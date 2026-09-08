@@ -729,8 +729,8 @@ Genel Stok
 </div>
 
 <div class="card">
-<div class="card-title">Kritik Stok</div>
-<div class="card-value red" id="criticalStock">0</div>
+<div class="card-title">Stokta Olmayan</div>
+<div class="card-value red" id="outOfStockCount">0</div>
 </div>
 
 </div>
@@ -1005,25 +1005,6 @@ data-native-inputmode="numeric"
 data-keypad-label="Başlangıç stoku"
 min="0"
 value="0"
->
-
-</div>
-
-<div class="form-group">
-
-<label>
-Kritik Stok
-</label>
-
-<input
-id="productCritical"
-type="text"
-inputmode="none"
-data-keypad="integer"
-data-native-inputmode="numeric"
-data-keypad-label="Kritik stok"
-min="0"
-value="5"
 >
 
 </div>
@@ -1880,11 +1861,6 @@ Number(
 document.getElementById("productStock").value
 );
 
-let critical =
-Number(
-document.getElementById("productCritical").value
-);
-
 let description =
 document.getElementById("productDescription")
 .value.trim();
@@ -1986,7 +1962,7 @@ length:length,
 
 stock:stock,
 
-critical:critical,
+critical:0,
 
 description:description
 
@@ -2101,7 +2077,6 @@ function clearProductForm(){
 document.getElementById("productThickness").value="";
 document.getElementById("productLength").value="6";
 document.getElementById("productStock").value="0";
-document.getElementById("productCritical").value="5";
 document.getElementById("productDescription").value="";
 
 }
@@ -2530,23 +2505,16 @@ let status;
 let statusClass;
 
 
-if(p.stock<=0){
+if(Number(p.stock)<=0){
 
 status="Stok Yok";
 statusClass="empty-stock";
 
 }
 
-else if(p.stock<=p.critical){
-
-status="Kritik";
-statusClass="critical";
-
-}
-
 else{
 
-status="Normal";
+status="Stokta Var";
 statusClass="normal";
 
 }
@@ -2842,7 +2810,7 @@ p=>p.type==="Boru"
 
 let totalStock=0;
 let totalMeters=0;
-let critical=0;
+let outOfStock=0;
 
 
 list.forEach(p=>{
@@ -2854,8 +2822,8 @@ totalMeters+=
 (Number(p.stock)||0)*
 parseLength(p.length);
 
-if(Number(p.stock)<=Number(p.critical))
-critical++;
+if(Number(p.stock)<=0)
+outOfStock++;
 
 });
 
@@ -2874,8 +2842,8 @@ document.getElementById(
 totalMeters.toFixed(2);
 
 document.getElementById(
-"criticalStock"
-).innerText=critical;
+"outOfStockCount"
+).innerText=outOfStock;
 
 }
 
@@ -3197,18 +3165,15 @@ let csv="\uFEFF";
 
 
 csv +=
-"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Kullanım Durumu;Stok;Toplam Metre;Kritik Stok;Durum\n";
+"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Kullanım Durumu;Stok;Toplam Metre;Durum\n";
 
 
 list.forEach(p=>{
 
 let status =
-p.stock<=0
+Number(p.stock)<=0
 ?"Stok Yok"
-:
-p.stock<=p.critical
-?"Kritik"
-:"Normal";
+:"Stokta Var";
 
 
 csv +=
@@ -3225,7 +3190,6 @@ p.stock+";"+
 p.stock*
 parseLength(p.length)
 ).toFixed(2)+";"+
-p.critical+";"+
 status+
 "\n";
 

@@ -1,0 +1,2935 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profil & Boru Stok Takip</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f1f5f9;
+color:#1e293b
+}
+
+header{
+background:#172033;
+color:white;
+padding:15px 25px
+}
+
+.header-content{
+max-width:1500px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px
+}
+
+header h1{
+margin:0;
+font-size:23px
+}
+
+.backup-area{
+display:flex;
+gap:8px;
+align-items:center
+}
+
+.container{
+max-width:1500px;
+margin:auto;
+padding:20px
+}
+
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:20px;
+flex-wrap:wrap
+}
+
+.tab{
+background:#cbd5e1;
+border:0;
+padding:12px 22px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer
+}
+
+.tab.active{
+background:#2563eb;
+color:white
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:10px;
+box-shadow:0 2px 8px #00000012
+}
+
+.card-title{
+color:#64748b;
+font-size:13px
+}
+
+.card-value{
+font-size:26px;
+font-weight:bold;
+margin-top:8px
+}
+
+.blue{color:#2563eb}
+.green{color:#16a34a}
+.red{color:#dc2626}
+
+.toolbar{
+background:white;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+input,select{
+border:1px solid #cbd5e1;
+border-radius:6px;
+padding:10px;
+font-size:14px
+}
+
+button{
+border:0;
+border-radius:6px;
+padding:10px 14px;
+font-weight:bold;
+cursor:pointer
+}
+
+button:hover{
+opacity:.88
+}
+
+.btn-blue{
+background:#2563eb;
+color:white
+}
+
+.btn-green{
+background:#16a34a;
+color:white
+}
+
+.btn-red{
+background:#dc2626;
+color:white
+}
+
+.btn-dark{
+background:#172033;
+color:white
+}
+
+.btn-orange{
+background:#f59e0b;
+color:white
+}
+
+.btn-gray{
+background:#e2e8f0;
+color:#1e293b
+}
+
+.table-box{
+background:white;
+border-radius:10px;
+overflow-x:auto;
+margin-bottom:25px;
+box-shadow:0 2px 8px #0000000d
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:1150px
+}
+
+th{
+background:#f8fafc;
+padding:13px;
+text-align:left;
+font-size:13px;
+border-bottom:1px solid #e2e8f0
+}
+
+td{
+padding:13px;
+border-bottom:1px solid #edf2f7;
+font-size:14px
+}
+
+tr:hover{
+background:#f8fafc
+}
+
+.nonstandard-length{
+display:inline-block;
+padding:5px 10px;
+background:#fff176;
+border:2px solid #d4a800;
+border-radius:6px;
+font-weight:900;
+color:#111827;
+box-shadow:0 1px 3px #0003;
+white-space:nowrap
+}
+
+.standard-length{
+font-weight:normal
+}
+
+.quality{
+background:#eef2ff;
+color:#3730a3;
+padding:5px 9px;
+border-radius:5px;
+font-weight:bold
+}
+
+.type-badge{
+background:#f1f5f9;
+padding:5px 8px;
+border-radius:5px;
+font-weight:bold
+}
+
+.status{
+padding:5px 9px;
+border-radius:15px;
+font-size:12px;
+font-weight:bold
+}
+
+.normal{
+background:#dcfce7;
+color:#166534
+}
+
+.critical{
+background:#ffedd5;
+color:#9a3412
+}
+
+.empty-stock{
+background:#fee2e2;
+color:#991b1b
+}
+
+.actions{
+display:flex;
+gap:5px
+}
+
+.actions button{
+padding:7px 9px;
+font-size:12px
+}
+
+.empty{
+text-align:center;
+padding:35px;
+color:#64748b
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#0008;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100
+}
+
+.modal-box{
+background:white;
+width:100%;
+max-width:650px;
+border-radius:12px;
+padding:25px;
+max-height:90vh;
+overflow-y:auto
+}
+
+.modal-box h2{
+margin-top:0
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+gap:6px
+}
+
+.form-group label{
+font-weight:bold;
+font-size:13px;
+color:#475569
+}
+
+.full{
+grid-column:1/-1
+}
+
+.modal-buttons{
+display:flex;
+justify-content:flex-end;
+gap:10px;
+margin-top:20px
+}
+
+.notice{
+background:#eff6ff;
+border:1px solid #bfdbfe;
+color:#1e40af;
+padding:12px;
+border-radius:8px;
+margin-bottom:15px;
+font-size:13px
+}
+
+.backup-info{
+background:#ecfdf5;
+border:1px solid #a7f3d0;
+color:#065f46;
+padding:10px;
+border-radius:7px;
+font-size:13px;
+margin-bottom:15px
+}
+
+.connection-info{
+background:#ecfdf5;
+border:1px solid #86efac;
+color:#166534;
+padding:10px;
+border-radius:7px;
+font-size:13px;
+margin-bottom:15px
+}
+
+.connection-error{
+background:#fee2e2;
+border:1px solid #fca5a5;
+color:#991b1b;
+padding:10px;
+border-radius:7px;
+font-size:13px;
+margin-bottom:15px
+}
+
+@media(max-width:900px){
+.cards{
+grid-template-columns:repeat(2,1fr)
+}
+}
+
+@media(max-width:700px){
+.header-content{
+flex-direction:column;
+align-items:stretch
+}
+
+.backup-area{
+justify-content:flex-end
+}
+}
+
+@media(max-width:600px){
+.container{
+padding:10px
+}
+
+.cards{
+grid-template-columns:1fr 1fr
+}
+
+.form-grid{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+header{
+padding:12px
+}
+
+header h1{
+font-size:18px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="header-content">
+
+<h1>
+🏭 Profil & Yuvarlak Boru Stok Takip
+</h1>
+
+<div class="backup-area">
+
+<button class="btn-green" onclick="backupData()">
+💾 Yedek Al
+</button>
+
+<button class="btn-orange" onclick="document.getElementById('backupFile').click()">
+📂 Yedek Yükle
+</button>
+
+<input
+type="file"
+id="backupFile"
+accept=".json"
+style="display:none"
+onchange="restoreData(event)"
+>
+
+</div>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<div id="connectionStatus" class="connection-info">
+☁️ Supabase bağlantısı hazırlanıyor...
+</div>
+
+<div class="tabs">
+
+<button class="tab active" id="tabGenel" onclick="changePage('Genel')">
+📊 Genel
+</button>
+
+<button class="tab" id="tabProfil" onclick="changePage('Profil')">
+📐 Profiller
+</button>
+
+<button class="tab" id="tabBoru" onclick="changePage('Boru')">
+🔩 Yuvarlak Borular
+</button>
+
+</div>
+
+<h2 id="pageTitle">
+Genel Stok
+</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-title">Malzeme Çeşidi</div>
+<div class="card-value blue" id="totalProducts">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Toplam Adet</div>
+<div class="card-value green" id="totalStock">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Toplam Metre</div>
+<div class="card-value blue" id="totalMeters">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Kritik Stok</div>
+<div class="card-value red" id="criticalStock">0</div>
+</div>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="search"
+type="text"
+placeholder="🔍 Ebat veya kalite ara..."
+oninput="showProducts()"
+>
+
+<select id="qualityFilter" onchange="showProducts()">
+
+<option value="">Tüm Kaliteler</option>
+<option value="ST37">ST37</option>
+<option value="ST52">ST52</option>
+<option value="304">304</option>
+<option value="316">316</option>
+<option value="316L">316L</option>
+<option value="Galvaniz">Galvaniz</option>
+<option value="Alüminyum">Alüminyum</option>
+<option value="Diğer">Diğer</option>
+
+</select>
+
+<button class="btn-blue" onclick="openProductModal()">
++ Malzeme Ekle
+</button>
+
+<button class="btn-dark" onclick="exportStock()">
+📥 Excel
+</button>
+
+</div>
+
+<div class="backup-info">
+
+💡 <strong>Not:</strong>
+6 metre ürünler stok 0 olduğunda listede kalır ve
+<strong>Stok Yok</strong> olarak görünür.
+
+6 metre dışındaki ürünler stok 0 olduğunda
+<strong>stok listesinden otomatik kaldırılır.</strong>
+
+</div>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Cinsi</th>
+<th>Tip</th>
+<th>Kalite</th>
+<th>Ebat / Çap</th>
+<th>Kalınlık</th>
+<th>Boy</th>
+<th>Stok</th>
+<th>Metre</th>
+<th>Durum</th>
+<th>İşlem</th>
+</tr>
+
+</thead>
+
+<tbody id="productTable">
+</tbody>
+
+</table>
+
+</div>
+
+<div class="table-box">
+
+<div style="
+padding:18px;
+font-size:18px;
+font-weight:bold
+">
+
+📋 Son Stok Hareketleri
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Tarih</th>
+<th>Cinsi</th>
+<th>Tip</th>
+<th>Kalite</th>
+<th>Ebat / Çap</th>
+<th>Kalınlık</th>
+<th>İşlem</th>
+<th>Miktar</th>
+<th>Açıklama</th>
+</tr>
+
+</thead>
+
+<tbody id="movementBody">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- MALZEME MODALI -->
+
+<div class="modal" id="productModal">
+
+<div class="modal-box">
+
+<h2 id="productModalTitle">
+Yeni Profil
+</h2>
+
+<div class="notice">
+
+<strong>Profil:</strong>
+Kare veya Dikdörtgen.
+
+<br><br>
+
+<strong>Boru:</strong>
+Sadece Yuvarlak boru.
+
+<br><br>
+
+Dikdörtgen profilde uzun kenarı başa yaz.
+
+<br>
+
+Örnek:
+<strong>60x40</strong>
+
+</div>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Malzeme Cinsi</label>
+
+<select id="productType" onchange="typeChanged()">
+
+<option value="Profil">
+Profil
+</option>
+
+<option value="Boru">
+Boru
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Profil Tipi</label>
+
+<select id="productShape" onchange="shapeChanged()">
+
+<option value="Kare">
+Kare
+</option>
+
+<option value="Dikdörtgen">
+Dikdörtgen
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Malzeme Kalitesi</label>
+
+<select id="productQuality">
+
+<option value="ST37">ST37</option>
+<option value="ST52">ST52</option>
+<option value="304">304</option>
+<option value="316">316</option>
+<option value="316L">316L</option>
+<option value="Galvaniz">Galvaniz</option>
+<option value="Alüminyum">Alüminyum</option>
+<option value="Diğer">Diğer</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label id="sizeLabel">
+Ebat
+</label>
+
+<select id="productSize">
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Kalınlık
+</label>
+
+<input
+id="productThickness"
+placeholder="Örn: 2 mm"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Boy (metre)
+</label>
+
+<input
+id="productLength"
+type="text"
+value="6"
+placeholder="Örn: 5,4"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Başlangıç Stoku
+</label>
+
+<input
+id="productStock"
+type="number"
+min="0"
+value="0"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>
+Kritik Stok
+</label>
+
+<input
+id="productCritical"
+type="number"
+min="0"
+value="5"
+>
+
+</div>
+
+<div class="form-group full">
+
+<label>
+Açıklama
+</label>
+
+<input
+id="productDescription"
+placeholder="İsteğe bağlı"
+>
+
+</div>
+
+</div>
+
+<div class="modal-buttons">
+
+<button class="btn-gray" onclick="closeProductModal()">
+Vazgeç
+</button>
+
+<button class="btn-blue" onclick="addProduct()">
+Kaydet
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- STOK HAREKET MODALI -->
+
+<div class="modal" id="movementModal">
+
+<div class="modal-box">
+
+<h2 id="movementTitle">
+Stok İşlemi
+</h2>
+
+<div class="notice" id="movementInfo">
+</div>
+
+<div class="form-group">
+
+<label>
+Miktar (Adet)
+</label>
+
+<input
+id="movementQuantity"
+type="number"
+min="1"
+>
+
+</div>
+
+<br>
+
+<div class="form-group">
+
+<label>
+Açıklama
+</label>
+
+<input
+id="movementDescription"
+placeholder="Örn: Müşteriye gönderildi"
+>
+
+</div>
+
+<div class="modal-buttons">
+
+<button class="btn-gray" onclick="closeMovementModal()">
+Vazgeç
+</button>
+
+<button id="movementButton" onclick="saveMovement()">
+Kaydet
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================================================
+   SUPABASE AYARLARI
+===================================================== */
+
+const SUPABASE_URL =
+"https://jdqbioesnyrnuqeqeifp.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_tq0SQbOOb6WOjZI-_1wOjA_4OzPgx8a";
+
+const PRODUCTS_TABLE = "StokTube";
+const MOVEMENTS_TABLE = "StokTubeMovements";
+
+
+/* =====================================================
+   UYGULAMA VERİLERİ
+===================================================== */
+
+let products=[];
+let movements=[];
+
+let currentPage="Genel";
+let currentProductId=null;
+let currentMovementType=null;
+
+
+/* =====================================================
+   SUPABASE İSTEK FONKSİYONU
+===================================================== */
+
+async function supabaseRequest(
+table,
+method="GET",
+data=null,
+query=""
+){
+
+let options={
+method:method,
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json",
+"Prefer":"return=representation"
+}
+};
+
+if(data!==null){
+options.body=JSON.stringify(data);
+}
+
+let response=await fetch(
+SUPABASE_URL+
+"/rest/v1/"+
+table+
+query,
+options
+);
+
+let text=await response.text();
+
+if(!response.ok){
+
+console.error(
+"Supabase hatası:",
+response.status,
+text
+);
+
+throw new Error(
+"Supabase hatası: "+
+response.status+
+" "+
+text
+);
+
+}
+
+if(!text)
+return null;
+
+try{
+return JSON.parse(text);
+}
+catch{
+return null;
+}
+
+}
+
+
+/* =====================================================
+   DURUM MESAJI
+===================================================== */
+
+function setConnectionStatus(message,error=false){
+
+let box=
+document.getElementById("connectionStatus");
+
+box.className=
+error
+?"connection-error"
+:"connection-info";
+
+box.innerHTML=message;
+
+}
+
+
+/* =====================================================
+   SUPABASE'DEN VERİLERİ ÇEK
+===================================================== */
+
+async function loadData(){
+
+try{
+
+setConnectionStatus(
+"☁️ Supabase'den stoklar yükleniyor..."
+);
+
+let productData=
+await supabaseRequest(
+PRODUCTS_TABLE,
+"GET",
+null,
+"?select=*&order=id.asc"
+);
+
+let movementData=
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"GET",
+null,
+"?select=*&order=id.asc"
+);
+
+products=
+Array.isArray(productData)
+?productData
+:[];
+
+movements=
+Array.isArray(movementData)
+?movementData
+:[];
+
+normalizeExistingData();
+
+showProducts();
+showMovements();
+
+setConnectionStatus(
+"☁️ <strong>Supabase bağlantısı aktif.</strong> Veriler bulutta tutuluyor."
+);
+
+}
+catch(error){
+
+console.error(error);
+
+setConnectionStatus(
+"❌ <strong>Supabase bağlantısı kurulamadı.</strong><br>"+
+"URL, anahtar veya tablo ayarlarını kontrol edin.",
+true
+);
+
+alert(
+"Supabase bağlantısında hata oluştu.\n\n"+
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+   METİN
+===================================================== */
+
+function normalizeText(text){
+
+return String(text || "")
+.toLowerCase()
+.replace(/×/g,"x")
+.replace(/\s+/g,"")
+.trim();
+
+}
+
+
+function formatSize(text){
+
+return String(text || "")
+.toLowerCase()
+.replace(/×/g,"x")
+.replace(/\s+/g,"")
+.trim();
+
+}
+
+
+function formatThickness(text){
+
+let v =
+String(text || "")
+.toLowerCase()
+.replace(/,/g,".")
+.replace(/\s+/g,"")
+.replace(/mm$/i,"")
+.trim();
+
+return v ? v+" mm" : "";
+
+}
+
+
+/* =====================================================
+   BOY
+===================================================== */
+
+function parseLength(value){
+
+let v =
+String(value || "")
+.replace(",",".")
+.replace(/\s+/g,"")
+.trim();
+
+return Number(v);
+
+}
+
+
+function formatLength(value){
+
+let n=parseLength(value);
+
+if(!Number.isFinite(n))
+return "";
+
+if(n===6)
+return "6 m";
+
+return n.toLocaleString(
+"tr-TR",
+{
+minimumFractionDigits:n%1!==0?1:0,
+maximumFractionDigits:2
+}
+)+" m";
+
+}
+
+
+function isStandardLength(value){
+
+return Math.abs(
+parseLength(value)-6
+)<0.000001;
+
+}
+
+
+/* =====================================================
+   KALİTE
+===================================================== */
+
+function normalizeQuality(text){
+
+let v=normalizeText(text);
+
+if(v==="st37") return "ST37";
+if(v==="st52") return "ST52";
+if(v==="304") return "304";
+if(v==="316") return "316";
+if(v==="316l") return "316L";
+if(v==="galvaniz") return "Galvaniz";
+if(v==="aluminyum") return "Alüminyum";
+
+return text;
+
+}
+
+
+/* =====================================================
+   EBATLAR
+===================================================== */
+
+const kareSizes=[
+
+"10x10",
+"15x15",
+"20x20",
+"25x25",
+"30x30",
+"35x35",
+"40x40",
+"45x45",
+"50x50",
+"55x55",
+"60x60",
+"70x70",
+"80x80",
+"90x90",
+"100x100",
+"110x110",
+"120x120",
+
+
+];
+
+
+const dikdortgenSizes=[
+
+"20x10",
+"25x15",
+"30x10",
+"30x15",
+"30x20",
+"40x20",
+"40x25",
+"40x30",
+"45x25",
+"50x20",
+"50x25",
+"50x30",
+"50x40",
+"60x20",
+"60x30",
+"60x40",
+"60x50",
+"70x30",
+"70x40",
+"70x50",
+"80x40",
+"80x50",
+"80x60",
+"90x40",
+"90x50",
+"100x40",
+"100x50",
+"100x60",
+"100x80",
+"120x40",
+"120x60",
+"120x80",
+"140x60",
+"140x80",
+"150x50",
+"150x100",
+"160x80",
+
+
+];
+
+
+const roundSizes=[
+
+"Ø10",
+"Ø11",
+"Ø12",
+"Ø13",
+"Ø15",
+"Ø16",
+"Ø17",
+"Ø19",
+"Ø21",
+"Ø22",
+"Ø25",
+"Ø27",
+"Ø28",
+"Ø30",
+"Ø32",
+"Ø34",
+"Ø35",
+"Ø38",
+"Ø40",
+"Ø42",
+"Ø45",
+"Ø48",
+"Ø50",
+"Ø51",
+"Ø57",
+"Ø60",
+"Ø70",
+"Ø75",
+"Ø76",
+"Ø80",
+"Ø89",
+"Ø101",
+"Ø108",
+"Ø114",
+"Ø127",
+"Ø133",
+"Ø134",
+"Ø139",
+"Ø152",
+
+
+];
+
+
+/* =====================================================
+   EBAT SEÇENEKLERİ
+===================================================== */
+
+function fillSizeOptions(){
+
+let type =
+document.getElementById("productType").value;
+
+let shape =
+document.getElementById("productShape").value;
+
+let select =
+document.getElementById("productSize");
+
+select.innerHTML="";
+
+let list=[];
+
+if(type==="Boru"){
+
+list=roundSizes;
+
+document.getElementById("sizeLabel")
+.innerText="Çap";
+
+}
+
+else if(shape==="Kare"){
+
+list=kareSizes;
+
+document.getElementById("sizeLabel")
+.innerText="Ebat";
+
+}
+
+else{
+
+list=dikdortgenSizes;
+
+document.getElementById("sizeLabel")
+.innerText="Ebat";
+
+}
+
+list.forEach(size=>{
+
+let option =
+document.createElement("option");
+
+option.value=size;
+option.textContent=size;
+
+select.appendChild(option);
+
+});
+
+}
+
+
+/* =====================================================
+   TİP
+===================================================== */
+
+function typeChanged(){
+
+let type =
+document.getElementById("productType").value;
+
+let shape =
+document.getElementById("productShape");
+
+if(type==="Boru"){
+
+shape.innerHTML =
+'<option value="Yuvarlak">Yuvarlak</option>';
+
+shape.value="Yuvarlak";
+shape.disabled=true;
+
+}
+
+else{
+
+shape.disabled=false;
+
+shape.innerHTML =
+'<option value="Kare">Kare</option>'+
+'<option value="Dikdörtgen">Dikdörtgen</option>';
+
+}
+
+fillSizeOptions();
+
+}
+
+
+/* =====================================================
+   ŞEKİL
+===================================================== */
+
+function shapeChanged(){
+
+fillSizeOptions();
+
+}
+
+
+/* =====================================================
+   SAYFA
+===================================================== */
+
+function changePage(page){
+
+currentPage=page;
+
+document.querySelectorAll(".tab")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+if(page==="Genel"){
+
+document.getElementById("tabGenel")
+.classList.add("active");
+
+document.getElementById("pageTitle")
+.innerText="Genel Stok";
+
+}
+
+if(page==="Profil"){
+
+document.getElementById("tabProfil")
+.classList.add("active");
+
+document.getElementById("pageTitle")
+.innerText="📐 Profil Stoğu";
+
+}
+
+if(page==="Boru"){
+
+document.getElementById("tabBoru")
+.classList.add("active");
+
+document.getElementById("pageTitle")
+.innerText="🔩 Yuvarlak Boru Stoğu";
+
+}
+
+document.getElementById("search").value="";
+document.getElementById("qualityFilter").value="";
+
+showProducts();
+showMovements();
+
+}
+
+
+/* =====================================================
+   MALZEME MODALI
+===================================================== */
+
+function openProductModal(){
+
+let type =
+currentPage==="Boru"
+?"Boru"
+:"Profil";
+
+document.getElementById("productType")
+.value=type;
+
+typeChanged();
+
+document.getElementById("productModalTitle")
+.innerText =
+type==="Boru"
+?"🔩 Yeni Yuvarlak Boru"
+:"📐 Yeni Profil";
+
+document.getElementById("productModal")
+.style.display="flex";
+
+}
+
+
+function closeProductModal(){
+
+document.getElementById("productModal")
+.style.display="none";
+
+}
+
+
+/* =====================================================
+   MALZEME EKLE
+===================================================== */
+
+async function addProduct(){
+
+let type =
+document.getElementById("productType").value;
+
+let shape =
+document.getElementById("productShape").value;
+
+let quality =
+normalizeQuality(
+document.getElementById("productQuality").value
+);
+
+let size =
+formatSize(
+document.getElementById("productSize").value
+);
+
+let thickness =
+formatThickness(
+document.getElementById("productThickness").value
+);
+
+let length =
+parseLength(
+document.getElementById("productLength").value
+);
+
+let stock =
+Number(
+document.getElementById("productStock").value
+);
+
+let critical =
+Number(
+document.getElementById("productCritical").value
+);
+
+let description =
+document.getElementById("productDescription")
+.value.trim();
+
+
+if(
+!size ||
+!thickness ||
+!Number.isFinite(length) ||
+length<=0
+){
+
+alert(
+"Ebat/çap, kalınlık ve boy bilgilerini kontrol edin."
+);
+
+return;
+
+}
+
+
+/* AYNI STOĞU ENGELLE */
+
+let existing =
+products.find(p =>
+
+normalizeText(p.type) ===
+normalizeText(type)
+
+&&
+
+normalizeText(p.shape) ===
+normalizeText(shape)
+
+&&
+
+normalizeText(p.quality) ===
+normalizeText(quality)
+
+&&
+
+normalizeText(p.size) ===
+normalizeText(size)
+
+&&
+
+normalizeText(p.thickness) ===
+normalizeText(thickness)
+
+&&
+
+Math.abs(
+parseLength(p.length)-length
+)<0.000001
+
+);
+
+
+if(existing){
+
+alert(
+
+"Bu stok zaten kayıtlı!\n\n"+
+
+existing.type+
+" | "+
+existing.quality+
+" | "+
+existing.size+
+" | "+
+existing.thickness+
+" | "+
+formatLength(existing.length)+
+
+"\n\nYeni kayıt açmak yerine '+ Giriş' butonunu kullan."
+
+);
+
+return;
+
+}
+
+
+let product={
+
+id:Date.now(),
+
+type:type,
+
+shape:shape,
+
+quality:quality,
+
+size:size,
+
+thickness:thickness,
+
+length:length,
+
+stock:stock,
+
+critical:critical,
+
+description:description
+
+};
+
+
+try{
+
+let result=
+await supabaseRequest(
+PRODUCTS_TABLE,
+"POST",
+product
+);
+
+if(!result || !result.length){
+
+throw new Error(
+"Ürün Supabase'e kaydedilemedi."
+);
+
+}
+
+let savedProduct=result[0];
+
+products.push(savedProduct);
+
+
+/* İLK STOK */
+
+if(stock>0){
+
+let movement={
+
+id:Date.now()+1,
+
+product_id:savedProduct.id,
+
+type:"Giriş",
+
+quantity:stock,
+
+date:new Date().toLocaleString("tr-TR"),
+
+description:"İlk stok",
+
+product_name:savedProduct.type,
+
+shape:savedProduct.shape,
+
+quality:savedProduct.quality,
+
+size:savedProduct.size,
+
+thickness:savedProduct.thickness,
+
+length:savedProduct.length
+
+};
+
+let movementResult=
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"POST",
+movement
+);
+
+if(movementResult &&
+movementResult.length){
+
+movements.push(
+movementResult[0]
+);
+
+}
+
+}
+
+closeProductModal();
+
+clearProductForm();
+
+showProducts();
+
+showMovements();
+
+alert(
+"✅ Malzeme Supabase'e kaydedildi."
+);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"❌ Malzeme kaydedilemedi.\n\n"+
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+   FORM TEMİZLE
+===================================================== */
+
+function clearProductForm(){
+
+document.getElementById("productThickness").value="";
+document.getElementById("productLength").value="6";
+document.getElementById("productStock").value="0";
+document.getElementById("productCritical").value="5";
+document.getElementById("productDescription").value="";
+
+}
+
+
+/* =====================================================
+   STOK HAREKET
+===================================================== */
+
+function openMovementModal(id,type){
+
+let product =
+products.find(p=>Number(p.id)===Number(id));
+
+if(!product)return;
+
+currentProductId=id;
+currentMovementType=type;
+
+document.getElementById("movementTitle")
+.innerText =
+type==="Giriş"
+?"➕ Stok Girişi"
+:"➖ Stok Çıkışı";
+
+document.getElementById("movementButton")
+.className =
+type==="Giriş"
+?"btn-green"
+:"btn-red";
+
+document.getElementById("movementButton")
+.innerText =
+type==="Giriş"
+?"Stok Ekle"
+:"Stok Çıkar";
+
+document.getElementById("movementInfo")
+.innerHTML =
+
+"<strong>"+
+product.type+
+"</strong> | "+
+product.quality+
+" | "+
+product.size+
+" | "+
+product.thickness+
+" | "+
+formatLength(product.length)+
+
+"<br><br>Mevcut stok: <strong>"+
+product.stock+
+" adet</strong>";
+
+document.getElementById("movementQuantity")
+.value="";
+
+document.getElementById("movementDescription")
+.value="";
+
+document.getElementById("movementModal")
+.style.display="flex";
+
+}
+
+
+function closeMovementModal(){
+
+document.getElementById("movementModal")
+.style.display="none";
+
+}
+
+
+/* =====================================================
+   STOK HAREKET KAYDET
+===================================================== */
+
+async function saveMovement(){
+
+let quantity =
+Number(
+document.getElementById("movementQuantity").value
+);
+
+let description =
+document.getElementById("movementDescription")
+.value.trim();
+
+
+if(quantity<=0){
+
+alert("Geçerli bir miktar girin.");
+
+return;
+
+}
+
+
+let product =
+products.find(
+p=>Number(p.id)===Number(currentProductId)
+);
+
+
+if(!product)return;
+
+
+/* STOK ÇIKIŞI */
+
+let newStock;
+
+if(currentMovementType==="Çıkış"){
+
+if(quantity>Number(product.stock)){
+
+alert(
+"Yeterli stok yok!\n\n"+
+"Mevcut stok: "+
+product.stock+
+" adet"
+);
+
+return;
+
+}
+
+newStock=
+Number(product.stock)-quantity;
+
+}
+
+else{
+
+newStock=
+Number(product.stock)+quantity;
+
+}
+
+
+/* SUPABASE ÜRÜNÜ GÜNCELLE */
+
+try{
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"PATCH",
+{
+stock:newStock
+},
+"?id=eq."+encodeURIComponent(product.id)
+);
+
+
+/* HAREKETİ KAYDET */
+
+let movement={
+
+id:Date.now(),
+
+product_id:product.id,
+
+type:currentMovementType,
+
+quantity:quantity,
+
+date:new Date().toLocaleString("tr-TR"),
+
+description:description,
+
+product_name:product.type,
+
+shape:product.shape,
+
+quality:product.quality,
+
+size:product.size,
+
+thickness:product.thickness,
+
+length:product.length
+
+};
+
+
+let movementResult=
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"POST",
+movement
+);
+
+
+/* YEREL EKRAN VERİSİNİ GÜNCELLE */
+
+product.stock=newStock;
+
+if(movementResult &&
+movementResult.length){
+
+movements.push(
+movementResult[0]
+);
+
+}
+
+
+/* 6 METRE DIŞI 0 İSE SİL */
+
+if(
+product.stock<=0 &&
+!isStandardLength(product.length)
+){
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"DELETE",
+null,
+"?id=eq."+encodeURIComponent(product.id)
+);
+
+products=
+products.filter(
+p=>Number(p.id)!==Number(product.id)
+);
+
+}
+
+
+closeMovementModal();
+
+showProducts();
+
+showMovements();
+
+alert(
+currentMovementType==="Giriş"
+?"✅ Stok girişi kaydedildi."
+:"✅ Stok çıkışı kaydedildi."
+);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"❌ Stok işlemi kaydedilemedi.\n\n"+
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+   SAYILAR
+===================================================== */
+
+function getNumbers(text){
+
+let clean =
+String(text)
+.replace("Ø","")
+.replace(",",".")
+.replace(/\s/g,"");
+
+let nums =
+clean.match(/\d+(?:\.\d+)?/g);
+
+if(!nums)
+return[999999,999999];
+
+return nums.map(Number);
+
+}
+
+
+/* =====================================================
+   SIRALAMA
+===================================================== */
+
+function sortProducts(list){
+
+return list.sort((a,b)=>{
+
+if(a.type==="Boru" && b.type==="Boru"){
+
+let A=getNumbers(a.size)[0];
+let B=getNumbers(b.size)[0];
+
+if(A!==B)
+return A-B;
+
+}
+
+if(a.type==="Profil" && b.type==="Profil"){
+
+let A=getNumbers(a.size);
+let B=getNumbers(b.size);
+
+if(A[0]!==B[0])
+return A[0]-B[0];
+
+if((A[1]||0)!==(B[1]||0))
+return(A[1]||0)-(B[1]||0);
+
+}
+
+let ta =
+parseFloat(
+String(a.thickness)
+.replace(",",".")
+)||0;
+
+let tb =
+parseFloat(
+String(b.thickness)
+.replace(",",".")
+)||0;
+
+if(ta!==tb)
+return ta-tb;
+
+return String(a.quality)
+.localeCompare(
+String(b.quality),
+"tr"
+);
+
+});
+
+}
+
+
+/* =====================================================
+   TABLO
+===================================================== */
+
+function showProducts(){
+
+let tbody =
+document.getElementById("productTable");
+
+let search =
+document.getElementById("search")
+.value.toLowerCase();
+
+let quality =
+document.getElementById("qualityFilter")
+.value;
+
+
+let filtered =
+products.filter(p=>{
+
+if(
+currentPage==="Profil" &&
+p.type!=="Profil"
+)
+return false;
+
+if(
+currentPage==="Boru" &&
+p.type!=="Boru"
+)
+return false;
+
+let text =
+p.type+" "+
+p.shape+" "+
+p.quality+" "+
+p.size+" "+
+p.thickness;
+
+if(
+!text.toLowerCase()
+.includes(search)
+)
+return false;
+
+if(
+quality &&
+p.quality!==quality
+)
+return false;
+
+return true;
+
+});
+
+
+filtered=sortProducts(filtered);
+
+
+if(filtered.length===0){
+
+tbody.innerHTML =
+'<tr>'+
+'<td colspan="10" class="empty">'+
+"Bu bölümde henüz malzeme bulunmuyor."+
+'</td>'+
+'</tr>';
+
+}
+
+else{
+
+tbody.innerHTML =
+
+filtered.map(p=>{
+
+let meters =
+Number(p.stock)*
+parseLength(p.length);
+
+
+let status;
+let statusClass;
+
+
+if(p.stock<=0){
+
+status="Stok Yok";
+statusClass="empty-stock";
+
+}
+
+else if(p.stock<=p.critical){
+
+status="Kritik";
+statusClass="critical";
+
+}
+
+else{
+
+status="Normal";
+statusClass="normal";
+
+}
+
+
+let lengthHTML =
+isStandardLength(p.length)
+
+?
+
+'<span class="standard-length">'+
+formatLength(p.length)+
+'</span>'
+
+:
+
+'<span class="nonstandard-length" title="6 metreden farklı boy">'+
+formatLength(p.length)+
+'</span>';
+
+
+return`
+
+<tr>
+
+<td>
+<span class="type-badge">
+${p.type}
+</span>
+</td>
+
+<td>
+${p.shape}
+</td>
+
+<td>
+<span class="quality">
+${p.quality}
+</span>
+</td>
+
+<td>
+<strong>
+${p.size}
+</strong>
+</td>
+
+<td>
+${p.thickness}
+</td>
+
+<td>
+${lengthHTML}
+</td>
+
+<td>
+<strong>
+${p.stock}
+</strong>
+adet
+</td>
+
+<td>
+${meters.toFixed(2)} m
+</td>
+
+<td>
+<span class="status ${statusClass}">
+${status}
+</span>
+</td>
+
+<td>
+
+<div class="actions">
+
+<button
+class="btn-green"
+onclick="openMovementModal(${p.id},'Giriş')">
++ Giriş
+</button>
+
+<button
+class="btn-red"
+onclick="openMovementModal(${p.id},'Çıkış')">
+- Çıkış
+</button>
+
+<button
+class="btn-gray"
+onclick="deleteProduct(${p.id})">
+Sil
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+updateDashboard();
+
+}
+
+
+/* =====================================================
+   HAREKETLER
+===================================================== */
+
+function showMovements(){
+
+let tbody =
+document.getElementById("movementBody");
+
+
+let recent =
+movements
+.slice()
+.reverse()
+.filter(m=>{
+
+let p =
+products.find(
+x=>Number(x.id)===Number(m.product_id)
+);
+
+
+/* Ürün silinmişse hareket geçmişinde göster */
+
+if(!p && !m.product_name)
+return false;
+
+if(!p)
+return true;
+
+if(
+currentPage==="Profil" &&
+p.type!=="Profil"
+)
+return false;
+
+if(
+currentPage==="Boru" &&
+p.type!=="Boru"
+)
+return false;
+
+return true;
+
+})
+.slice(0,30);
+
+
+if(recent.length===0){
+
+tbody.innerHTML =
+'<tr>'+
+'<td colspan="9" class="empty">'+
+"Henüz stok hareketi yok."+
+'</td>'+
+'</tr>';
+
+return;
+
+}
+
+
+tbody.innerHTML =
+
+recent.map(m=>{
+
+let p =
+products.find(
+x=>Number(x.id)===Number(m.product_id)
+);
+
+
+/* Ürün artık silindiyse hareket içindeki bilgileri kullan */
+
+let type =
+p ? p.type : m.product_name;
+
+let shape =
+p ? p.shape : m.shape;
+
+let quality =
+p ? p.quality : m.quality;
+
+let size =
+p ? p.size : m.size;
+
+let thickness =
+p ? p.thickness : m.thickness;
+
+
+let color =
+m.type==="Giriş"
+?"#16a34a"
+:"#dc2626";
+
+
+return`
+
+<tr>
+
+<td>
+${m.date}
+</td>
+
+<td>
+${type||"-"}
+</td>
+
+<td>
+${shape||"-"}
+</td>
+
+<td>
+${quality||"-"}
+</td>
+
+<td>
+${size||"-"}
+</td>
+
+<td>
+${thickness||"-"}
+</td>
+
+<td style="color:${color};font-weight:bold">
+${m.type}
+</td>
+
+<td>
+${m.quantity} adet
+</td>
+
+<td>
+${m.description||"-"}
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
+   ÖZET
+===================================================== */
+
+function updateDashboard(){
+
+let list=products;
+
+
+if(currentPage==="Profil")
+list=products.filter(
+p=>p.type==="Profil"
+);
+
+if(currentPage==="Boru")
+list=products.filter(
+p=>p.type==="Boru"
+);
+
+
+let totalStock=0;
+let totalMeters=0;
+let critical=0;
+
+
+list.forEach(p=>{
+
+totalStock+=
+Number(p.stock)||0;
+
+totalMeters+=
+(Number(p.stock)||0)*
+parseLength(p.length);
+
+if(Number(p.stock)<=Number(p.critical))
+critical++;
+
+});
+
+
+document.getElementById(
+"totalProducts"
+).innerText=list.length;
+
+document.getElementById(
+"totalStock"
+).innerText=totalStock;
+
+document.getElementById(
+"totalMeters"
+).innerText=
+totalMeters.toFixed(2);
+
+document.getElementById(
+"criticalStock"
+).innerText=critical;
+
+}
+
+
+/* =====================================================
+   SİL
+===================================================== */
+
+async function deleteProduct(id){
+
+let p =
+products.find(
+x=>Number(x.id)===Number(id)
+);
+
+if(!p)return;
+
+
+if(!confirm(
+
+"Bu malzemeyi silmek istediğinize emin misiniz?\n\n"+
+
+p.type+
+" | "+
+p.quality+
+" | "+
+p.size+
+" | "+
+p.thickness+
+" | "+
+formatLength(p.length)
+
+))
+return;
+
+
+try{
+
+/* HAREKETLERDE ÜRÜN BİLGİSİNİ KORU */
+
+let relatedMovements=
+movements.filter(
+m=>Number(m.product_id)===Number(id)
+);
+
+for(let m of relatedMovements){
+
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"PATCH",
+{
+product_name:p.type,
+shape:p.shape,
+quality:p.quality,
+size:p.size,
+thickness:p.thickness,
+length:p.length
+},
+"?id=eq."+encodeURIComponent(m.id)
+);
+
+}
+
+
+/* ÜRÜNÜ SİL */
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"DELETE",
+null,
+"?id=eq."+encodeURIComponent(id)
+);
+
+
+products =
+products.filter(
+x=>Number(x.id)!==Number(id)
+);
+
+
+/* EKRANI YENİLE */
+
+showProducts();
+
+showMovements();
+
+alert(
+"✅ Malzeme silindi."
+);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"❌ Malzeme silinemedi.\n\n"+
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+   YEDEK AL
+===================================================== */
+
+function backupData(){
+
+let backup={
+
+version:2,
+
+createdAt:
+new Date().toISOString(),
+
+products:products,
+
+movements:movements
+
+};
+
+
+let content =
+JSON.stringify(
+backup,
+null,
+2
+);
+
+
+let blob =
+new Blob(
+[content],
+{
+type:"application/json;charset=utf-8"
+}
+);
+
+
+let url =
+URL.createObjectURL(blob);
+
+
+let link =
+document.createElement("a");
+
+
+let date =
+new Date()
+.toLocaleDateString("tr-TR")
+.replace(/\./g,"-");
+
+
+link.href=url;
+
+link.download =
+"stok_yedegi_"+date+".json";
+
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+URL.revokeObjectURL(url);
+
+
+alert(
+"Stok yedeği başarıyla alındı."
+);
+
+}
+
+
+/* =====================================================
+   YEDEK YÜKLE
+===================================================== */
+
+async function restoreData(event){
+
+let file =
+event.target.files[0];
+
+if(!file)
+return;
+
+
+let reader =
+new FileReader();
+
+
+reader.onload=async function(e){
+
+try{
+
+let backup =
+JSON.parse(e.target.result);
+
+
+if(
+!backup ||
+!Array.isArray(backup.products) ||
+!Array.isArray(backup.movements)
+){
+
+throw new Error(
+"Geçersiz yedek dosyası."
+);
+
+}
+
+
+/* ÜRÜNLERİ SUPABASE'E YÜKLE */
+
+for(let p of backup.products){
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"POST",
+p
+);
+
+}
+
+
+/* HAREKETLERİ SUPABASE'E YÜKLE */
+
+for(let m of backup.movements){
+
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"POST",
+m
+);
+
+}
+
+
+await loadData();
+
+
+alert(
+"Yedek başarıyla Supabase'e yüklendi."
+);
+
+}
+
+catch(error){
+
+console.error(error);
+
+alert(
+"Yedek dosyası yüklenemedi.\n\n"+
+error.message
+);
+
+}
+
+
+event.target.value="";
+
+};
+
+
+reader.readAsText(file);
+
+}
+
+
+/* =====================================================
+   EXCEL
+===================================================== */
+
+function exportStock(){
+
+let list=products;
+
+
+if(currentPage==="Profil")
+list=products.filter(
+p=>p.type==="Profil"
+);
+
+if(currentPage==="Boru")
+list=products.filter(
+p=>p.type==="Boru"
+);
+
+
+if(list.length===0){
+
+alert(
+"Aktarılacak stok bulunmuyor."
+);
+
+return;
+
+}
+
+
+list=sortProducts([...list]);
+
+
+let csv="\uFEFF";
+
+
+csv +=
+"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Stok;Toplam Metre;Kritik Stok;Durum\n";
+
+
+list.forEach(p=>{
+
+let status =
+p.stock<=0
+?"Stok Yok"
+:
+p.stock<=p.critical
+?"Kritik"
+:"Normal";
+
+
+csv +=
+
+p.type+";"+
+p.shape+";"+
+p.quality+";"+
+p.size+";"+
+p.thickness+";"+
+formatLength(p.length)+";"+
+p.stock+";"+
+(
+p.stock*
+parseLength(p.length)
+).toFixed(2)+";"+
+p.critical+";"+
+status+
+"\n";
+
+});
+
+
+downloadCSV(
+csv,
+"stok_listesi.csv"
+);
+
+}
+
+
+function downloadCSV(content,filename){
+
+let blob =
+new Blob(
+[content],
+{
+type:"text/csv;charset=utf-8;"
+}
+);
+
+
+let url =
+URL.createObjectURL(blob);
+
+
+let link =
+document.createElement("a");
+
+
+link.href=url;
+link.download=filename;
+
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   ESKİ VERİLERİ NORMALLEŞTİR
+===================================================== */
+
+function normalizeExistingData(){
+
+products.forEach(p=>{
+
+p.type =
+p.type==="Boru"
+?"Boru"
+:"Profil";
+
+
+if(!p.shape){
+
+p.shape =
+p.type==="Boru"
+?"Yuvarlak"
+:"Kare";
+
+}
+
+
+p.quality =
+normalizeQuality(p.quality);
+
+
+p.size =
+formatSize(p.size);
+
+
+p.thickness =
+formatThickness(p.thickness);
+
+
+p.length =
+parseLength(p.length)||6;
+
+
+p.stock =
+Number(p.stock)||0;
+
+
+p.critical =
+Number(p.critical)||0;
+
+});
+
+}
+
+
+/* =====================================================
+   MODAL DIŞINA TIKLAYINCA KAPAT
+===================================================== */
+
+window.onclick=function(event){
+
+let productModal=
+document.getElementById("productModal");
+
+let movementModal=
+document.getElementById("movementModal");
+
+if(event.target===productModal){
+
+closeProductModal();
+
+}
+
+if(event.target===movementModal){
+
+closeMovementModal();
+
+}
+
+}
+
+
+/* =====================================================
+   BAŞLANGIÇ
+===================================================== */
+
+fillSizeOptions();
+
+changePage("Genel");
+
+loadData();
+
+</script>
+
+</body>
+</html>

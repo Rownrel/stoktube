@@ -204,6 +204,45 @@ white-space:nowrap
 font-weight:normal
 }
 
+.usage-check{
+display:inline-flex;
+align-items:center;
+gap:6px;
+margin-left:10px;
+padding:5px 8px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+background:#f8fafc;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+vertical-align:middle;
+white-space:nowrap
+}
+
+.usage-check input{
+width:17px;
+height:17px;
+margin:0;
+padding:0;
+cursor:pointer;
+accent-color:#16a34a
+}
+
+.usage-check.checked{
+background:#dcfce7;
+border-color:#86efac;
+color:#166534
+}
+
+.reserved-row{
+background:#f0fdf4
+}
+
+.reserved-row:hover{
+background:#dcfce7
+}
+
 .quality{
 background:#eef2ff;
 color:#3730a3;
@@ -863,6 +902,54 @@ let movements=[];
 let currentPage="Genel";
 let currentProductId=null;
 let currentMovementType=null;
+
+/* 6 metre olmayan parçalar için "kullanılacak / ayrıldı" işareti */
+const USAGE_STORAGE_KEY="stokTubeUsageSelections";
+let usageSelections={};
+
+function loadUsageSelections(){
+
+try{
+
+let saved=localStorage.getItem(USAGE_STORAGE_KEY);
+usageSelections=saved ? JSON.parse(saved) : {};
+
+if(!usageSelections || typeof usageSelections!=="object")
+usageSelections={};
+
+}
+catch{
+usageSelections={};
+}
+
+}
+
+function persistUsageSelections(){
+
+localStorage.setItem(
+USAGE_STORAGE_KEY,
+JSON.stringify(usageSelections)
+);
+
+}
+
+function isUsageSelected(id){
+return !!usageSelections[String(id)];
+}
+
+function toggleUsageSelection(id,checked){
+
+let key=String(id);
+
+if(checked)
+usageSelections[key]=true;
+else
+delete usageSelections[key];
+
+persistUsageSelections();
+showProducts();
+
+}
 
 
 /* =====================================================
@@ -1927,6 +2014,9 @@ products.filter(
 p=>Number(p.id)!==Number(product.id)
 );
 
+delete usageSelections[String(product.id)];
+persistUsageSelections();
+
 }
 
 
@@ -2161,9 +2251,24 @@ formatLength(p.length)+
 '</span>';
 
 
+let usageHTML =
+!isStandardLength(p.length)
+?
+'<label class="usage-check '+(isUsageSelected(p.id)?'checked':'')+'" title="Bu parçanın kullanılmak üzere ayrıldığını işaretle">'+
+'<input type="checkbox" '+(isUsageSelected(p.id)?'checked':'')+' onchange="toggleUsageSelection('+p.id+',this.checked)">'+
+'<span>'+(isUsageSelected(p.id)?'✓ Ayrıldı':'Kullanılacak')+'</span>'+
+'</label>'
+:'';
+
+let rowClass =
+isUsageSelected(p.id)
+?'reserved-row'
+:'';
+
+
 return`
 
-<tr>
+<tr class="${rowClass}">
 
 <td>
 <span class="type-badge">
@@ -2193,6 +2298,7 @@ ${p.thickness}
 
 <td>
 ${lengthHTML}
+${usageHTML}
 </td>
 
 <td>
@@ -2532,6 +2638,9 @@ products.filter(
 x=>Number(x.id)!==Number(id)
 );
 
+delete usageSelections[String(id)];
+persistUsageSelections();
+
 
 /* EKRANI YENİLE */
 
@@ -2566,14 +2675,16 @@ function backupData(){
 
 let backup={
 
-version:2,
+version:3,
 
 createdAt:
 new Date().toISOString(),
 
 products:products,
 
-movements:movements
+movements:movements,
+
+usageSelections:usageSelections
 
 };
 
@@ -2694,6 +2805,11 @@ m
 
 }
 
+if(backup.usageSelections && typeof backup.usageSelections==="object"){
+usageSelections=backup.usageSelections;
+persistUsageSelections();
+}
+
 
 await loadData();
 
@@ -2764,7 +2880,7 @@ let csv="\uFEFF";
 
 
 csv +=
-"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Stok;Toplam Metre;Kritik Stok;Durum\n";
+"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Kullanım Durumu;Stok;Toplam Metre;Kritik Stok;Durum\n";
 
 
 list.forEach(p=>{
@@ -2786,6 +2902,7 @@ p.quality+";"+
 p.size+";"+
 p.thickness+";"+
 formatLength(p.length)+";"+
+(!isStandardLength(p.length) && isUsageSelected(p.id) ? "Ayrıldı" : "")+";"+
 p.stock+";"+
 (
 p.stock*
@@ -2922,6 +3039,8 @@ closeMovementModal();
 /* =====================================================
    BAŞLANGIÇ
 ===================================================== */
+
+loadUsageSelections();
 
 fillSizeOptions();
 

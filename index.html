@@ -126,6 +126,30 @@ button:hover{
 opacity:.88
 }
 
+.keypad-toggle{
+display:inline-flex;
+align-items:center;
+gap:8px;
+min-height:40px;
+padding:7px 11px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+background:#f8fafc;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+user-select:none
+}
+
+.keypad-toggle input{
+width:20px;
+height:20px;
+margin:0;
+padding:0;
+accent-color:#2563eb;
+cursor:pointer
+}
+
 .btn-blue{
 background:#2563eb;
 color:white
@@ -483,12 +507,20 @@ gap:8px
 }
 
 .keypad-grid button{
-min-height:50px;
-font-size:20px;
+min-height:56px;
+font-size:22px;
 background:#f8fafc;
 color:#0f172a;
-border-radius:9px;
-padding:8px
+border-radius:10px;
+padding:8px;
+touch-action:manipulation;
+-webkit-tap-highlight-color:transparent;
+user-select:none
+}
+
+.keypad-grid button:active{
+transform:scale(.97);
+background:#e2e8f0
 }
 
 .keypad-grid button.keypad-action{
@@ -614,6 +646,7 @@ id="search"
 type="text"
 inputmode="none"
 data-keypad="search"
+data-native-inputmode="text"
 data-keypad-label="Stok arama"
 placeholder="🔍 Ebat veya kalite ara..."
 oninput="showProducts()"
@@ -640,6 +673,11 @@ oninput="showProducts()"
 <button class="btn-dark" onclick="exportStock()">
 📥 Excel
 </button>
+
+<label class="keypad-toggle" for="keypadEnabled">
+<input type="checkbox" id="keypadEnabled" checked>
+<span>🔢 Ekran Klavyesi</span>
+</label>
 
 </div>
 
@@ -830,6 +868,7 @@ Kalınlık
 id="productThickness"
 inputmode="none"
 data-keypad="decimal"
+data-native-inputmode="decimal"
 data-keypad-label="Kalınlık"
 placeholder="Örn: 2 mm"
 >
@@ -847,6 +886,7 @@ id="productLength"
 type="text"
 inputmode="none"
 data-keypad="decimal"
+data-native-inputmode="decimal"
 data-keypad-label="Boy"
 value="6"
 placeholder="Örn: 5,4"
@@ -865,6 +905,7 @@ id="productStock"
 type="text"
 inputmode="none"
 data-keypad="integer"
+data-native-inputmode="numeric"
 data-keypad-label="Başlangıç stoku"
 min="0"
 value="0"
@@ -883,6 +924,7 @@ id="productCritical"
 type="text"
 inputmode="none"
 data-keypad="integer"
+data-native-inputmode="numeric"
 data-keypad-label="Kritik stok"
 min="0"
 value="5"
@@ -945,6 +987,7 @@ id="movementQuantity"
 type="text"
 inputmode="none"
 data-keypad="integer"
+data-native-inputmode="numeric"
 data-keypad-label="Stok hareket miktarı"
 min="1"
 >
@@ -3187,6 +3230,12 @@ closeMovementModal();
 ===================================================== */
 
 let keypadTarget=null;
+const KEYPAD_PREF_KEY="stokNumericKeypadEnabled";
+
+function isNumericKeypadEnabled(){
+let toggle=document.getElementById("keypadEnabled");
+return !!(toggle && toggle.checked);
+}
 
 function keypadAllowed(key,mode){
 
@@ -3211,9 +3260,26 @@ btn.disabled=!keypadAllowed(btn.dataset.key,mode);
 
 }
 
+function updateInputModes(){
+
+let enabled=isNumericKeypadEnabled();
+
+document.querySelectorAll("[data-keypad]").forEach(input=>{
+if(enabled){
+input.setAttribute("inputmode","none");
+}else{
+let nativeMode=input.dataset.nativeInputmode || "text";
+input.setAttribute("inputmode",nativeMode);
+}
+});
+
+if(!enabled)closeNumericKeypad();
+
+}
+
 function openNumericKeypad(input){
 
-if(!input)return;
+if(!input || !isNumericKeypadEnabled())return;
 
 if(keypadTarget && keypadTarget!==input)
 keypadTarget.classList.remove("keypad-focus");
@@ -3235,8 +3301,10 @@ updateKeypadButtons();
 function closeNumericKeypad(){
 
 let box=document.getElementById("numericKeypad");
+if(box){
 box.classList.remove("open");
 box.setAttribute("aria-hidden","true");
+}
 
 if(keypadTarget)
 keypadTarget.classList.remove("keypad-focus");
@@ -3308,26 +3376,8 @@ keypadTarget.focus({preventScroll:true});
 
 }
 
-function initNumericKeypad(){
+function handleKeypadButton(btn){
 
-document.addEventListener("keydown",e=>{
-if(e.key==="Escape")closeNumericKeypad();
-});
-
-document.querySelectorAll("[data-keypad]").forEach(input=>{
-input.addEventListener("focus",()=>openNumericKeypad(input));
-input.addEventListener("click",()=>openNumericKeypad(input));
-});
-
-let box=document.getElementById("numericKeypad");
-
-box.addEventListener("mousedown",e=>e.preventDefault());
-box.addEventListener("touchstart",e=>{
-if(e.target.closest("button"))e.preventDefault();
-},{passive:false});
-
-box.addEventListener("click",e=>{
-let btn=e.target.closest("button");
 if(!btn || btn.disabled)return;
 
 if(btn.dataset.key!==undefined){
@@ -3335,15 +3385,75 @@ keypadInsert(btn.dataset.key);
 return;
 }
 
-if(btn.dataset.action==="backspace")keypadBackspace();
+if(btn.dataset.action==="backspace"){
+keypadBackspace();
+return;
+}
 
 if(btn.dataset.action==="clear" && keypadTarget){
 keypadTarget.value="";
 triggerInputChange(keypadTarget);
 keypadTarget.focus({preventScroll:true});
+return;
 }
 
 if(btn.dataset.action==="close")closeNumericKeypad();
+
+}
+
+function initNumericKeypad(){
+
+let toggle=document.getElementById("keypadEnabled");
+
+/* Daha önceki tercih varsa geri yükle; ilk kullanımda açık */
+try{
+let saved=localStorage.getItem(KEYPAD_PREF_KEY);
+if(saved!==null)toggle.checked=saved==="1";
+}catch{}
+
+updateInputModes();
+
+toggle.addEventListener("change",()=>{
+try{
+localStorage.setItem(KEYPAD_PREF_KEY,toggle.checked?"1":"0");
+}catch{}
+updateInputModes();
+});
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape")closeNumericKeypad();
+});
+
+document.querySelectorAll("[data-keypad]").forEach(input=>{
+input.addEventListener("focus",()=>openNumericKeypad(input));
+input.addEventListener("pointerup",()=>openNumericKeypad(input));
+});
+
+let box=document.getElementById("numericKeypad");
+
+/*
+Dokunmatik ekranda click üretimine güvenmiyoruz.
+Pointer Events hem parmak, hem kalem, hem mouse ile çalışır.
+*/
+box.addEventListener("pointerdown",e=>{
+let btn=e.target.closest("button");
+if(!btn)return;
+e.preventDefault();
+});
+
+box.addEventListener("pointerup",e=>{
+let btn=e.target.closest("button");
+if(!btn)return;
+e.preventDefault();
+handleKeypadButton(btn);
+});
+
+/* Klavyeyle Enter/Space kullanımı için erişilebilirlik desteği */
+box.addEventListener("click",e=>{
+if(e.detail!==0)return;
+let btn=e.target.closest("button");
+if(!btn)return;
+handleKeypadButton(btn);
 });
 
 }

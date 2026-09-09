@@ -927,6 +927,178 @@ padding:18px
 }
 }
 
+
+/* =====================================================
+   SATIN ALMA EXCEL AKTARIMI
+===================================================== */
+
+.purchase-modal-box{
+max-width:1180px
+}
+
+.purchase-import-top{
+display:flex;
+gap:12px;
+align-items:center;
+justify-content:space-between;
+flex-wrap:wrap;
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:14px;
+margin-bottom:14px
+}
+
+.purchase-import-file{
+font-size:13px;
+color:#475569;
+word-break:break-word
+}
+
+.purchase-import-summary{
+display:grid;
+grid-template-columns:repeat(4,minmax(130px,1fr));
+gap:10px;
+margin-bottom:14px
+}
+
+.purchase-summary-card{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:9px;
+padding:11px 12px
+}
+
+.purchase-summary-label{
+font-size:12px;
+color:#64748b
+}
+
+.purchase-summary-value{
+font-size:20px;
+font-weight:800;
+margin-top:4px
+}
+
+.purchase-preview-wrap{
+overflow:auto;
+max-height:480px;
+border:1px solid #e2e8f0;
+border-radius:10px
+}
+
+.purchase-preview-table{
+min-width:1080px
+}
+
+.purchase-preview-table th{
+position:sticky;
+top:0;
+z-index:2;
+background:#f8fafc
+}
+
+.purchase-mini-select{
+padding:7px 8px;
+min-width:112px;
+font-size:13px
+}
+
+.purchase-edit-input{
+height:38px;
+padding:7px 9px;
+border:2px solid #cbd5e1;
+border-radius:7px;
+font-size:14px;
+font-weight:800;
+background:#fff;
+color:#0f172a
+}
+
+.purchase-edit-input:focus{
+outline:none;
+border-color:#2563eb;
+box-shadow:0 0 0 3px #2563eb1f
+}
+
+.purchase-size-input{
+width:132px;
+min-width:112px;
+text-align:center
+}
+
+.purchase-thickness-input{
+width:92px;
+min-width:82px;
+text-align:center
+}
+
+.purchase-quantity-input{
+width:88px;
+min-width:76px;
+text-align:center;
+font-weight:900
+}
+
+.purchase-row-ok{
+background:#f0fdf4
+}
+
+.purchase-row-error{
+background:#fff7ed
+}
+
+.purchase-status-pill{
+display:inline-block;
+padding:5px 8px;
+border-radius:999px;
+font-size:11px;
+font-weight:800;
+white-space:nowrap
+}
+
+.purchase-status-new{
+background:#dbeafe;
+color:#1e40af
+}
+
+.purchase-status-update{
+background:#dcfce7;
+color:#166534
+}
+
+.purchase-status-error{
+background:#ffedd5;
+color:#9a3412
+}
+
+.purchase-source-note{
+font-size:12px;
+color:#64748b;
+margin-top:10px;
+line-height:1.45
+}
+
+.purchase-check{
+width:20px;
+height:20px;
+accent-color:#2563eb;
+cursor:pointer
+}
+
+.purchase-commit{
+min-width:200px
+}
+
+@media(max-width:760px){
+.purchase-import-summary{
+grid-template-columns:1fr 1fr
+}
+.purchase-modal-box{
+padding:16px
+}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -941,7 +1113,7 @@ padding:18px
 <div class="header-content">
 
 <h1>
-🏭 Profil & Boru Stok Takip
+🏭 Profil & Yuvarlak Boru Stok Takip
 </h1>
 
 <div class="backup-area">
@@ -1068,6 +1240,10 @@ oninput="showProducts()"
 
 <button class="btn-blue" onclick="openProductModal()">
 + Malzeme Ekle
+</button>
+
+<button class="btn-orange" type="button" onclick="openPurchaseImportModal()">
+📄 Excel'den Stok Ekle
 </button>
 
 <button class="btn-dark" onclick="exportStock()">
@@ -1339,7 +1515,7 @@ value="0"
 </div>
 
 <div class="reservation-section" id="productReservationSection" style="display:none">
-<div class="reservation-section-title">🔖 6 m Profil İçin Ayrılan İşler</div>
+<div class="reservation-section-title">🔖 6 m Malzeme İçin Ayrılan İşler</div>
 <div class="reservation-entry-grid">
 <div class="form-group">
 <label>Ayrılan Boy Sayısı</label>
@@ -1464,6 +1640,108 @@ Kaydet
 
 </div>
 
+
+
+<!-- SATIN ALMA EXCEL'İNDEN STOK AKTARIM MODALI -->
+<div class="modal" id="purchaseImportModal">
+<div class="modal-box purchase-modal-box">
+
+<h2>📥 Satın Alma Excel'inden Stok Ekle</h2>
+
+<div class="notice">
+<strong>Bu aktarımda tüm ürünler 6 metre kabul edilir.</strong><br><br>
+Aynı malzeme stokta zaten varsa yeni kart açılmaz; Excel'deki boy adedi mevcut stoğa eklenir.
+Yeni bir malzemeyse otomatik stok kartı oluşturulur. Aktarmadan önce aşağıdaki önizlemeyi kontrol edebilirsin.
+</div>
+
+<div class="purchase-import-top">
+<div>
+<button type="button" class="btn-orange" onclick="document.getElementById('purchaseExcelFile').click()">
+📄 Satın Alma Excel'i Seç
+</button>
+<input
+type="file"
+id="purchaseExcelFile"
+accept=".xlsx"
+style="display:none"
+onchange="readPurchaseExcel(event)"
+>
+</div>
+
+<div id="purchaseImportFileInfo" class="purchase-import-file">
+Henüz Excel seçilmedi.
+</div>
+</div>
+
+<div id="purchaseImportStatus" class="price-status ok">
+Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik okunacak.
+</div>
+
+<div class="purchase-import-summary">
+<div class="purchase-summary-card">
+<div class="purchase-summary-label">Okunan Satır</div>
+<div class="purchase-summary-value blue" id="purchaseReadCount">0</div>
+</div>
+<div class="purchase-summary-card">
+<div class="purchase-summary-label">Yeni Stok Kartı</div>
+<div class="purchase-summary-value blue" id="purchaseNewCount">0</div>
+</div>
+<div class="purchase-summary-card">
+<div class="purchase-summary-label">Mevcut Stoğa Eklenecek</div>
+<div class="purchase-summary-value green" id="purchaseUpdateCount">0</div>
+</div>
+<div class="purchase-summary-card">
+<div class="purchase-summary-label">Toplam Boy</div>
+<div class="purchase-summary-value green" id="purchasePieceCount">0</div>
+</div>
+</div>
+
+<div class="purchase-preview-wrap">
+<table class="purchase-preview-table">
+<thead>
+<tr>
+<th>Aktar</th>
+<th>Excel Satırı</th>
+<th>Cinsi</th>
+<th>Kalite</th>
+<th>Ebat / Çap</th>
+<th>Kalınlık</th>
+<th>Boy</th>
+<th>Adet</th>
+<th>Mevcut Stok</th>
+<th>Yapılacak İşlem</th>
+</tr>
+</thead>
+<tbody id="purchasePreviewBody">
+<tr>
+<td colspan="10" class="empty">Önizleme için bir satın alma Excel'i seç.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="purchase-source-note">
+Excel'de kullanılan alanlar: <strong>Malzeme, Kalite Sınıfı, Kalınlık, Ebat, Miktar ve Birim.</strong>
+Örneğin gönderdiğin formdaki <strong>ST37 / 1,5 / 20×10 / 1 BOY</strong> satırı
+<strong>Profil • Dikdörtgen • ST37 • 20×10 • 1,5 mm • 6 m • 1 adet</strong> olarak okunur.
+<br><strong>Ebat / Çap, Kalınlık ve Adet</strong> alanları düzenlenebilir. Sipariş revize olduysa veya gelen malzeme talep formundan farklıysa, stoğa aktarmadan önce gerçek gelen bilgileri burada düzeltebilirsin.
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closePurchaseImportModal()">Vazgeç</button>
+<button
+type="button"
+id="purchaseImportCommitBtn"
+class="btn-green purchase-commit"
+onclick="commitPurchaseImport()"
+disabled
+>
+✅ Seçilenleri Stoğa Aktar
+</button>
+</div>
+
+</div>
+</div>
 
 <!-- 6 M PROFİL REZERVASYON MODALI -->
 <div class="modal" id="reservationModal">
@@ -1664,6 +1942,10 @@ let movements=[];
 let currentPage="Genel";
 let currentProductId=null;
 let currentMovementType=null;
+
+/* Satın alma Excel aktarımı */
+let purchaseImportRows=[];
+let purchaseImportFileName="";
 
 /* =====================================================
    FİYAT LİSTESİ VERİLERİ
@@ -2497,7 +2779,16 @@ function persistStandardReservations(){
 try{localStorage.setItem(STANDARD_RESERVATION_STORAGE_KEY,JSON.stringify(standardReservations));}catch{}
 }
 function isStandardReservableProduct(product){
-return !!(product && product.type==="Profil" && isStandardLength(product.length));
+if(!product || !isStandardLength(product.length))return false;
+
+/* 6 metre olan tüm stok malzemeleri ayırılabilir.
+   Böylece Excel'den eklenen Boru / Profil / Köşebent / Lama / NPU kayıtlarında da + Ayır görünür. */
+const reservableTypes=["Profil","Boru","Köşebent","Lama","NPU"];
+let type=String(product.type||"").trim();
+let shape=String(product.shape||"").trim();
+
+/* Eski/uyumsuz profil kayıtlarını da geriye dönük tanı. */
+return reservableTypes.includes(type) || shape==="Kare" || shape==="Dikdörtgen" || shape==="Yuvarlak";
 }
 function getStandardReservations(productId){
 let list=standardReservations[String(productId)];
@@ -2537,7 +2828,8 @@ let section=document.getElementById("productReservationSection");
 if(!section)return;
 let type=document.getElementById("productType").value;
 let length=parseLength(document.getElementById("productLength").value);
-section.style.display=(type==="Profil" && Number.isFinite(length) && Math.abs(length-6)<0.000001) ? "block" : "none";
+const reservableTypes=["Profil","Boru","Köşebent","Lama","NPU"];
+section.style.display=(reservableTypes.includes(type) && Number.isFinite(length) && Math.abs(length-6)<0.000001) ? "block" : "none";
 }
 function openReservationModal(productId){
 let product=products.find(p=>Number(p.id)===Number(productId));
@@ -2619,6 +2911,956 @@ if(!desc.value.trim())desc.value=item.note;
 function standardReservationExcelText(product){
 return getStandardReservations(product.id).map(r=>r.quantity+" boy - "+r.note).join(" | ");
 }
+
+
+/* =====================================================
+   SATIN ALMA EXCEL'İNDEN STOK AKTARIMI
+===================================================== */
+
+function setPurchaseImportStatus(message,error=false){
+let box=document.getElementById("purchaseImportStatus");
+if(!box)return;
+box.className="price-status "+(error?"error":"ok");
+box.innerHTML=message;
+}
+
+function openPurchaseImportModal(){
+closeNumericKeypad();
+purchaseImportRows=[];
+purchaseImportFileName="";
+
+let file=document.getElementById("purchaseExcelFile");
+if(file)file.value="";
+
+document.getElementById("purchaseImportFileInfo").textContent="Henüz Excel seçilmedi.";
+document.getElementById("purchasePreviewBody").innerHTML=
+'<tr><td colspan="10" class="empty">Önizleme için bir satın alma Excel\'i seç.</td></tr>';
+
+setPurchaseImportStatus(
+"Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik okunacak."
+);
+
+renderPurchaseImportSummary();
+document.getElementById("purchaseImportModal").style.display="flex";
+}
+
+function closePurchaseImportModal(){
+closeNumericKeypad();
+document.getElementById("purchaseImportModal").style.display="none";
+}
+
+function purchaseCellValue(cell){
+if(!cell)return null;
+
+let value=cell.value;
+
+if(value && typeof value==="object"){
+if(Object.prototype.hasOwnProperty.call(value,"result")){
+value=value.result;
+}
+else if(Array.isArray(value.richText)){
+value=value.richText.map(x=>x.text||"").join("");
+}
+else if(Object.prototype.hasOwnProperty.call(value,"text")){
+value=value.text;
+}
+}
+
+return value;
+}
+
+function normalizePurchaseHeader(value){
+return String(value??"")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ş/g,"s")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c")
+.replace(/\s+/g," ")
+.trim();
+}
+
+function purchaseNumber(value){
+if(typeof value==="number")return Number.isFinite(value)?value:null;
+
+let text=String(value??"")
+.trim()
+.replace(/\s+/g,"")
+.replace(/\.(?=\d{3}(?:\D|$))/g,"")
+.replace(",",".")
+.replace(/[^\d.-]/g,"");
+
+let n=Number(text);
+return Number.isFinite(n)?n:null;
+}
+
+function purchaseCompactNumber(value){
+let n=Number(value);
+if(!Number.isFinite(n))return "";
+return n.toLocaleString("tr-TR",{maximumFractionDigits:3});
+}
+
+function purchaseExtractNumbers(value){
+let text=String(value??"")
+.replace(/,/g,".")
+.replace(/×/g,"x");
+
+let matches=text.match(/\d+(?:\.\d+)?/g);
+return matches?matches.map(Number).filter(Number.isFinite):[];
+}
+
+function purchaseKnownQuality(value){
+let text=normalizePurchaseHeader(value).replace(/\s+/g,"");
+
+if(text.includes("316l"))return "316L";
+if(text.includes("st37"))return "ST37";
+if(text.includes("st52"))return "ST52";
+if(/(^|[^0-9])304([^0-9]|$)/.test(text))return "304";
+if(/(^|[^0-9])316([^0-9]|$)/.test(text))return "316";
+if(text.includes("galvaniz"))return "Galvaniz";
+if(text.includes("aluminyum"))return "Alüminyum";
+
+return "";
+}
+
+function purchaseQualityFromFields(material,quality){
+let known=purchaseKnownQuality(quality)||purchaseKnownQuality(material);
+if(known)return known;
+
+let q=String(quality??"").trim();
+if(q)return normalizeQuality(q);
+
+let m=String(material??"").trim();
+let compact=normalizePurchaseHeader(m).replace(/\s+/g,"");
+
+if(
+/^(s|st)\d+/i.test(compact) ||
+/^(304|316l?|430)$/i.test(compact)
+){
+return normalizeQuality(m);
+}
+
+return "Diğer";
+}
+
+function inferPurchaseType(material,size){
+let text=normalizePurchaseHeader(
+String(material??"")+" "+String(size??"")
+);
+
+if(text.includes("npu") || text.includes("upn"))return "NPU";
+if(text.includes("kosebent") || text.includes("angle"))return "Köşebent";
+if(text.includes("lama") || text.includes("flat bar"))return "Lama";
+if(text.includes("boru") || /[øØ⌀]/.test(String(size??"")))return "Boru";
+if(text.includes("profil"))return "Profil";
+
+let nums=purchaseExtractNumbers(size);
+if(nums.length>=2)return "Profil";
+
+/* Kullanıcı belirli sekmedeyse tek ölçülü belirsiz satırda sekmeyi ipucu olarak kullan. */
+if(["Profil","Boru","Köşebent","Lama","NPU"].includes(currentPage)){
+return currentPage;
+}
+
+return "";
+}
+
+function applyPurchaseTypeToItem(item){
+let type=item.type;
+let nums=purchaseExtractNumbers(item.rawSize);
+let thickness=purchaseNumber(item.rawThickness);
+
+item.shape="";
+item.size="";
+item.thickness="";
+
+if(type==="Profil"){
+if(nums.length>=2){
+let a=nums[0];
+let b=nums[1];
+
+/* Firma standardında uzun kenar başta tutuluyor. */
+if(a<b)[a,b]=[b,a];
+
+item.size=formatSize(
+purchaseCompactNumber(a)+"x"+purchaseCompactNumber(b)
+);
+
+item.shape=Math.abs(a-b)<0.000001
+?"Kare"
+:"Dikdörtgen";
+
+if(!Number.isFinite(thickness) && nums.length>=3){
+thickness=nums[2];
+}
+}
+}
+
+else if(type==="Boru"){
+if(nums.length>=1){
+item.size=formatSize("Ø"+purchaseCompactNumber(nums[0]));
+item.shape="Yuvarlak";
+
+if(!Number.isFinite(thickness) && nums.length>=2){
+thickness=nums[1];
+}
+}
+}
+
+else if(type==="Köşebent"){
+if(nums.length>=2){
+let a=nums[0];
+let b=nums[1];
+if(a<b)[a,b]=[b,a];
+
+item.size=formatSize(
+purchaseCompactNumber(a)+"x"+purchaseCompactNumber(b)
+);
+if(!Number.isFinite(thickness) && nums.length>=3){
+thickness=nums[2];
+}
+}
+else if(String(item.rawSize??"").trim()){
+item.size=formatSize(item.rawSize);
+}
+item.shape="Köşebent";
+}
+
+else if(type==="Lama"){
+if(nums.length>=1){
+item.size=formatSize(purchaseCompactNumber(nums[0]));
+if(!Number.isFinite(thickness) && nums.length>=2){
+thickness=nums[1];
+}
+}
+else{
+item.size=formatSize(item.rawSize);
+}
+item.shape="Lama";
+}
+
+else if(type==="NPU"){
+if(nums.length>=1){
+item.size=formatSize(purchaseCompactNumber(nums[0]));
+}
+else{
+item.size=formatSize(
+String(item.rawSize??"").replace(/npu|upn/gi,"")
+);
+}
+item.shape="NPU";
+}
+
+if(Number.isFinite(thickness)){
+item.thickness=formatThickness(thickness);
+}
+}
+
+function validatePurchaseItem(item){
+if(!item.type){
+return "Malzeme cinsi belirlenemedi. Cinsi seç.";
+}
+
+if(!item.size){
+return "Ebat / çap okunamadı.";
+}
+
+if(item.type!=="NPU" && !item.thickness){
+return "Kalınlık okunamadı.";
+}
+
+let qty=Number(item.quantity);
+
+if(!Number.isFinite(qty) || qty<=0){
+return "Miktar geçersiz.";
+}
+
+if(!Number.isInteger(qty)){
+return "Miktar tam boy adedi olmalı.";
+}
+
+let unit=normalizePurchaseHeader(item.unit);
+
+if(
+unit &&
+!unit.includes("boy") &&
+!unit.includes("adet")
+){
+return "Birim '"+String(item.unit)+"'. Bu aktarım BOY/ADET içindir.";
+}
+
+return "";
+}
+
+function findExistingPurchaseProduct(item){
+return products.find(p=>
+
+normalizeText(p.type)===normalizeText(item.type)
+
+&& normalizeText(p.shape)===normalizeText(item.shape)
+
+&& normalizeText(p.quality)===normalizeText(item.quality)
+
+&& normalizeText(p.size)===normalizeText(item.size)
+
+&& normalizeText(p.thickness)===normalizeText(item.thickness)
+
+&& Math.abs(parseLength(p.length)-6)<0.000001
+
+);
+}
+
+function getPurchaseHeaders(sheet,rowNumber){
+let found={};
+
+sheet.getRow(rowNumber).eachCell({includeEmpty:false},(cell,col)=>{
+let text=normalizePurchaseHeader(purchaseCellValue(cell));
+
+if(text.includes("malzeme") && !found.material)found.material=col;
+else if(text.includes("kalite") && !found.quality)found.quality=col;
+else if(text.includes("kalinlik") && !found.thickness)found.thickness=col;
+else if(text.includes("ebat") && !found.size)found.size=col;
+else if(text.includes("miktar") && !found.quantity)found.quantity=col;
+else if(text.includes("birim") && !found.unit)found.unit=col;
+else if(text.includes("fiyat") && !found.price)found.price=col;
+});
+
+return found;
+}
+
+function findPurchaseTable(workbook){
+for(let ws of workbook.worksheets){
+
+let maxRow=Math.min(ws.rowCount||0,80);
+
+for(let row=1;row<=maxRow;row++){
+let headers=getPurchaseHeaders(ws,row);
+
+if(
+headers.material &&
+headers.thickness &&
+headers.size &&
+headers.quantity
+){
+return {
+sheet:ws,
+headerRow:row,
+headers:headers
+};
+}
+}
+}
+
+return null;
+}
+
+function extractPurchaseRows(workbook){
+let table=findPurchaseTable(workbook);
+
+if(!table){
+throw new Error(
+"Excel içinde 'Malzeme / Kalınlık / Ebat / Miktar' başlıklı Hammadde Talep Detayları tablosu bulunamadı."
+);
+}
+
+let {sheet,headerRow,headers}=table;
+let rows=[];
+
+for(let row=headerRow+1;row<=sheet.rowCount;row++){
+
+let rowText="";
+sheet.getRow(row).eachCell({includeEmpty:false},cell=>{
+rowText+=" "+String(purchaseCellValue(cell)??"");
+});
+
+let normalizedRowText=normalizePurchaseHeader(rowText);
+
+if(
+normalizedRowText.includes("5. aciklama") ||
+normalizedRowText.includes("aciklama / talep nedeni")
+){
+break;
+}
+
+let material=headers.material
+?purchaseCellValue(sheet.getCell(row,headers.material))
+:"";
+
+let quality=headers.quality
+?purchaseCellValue(sheet.getCell(row,headers.quality))
+:"";
+
+let thickness=headers.thickness
+?purchaseCellValue(sheet.getCell(row,headers.thickness))
+:"";
+
+let size=headers.size
+?purchaseCellValue(sheet.getCell(row,headers.size))
+:"";
+
+let quantity=headers.quantity
+?purchaseCellValue(sheet.getCell(row,headers.quantity))
+:"";
+
+let unit=headers.unit
+?purchaseCellValue(sheet.getCell(row,headers.unit))
+:"";
+
+let hasData=[
+material,quality,thickness,size,quantity,unit
+].some(v=>String(v??"").trim()!=="");
+
+if(!hasData)continue;
+
+let item={
+sourceRow:row,
+rawMaterial:String(material??"").trim(),
+rawQuality:String(quality??"").trim(),
+rawThickness:thickness,
+rawSize:String(size??"").trim(),
+quantity:purchaseNumber(quantity),
+unit:String(unit??"").trim(),
+quality:purchaseQualityFromFields(material,quality),
+type:inferPurchaseType(material,size),
+shape:"",
+size:"",
+thickness:"",
+selected:true
+};
+
+applyPurchaseTypeToItem(item);
+
+if(validatePurchaseItem(item)){
+item.selected=false;
+}
+
+rows.push(item);
+}
+
+if(rows.length===0){
+throw new Error(
+"Hammadde Talep Detayları tablosunda aktarılabilecek dolu satır bulunamadı."
+);
+}
+
+return rows;
+}
+
+function purchaseTypeOptions(selected){
+let types=["Profil","Boru","Köşebent","Lama","NPU"];
+
+return '<option value="">Cinsi seç</option>'+
+types.map(type=>
+'<option value="'+type+'" '+(type===selected?"selected":"")+'>'+type+'</option>'
+).join("");
+}
+
+function purchaseQualityOptions(selected){
+let qualities=["ST37","ST52","304","316","316L","Galvaniz","Alüminyum","Diğer"];
+let current=String(selected||"");
+
+if(current && !qualities.includes(current)){
+qualities.unshift(current);
+}
+
+return qualities.map(q=>
+'<option value="'+escapeHTML(q)+'" '+(q===current?"selected":"")+'>'+escapeHTML(q)+'</option>'
+).join("");
+}
+
+function changePurchaseItemType(index,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+item.type=value;
+applyPurchaseTypeToItem(item);
+
+if(!validatePurchaseItem(item)){
+item.selected=true;
+}
+else{
+item.selected=false;
+}
+
+renderPurchaseImportPreview();
+}
+
+function changePurchaseItemQuality(index,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+item.quality=value;
+renderPurchaseImportPreview();
+}
+
+function updatePurchaseItemDraft(index,field,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+if(field==="size"){
+item.rawSize=String(value??"");
+}
+else if(field==="thickness"){
+item.rawThickness=String(value??"");
+}
+}
+
+function finalizePurchaseItemField(index,field,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+updatePurchaseItemDraft(index,field,value);
+applyPurchaseTypeToItem(item);
+
+if(!validatePurchaseItem(item)){
+item.selected=true;
+}
+else{
+item.selected=false;
+}
+
+renderPurchaseImportPreview();
+}
+
+function changePurchaseItemQuantity(index,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+let quantity=purchaseNumber(value);
+
+if(!Number.isFinite(quantity) || quantity<=0){
+item.quantity=NaN;
+item.selected=false;
+}else{
+/* Boy adedi tam sayı tutulur. */
+item.quantity=Math.max(1,Math.round(quantity));
+if(!validatePurchaseItem(item))item.selected=true;
+}
+
+renderPurchaseImportPreview();
+}
+
+function togglePurchaseItem(index,checked){
+let item=purchaseImportRows[index];
+if(!item)return;
+
+if(validatePurchaseItem(item)){
+item.selected=false;
+}
+else{
+item.selected=!!checked;
+}
+
+renderPurchaseImportSummary();
+}
+
+function renderPurchaseImportSummary(){
+let read=purchaseImportRows.length;
+let newCount=0;
+let updateCount=0;
+let pieces=0;
+let ready=0;
+let errors=0;
+
+purchaseImportRows.forEach(item=>{
+let error=validatePurchaseItem(item);
+
+if(error){
+errors++;
+return;
+}
+
+if(!item.selected)return;
+
+ready++;
+pieces+=Number(item.quantity)||0;
+
+if(findExistingPurchaseProduct(item))updateCount++;
+else newCount++;
+});
+
+document.getElementById("purchaseReadCount").textContent=read;
+document.getElementById("purchaseNewCount").textContent=newCount;
+document.getElementById("purchaseUpdateCount").textContent=updateCount;
+document.getElementById("purchasePieceCount").textContent=pieces;
+
+let btn=document.getElementById("purchaseImportCommitBtn");
+btn.disabled=ready===0;
+
+if(read>0){
+setPurchaseImportStatus(
+"<strong>"+ready+" satır aktarılmaya hazır.</strong>"+
+(errors?" "+errors+" satır kontrol istiyor.":" Tüm satırlar hazır.")
+);
+}
+}
+
+function renderPurchaseImportPreview(){
+let tbody=document.getElementById("purchasePreviewBody");
+
+if(!purchaseImportRows.length){
+tbody.innerHTML=
+'<tr><td colspan="10" class="empty">Excel içinde aktarılacak satır bulunamadı.</td></tr>';
+renderPurchaseImportSummary();
+return;
+}
+
+tbody.innerHTML=purchaseImportRows.map((item,index)=>{
+
+let error=validatePurchaseItem(item);
+let existing=error?null:findExistingPurchaseProduct(item);
+
+let statusHTML;
+
+if(error){
+statusHTML=
+'<span class="purchase-status-pill purchase-status-error">⚠️ '+escapeHTML(error)+'</span>';
+}
+else if(existing){
+statusHTML=
+'<span class="purchase-status-pill purchase-status-update">Mevcut stoğa +'+item.quantity+'</span>';
+}
+else{
+statusHTML=
+'<span class="purchase-status-pill purchase-status-new">Yeni stok kartı</span>';
+}
+
+let existingStock=existing
+?Number(existing.stock)||0
+:"-";
+
+return `
+<tr class="${error?"purchase-row-error":"purchase-row-ok"}">
+
+<td>
+<input
+class="purchase-check"
+type="checkbox"
+${item.selected && !error?"checked":""}
+${error?"disabled":""}
+onchange="togglePurchaseItem(${index},this.checked)"
+>
+</td>
+
+<td><strong>${item.sourceRow}</strong></td>
+
+<td>
+<select
+class="purchase-mini-select"
+onchange="changePurchaseItemType(${index},this.value)"
+>
+${purchaseTypeOptions(item.type)}
+</select>
+</td>
+
+<td>
+<select
+class="purchase-mini-select"
+onchange="changePurchaseItemQuality(${index},this.value)"
+>
+${purchaseQualityOptions(item.quality)}
+</select>
+</td>
+
+<td>
+<input
+class="purchase-edit-input purchase-size-input"
+type="text"
+inputmode="none"
+data-keypad="text"
+data-native-inputmode="text"
+data-keypad-label="Ebat / çap"
+data-purchase-index="${index}"
+data-purchase-field="size"
+value="${escapeHTML(String(item.rawSize||item.size||""))}"
+placeholder="Örn: 40x40 / Ø76"
+onfocus="openNumericKeypad(this)"
+onpointerup="openNumericKeypad(this)"
+oninput="updatePurchaseItemDraft(${index},'size',this.value)"
+onblur="finalizePurchaseItemField(${index},'size',this.value)"
+onkeydown="if(event.key==='Enter'){event.preventDefault();finalizePurchaseItemField(${index},'size',this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
+aria-label="Ebat veya çap"
+>
+</td>
+
+<td>
+<input
+class="purchase-edit-input purchase-thickness-input"
+type="text"
+inputmode="none"
+data-keypad="decimal"
+data-native-inputmode="decimal"
+data-keypad-label="Kalınlık"
+data-purchase-index="${index}"
+data-purchase-field="thickness"
+value="${escapeHTML(String(item.rawThickness??"").replace(/\s*mm$/i,""))}"
+placeholder="mm"
+onfocus="openNumericKeypad(this)"
+onpointerup="openNumericKeypad(this)"
+oninput="updatePurchaseItemDraft(${index},'thickness',this.value)"
+onblur="finalizePurchaseItemField(${index},'thickness',this.value)"
+onkeydown="if(event.key==='Enter'){event.preventDefault();finalizePurchaseItemField(${index},'thickness',this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
+aria-label="Kalınlık"
+>
+</td>
+
+<td><strong>6 m</strong></td>
+
+<td>
+<input
+class="purchase-edit-input purchase-quantity-input"
+type="text"
+inputmode="none"
+data-keypad="integer"
+data-native-inputmode="numeric"
+data-keypad-label="Gelen boy adedi"
+value="${Number.isFinite(Number(item.quantity))?escapeHTML(String(item.quantity)):""}"
+placeholder="Adet"
+onfocus="openNumericKeypad(this)"
+onpointerup="openNumericKeypad(this)"
+onchange="changePurchaseItemQuantity(${index},this.value)"
+onkeydown="if(event.key==='Enter'){event.preventDefault();changePurchaseItemQuantity(${index},this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
+aria-label="Gelen boy adedi"
+>
+</td>
+
+<td>${existingStock==="-"?"-":existingStock+" adet"}</td>
+
+<td>${statusHTML}</td>
+
+</tr>
+`;
+}).join("");
+
+renderPurchaseImportSummary();
+}
+
+async function readPurchaseExcel(event){
+let file=event.target.files[0];
+
+if(!file)return;
+
+purchaseImportFileName=file.name;
+
+document.getElementById("purchaseImportFileInfo").innerHTML=
+"<strong>"+escapeHTML(file.name)+"</strong> okunuyor...";
+
+setPurchaseImportStatus("Excel okunuyor...");
+
+try{
+
+if(typeof ExcelJS==="undefined"){
+throw new Error(
+"Excel okuyucu yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenile."
+);
+}
+
+let workbook=new ExcelJS.Workbook();
+let buffer=await file.arrayBuffer();
+
+await workbook.xlsx.load(buffer);
+
+purchaseImportRows=extractPurchaseRows(workbook);
+
+document.getElementById("purchaseImportFileInfo").innerHTML=
+"<strong>"+escapeHTML(file.name)+"</strong> • "+
+purchaseImportRows.length+" dolu malzeme satırı";
+
+renderPurchaseImportPreview();
+
+}
+catch(error){
+
+console.error(error);
+
+purchaseImportRows=[];
+
+document.getElementById("purchaseImportFileInfo").innerHTML=
+"<strong>"+escapeHTML(file.name)+"</strong>";
+
+document.getElementById("purchasePreviewBody").innerHTML=
+'<tr><td colspan="10" class="empty">Excel okunamadı.</td></tr>';
+
+setPurchaseImportStatus(
+"❌ <strong>Excel okunamadı.</strong><br>"+escapeHTML(error.message),
+true
+);
+
+renderPurchaseImportSummary();
+
+}
+finally{
+/* Aynı dosyayı tekrar seçebilmek için */
+event.target.value="";
+}
+}
+
+async function addPurchaseMovement(product,quantity,fileName,idOffset){
+let movement={
+id:Date.now()+50000+idOffset,
+product_id:product.id,
+type:"Giriş",
+quantity:quantity,
+date:new Date().toLocaleString("tr-TR"),
+description:"Satın alma Excel'i: "+fileName,
+product_name:product.type,
+shape:product.shape,
+quality:product.quality,
+size:product.size,
+thickness:product.thickness,
+length:product.length
+};
+
+let movementResult=await supabaseRequest(
+MOVEMENTS_TABLE,
+"POST",
+movement
+);
+
+if(movementResult && movementResult.length){
+movements.push(movementResult[0]);
+}
+}
+
+async function commitPurchaseImport(){
+let selected=purchaseImportRows.filter(
+item=>item.selected && !validatePurchaseItem(item)
+);
+
+if(!selected.length){
+alert("Stoğa aktarılacak geçerli bir satır seçilmedi.");
+return;
+}
+
+let btn=document.getElementById("purchaseImportCommitBtn");
+btn.disabled=true;
+btn.textContent="⏳ Stoğa Aktarılıyor...";
+
+let added=0;
+let updated=0;
+let failed=[];
+
+let baseId=Date.now();
+
+for(let i=0;i<selected.length;i++){
+let item=selected[i];
+
+try{
+
+let existing=findExistingPurchaseProduct(item);
+
+if(existing){
+
+let newStock=(Number(existing.stock)||0)+Number(item.quantity);
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"PATCH",
+{stock:newStock},
+"?id=eq."+encodeURIComponent(existing.id)
+);
+
+existing.stock=newStock;
+
+await addPurchaseMovement(
+existing,
+Number(item.quantity),
+purchaseImportFileName||"Satın Alma Formu.xlsx",
+i
+);
+
+updated++;
+}
+
+else{
+
+let product={
+id:baseId+i,
+type:item.type,
+shape:item.shape,
+quality:item.quality,
+size:item.size,
+thickness:item.thickness,
+length:6,
+stock:Number(item.quantity),
+critical:0,
+description:"Satın alma Excel'inden eklendi"
+};
+
+let result=await supabaseRequest(
+PRODUCTS_TABLE,
+"POST",
+product
+);
+
+if(!result || !result.length){
+throw new Error("Stok kartı oluşturulamadı.");
+}
+
+let saved=result[0];
+products.push(saved);
+
+await addPurchaseMovement(
+saved,
+Number(item.quantity),
+purchaseImportFileName||"Satın Alma Formu.xlsx",
+1000+i
+);
+
+added++;
+}
+
+}
+catch(error){
+console.error("Satın alma Excel aktarım hatası:",item,error);
+failed.push(
+"Satır "+item.sourceRow+" ("+(item.size||item.rawSize||"?")+"): "+error.message
+);
+}
+}
+
+try{
+await loadData();
+}catch(error){
+console.error(error);
+}
+
+btn.textContent="✅ Seçilenleri Stoğa Aktar";
+btn.disabled=false;
+
+if(failed.length===0){
+
+closePurchaseImportModal();
+
+alert(
+"✅ Satın alma Excel'i stoğa aktarıldı.\n\n"+
+"Yeni stok kartı: "+added+"\n"+
+"Mevcut stoğa eklenen: "+updated+"\n"+
+"Toplam işlenen satır: "+(added+updated)
+);
+
+}
+else{
+
+setPurchaseImportStatus(
+"⚠️ "+(added+updated)+" satır aktarıldı, "+failed.length+" satırda hata oluştu.",
+true
+);
+
+alert(
+"⚠️ Aktarım kısmen tamamlandı.\n\n"+
+"Başarılı: "+(added+updated)+" satır\n"+
+"Hatalı: "+failed.length+" satır\n\n"+
+failed.slice(0,8).join("\n")
+);
+
+renderPurchaseImportPreview();
+
+}
+}
+
 
 /* =====================================================
    SUPABASE İSTEK FONKSİYONU
@@ -3273,7 +4515,7 @@ document.getElementById("productDescription")
 .value.trim();
 
 let pendingReservedTotal=pendingProductReservations.reduce((sum,r)=>sum+(Number(r.quantity)||0),0);
-if(type==="Profil" && isStandardLength(length) && pendingReservedTotal>stock){
+if(isStandardLength(length) && pendingReservedTotal>stock){
 alert("Ayrılan toplam boy sayısı başlangıç stokundan fazla olamaz.\n\nBaşlangıç stoku: "+stock+" boy\nAyrılan toplam: "+pendingReservedTotal+" boy");
 return;
 }
@@ -5251,6 +6493,9 @@ document.getElementById("reservationModal");
 let priceModal=
 document.getElementById("priceModal");
 
+let purchaseImportModal=
+document.getElementById("purchaseImportModal");
+
 if(event.target===productModal){
 
 closeProductModal();
@@ -5272,6 +6517,12 @@ closeReservationModal();
 if(event.target===priceModal){
 
 closePriceModal();
+
+}
+
+if(event.target===purchaseImportModal){
+
+closePurchaseImportModal();
 
 }
 
@@ -5495,6 +6746,16 @@ if(usageId){
 finishUsageNoteEdit(usageId,input);
 return;
 }
+
+let purchaseField=input && input.dataset ? input.dataset.purchaseField : null;
+let purchaseIndex=input && input.dataset ? Number(input.dataset.purchaseIndex) : NaN;
+if(purchaseField && Number.isInteger(purchaseIndex)){
+let value=input.value;
+closeNumericKeypad();
+finalizePurchaseItemField(purchaseIndex,purchaseField,value);
+return;
+}
+
 closeNumericKeypad();
 try{input.focus({preventScroll:true});}catch{}
 },140);

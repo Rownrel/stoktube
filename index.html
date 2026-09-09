@@ -778,6 +778,155 @@ gap:6px
 .alpha-keypad-grid .keypad-space{grid-column:span 4}
 .alpha-keypad-grid .keypad-wide{grid-column:span 2}
 }
+
+/* =====================================================
+   FİYAT LİSTESİ
+===================================================== */
+.btn-price{
+background:#7c3aed;
+color:white
+}
+
+.price-modal-box{
+max-width:980px
+}
+
+.price-top-grid{
+display:grid;
+grid-template-columns:minmax(220px,1fr) minmax(220px,1fr);
+gap:14px;
+margin-bottom:15px
+}
+
+.price-panel{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:14px
+}
+
+.price-panel-title{
+font-size:13px;
+font-weight:900;
+color:#475569;
+margin-bottom:8px
+}
+
+.price-file-row{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap
+}
+
+.price-file-info{
+font-size:12px;
+line-height:1.45;
+color:#475569;
+margin-top:8px
+}
+
+.price-discount-wrap{
+display:flex;
+align-items:center;
+gap:8px
+}
+
+.price-discount-wrap input{
+width:130px;
+font-size:20px;
+font-weight:900;
+text-align:center
+}
+
+.price-percent{
+font-size:20px;
+font-weight:900;
+color:#475569
+}
+
+.price-search-row{
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+margin:4px 0 12px
+}
+
+.price-search-row input{
+flex:1 1 320px;
+min-width:220px;
+font-size:16px
+}
+
+.price-result-count{
+font-size:12px;
+font-weight:800;
+color:#64748b
+}
+
+.price-table-wrap{
+border:1px solid #e2e8f0;
+border-radius:10px;
+overflow:auto;
+max-height:52vh
+}
+
+.price-table{
+min-width:720px
+}
+
+.price-table th{
+position:sticky;
+top:0;
+z-index:1;
+background:#f1f5f9
+}
+
+.price-base{
+font-weight:800;
+color:#334155
+}
+
+.price-discounted{
+font-weight:900;
+color:#166534
+}
+
+.price-empty{
+text-align:center;
+padding:34px 15px;
+color:#64748b
+}
+
+.price-status{
+padding:10px 12px;
+border-radius:8px;
+font-size:12px;
+margin-bottom:12px
+}
+
+.price-status.ok{
+background:#ecfdf5;
+border:1px solid #86efac;
+color:#166534
+}
+
+.price-status.error{
+background:#fee2e2;
+border:1px solid #fca5a5;
+color:#991b1b
+}
+
+@media(max-width:700px){
+.price-top-grid{
+grid-template-columns:1fr
+}
+.price-modal-box{
+padding:18px
+}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -796,6 +945,10 @@ gap:6px
 </h1>
 
 <div class="backup-area">
+
+<button class="btn-price" type="button" onclick="openPriceModal()">
+💰 Fiyatlar
+</button>
 
 <button class="btn-green" onclick="backupData()">
 💾 Yedek Al
@@ -1334,6 +1487,97 @@ Kaydet
 </div>
 </div>
 
+
+<!-- FİYAT LİSTESİ MODALI -->
+<div class="modal" id="priceModal">
+<div class="modal-box price-modal-box">
+
+<h2>💰 Profil Fiyatları</h2>
+
+<div id="priceStatus" class="price-status ok">
+İskontosuz fiyatlar Excel fiyat listesinin sol tablosundan okunur.
+</div>
+
+<div class="price-top-grid">
+
+<div class="price-panel">
+<div class="price-panel-title">📄 Fiyat Listesi Excel'i</div>
+<div class="price-file-row">
+<button type="button" class="btn-orange" onclick="document.getElementById('priceExcelFile').click()">
+Excel Fiyat Listesini Değiştir
+</button>
+<input
+type="file"
+id="priceExcelFile"
+accept=".xlsx,.xls"
+style="display:none"
+onchange="importPriceExcel(event)"
+>
+</div>
+<div id="priceFileInfo" class="price-file-info"></div>
+</div>
+
+<div class="price-panel">
+<div class="price-panel-title">İskonto (%)</div>
+<div class="price-discount-wrap">
+<input
+id="priceDiscount"
+type="text"
+inputmode="none"
+data-keypad="decimal"
+data-native-inputmode="decimal"
+data-keypad-label="Fiyat iskontosu"
+value="0"
+oninput="priceDiscountChanged()"
+>
+<span class="price-percent">%</span>
+</div>
+<div class="price-file-info">
+İskontosuz fiyat sabit kalır; bu oran yalnızca iskontolu fiyatı değiştirir.
+</div>
+</div>
+
+</div>
+
+<div class="price-panel-title">🔍 Profil Ara</div>
+<div class="price-search-row">
+<input
+id="priceSearch"
+type="text"
+inputmode="none"
+data-keypad="search"
+data-native-inputmode="text"
+data-keypad-label="Profil fiyat arama"
+placeholder="Örn: 40x40 veya 40x40x2"
+oninput="renderPriceResults()"
+>
+<span id="priceResultCount" class="price-result-count"></span>
+</div>
+
+<div class="price-table-wrap">
+<table class="price-table">
+<thead>
+<tr>
+<th>Ebat</th>
+<th>Kalınlık</th>
+<th>İskontosuz Fiyat</th>
+<th>İskonto</th>
+<th>İskontolu Fiyat</th>
+</tr>
+</thead>
+<tbody id="priceResultBody">
+<tr><td colspan="5" class="price-empty">Profil aramak için yukarıdaki kutuya ebat yazın.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closePriceModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
   <div class="keypad-head">
@@ -1419,6 +1663,401 @@ let movements=[];
 let currentPage="Genel";
 let currentProductId=null;
 let currentMovementType=null;
+
+/* =====================================================
+   FİYAT LİSTESİ VERİLERİ
+===================================================== */
+
+const PRICE_STORAGE_KEY="stokTubeProfilePriceListV1";
+const DEFAULT_PRICE_DATA={"version":1,"fileName":"Yeni Fiyat Listesi.xlsx","importedAt":"2026-09-09T10:50:00+03:00","sourceDiscount":38.5,"records":[{"type":"Profil","size":"15x15","thickness":1.2,"basePrice":28.68},{"type":"Profil","size":"15x15","thickness":1.5,"basePrice":34.5},{"type":"Profil","size":"15x15","thickness":2.0,"basePrice":43.41},{"type":"Profil","size":"20x10","thickness":1.2,"basePrice":28.68},{"type":"Profil","size":"20x10","thickness":1.5,"basePrice":34.5},{"type":"Profil","size":"20x10","thickness":2.0,"basePrice":43.41},{"type":"Profil","size":"16x16","thickness":1.5,"basePrice":39.59},{"type":"Profil","size":"20x20","thickness":1.2,"basePrice":35.79},{"type":"Profil","size":"20x20","thickness":1.4,"basePrice":40.05},{"type":"Profil","size":"20x20","thickness":1.5,"basePrice":41.14},{"type":"Profil","size":"20x20","thickness":1.9,"basePrice":48.15},{"type":"Profil","size":"20x20","thickness":2.0,"basePrice":49.18},{"type":"Profil","size":"20x20","thickness":2.5,"basePrice":64.41},{"type":"Profil","size":"30x10","thickness":1.2,"basePrice":35.79},{"type":"Profil","size":"30x10","thickness":1.4,"basePrice":40.05},{"type":"Profil","size":"30x10","thickness":1.5,"basePrice":41.14},{"type":"Profil","size":"30x10","thickness":1.9,"basePrice":48.15},{"type":"Profil","size":"30x10","thickness":2.0,"basePrice":49.18},{"type":"Profil","size":"30x10","thickness":2.5,"basePrice":64.41},{"type":"Profil","size":"25x15","thickness":1.2,"basePrice":35.79},{"type":"Profil","size":"25x15","thickness":1.4,"basePrice":40.05},{"type":"Profil","size":"25x15","thickness":1.5,"basePrice":41.14},{"type":"Profil","size":"25x15","thickness":1.9,"basePrice":48.15},{"type":"Profil","size":"25x15","thickness":2.0,"basePrice":49.18},{"type":"Profil","size":"25x15","thickness":2.5,"basePrice":64.41},{"type":"Profil","size":"30x15","thickness":1.5,"basePrice":49.55},{"type":"Profil","size":"30x15","thickness":2.0,"basePrice":62.83},{"type":"Profil","size":"25x25","thickness":1.2,"basePrice":44.95},{"type":"Profil","size":"25x25","thickness":1.4,"basePrice":47.75},{"type":"Profil","size":"25x25","thickness":1.5,"basePrice":49.73},{"type":"Profil","size":"25x25","thickness":1.9,"basePrice":58.7},{"type":"Profil","size":"25x25","thickness":2.0,"basePrice":59.23},{"type":"Profil","size":"25x25","thickness":2.5,"basePrice":75.54},{"type":"Profil","size":"25x25","thickness":3.0,"basePrice":89.35},{"type":"Profil","size":"30x20","thickness":1.2,"basePrice":44.95},{"type":"Profil","size":"30x20","thickness":1.4,"basePrice":47.75},{"type":"Profil","size":"30x20","thickness":1.5,"basePrice":49.73},{"type":"Profil","size":"30x20","thickness":1.9,"basePrice":58.7},{"type":"Profil","size":"30x20","thickness":2.0,"basePrice":59.23},{"type":"Profil","size":"30x20","thickness":2.5,"basePrice":75.54},{"type":"Profil","size":"30x20","thickness":3.0,"basePrice":89.35},{"type":"Profil","size":"40x10","thickness":1.2,"basePrice":48.59},{"type":"Profil","size":"40x10","thickness":1.5,"basePrice":55.54},{"type":"Profil","size":"40x10","thickness":2.0,"basePrice":64.91},{"type":"Profil","size":"40x10","thickness":2.5,"basePrice":82.28},{"type":"Profil","size":"40x15","thickness":1.5,"basePrice":61.8},{"type":"Profil","size":"40x15","thickness":2.0,"basePrice":79.89},{"type":"Profil","size":"35x20","thickness":1.5,"basePrice":61.8},{"type":"Profil","size":"35x20","thickness":2.0,"basePrice":79.89},{"type":"Profil","size":"35x25","thickness":1.5,"basePrice":66.66},{"type":"Profil","size":"35x25","thickness":2.0,"basePrice":81.67},{"type":"Profil","size":"50x10","thickness":1.5,"basePrice":67.31},{"type":"Profil","size":"50x10","thickness":2.0,"basePrice":83.97},{"type":"Profil","size":"45x15","thickness":1.5,"basePrice":67.31},{"type":"Profil","size":"45x15","thickness":2.0,"basePrice":83.97},{"type":"Profil","size":"30x30","thickness":1.2,"basePrice":53.42},{"type":"Profil","size":"30x30","thickness":1.4,"basePrice":57.19},{"type":"Profil","size":"30x30","thickness":1.5,"basePrice":59.29},{"type":"Profil","size":"30x30","thickness":1.9,"basePrice":70.75},{"type":"Profil","size":"30x30","thickness":2.0,"basePrice":72.92},{"type":"Profil","size":"30x30","thickness":2.5,"basePrice":88.71},{"type":"Profil","size":"30x30","thickness":3.0,"basePrice":106.34},{"type":"Profil","size":"30x30","thickness":4.0,"basePrice":153.37},{"type":"Profil","size":"40x20","thickness":1.2,"basePrice":53.42},{"type":"Profil","size":"40x20","thickness":1.4,"basePrice":57.19},{"type":"Profil","size":"40x20","thickness":1.5,"basePrice":59.29},{"type":"Profil","size":"40x20","thickness":1.9,"basePrice":70.75},{"type":"Profil","size":"40x20","thickness":2.0,"basePrice":72.92},{"type":"Profil","size":"40x20","thickness":2.5,"basePrice":88.71},{"type":"Profil","size":"40x20","thickness":3.0,"basePrice":106.34},{"type":"Profil","size":"40x20","thickness":4.0,"basePrice":153.37},{"type":"Profil","size":"40x25","thickness":1.5,"basePrice":70.16},{"type":"Profil","size":"40x25","thickness":2.0,"basePrice":87.5},{"type":"Profil","size":"40x25","thickness":2.5,"basePrice":105.28},{"type":"Profil","size":"40x25","thickness":3.0,"basePrice":125.27},{"type":"Profil","size":"40x30","thickness":1.2,"basePrice":63.07},{"type":"Profil","size":"40x30","thickness":1.4,"basePrice":66.38},{"type":"Profil","size":"40x30","thickness":1.5,"basePrice":68.55},{"type":"Profil","size":"40x30","thickness":1.9,"basePrice":82.38},{"type":"Profil","size":"40x30","thickness":2.0,"basePrice":84.81},{"type":"Profil","size":"40x30","thickness":2.5,"basePrice":104.74},{"type":"Profil","size":"40x30","thickness":3.0,"basePrice":123.89},{"type":"Profil","size":"35x35","thickness":1.5,"basePrice":71.55},{"type":"Profil","size":"35x35","thickness":2.0,"basePrice":88.46},{"type":"Profil","size":"35x35","thickness":2.5,"basePrice":106.28},{"type":"Profil","size":"35x35","thickness":3.0,"basePrice":129.86},{"type":"Profil","size":"50x20","thickness":1.5,"basePrice":71.55},{"type":"Profil","size":"50x20","thickness":2.0,"basePrice":88.46},{"type":"Profil","size":"50x20","thickness":2.5,"basePrice":106.28},{"type":"Profil","size":"50x20","thickness":3.0,"basePrice":129.86},{"type":"Profil","size":"50x25","thickness":1.5,"basePrice":82.27},{"type":"Profil","size":"50x25","thickness":2.0,"basePrice":101.68},{"type":"Profil","size":"50x25","thickness":2.5,"basePrice":121.66},{"type":"Profil","size":"50x25","thickness":3.0,"basePrice":146.37},{"type":"Profil","size":"40x40","thickness":1.2,"basePrice":72.12},{"type":"Profil","size":"40x40","thickness":1.4,"basePrice":76.27},{"type":"Profil","size":"40x40","thickness":1.5,"basePrice":78.47},{"type":"Profil","size":"40x40","thickness":1.9,"basePrice":93.13},{"type":"Profil","size":"40x40","thickness":2.0,"basePrice":95.62},{"type":"Profil","size":"40x40","thickness":2.4,"basePrice":112.29},{"type":"Profil","size":"40x40","thickness":2.5,"basePrice":115.35},{"type":"Profil","size":"40x40","thickness":2.9,"basePrice":134.46},{"type":"Profil","size":"40x40","thickness":3.0,"basePrice":137.58},{"type":"Profil","size":"40x40","thickness":4.0,"basePrice":185.5},{"type":"Profil","size":"40x40","thickness":5.0,"basePrice":233.13},{"type":"Profil","size":"50x30","thickness":1.2,"basePrice":72.12},{"type":"Profil","size":"50x30","thickness":1.4,"basePrice":76.27},{"type":"Profil","size":"50x30","thickness":1.5,"basePrice":78.47},{"type":"Profil","size":"50x30","thickness":1.9,"basePrice":93.13},{"type":"Profil","size":"50x30","thickness":2.0,"basePrice":95.62},{"type":"Profil","size":"50x30","thickness":2.4,"basePrice":112.29},{"type":"Profil","size":"50x30","thickness":2.5,"basePrice":115.35},{"type":"Profil","size":"50x30","thickness":2.9,"basePrice":134.46},{"type":"Profil","size":"50x30","thickness":3.0,"basePrice":137.58},{"type":"Profil","size":"50x30","thickness":4.0,"basePrice":185.5},{"type":"Profil","size":"50x30","thickness":5.0,"basePrice":233.13},{"type":"Profil","size":"60x20","thickness":1.5,"basePrice":89.97},{"type":"Profil","size":"60x20","thickness":2.0,"basePrice":109.93},{"type":"Profil","size":"45x45","thickness":1.5,"basePrice":101.64},{"type":"Profil","size":"45x45","thickness":2.0,"basePrice":123.22},{"type":"Profil","size":"45x45","thickness":2.5,"basePrice":148.12},{"type":"Profil","size":"45x45","thickness":3.0,"basePrice":174.76},{"type":"Profil","size":"45x45","thickness":4.0,"basePrice":234.68},{"type":"Profil","size":"45x45","thickness":5.0,"basePrice":292.31},{"type":"Profil","size":"50x40","thickness":1.5,"basePrice":101.64},{"type":"Profil","size":"50x40","thickness":2.0,"basePrice":123.22},{"type":"Profil","size":"50x40","thickness":2.5,"basePrice":148.12},{"type":"Profil","size":"50x40","thickness":3.0,"basePrice":174.76},{"type":"Profil","size":"50x40","thickness":4.0,"basePrice":234.68},{"type":"Profil","size":"50x40","thickness":5.0,"basePrice":292.31},{"type":"Profil","size":"60x30","thickness":1.5,"basePrice":101.64},{"type":"Profil","size":"60x30","thickness":2.0,"basePrice":123.22},{"type":"Profil","size":"60x30","thickness":2.5,"basePrice":148.12},{"type":"Profil","size":"60x30","thickness":3.0,"basePrice":174.76},{"type":"Profil","size":"60x30","thickness":4.0,"basePrice":234.68},{"type":"Profil","size":"60x30","thickness":5.0,"basePrice":292.31},{"type":"Profil","size":"50x50","thickness":1.2,"basePrice":94.76},{"type":"Profil","size":"50x50","thickness":1.4,"basePrice":96.84},{"type":"Profil","size":"50x50","thickness":1.5,"basePrice":100.02},{"type":"Profil","size":"50x50","thickness":1.9,"basePrice":117.95},{"type":"Profil","size":"50x50","thickness":2.0,"basePrice":121.16},{"type":"Profil","size":"50x50","thickness":2.4,"basePrice":141.68},{"type":"Profil","size":"50x50","thickness":2.5,"basePrice":145.57},{"type":"Profil","size":"50x50","thickness":2.9,"basePrice":169.67},{"type":"Profil","size":"50x50","thickness":3.0,"basePrice":173.68},{"type":"Profil","size":"50x50","thickness":4.0,"basePrice":232.09},{"type":"Profil","size":"50x50","thickness":5.0,"basePrice":287.41},{"type":"Profil","size":"60x40","thickness":1.2,"basePrice":94.76},{"type":"Profil","size":"60x40","thickness":1.4,"basePrice":96.84},{"type":"Profil","size":"60x40","thickness":1.5,"basePrice":100.02},{"type":"Profil","size":"60x40","thickness":1.9,"basePrice":117.95},{"type":"Profil","size":"60x40","thickness":2.0,"basePrice":121.16},{"type":"Profil","size":"60x40","thickness":2.4,"basePrice":141.68},{"type":"Profil","size":"60x40","thickness":2.5,"basePrice":145.57},{"type":"Profil","size":"60x40","thickness":2.9,"basePrice":169.67},{"type":"Profil","size":"60x40","thickness":3.0,"basePrice":173.68},{"type":"Profil","size":"60x40","thickness":4.0,"basePrice":232.09},{"type":"Profil","size":"60x40","thickness":5.0,"basePrice":287.41},{"type":"Profil","size":"70x30","thickness":1.2,"basePrice":96.86},{"type":"Profil","size":"70x30","thickness":1.5,"basePrice":104.85},{"type":"Profil","size":"70x30","thickness":1.9,"basePrice":136.06},{"type":"Profil","size":"70x30","thickness":2.0,"basePrice":129.93},{"type":"Profil","size":"70x30","thickness":2.5,"basePrice":156.04},{"type":"Profil","size":"70x30","thickness":3.0,"basePrice":183.42},{"type":"Profil","size":"70x30","thickness":4.0,"basePrice":243.12},{"type":"Profil","size":"80x20","thickness":1.5,"basePrice":113.7},{"type":"Profil","size":"80x20","thickness":2.0,"basePrice":145.98},{"type":"Profil","size":"80x20","thickness":2.5,"basePrice":163.95},{"type":"Profil","size":"80x20","thickness":3.0,"basePrice":208.74},{"type":"Profil","size":"80x30","thickness":1.5,"basePrice":129.3},{"type":"Profil","size":"80x30","thickness":2.0,"basePrice":156.2},{"type":"Profil","size":"80x30","thickness":2.5,"basePrice":187.26},{"type":"Profil","size":"80x30","thickness":3.0,"basePrice":222.99},{"type":"Profil","size":"80x30","thickness":4.0,"basePrice":291.94},{"type":"Profil","size":"80x30","thickness":5.0,"basePrice":363.07},{"type":"Profil","size":"70x40","thickness":1.5,"basePrice":129.3},{"type":"Profil","size":"70x40","thickness":2.0,"basePrice":156.2},{"type":"Profil","size":"70x40","thickness":2.5,"basePrice":187.26},{"type":"Profil","size":"70x40","thickness":3.0,"basePrice":222.99},{"type":"Profil","size":"70x40","thickness":4.0,"basePrice":291.94},{"type":"Profil","size":"70x40","thickness":5.0,"basePrice":363.07},{"type":"Profil","size":"60x50","thickness":1.5,"basePrice":129.3},{"type":"Profil","size":"60x50","thickness":2.0,"basePrice":156.2},{"type":"Profil","size":"60x50","thickness":2.5,"basePrice":187.26},{"type":"Profil","size":"60x50","thickness":3.0,"basePrice":222.99},{"type":"Profil","size":"60x50","thickness":4.0,"basePrice":291.94},{"type":"Profil","size":"60x50","thickness":5.0,"basePrice":363.07},{"type":"Profil","size":"60x60","thickness":1.2,"basePrice":114.97},{"type":"Profil","size":"60x60","thickness":1.4,"basePrice":120.62},{"type":"Profil","size":"60x60","thickness":1.5,"basePrice":124.93},{"type":"Profil","size":"60x60","thickness":1.9,"basePrice":143.79},{"type":"Profil","size":"60x60","thickness":2.0,"basePrice":147.74},{"type":"Profil","size":"60x60","thickness":2.4,"basePrice":172.66},{"type":"Profil","size":"60x60","thickness":2.5,"basePrice":177.65},{"type":"Profil","size":"60x60","thickness":2.9,"basePrice":207.63},{"type":"Profil","size":"60x60","thickness":3.0,"basePrice":212.02},{"type":"Profil","size":"60x60","thickness":4.0,"basePrice":284.68},{"type":"Profil","size":"60x60","thickness":5.0,"basePrice":357.78},{"type":"Profil","size":"80x40","thickness":1.2,"basePrice":114.97},{"type":"Profil","size":"80x40","thickness":1.4,"basePrice":120.62},{"type":"Profil","size":"80x40","thickness":1.5,"basePrice":124.93},{"type":"Profil","size":"80x40","thickness":1.9,"basePrice":143.79},{"type":"Profil","size":"80x40","thickness":2.0,"basePrice":147.74},{"type":"Profil","size":"80x40","thickness":2.4,"basePrice":172.66},{"type":"Profil","size":"80x40","thickness":2.5,"basePrice":177.65},{"type":"Profil","size":"80x40","thickness":2.9,"basePrice":207.63},{"type":"Profil","size":"80x40","thickness":3.0,"basePrice":212.02},{"type":"Profil","size":"80x40","thickness":4.0,"basePrice":284.68},{"type":"Profil","size":"80x40","thickness":5.0,"basePrice":357.78},{"type":"Profil","size":"70x50","thickness":2.0,"basePrice":156.91},{"type":"Profil","size":"70x50","thickness":2.5,"basePrice":187.52},{"type":"Profil","size":"70x50","thickness":3.0,"basePrice":223.51},{"type":"Profil","size":"70x50","thickness":4.0,"basePrice":299.04},{"type":"Profil","size":"70x50","thickness":5.0,"basePrice":373.56},{"type":"Profil","size":"90x30","thickness":2.0,"basePrice":164.5},{"type":"Profil","size":"90x30","thickness":2.5,"basePrice":203.25},{"type":"Profil","size":"90x30","thickness":3.0,"basePrice":236.67},{"type":"Profil","size":"100x20","thickness":2.0,"basePrice":177.67},{"type":"Profil","size":"100x30","thickness":1.5,"basePrice":149.42},{"type":"Profil","size":"100x30","thickness":2.0,"basePrice":186.3},{"type":"Profil","size":"100x30","thickness":2.5,"basePrice":225.22},{"type":"Profil","size":"100x30","thickness":3.0,"basePrice":262.1},{"type":"Profil","size":"100x30","thickness":4.0,"basePrice":339.7},{"type":"Profil","size":"100x30","thickness":5.0,"basePrice":421.04},{"type":"Profil","size":"80x50","thickness":1.5,"basePrice":149.42},{"type":"Profil","size":"80x50","thickness":2.0,"basePrice":186.3},{"type":"Profil","size":"80x50","thickness":2.5,"basePrice":225.22},{"type":"Profil","size":"80x50","thickness":3.0,"basePrice":262.1},{"type":"Profil","size":"80x50","thickness":4.0,"basePrice":339.7},{"type":"Profil","size":"80x50","thickness":5.0,"basePrice":421.04},{"type":"Profil","size":"110x30","thickness":1.5,"basePrice":166.84},{"type":"Profil","size":"70x70","thickness":1.5,"basePrice":154.5},{"type":"Profil","size":"70x70","thickness":1.9,"basePrice":177.02},{"type":"Profil","size":"70x70","thickness":2.0,"basePrice":181.89},{"type":"Profil","size":"70x70","thickness":2.4,"basePrice":206.08},{"type":"Profil","size":"70x70","thickness":2.5,"basePrice":211.56},{"type":"Profil","size":"70x70","thickness":2.9,"basePrice":245.63},{"type":"Profil","size":"70x70","thickness":3.0,"basePrice":252.55},{"type":"Profil","size":"70x70","thickness":4.0,"basePrice":334.75},{"type":"Profil","size":"70x70","thickness":5.0,"basePrice":423.23},{"type":"Profil","size":"70x70","thickness":6.0,"basePrice":548.27},{"type":"Profil","size":"90x50","thickness":1.5,"basePrice":154.5},{"type":"Profil","size":"90x50","thickness":1.9,"basePrice":177.02},{"type":"Profil","size":"90x50","thickness":2.0,"basePrice":181.89},{"type":"Profil","size":"90x50","thickness":2.4,"basePrice":206.08},{"type":"Profil","size":"90x50","thickness":2.5,"basePrice":211.56},{"type":"Profil","size":"90x50","thickness":2.9,"basePrice":245.63},{"type":"Profil","size":"90x50","thickness":3.0,"basePrice":252.55},{"type":"Profil","size":"90x50","thickness":4.0,"basePrice":334.75},{"type":"Profil","size":"90x50","thickness":5.0,"basePrice":423.23},{"type":"Profil","size":"90x50","thickness":6.0,"basePrice":548.27},{"type":"Profil","size":"80x60","thickness":1.5,"basePrice":154.5},{"type":"Profil","size":"80x60","thickness":1.9,"basePrice":177.02},{"type":"Profil","size":"80x60","thickness":2.0,"basePrice":181.89},{"type":"Profil","size":"80x60","thickness":2.4,"basePrice":206.08},{"type":"Profil","size":"80x60","thickness":2.5,"basePrice":211.56},{"type":"Profil","size":"80x60","thickness":2.9,"basePrice":245.63},{"type":"Profil","size":"80x60","thickness":3.0,"basePrice":252.55},{"type":"Profil","size":"80x60","thickness":4.0,"basePrice":334.75},{"type":"Profil","size":"80x60","thickness":5.0,"basePrice":423.23},{"type":"Profil","size":"80x60","thickness":6.0,"basePrice":548.27},{"type":"Profil","size":"100x40","thickness":1.5,"basePrice":154.5},{"type":"Profil","size":"100x40","thickness":1.9,"basePrice":177.02},{"type":"Profil","size":"100x40","thickness":2.0,"basePrice":181.89},{"type":"Profil","size":"100x40","thickness":2.4,"basePrice":206.08},{"type":"Profil","size":"100x40","thickness":2.5,"basePrice":211.56},{"type":"Profil","size":"100x40","thickness":2.9,"basePrice":245.63},{"type":"Profil","size":"100x40","thickness":3.0,"basePrice":252.55},{"type":"Profil","size":"100x40","thickness":4.0,"basePrice":334.75},{"type":"Profil","size":"100x40","thickness":5.0,"basePrice":423.23},{"type":"Profil","size":"100x40","thickness":6.0,"basePrice":548.27},{"type":"Profil","size":"100x50","thickness":1.5,"basePrice":181.14},{"type":"Profil","size":"100x50","thickness":1.9,"basePrice":188.52},{"type":"Profil","size":"100x50","thickness":2.0,"basePrice":193.44},{"type":"Profil","size":"100x50","thickness":2.4,"basePrice":221.01},{"type":"Profil","size":"100x50","thickness":2.5,"basePrice":226.57},{"type":"Profil","size":"100x50","thickness":2.9,"basePrice":263.88},{"type":"Profil","size":"100x50","thickness":3.0,"basePrice":269.64},{"type":"Profil","size":"100x50","thickness":4.0,"basePrice":351.76},{"type":"Profil","size":"100x50","thickness":5.0,"basePrice":440.14},{"type":"Profil","size":"100x50","thickness":6.0,"basePrice":557.19},{"type":"Profil","size":"75x75","thickness":2.0,"basePrice":203.39},{"type":"Profil","size":"75x75","thickness":3.0,"basePrice":284.81},{"type":"Profil","size":"80x80","thickness":1.5,"basePrice":175.72},{"type":"Profil","size":"80x80","thickness":1.9,"basePrice":201.71},{"type":"Profil","size":"80x80","thickness":2.0,"basePrice":207.93},{"type":"Profil","size":"80x80","thickness":2.4,"basePrice":234.84},{"type":"Profil","size":"80x80","thickness":2.5,"basePrice":242.3},{"type":"Profil","size":"80x80","thickness":2.9,"basePrice":280.06},{"type":"Profil","size":"80x80","thickness":3.0,"basePrice":287.63},{"type":"Profil","size":"80x80","thickness":4.0,"basePrice":377.05},{"type":"Profil","size":"80x80","thickness":5.0,"basePrice":475.19},{"type":"Profil","size":"80x80","thickness":6.0,"basePrice":575.95},{"type":"Profil","size":"100x60","thickness":1.5,"basePrice":175.72},{"type":"Profil","size":"100x60","thickness":1.9,"basePrice":201.71},{"type":"Profil","size":"100x60","thickness":2.0,"basePrice":207.93},{"type":"Profil","size":"100x60","thickness":2.4,"basePrice":234.84},{"type":"Profil","size":"100x60","thickness":2.5,"basePrice":242.3},{"type":"Profil","size":"100x60","thickness":2.9,"basePrice":280.06},{"type":"Profil","size":"100x60","thickness":3.0,"basePrice":287.63},{"type":"Profil","size":"100x60","thickness":4.0,"basePrice":377.05},{"type":"Profil","size":"100x60","thickness":5.0,"basePrice":475.19},{"type":"Profil","size":"100x60","thickness":6.0,"basePrice":575.95},{"type":"Profil","size":"120x40","thickness":2.0,"basePrice":217.52},{"type":"Profil","size":"120x40","thickness":2.5,"basePrice":254.29},{"type":"Profil","size":"120x40","thickness":3.0,"basePrice":299.61},{"type":"Profil","size":"120x40","thickness":4.0,"basePrice":395.58},{"type":"Profil","size":"120x40","thickness":5.0,"basePrice":494.24},{"type":"Profil","size":"130x40","thickness":2.5,"basePrice":288.43},{"type":"Profil","size":"130x40","thickness":3.0,"basePrice":359.98},{"type":"Profil","size":"130x40","thickness":4.0,"basePrice":481.94},{"type":"Profil","size":"130x40","thickness":5.0,"basePrice":592.16},{"type":"Profil","size":"120x50","thickness":2.5,"basePrice":288.43},{"type":"Profil","size":"120x50","thickness":3.0,"basePrice":359.98},{"type":"Profil","size":"120x50","thickness":4.0,"basePrice":481.94},{"type":"Profil","size":"120x50","thickness":5.0,"basePrice":592.16},{"type":"Profil","size":"100x70","thickness":2.5,"basePrice":288.43},{"type":"Profil","size":"100x70","thickness":3.0,"basePrice":359.98},{"type":"Profil","size":"100x70","thickness":4.0,"basePrice":481.94},{"type":"Profil","size":"100x70","thickness":5.0,"basePrice":592.16},{"type":"Profil","size":"120x60","thickness":2.0,"basePrice":234.56},{"type":"Profil","size":"120x60","thickness":2.4,"basePrice":265.55},{"type":"Profil","size":"120x60","thickness":2.5,"basePrice":272.38},{"type":"Profil","size":"120x60","thickness":2.9,"basePrice":314.83},{"type":"Profil","size":"120x60","thickness":3.0,"basePrice":326.67},{"type":"Profil","size":"120x60","thickness":4.0,"basePrice":434.06},{"type":"Profil","size":"120x60","thickness":5.0,"basePrice":534.41},{"type":"Profil","size":"120x60","thickness":6.0,"basePrice":664.31},{"type":"Profil","size":"90x90","thickness":2.0,"basePrice":234.56},{"type":"Profil","size":"90x90","thickness":2.4,"basePrice":265.55},{"type":"Profil","size":"90x90","thickness":2.5,"basePrice":272.38},{"type":"Profil","size":"90x90","thickness":2.9,"basePrice":314.83},{"type":"Profil","size":"90x90","thickness":3.0,"basePrice":326.67},{"type":"Profil","size":"90x90","thickness":4.0,"basePrice":434.06},{"type":"Profil","size":"90x90","thickness":5.0,"basePrice":534.41},{"type":"Profil","size":"90x90","thickness":6.0,"basePrice":664.31},{"type":"Profil","size":"100x80","thickness":2.0,"basePrice":234.56},{"type":"Profil","size":"100x80","thickness":2.4,"basePrice":265.55},{"type":"Profil","size":"100x80","thickness":2.5,"basePrice":272.38},{"type":"Profil","size":"100x80","thickness":2.9,"basePrice":314.83},{"type":"Profil","size":"100x80","thickness":3.0,"basePrice":326.67},{"type":"Profil","size":"100x80","thickness":4.0,"basePrice":434.06},{"type":"Profil","size":"100x80","thickness":5.0,"basePrice":534.41},{"type":"Profil","size":"100x80","thickness":6.0,"basePrice":664.31},{"type":"Profil","size":"140x40","thickness":3.0,"basePrice":368.11},{"type":"Profil","size":"140x40","thickness":4.0,"basePrice":479.91},{"type":"Profil","size":"140x40","thickness":5.0,"basePrice":594.89},{"type":"Profil","size":"110x70","thickness":3.0,"basePrice":368.11},{"type":"Profil","size":"110x70","thickness":4.0,"basePrice":479.91},{"type":"Profil","size":"110x70","thickness":5.0,"basePrice":594.89},{"type":"Profil","size":"120x70","thickness":2.0,"basePrice":268.74},{"type":"Profil","size":"120x70","thickness":2.5,"basePrice":328.69},{"type":"Profil","size":"120x70","thickness":3.0,"basePrice":385.95},{"type":"Profil","size":"150x50","thickness":2.0,"basePrice":292.34},{"type":"Profil","size":"150x50","thickness":2.5,"basePrice":334.17},{"type":"Profil","size":"150x50","thickness":3.0,"basePrice":396.75},{"type":"Profil","size":"150x50","thickness":4.0,"basePrice":517.82},{"type":"Profil","size":"150x50","thickness":5.0,"basePrice":648.13},{"type":"Profil","size":"150x50","thickness":6.0,"basePrice":773.17},{"type":"Profil","size":"140x60","thickness":2.5,"basePrice":320.96},{"type":"Profil","size":"140x60","thickness":3.0,"basePrice":389.41},{"type":"Profil","size":"140x60","thickness":4.0,"basePrice":512.95},{"type":"Profil","size":"140x60","thickness":5.0,"basePrice":632.27},{"type":"Profil","size":"140x60","thickness":6.0,"basePrice":818.51},{"type":"Profil","size":"100x100","thickness":2.0,"basePrice":266.33},{"type":"Profil","size":"100x100","thickness":2.4,"basePrice":303.3},{"type":"Profil","size":"100x100","thickness":2.5,"basePrice":311.82},{"type":"Profil","size":"100x100","thickness":2.9,"basePrice":358.41},{"type":"Profil","size":"100x100","thickness":3.0,"basePrice":367.99},{"type":"Profil","size":"100x100","thickness":4.0,"basePrice":483.2},{"type":"Profil","size":"100x100","thickness":5.0,"basePrice":593.98},{"type":"Profil","size":"100x100","thickness":6.0,"basePrice":726.52},{"type":"Profil","size":"100x100","thickness":8.0,"basePrice":1007.76},{"type":"Profil","size":"120x80","thickness":2.0,"basePrice":266.33},{"type":"Profil","size":"120x80","thickness":2.4,"basePrice":303.3},{"type":"Profil","size":"120x80","thickness":2.5,"basePrice":311.82},{"type":"Profil","size":"120x80","thickness":2.9,"basePrice":358.41},{"type":"Profil","size":"120x80","thickness":3.0,"basePrice":367.99},{"type":"Profil","size":"120x80","thickness":4.0,"basePrice":483.2},{"type":"Profil","size":"120x80","thickness":5.0,"basePrice":593.98},{"type":"Profil","size":"120x80","thickness":6.0,"basePrice":726.52},{"type":"Profil","size":"120x80","thickness":8.0,"basePrice":1007.76},{"type":"Profil","size":"140x80","thickness":2.5,"basePrice":437.01},{"type":"Profil","size":"140x80","thickness":3.0,"basePrice":440.85},{"type":"Profil","size":"140x80","thickness":4.0,"basePrice":575.79},{"type":"Profil","size":"140x80","thickness":5.0,"basePrice":712.73},{"type":"Profil","size":"140x80","thickness":6.0,"basePrice":855.81},{"type":"Profil","size":"140x80","thickness":8.0,"basePrice":1143.36},{"type":"Profil","size":"110x110","thickness":2.5,"basePrice":437.01},{"type":"Profil","size":"110x110","thickness":3.0,"basePrice":440.85},{"type":"Profil","size":"110x110","thickness":4.0,"basePrice":575.79},{"type":"Profil","size":"110x110","thickness":5.0,"basePrice":712.73},{"type":"Profil","size":"110x110","thickness":6.0,"basePrice":855.81},{"type":"Profil","size":"110x110","thickness":8.0,"basePrice":1143.36},{"type":"Profil","size":"120x100","thickness":2.5,"basePrice":437.01},{"type":"Profil","size":"120x100","thickness":3.0,"basePrice":440.85},{"type":"Profil","size":"120x100","thickness":4.0,"basePrice":575.79},{"type":"Profil","size":"120x100","thickness":5.0,"basePrice":712.73},{"type":"Profil","size":"120x100","thickness":6.0,"basePrice":855.81},{"type":"Profil","size":"120x100","thickness":8.0,"basePrice":1143.36},{"type":"Profil","size":"120x120","thickness":2.5,"basePrice":381.21},{"type":"Profil","size":"120x120","thickness":3.0,"basePrice":447.76},{"type":"Profil","size":"120x120","thickness":4.0,"basePrice":580.69},{"type":"Profil","size":"120x120","thickness":5.0,"basePrice":729.01},{"type":"Profil","size":"120x120","thickness":6.0,"basePrice":885.61},{"type":"Profil","size":"120x120","thickness":8.0,"basePrice":1229.48},{"type":"Profil","size":"160x80","thickness":2.5,"basePrice":381.21},{"type":"Profil","size":"160x80","thickness":3.0,"basePrice":447.76},{"type":"Profil","size":"160x80","thickness":4.0,"basePrice":580.69},{"type":"Profil","size":"160x80","thickness":5.0,"basePrice":729.01},{"type":"Profil","size":"160x80","thickness":6.0,"basePrice":885.61},{"type":"Profil","size":"160x80","thickness":8.0,"basePrice":1229.48},{"type":"Profil","size":"150x100","thickness":3.0,"basePrice":486.49},{"type":"Profil","size":"150x100","thickness":4.0,"basePrice":649.83},{"type":"Profil","size":"150x100","thickness":5.0,"basePrice":807.49},{"type":"Profil","size":"150x100","thickness":6.0,"basePrice":991.68},{"type":"Profil","size":"150x100","thickness":8.0,"basePrice":1334.43},{"type":"Profil","size":"140x140","thickness":3.0,"basePrice":640.8},{"type":"Profil","size":"140x140","thickness":4.0,"basePrice":751.44},{"type":"Profil","size":"140x140","thickness":5.0,"basePrice":918.64},{"type":"Profil","size":"140x140","thickness":6.0,"basePrice":1125.07},{"type":"Profil","size":"140x140","thickness":8.0,"basePrice":1532.39},{"type":"Profil","size":"200x80","thickness":3.0,"basePrice":649.08},{"type":"Profil","size":"200x80","thickness":4.0,"basePrice":787.64},{"type":"Profil","size":"200x80","thickness":5.0,"basePrice":959.27},{"type":"Profil","size":"200x80","thickness":6.0,"basePrice":1170.93},{"type":"Profil","size":"180x100","thickness":3.0,"basePrice":649.08},{"type":"Profil","size":"180x100","thickness":4.0,"basePrice":787.64},{"type":"Profil","size":"180x100","thickness":5.0,"basePrice":959.27},{"type":"Profil","size":"180x100","thickness":6.0,"basePrice":1170.93},{"type":"Profil","size":"150x150","thickness":3.0,"basePrice":660.67},{"type":"Profil","size":"150x150","thickness":4.0,"basePrice":822.83},{"type":"Profil","size":"150x150","thickness":5.0,"basePrice":1002.01},{"type":"Profil","size":"150x150","thickness":6.0,"basePrice":1217.85},{"type":"Profil","size":"150x150","thickness":8.0,"basePrice":1653.82},{"type":"Profil","size":"200x100","thickness":3.0,"basePrice":660.67},{"type":"Profil","size":"200x100","thickness":4.0,"basePrice":822.83},{"type":"Profil","size":"200x100","thickness":5.0,"basePrice":1002.01},{"type":"Profil","size":"200x100","thickness":6.0,"basePrice":1217.85},{"type":"Profil","size":"200x100","thickness":8.0,"basePrice":1653.82},{"type":"Profil","size":"175x175","thickness":3.0,"basePrice":887.73},{"type":"Profil","size":"175x175","thickness":4.0,"basePrice":999.18},{"type":"Profil","size":"175x175","thickness":5.0,"basePrice":1235.08},{"type":"Profil","size":"175x175","thickness":6.0,"basePrice":1466.35},{"type":"Profil","size":"175x175","thickness":8.0,"basePrice":2053.68},{"type":"Profil","size":"200x150","thickness":3.0,"basePrice":887.73},{"type":"Profil","size":"200x150","thickness":4.0,"basePrice":999.18},{"type":"Profil","size":"200x150","thickness":5.0,"basePrice":1235.08},{"type":"Profil","size":"200x150","thickness":6.0,"basePrice":1466.35},{"type":"Profil","size":"200x150","thickness":8.0,"basePrice":2053.68},{"type":"Profil","size":"200x200","thickness":4.0,"basePrice":1157.03},{"type":"Profil","size":"200x200","thickness":5.0,"basePrice":1443.01},{"type":"Profil","size":"200x200","thickness":6.0,"basePrice":1741.0},{"type":"Profil","size":"200x200","thickness":8.0,"basePrice":2392.91},{"type":"Profil","size":"200x200","thickness":10.0,"basePrice":3106.7},{"type":"Profil","size":"250x150","thickness":4.0,"basePrice":1157.03},{"type":"Profil","size":"250x150","thickness":5.0,"basePrice":1443.01},{"type":"Profil","size":"250x150","thickness":6.0,"basePrice":1741.0},{"type":"Profil","size":"250x150","thickness":8.0,"basePrice":2392.91},{"type":"Profil","size":"250x150","thickness":10.0,"basePrice":3106.7},{"type":"Profil","size":"250x250","thickness":5.0,"basePrice":1831.97},{"type":"Profil","size":"250x250","thickness":6.0,"basePrice":2174.29},{"type":"Profil","size":"250x250","thickness":8.0,"basePrice":3074.21},{"type":"Profil","size":"250x250","thickness":10.0,"basePrice":4135.25},{"type":"Profil","size":"300x200","thickness":5.0,"basePrice":1831.97},{"type":"Profil","size":"300x200","thickness":6.0,"basePrice":2174.29},{"type":"Profil","size":"300x200","thickness":8.0,"basePrice":3074.21},{"type":"Profil","size":"300x200","thickness":10.0,"basePrice":4135.25}]};
+
+let priceState=null;
+
+function cloneDefaultPriceState(){
+return JSON.parse(JSON.stringify(DEFAULT_PRICE_DATA));
+}
+
+function normalizePriceNumber(value){
+let n=Number(String(value??"").replace(",",".").trim());
+return Number.isFinite(n)?n:null;
+}
+
+function priceCellValue(cell){
+if(!cell)return null;
+let value=cell.value;
+if(value && typeof value==="object"){
+if(Object.prototype.hasOwnProperty.call(value,"result"))value=value.result;
+else if(Object.prototype.hasOwnProperty.call(value,"text"))value=value.text;
+}
+return value;
+}
+
+function compactPriceNumber(value){
+let n=Number(value);
+if(!Number.isFinite(n))return "";
+return n.toLocaleString("tr-TR",{maximumFractionDigits:3});
+}
+
+function canonicalPriceProfileSize(value){
+let s=String(value??"")
+.replace(/×/g,"x")
+.replace(/\s+/g,"")
+.trim();
+
+let m=s.match(/^(\d+(?:[.,]\d+)?)x(\d+(?:[.,]\d+)?)$/i);
+if(!m)return s;
+
+let a=Number(m[1].replace(",","."));
+let b=Number(m[2].replace(",","."));
+if(!Number.isFinite(a) || !Number.isFinite(b))return s;
+
+let high=Math.max(a,b);
+let low=Math.min(a,b);
+
+return compactPriceNumber(high)+"x"+compactPriceNumber(low);
+}
+
+function normalizePriceSearch(value){
+return String(value??"")
+.toLocaleLowerCase("tr-TR")
+.replace(/×/g,"x")
+.replace(/,/g,".")
+.replace(/\s+/g,"")
+.trim();
+}
+
+function validatePriceState(state){
+return !!(
+state &&
+Array.isArray(state.records) &&
+state.records.length>0
+);
+}
+
+function loadPriceState(){
+try{
+let saved=localStorage.getItem(PRICE_STORAGE_KEY);
+let parsed=saved?JSON.parse(saved):null;
+priceState=validatePriceState(parsed)?parsed:cloneDefaultPriceState();
+}
+catch{
+priceState=cloneDefaultPriceState();
+}
+
+if(!Number.isFinite(Number(priceState.discount))){
+priceState.discount=Number.isFinite(Number(priceState.sourceDiscount))
+?Number(priceState.sourceDiscount)
+:0;
+}
+
+updatePriceModalInfo();
+}
+
+function savePriceState(){
+try{
+localStorage.setItem(PRICE_STORAGE_KEY,JSON.stringify(priceState));
+}
+catch(error){
+console.warn("Fiyat listesi tarayıcıya kaydedilemedi:",error);
+}
+}
+
+function setPriceStatus(message,error=false){
+let box=document.getElementById("priceStatus");
+if(!box)return;
+box.className="price-status "+(error?"error":"ok");
+box.textContent=message;
+}
+
+function updatePriceModalInfo(){
+if(!priceState)return;
+
+let info=document.getElementById("priceFileInfo");
+let discount=document.getElementById("priceDiscount");
+
+if(info){
+let dateText="";
+if(priceState.importedAt){
+try{
+dateText=" • "+new Date(priceState.importedAt).toLocaleString("tr-TR");
+}catch{}
+}
+
+let sourceText=Number.isFinite(Number(priceState.sourceDiscount))
+?" • Excel iskontosu: %"+compactPriceNumber(priceState.sourceDiscount)
+:"";
+
+info.innerHTML=
+"<strong>"+escapeHTML(priceState.fileName||"Fiyat listesi")+"</strong>"+
+"<br>"+priceState.records.length+" profil fiyatı"+sourceText+dateText;
+}
+
+if(discount){
+discount.value=compactPriceNumber(priceState.discount||0);
+}
+}
+
+function openPriceModal(){
+if(!priceState)loadPriceState();
+
+updatePriceModalInfo();
+
+document.getElementById("priceSearch").value="";
+document.getElementById("priceResultCount").textContent="";
+document.getElementById("priceResultBody").innerHTML=
+'<tr><td colspan="5" class="price-empty">Profil aramak için yukarıdaki kutuya ebat yazın.</td></tr>';
+
+setPriceStatus(
+"İskontosuz fiyatlar Excel fiyat listesinin sol tablosundan okunur."
+);
+
+document.getElementById("priceModal").style.display="flex";
+}
+
+function closePriceModal(){
+let modal=document.getElementById("priceModal");
+if(modal)modal.style.display="none";
+
+if(keypadTarget && modal && modal.contains(keypadTarget)){
+closeNumericKeypad();
+}
+}
+
+function getPriceDiscount(){
+let input=document.getElementById("priceDiscount");
+let n=normalizePriceNumber(input?input.value:0);
+if(!Number.isFinite(n))return 0;
+return Math.max(0,Math.min(100,n));
+}
+
+function priceDiscountChanged(){
+if(!priceState)return;
+priceState.discount=getPriceDiscount();
+savePriceState();
+renderPriceResults();
+}
+
+function formatTLPerMeter(value){
+let n=Number(value);
+if(!Number.isFinite(n))return "-";
+return n.toLocaleString(
+"tr-TR",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)+" TL/m";
+}
+
+function renderPriceResults(){
+let tbody=document.getElementById("priceResultBody");
+let countBox=document.getElementById("priceResultCount");
+if(!tbody || !priceState)return;
+
+let raw=document.getElementById("priceSearch").value.trim();
+let q=normalizePriceSearch(raw);
+
+if(!q){
+countBox.textContent="";
+tbody.innerHTML=
+'<tr><td colspan="5" class="price-empty">Profil aramak için yukarıdaki kutuya ebat yazın.</td></tr>';
+return;
+}
+
+let discount=getPriceDiscount();
+
+let matches=priceState.records.filter(r=>{
+let size=canonicalPriceProfileSize(r.size);
+let th=compactPriceNumber(r.thickness);
+let key1=normalizePriceSearch(size);
+let key2=normalizePriceSearch(size+"x"+th);
+let key3=normalizePriceSearch(size+" "+th);
+return key1.includes(q) || key2.includes(q) || key3.includes(q);
+});
+
+matches.sort((a,b)=>{
+let an=getNumbers(a.size);
+let bn=getNumbers(b.size);
+if(an[0]!==bn[0])return an[0]-bn[0];
+if((an[1]||0)!==(bn[1]||0))return (an[1]||0)-(bn[1]||0);
+return Number(a.thickness)-Number(b.thickness);
+});
+
+let visible=matches.slice(0,80);
+countBox.textContent=
+matches.length>80
+?matches.length+" sonuç • ilk 80 gösteriliyor"
+:matches.length+" sonuç";
+
+if(!visible.length){
+tbody.innerHTML=
+'<tr><td colspan="5" class="price-empty">Bu aramaya uygun profil fiyatı bulunamadı.</td></tr>';
+return;
+}
+
+tbody.innerHTML=visible.map(r=>{
+let base=Number(r.basePrice)||0;
+let discounted=base*(1-discount/100);
+
+return `
+<tr>
+<td><strong>${escapeHTML(canonicalPriceProfileSize(r.size))}</strong></td>
+<td>${compactPriceNumber(r.thickness)} mm</td>
+<td class="price-base">${formatTLPerMeter(base)}</td>
+<td>%${compactPriceNumber(discount)}</td>
+<td class="price-discounted">${formatTLPerMeter(discounted)}</td>
+</tr>
+`;
+}).join("");
+}
+
+function extractProfilePricesFromExcelJS(workbook,fileName){
+let sheet=null;
+
+workbook.worksheets.some(ws=>{
+let a1=String(priceCellValue(ws.getCell(1,1))||"")
+.toLocaleUpperCase("tr-TR");
+
+let row1Text="";
+ws.getRow(1).eachCell({includeEmpty:false},cell=>{
+row1Text+=" "+String(priceCellValue(cell)||"");
+});
+row1Text=row1Text.toLocaleUpperCase("tr-TR");
+
+if(
+a1.includes("HR PROF") ||
+row1Text.includes("KONSTRÜKSİYON PROFİLLERİ")
+){
+sheet=ws;
+return true;
+}
+return false;
+});
+
+if(!sheet){
+throw new Error(
+"Excel içinde HR Profil fiyat sayfası bulunamadı."
+);
+}
+
+let headers=[];
+for(let col=5;col<=18;col++){
+headers.push(normalizePriceNumber(priceCellValue(sheet.getCell(3,col))));
+}
+
+let records=[];
+
+for(let row=4;row<=sheet.rowCount;row++){
+
+let rowText="";
+for(let checkCol=1;checkCol<=10;checkCol++){
+rowText+=" "+String(priceCellValue(sheet.getCell(row,checkCol))||"");
+}
+
+if(
+rowText.toLocaleUpperCase("tr-TR").includes("BİRİM FİYAT")
+){
+break;
+}
+
+let dimensions=[];
+
+for(let col=1;col<=4;col++){
+let raw=priceCellValue(sheet.getCell(row,col));
+if(raw===null || raw===undefined || String(raw).trim()==="")continue;
+
+let size=canonicalPriceProfileSize(raw);
+if(/^\d+(?:[.,]\d+)?x\d+(?:[.,]\d+)?$/i.test(size)){
+dimensions.push(size);
+}
+}
+
+if(!dimensions.length)continue;
+
+for(let i=0;i<headers.length;i++){
+let thickness=headers[i];
+let basePrice=normalizePriceNumber(
+priceCellValue(sheet.getCell(row,5+i))
+);
+
+if(
+!Number.isFinite(thickness) ||
+!Number.isFinite(basePrice) ||
+basePrice<=0
+)continue;
+
+dimensions.forEach(size=>{
+records.push({
+type:"Profil",
+size:size,
+thickness:thickness,
+basePrice:basePrice
+});
+});
+}
+}
+
+if(records.length===0){
+throw new Error(
+"Excel'den profil fiyatları okunamadı. Dosya düzeni beklenen fiyat listesiyle aynı olmalı."
+);
+}
+
+let sourceDiscount=
+normalizePriceNumber(priceCellValue(sheet.getCell(3,19)));
+
+return {
+version:1,
+fileName:fileName||"Fiyat Listesi.xlsx",
+importedAt:new Date().toISOString(),
+sourceDiscount:Number.isFinite(sourceDiscount)?sourceDiscount:null,
+discount:Number.isFinite(sourceDiscount)?sourceDiscount:0,
+records:records
+};
+}
+
+async function importPriceExcel(event){
+let file=event.target.files && event.target.files[0];
+if(!file)return;
+
+try{
+if(typeof ExcelJS==="undefined"){
+throw new Error(
+"Excel modülü yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin."
+);
+}
+
+setPriceStatus("Excel fiyat listesi okunuyor...");
+
+let buffer=await file.arrayBuffer();
+let workbook=new ExcelJS.Workbook();
+await workbook.xlsx.load(buffer);
+
+let parsed=extractProfilePricesFromExcelJS(workbook,file.name);
+
+priceState=parsed;
+savePriceState();
+updatePriceModalInfo();
+
+document.getElementById("priceSearch").value="";
+renderPriceResults();
+
+setPriceStatus(
+"✅ Fiyat listesi güncellendi. Bundan sonra aramalar yeni Excel fiyatlarını kullanacak."
+);
+
+}
+catch(error){
+console.error(error);
+setPriceStatus(
+"❌ Excel fiyat listesi güncellenemedi: "+error.message,
+true
+);
+}
+finally{
+event.target.value="";
+}
+}
 
 /* 6 metre olmayan parçalar için "kullanılacak / ayrıldı" işareti ve iş/proje kodu */
 const USAGE_STORAGE_KEY="stokTubeUsageSelections";
@@ -4350,6 +4989,9 @@ document.getElementById("movementModal");
 let reservationModal=
 document.getElementById("reservationModal");
 
+let priceModal=
+document.getElementById("priceModal");
+
 if(event.target===productModal){
 
 closeProductModal();
@@ -4365,6 +5007,12 @@ closeMovementModal();
 if(event.target===reservationModal){
 
 closeReservationModal();
+
+}
+
+if(event.target===priceModal){
+
+closePriceModal();
 
 }
 
@@ -4698,6 +5346,7 @@ handleKeypadButton(btn);
 
 initNumericKeypad();
 
+loadPriceState();
 loadUsageSelections();
 loadStandardReservations();
 

@@ -231,16 +231,19 @@ font-weight:normal
 
 .length-usage-wrap{
 display:flex;
-align-items:flex-start;
+align-items:center;
 gap:10px;
-min-width:260px
+min-width:340px
 }
 
 .length-value-slot{
 flex:0 0 82px;
 width:82px;
 display:flex;
-align-items:flex-start
+align-items:center;
+justify-content:center;
+align-self:stretch;
+text-align:center
 }
 
 .length-usage-wrap .usage-area{
@@ -364,6 +367,35 @@ font-weight:600;
 color:#64748b;
 text-transform:none
 }
+
+/* =====================================================
+   6 METRE PROFİL REZERVASYONLARI
+===================================================== */
+.reservation-section{
+grid-column:1/-1;
+background:#f8fafc;
+border:1px solid #cbd5e1;
+border-radius:9px;
+padding:13px;
+margin-top:2px
+}
+.reservation-section-title{font-weight:900;font-size:13px;color:#334155;margin-bottom:8px}
+.reservation-help{font-size:12px;color:#64748b;margin-top:7px}
+.reservation-entry-grid{display:grid;grid-template-columns:140px 1fr auto;gap:8px;align-items:end}
+.reservation-entry-grid .form-group{min-width:0}
+.reservation-entry-grid button{min-height:42px}
+.pending-reservation-list,.standard-reservations-inline{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.standard-reservations-inline{width:235px;margin-top:0}
+.reservation-chip{display:flex;align-items:center;justify-content:space-between;gap:7px;min-height:32px;padding:5px 7px 5px 9px;border:1px solid #86efac;border-radius:7px;background:#f0fdf4;color:#166534;font-size:12px;font-weight:700;line-height:1.25}
+.reservation-chip-main{min-width:0;word-break:break-word}
+.reservation-remove{flex:0 0 28px;width:28px;height:28px;min-width:28px;padding:0;border-radius:6px;background:#fee2e2;color:#991b1b;font-size:16px;line-height:28px;touch-action:manipulation}
+.reservation-add-small{width:fit-content;min-height:32px;padding:5px 9px;font-size:12px;background:#e2e8f0;color:#334155;touch-action:manipulation}
+.reservation-total{font-size:11px;font-weight:800;color:#166534}
+.movement-reservation-box{background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:12px;margin:12px 0}
+.movement-reservation-box label{display:block;font-weight:900;font-size:13px;color:#166534;margin-bottom:7px}
+.movement-reservation-box select{width:100%;min-height:44px;background:white}
+.movement-reservation-hint{font-size:12px;color:#475569;margin-top:7px}
+@media(max-width:700px){.reservation-entry-grid{grid-template-columns:1fr}.standard-reservations-inline{width:210px}}
 
 .quality{
 background:#eef2ff;
@@ -1123,6 +1155,7 @@ Boy (metre)
 <input
 id="productLength"
 type="text"
+oninput="updateProductReservationVisibility()"
 inputmode="none"
 data-keypad="decimal"
 data-native-inputmode="decimal"
@@ -1150,6 +1183,23 @@ min="0"
 value="0"
 >
 
+</div>
+
+<div class="reservation-section" id="productReservationSection" style="display:none">
+<div class="reservation-section-title">🔖 6 m Profil İçin Ayrılan İşler</div>
+<div class="reservation-entry-grid">
+<div class="form-group">
+<label>Ayrılan Boy Sayısı</label>
+<input id="pendingReservationQuantity" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Ayrılan boy sayısı" placeholder="Örn: 40">
+</div>
+<div class="form-group">
+<label>Firma / İş / Proje</label>
+<input id="pendingReservationNote" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Ayrılan firma veya iş" placeholder="Örn: X Firması / DT034580">
+</div>
+<button type="button" class="btn-green" onclick="addPendingProductReservation()">+ Ayır</button>
+</div>
+<div id="pendingReservationList" class="pending-reservation-list"></div>
+<div class="reservation-help">Birden fazla ayırma ekleyebilirsin. Örn: <strong>40 boy • X Firması için ayrıldı</strong>.</div>
 </div>
 
 <div class="form-group full">
@@ -1198,6 +1248,14 @@ Stok İşlemi
 </h2>
 
 <div class="notice" id="movementInfo">
+</div>
+
+<div class="movement-reservation-box" id="movementReservationGroup" style="display:none">
+<label for="movementReservationSelect">🔖 Ayrılan İş</label>
+<select id="movementReservationSelect" onchange="movementReservationChanged()">
+<option value="">Ayrılan iş seçmeden çıkış</option>
+</select>
+<div class="movement-reservation-hint">Bir kayıt seçersen ayrılan boy sayısı otomatik gelir. Çıkış kaydedilince seçilen kayıt ana stok ekranından kaldırılır.</div>
 </div>
 
 <div class="form-group">
@@ -1253,6 +1311,28 @@ Kaydet
 
 </div>
 
+
+<!-- 6 M PROFİL REZERVASYON MODALI -->
+<div class="modal" id="reservationModal">
+<div class="modal-box" style="max-width:560px">
+<h2>🔖 Stoktan Boy Ayır</h2>
+<div class="notice" id="reservationProductInfo"></div>
+<div class="form-grid">
+<div class="form-group">
+<label>Ayrılan Boy Sayısı</label>
+<input id="reservationQuantity" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Ayrılan boy sayısı" placeholder="Örn: 40">
+</div>
+<div class="form-group">
+<label>Firma / İş / Proje</label>
+<input id="reservationNote" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Ayrılan firma veya iş" placeholder="Örn: X Firması / DT034580">
+</div>
+</div>
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeReservationModal()">Vazgeç</button>
+<button type="button" class="btn-green" onclick="saveReservationModal()">Ayır</button>
+</div>
+</div>
+</div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
@@ -1344,6 +1424,11 @@ let currentMovementType=null;
 const USAGE_STORAGE_KEY="stokTubeUsageSelections";
 let usageSelections={};
 let usageEditingId=null;
+
+const STANDARD_RESERVATION_STORAGE_KEY="stokTubeStandardReservations";
+let standardReservations={};
+let pendingProductReservations=[];
+let reservationProductId=null;
 
 function normalizeUsageEntry(entry){
 
@@ -1481,6 +1566,160 @@ note:value
 
 persistUsageSelections();
 
+}
+
+
+/* =====================================================
+   6 METRE PROFİL REZERVASYONLARI
+===================================================== */
+function normalizeReservation(entry){
+if(!entry || typeof entry!=="object")return null;
+let quantity=Number(entry.quantity);
+let note=String(entry.note||"").trim();
+let id=String(entry.id||"").trim();
+if(!Number.isFinite(quantity) || quantity<=0 || !note)return null;
+if(!id)id="r"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+return {id:id,quantity:Math.floor(quantity),note:note};
+}
+function loadStandardReservations(){
+try{
+let saved=localStorage.getItem(STANDARD_RESERVATION_STORAGE_KEY);
+let raw=saved ? JSON.parse(saved) : {};
+standardReservations={};
+if(raw && typeof raw==="object"){
+Object.keys(raw).forEach(key=>{
+let list=Array.isArray(raw[key]) ? raw[key] : [];
+let clean=list.map(normalizeReservation).filter(Boolean);
+if(clean.length)standardReservations[String(key)]=clean;
+});
+}
+}catch{standardReservations={};}
+}
+function persistStandardReservations(){
+try{localStorage.setItem(STANDARD_RESERVATION_STORAGE_KEY,JSON.stringify(standardReservations));}catch{}
+}
+function isStandardReservableProduct(product){
+return !!(product && product.type==="Profil" && isStandardLength(product.length));
+}
+function getStandardReservations(productId){
+let list=standardReservations[String(productId)];
+return Array.isArray(list) ? list : [];
+}
+function getReservedQuantity(productId){
+return getStandardReservations(productId).reduce((sum,r)=>sum+(Number(r.quantity)||0),0);
+}
+function createReservation(quantity,note){
+return {id:"r"+Date.now().toString(36)+Math.random().toString(36).slice(2,8),quantity:Math.floor(Number(quantity)),note:String(note||"").trim()};
+}
+function reservationDisplayText(r){return String(r.quantity)+" boy • "+String(r.note)+" için ayrıldı";}
+function addPendingProductReservation(){
+let quantity=Number(document.getElementById("pendingReservationQuantity").value);
+let note=document.getElementById("pendingReservationNote").value.trim();
+if(!Number.isFinite(quantity) || quantity<=0){alert("Ayrılacak boy sayısını girin.");return;}
+if(!note){alert("Firma, iş veya proje bilgisini girin.");return;}
+pendingProductReservations.push(createReservation(quantity,note));
+document.getElementById("pendingReservationQuantity").value="";
+document.getElementById("pendingReservationNote").value="";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+renderPendingProductReservations();
+}
+function removePendingProductReservation(id){
+pendingProductReservations=pendingProductReservations.filter(r=>String(r.id)!==String(id));
+renderPendingProductReservations();
+}
+function renderPendingProductReservations(){
+let box=document.getElementById("pendingReservationList");
+if(!box)return;
+box.innerHTML=pendingProductReservations.map(r=>
+'<div class="reservation-chip"><div class="reservation-chip-main">🔖 '+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removePendingProductReservation(\''+r.id+'\')" title="Bu ayırmayı kaldır">×</button></div>'
+).join("");
+}
+function updateProductReservationVisibility(){
+let section=document.getElementById("productReservationSection");
+if(!section)return;
+let type=document.getElementById("productType").value;
+let length=parseLength(document.getElementById("productLength").value);
+section.style.display=(type==="Profil" && Number.isFinite(length) && Math.abs(length-6)<0.000001) ? "block" : "none";
+}
+function openReservationModal(productId){
+let product=products.find(p=>Number(p.id)===Number(productId));
+if(!isStandardReservableProduct(product))return;
+reservationProductId=product.id;
+let reserved=getReservedQuantity(product.id);
+let available=Math.max(0,(Number(product.stock)||0)-reserved);
+document.getElementById("reservationProductInfo").innerHTML=
+"<strong>"+escapeHTML(product.type)+"</strong> | "+escapeHTML(product.quality)+" | "+escapeHTML(product.size)+" | "+escapeHTML(product.thickness)+" | "+formatLength(product.length)+
+"<br><br>Stok: <strong>"+Number(product.stock)+" boy</strong> &nbsp; • &nbsp; Ayrılmış: <strong>"+reserved+" boy</strong> &nbsp; • &nbsp; Serbest: <strong>"+available+" boy</strong>";
+document.getElementById("reservationQuantity").value="";
+document.getElementById("reservationNote").value="";
+document.getElementById("reservationModal").style.display="flex";
+}
+function closeReservationModal(){
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+document.getElementById("reservationModal").style.display="none";
+reservationProductId=null;
+}
+function saveReservationModal(){
+let product=products.find(p=>Number(p.id)===Number(reservationProductId));
+if(!isStandardReservableProduct(product))return;
+let quantity=Number(document.getElementById("reservationQuantity").value);
+let note=document.getElementById("reservationNote").value.trim();
+if(!Number.isFinite(quantity) || quantity<=0){alert("Ayrılacak boy sayısını girin.");return;}
+if(!note){alert("Firma, iş veya proje bilgisini girin.");return;}
+let reserved=getReservedQuantity(product.id);
+if(reserved+quantity>Number(product.stock)){
+alert("Bu kadar malzeme ayıramazsınız.\n\nMevcut stok: "+product.stock+" boy\nDaha önce ayrılan: "+reserved+" boy\nAyırabileceğiniz en fazla: "+Math.max(0,Number(product.stock)-reserved)+" boy");
+return;
+}
+let key=String(product.id);
+if(!Array.isArray(standardReservations[key]))standardReservations[key]=[];
+standardReservations[key].push(createReservation(quantity,note));
+persistStandardReservations();
+closeReservationModal();
+showProducts();
+}
+function removeStandardReservation(productId,reservationId,ask=true,event=null){
+if(event){event.preventDefault();event.stopPropagation();}
+let list=getStandardReservations(productId);
+let item=list.find(r=>String(r.id)===String(reservationId));
+if(!item)return;
+if(ask && !confirm("Bu ayırmayı kaldırmak istiyor musunuz?\n\n"+reservationDisplayText(item)))return;
+let next=list.filter(r=>String(r.id)!==String(reservationId));
+let key=String(productId);
+if(next.length)standardReservations[key]=next;else delete standardReservations[key];
+persistStandardReservations();
+showProducts();
+}
+function renderStandardReservationsHTML(product){
+if(!isStandardReservableProduct(product))return "";
+let list=getStandardReservations(product.id);
+let reserved=getReservedQuantity(product.id);
+let chips=list.map(r=>
+'<div class="reservation-chip"><div class="reservation-chip-main">🔖 '+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removeStandardReservation('+Number(product.id)+',\''+r.id+'\',true,event)" title="Ayırmayı kaldır">×</button></div>'
+).join("");
+return '<div class="standard-reservations-inline">'+chips+'<button type="button" class="reservation-add-small" onclick="openReservationModal('+Number(product.id)+')">+ Ayır</button></div>';
+}
+function populateMovementReservation(product,type){
+let group=document.getElementById("movementReservationGroup");
+let select=document.getElementById("movementReservationSelect");
+select.innerHTML='<option value="">Ayrılan iş seçmeden çıkış</option>';
+if(type!=="Çıkış" || !isStandardReservableProduct(product)){group.style.display="none";return;}
+let list=getStandardReservations(product.id);
+if(!list.length){group.style.display="none";return;}
+list.forEach(r=>{let option=document.createElement("option");option.value=r.id;option.textContent=r.quantity+" boy — "+r.note;select.appendChild(option);});
+group.style.display="block";
+}
+function movementReservationChanged(){
+let id=document.getElementById("movementReservationSelect").value;
+if(!id)return;
+let item=getStandardReservations(currentProductId).find(r=>String(r.id)===String(id));
+if(!item)return;
+document.getElementById("movementQuantity").value=String(item.quantity);
+let desc=document.getElementById("movementDescription");
+if(!desc.value.trim())desc.value=item.note;
+}
+function standardReservationExcelText(product){
+return getStandardReservations(product.id).map(r=>r.quantity+" boy - "+r.note).join(" | ");
 }
 
 /* =====================================================
@@ -1998,6 +2237,7 @@ shape.value=type;
 }
 
 fillSizeOptions();
+updateProductReservationVisibility();
 
 }
 
@@ -2071,6 +2311,10 @@ const modalTitles={
 
 document.getElementById("productModalTitle").innerText=modalTitles[type]||"Yeni Malzeme";
 
+pendingProductReservations=[];
+renderPendingProductReservations();
+updateProductReservationVisibility();
+
 document.getElementById("productModal").style.display="flex";
 
 }
@@ -2130,6 +2374,11 @@ let description =
 document.getElementById("productDescription")
 .value.trim();
 
+let pendingReservedTotal=pendingProductReservations.reduce((sum,r)=>sum+(Number(r.quantity)||0),0);
+if(type==="Profil" && isStandardLength(length) && pendingReservedTotal>stock){
+alert("Ayrılan toplam boy sayısı başlangıç stokundan fazla olamaz.\n\nBaşlangıç stoku: "+stock+" boy\nAyrılan toplam: "+pendingReservedTotal+" boy");
+return;
+}
 
 if(
 !size ||
@@ -2255,6 +2504,10 @@ let savedProduct=result[0];
 
 products.push(savedProduct);
 
+if(isStandardReservableProduct(savedProduct) && pendingProductReservations.length){
+standardReservations[String(savedProduct.id)]=pendingProductReservations.map(r=>({...r}));
+persistStandardReservations();
+}
 
 /* İLK STOK */
 
@@ -2344,6 +2597,9 @@ document.getElementById("productThickness").value="";
 document.getElementById("productLength").value="6";
 document.getElementById("productStock").value="0";
 document.getElementById("productDescription").value="";
+pendingProductReservations=[];
+renderPendingProductReservations();
+updateProductReservationVisibility();
 
 }
 
@@ -2404,6 +2660,8 @@ document.getElementById("movementQuantity")
 document.getElementById("movementDescription")
 .value="";
 
+populateMovementReservation(product,type);
+
 document.getElementById("movementModal")
 .style.display="flex";
 
@@ -2453,6 +2711,20 @@ p=>Number(p.id)===Number(currentProductId)
 
 if(!product)return;
 
+let selectedReservationId="";
+let selectedReservation=null;
+if(currentMovementType==="Çıkış"){
+let select=document.getElementById("movementReservationSelect");
+if(select && select.value){
+selectedReservationId=select.value;
+selectedReservation=getStandardReservations(product.id).find(r=>String(r.id)===String(selectedReservationId)) || null;
+}
+if(selectedReservation && quantity!==Number(selectedReservation.quantity)){
+alert("Seçtiğiniz ayrılan iş "+selectedReservation.quantity+" boy için kayıtlı.\n\nBu işi tamamlamak için çıkış miktarı "+selectedReservation.quantity+" boy olmalı.");
+return;
+}
+if(selectedReservation && !description)description=selectedReservation.note;
+}
 
 /* STOK ÇIKIŞI */
 
@@ -2485,6 +2757,14 @@ Number(product.stock)+quantity;
 
 }
 
+if(currentMovementType==="Çıkış" && isStandardReservableProduct(product)){
+let reservedAfter=getReservedQuantity(product.id);
+if(selectedReservation)reservedAfter-=Number(selectedReservation.quantity)||0;
+if(newStock<reservedAfter){
+alert("Bu çıkış yapılamaz.\n\nÇıkıştan sonra stok: "+newStock+" boy\nKalan ayrılmış işler: "+reservedAfter+" boy\n\nÖnce ilgili ayrılan işi seçin veya ayırma kaydını kaldırın.");
+return;
+}
+}
 
 /* SUPABASE ÜRÜNÜ GÜNCELLE */
 
@@ -2552,6 +2832,9 @@ movementResult[0]
 
 }
 
+if(selectedReservation){
+removeStandardReservation(product.id,selectedReservation.id,false);
+}
 
 /* 6 METRE DIŞI 0 İSE SİL */
 
@@ -2845,7 +3128,8 @@ p.type+" "+
 p.shape+" "+
 p.quality+" "+
 p.size+" "+
-p.thickness;
+p.thickness+" "+
+getStandardReservations(p.id).map(r=>r.note+" "+r.quantity).join(" ");
 
 if(
 !text.toLowerCase()
@@ -2926,13 +3210,15 @@ formatLength(p.length)+
 '</span>';
 
 
+let standardReservationHTML=isStandardReservableProduct(p)?renderStandardReservationsHTML(p):"";
+
 let usageHTML =
 !isStandardLength(p.length)
 ?
 '<div class="usage-area">'+
-'<label class="usage-check '+(isUsageSelected(p.id)?'checked':'')+'" title="Bu parçanın kullanılmak üzere ayrıldığını işaretle">'+
+'<label class="usage-check '+(isUsageSelected(p.id)?'checked':'')+'" title="Bu parçayı bir iş için ayırmak istiyorsan işaretle">'+
 '<input type="checkbox" '+(isUsageSelected(p.id)?'checked':'')+' onchange="toggleUsageSelection('+p.id+',this.checked)">'+
-'<span>'+(isUsageSelected(p.id)?'✓ Ayrıldı':'Kullanılacak')+'</span>'+ 
+'<span>'+(isUsageSelected(p.id)?'✓ Ayrıldı':'Kullanılabilir')+'</span>'+ 
 '</label>'+ 
 (
  isUsageSelected(p.id)
@@ -2969,7 +3255,7 @@ let usageHTML =
 :'';
 
 let rowClass =
-isUsageSelected(p.id)
+(isUsageSelected(p.id) || getStandardReservations(p.id).length>0)
 ?'reserved-row'
 :'';
 
@@ -3008,6 +3294,7 @@ ${p.thickness}
 <div class="length-usage-wrap">
 <div class="length-value-slot">${lengthHTML}</div>
 ${usageHTML}
+${standardReservationHTML}
 </div>
 </td>
 
@@ -3345,6 +3632,8 @@ x=>Number(x.id)!==Number(id)
 
 delete usageSelections[String(id)];
 persistUsageSelections();
+delete standardReservations[String(id)];
+persistStandardReservations();
 
 
 /* EKRANI YENİLE */
@@ -3380,7 +3669,7 @@ function backupData(){
 
 let backup={
 
-version:4,
+version:5,
 
 createdAt:
 new Date().toISOString(),
@@ -3389,7 +3678,9 @@ products:products,
 
 movements:movements,
 
-usageSelections:usageSelections
+usageSelections:usageSelections,
+
+standardReservations:standardReservations
 
 };
 
@@ -3515,6 +3806,10 @@ usageSelections=backup.usageSelections;
 persistUsageSelections();
 }
 
+if(backup.standardReservations && typeof backup.standardReservations==="object"){
+standardReservations=backup.standardReservations;
+persistStandardReservations();
+}
 
 await loadData();
 
@@ -3778,10 +4073,10 @@ excelThickness(p.thickness),
 Number.isFinite(length)?length:null,
 (!isStandardLength(p.length) && isUsageSelected(p.id))
 ?"Ayrıldı"
-:"",
+:(isStandardReservableProduct(p) && getStandardReservations(p.id).length ? "Rezervasyonlu" : ""),
 (!isStandardLength(p.length) && isUsageSelected(p.id))
 ?excelSafeText(getUsageNote(p.id))
-:"",
+:(isStandardReservableProduct(p) ? excelSafeText(standardReservationExcelText(p)) : ""),
 stock,
 totalMeter,
 Number.isFinite(unitKg)?unitKg:null,
@@ -3921,7 +4216,7 @@ fgColor:{argb:"FFDCFCE7"}
 
 }
 
-if(sheet.getCell(r,7).value==="Ayrıldı"){
+if(["Ayrıldı","Rezervasyonlu"].includes(sheet.getCell(r,7).value)){
 
 sheet.getCell(r,7).font={
 bold:true,
@@ -4052,6 +4347,9 @@ document.getElementById("productModal");
 let movementModal=
 document.getElementById("movementModal");
 
+let reservationModal=
+document.getElementById("reservationModal");
+
 if(event.target===productModal){
 
 closeProductModal();
@@ -4061,6 +4359,12 @@ closeProductModal();
 if(event.target===movementModal){
 
 closeMovementModal();
+
+}
+
+if(event.target===reservationModal){
+
+closeReservationModal();
 
 }
 
@@ -4395,8 +4699,10 @@ handleKeypadButton(btn);
 initNumericKeypad();
 
 loadUsageSelections();
+loadStandardReservations();
 
 fillSizeOptions();
+updateProductReservationVisibility();
 
 changePage("Genel");
 

@@ -232,13 +232,16 @@ font-weight:normal
 .length-usage-wrap{
 display:flex;
 align-items:center;
-gap:10px;
-min-width:340px
+/* Boy değerinden sonraki ikinci alan her satırda aynı x konumundan başlar.
+   6 m satırındaki + Ayır ile 6 m dışındaki Kullanılabilir/Ayrıldı birebir hizalanır. */
+gap:16px;
+min-width:279px;
+width:279px
 }
 
 .length-value-slot{
-flex:0 0 82px;
-width:82px;
+flex:0 0 58px;
+width:58px;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -246,20 +249,41 @@ align-self:stretch;
 text-align:center
 }
 
+/* Kullanılabilir / Ayrıldı eski konumunda kalır.
+   Boy sütunundaki gereksiz sağ boşluk kaldırıldığı için Stok ve devamı sola yaklaşır. */
 .length-usage-wrap .usage-area{
 flex:0 0 155px;
 width:155px;
-margin-left:0
+margin-left:0;
+align-items:flex-start
 }
 
-.length-usage-wrap .usage-check{
-width:145px;
+.length-usage-wrap 
+/* 6 m dışındaki boy etiketi Kullanılabilir kutusuna yaklaşmasın.
+   Yalnızca non-standard satırlarda boy alanını genişlet; 6 m rezervasyon düzenine dokunma. */
+.length-usage-wrap.length-usage-nonstandard{
+  gap:16px;
+}
+
+.length-usage-nonstandard .length-value-slot{
+  flex:0 0 58px;
+  width:58px;
+  justify-content:flex-start;
+}
+
+.length-usage-nonstandard .usage-area,
+.length-usage-nonstandard .usage-check{
+  margin-left:0;
+}
+
+.usage-check{
+width:155px;
 justify-content:flex-start
 }
 
 .length-usage-wrap .usage-note-display,
 .length-usage-wrap .usage-note-input{
-width:145px
+width:155px
 }
 
 .usage-check{
@@ -385,11 +409,21 @@ margin-top:2px
 .reservation-entry-grid .form-group{min-width:0}
 .reservation-entry-grid button{min-height:42px}
 .pending-reservation-list,.standard-reservations-inline{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.standard-reservations-inline{width:235px;margin-top:0}
-.reservation-chip{display:flex;align-items:center;justify-content:space-between;gap:7px;min-height:32px;padding:5px 7px 5px 9px;border:1px solid #86efac;border-radius:7px;background:#f0fdf4;color:#166534;font-size:12px;font-weight:700;line-height:1.25}
-.reservation-chip-main{min-width:0;word-break:break-word}
-.reservation-remove{flex:0 0 28px;width:28px;height:28px;min-width:28px;padding:0;border-radius:6px;background:#fee2e2;color:#991b1b;font-size:16px;line-height:28px;touch-action:manipulation}
+.standard-reservations-inline{width:205px;flex:0 0 205px;margin-top:0}
+.reservation-chip{display:flex;align-items:center;justify-content:space-between;gap:5px;min-height:32px;padding:5px 5px 5px 7px;border:1px solid #86efac;border-radius:7px;background:#f0fdf4;color:#166534;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap}
+.reservation-chip-main{min-width:0;white-space:nowrap;word-break:normal;overflow:visible}
+.reservation-remove{flex:0 0 24px;width:24px;height:24px;min-width:24px;padding:0;border-radius:6px;background:#fee2e2;color:#991b1b;font-size:14px;line-height:24px;touch-action:manipulation}
 .reservation-add-small{width:fit-content;min-height:32px;padding:5px 9px;font-size:12px;background:#e2e8f0;color:#334155;touch-action:manipulation}
+
+/* + Ayır ve Kullanılabilir/Ayrıldı artık aynı sabit başlangıç çizgisindedir. */
+.standard-reservations-inline .reservation-add-small{
+  width:155px;
+  min-width:155px;
+  max-width:155px;
+  align-self:flex-start;
+  text-align:left;
+  margin:0;
+}
 .reservation-total{font-size:11px;font-weight:800;color:#166534}
 .movement-reservation-box{background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:12px;margin:12px 0}
 .movement-reservation-box label{display:block;font-weight:900;font-size:13px;color:#166534;margin-bottom:7px}
@@ -446,6 +480,56 @@ background:#f1f5f9;
 padding:5px 8px;
 border-radius:5px;
 font-weight:bold
+}
+
+/* Ana stok tablosunun bilgi sütunlarını daha kompakt tut */
+.stock-table{
+min-width:990px
+}
+
+.stock-table th,
+.stock-table td{
+padding-left:8px;
+padding-right:8px
+}
+
+.stock-table th:nth-child(-n+7),
+.stock-table td:nth-child(-n+7){
+width:1%;
+white-space:nowrap
+}
+
+/* Kullanılabilir / Ayrıldı alanı eski konumunda kalsın.
+   Bu alan ile Stok sütunu arasında yaklaşık 7 karakterlik nefes boşluğu bırak. */
+.stock-table th:nth-child(8),
+.stock-table td:nth-child(8){
+width:calc(279px + 7ch);
+min-width:calc(279px + 7ch);
+max-width:none
+}
+
+.stock-table td:nth-child(8){
+padding-right:calc(8px + 7ch)
+}
+
+/* Kalınlık ile Boy arasında görsel boşluk. Boy sütunu hizalama için gerektiği kadar genişleyebilir. */
+.stock-table th:nth-child(8),
+.stock-table td:nth-child(8){
+padding-left:18px
+}
+
+.stock-table th:nth-child(n+9),
+.stock-table td:nth-child(n+9){
+padding-left:6px;
+padding-right:6px;
+white-space:nowrap
+}
+
+.stock-table .type-badge,
+.stock-table .quality,
+.stock-table .finish-badge,
+.stock-table .pipe-seam-badge{
+padding:4px 7px
 }
 
 .status{
@@ -1149,7 +1233,7 @@ padding:16px
 <div class="header-content">
 
 <h1>
-🏭 Profil & Yuvarlak Boru Stok Takip
+🏭 Profil & Boru Stok Takip
 </h1>
 
 <div class="backup-area">
@@ -1197,7 +1281,7 @@ onchange="restoreData(event)"
 </button>
 
 <button class="tab" id="tabBoru" onclick="changePage('Boru')">
-🔩 Yuvarlak Borular
+🔩 Borular
 </button>
 
 <button class="tab" id="tabKosebent" onclick="changePage('Köşebent')">
@@ -1291,7 +1375,7 @@ oninput="showProducts()"
 </button>
 
 <button class="btn-orange" type="button" onclick="openPurchaseImportModal()">
-📄 Excel'den Stok Ekle
+📄 Excel'den Ekle
 </button>
 
 <button class="btn-dark" onclick="exportStock()">
@@ -1300,7 +1384,7 @@ oninput="showProducts()"
 
 <label class="keypad-toggle" for="keypadEnabled">
 <input type="checkbox" id="keypadEnabled" checked>
-<span>🔢 Ekran Klavyesi</span>
+<span>🔢 Klavye</span>
 </label>
 
 </div>
@@ -1318,7 +1402,7 @@ oninput="showProducts()"
 
 <div class="table-box">
 
-<table>
+<table class="stock-table">
 
 <thead>
 
@@ -1404,7 +1488,7 @@ Kare veya Dikdörtgen.
 <br><br>
 
 <strong>Boru:</strong>
-Sadece Yuvarlak boru.
+Sadece boru.
 
 <br><br>
 
@@ -1931,7 +2015,7 @@ oninput="renderPriceResults()"
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
   <div class="keypad-head">
-    <span>⌨️ Ekran Klavyesi</span>
+    <span>⌨️ Klavye</span>
     <span class="keypad-target" id="keypadTargetLabel"></span>
   </div>
 
@@ -2871,7 +2955,7 @@ return getStandardReservations(productId).reduce((sum,r)=>sum+(Number(r.quantity
 function createReservation(quantity,note){
 return {id:"r"+Date.now().toString(36)+Math.random().toString(36).slice(2,8),quantity:Math.floor(Number(quantity)),note:String(note||"").trim()};
 }
-function reservationDisplayText(r){return String(r.quantity)+" boy • "+String(r.note)+" için ayrıldı";}
+function reservationDisplayText(r){return String(r.quantity)+" boy "+String(r.note)+" için ayrıldı";}
 function addPendingProductReservation(){
 let quantity=Number(document.getElementById("pendingReservationQuantity").value);
 let note=document.getElementById("pendingReservationNote").value.trim();
@@ -2891,7 +2975,7 @@ function renderPendingProductReservations(){
 let box=document.getElementById("pendingReservationList");
 if(!box)return;
 box.innerHTML=pendingProductReservations.map(r=>
-'<div class="reservation-chip"><div class="reservation-chip-main">🔖 '+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removePendingProductReservation(\''+r.id+'\')" title="Bu ayırmayı kaldır">×</button></div>'
+'<div class="reservation-chip"><div class="reservation-chip-main">'+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removePendingProductReservation(\''+r.id+'\')" title="Bu ayırmayı kaldır">×</button></div>'
 ).join("");
 }
 function updateProductReservationVisibility(){
@@ -2956,7 +3040,7 @@ if(!isStandardReservableProduct(product))return "";
 let list=getStandardReservations(product.id);
 let reserved=getReservedQuantity(product.id);
 let chips=list.map(r=>
-'<div class="reservation-chip"><div class="reservation-chip-main">🔖 '+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removeStandardReservation('+Number(product.id)+',\''+r.id+'\',true,event)" title="Ayırmayı kaldır">×</button></div>'
+'<div class="reservation-chip"><div class="reservation-chip-main">'+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removeStandardReservation('+Number(product.id)+',\''+r.id+'\',true,event)" title="Ayırmayı kaldır">×</button></div>'
 ).join("");
 return '<div class="standard-reservations-inline">'+chips+'<button type="button" class="reservation-add-small" onclick="openReservationModal('+Number(product.id)+')">+ Ayır</button></div>';
 }
@@ -4570,7 +4654,7 @@ document.getElementById("productShape");
 if(type==="Boru"){
 
 shape.innerHTML =
-'<option value="Yuvarlak">Yuvarlak</option>';
+'<option value="Yuvarlak">Boru</option>';
 shape.value="Yuvarlak";
 shape.disabled=true;
 
@@ -4643,7 +4727,7 @@ document.querySelectorAll(".tab")
 const pageConfig={
 "Genel":{tab:"tabGenel",title:"Genel Stok"},
 "Profil":{tab:"tabProfil",title:"📐 Profil Stoğu"},
-"Boru":{tab:"tabBoru",title:"🔩 Yuvarlak Boru Stoğu"},
+"Boru":{tab:"tabBoru",title:"🔩 Boru Stoğu"},
 "Köşebent":{tab:"tabKosebent",title:"📐 Köşebent Stoğu"},
 "Lama":{tab:"tabLama",title:"▬ Lama Stoğu"},
 "NPU":{tab:"tabNPU",title:"🏗️ NPU Stoğu"}
@@ -4683,7 +4767,7 @@ typeChanged();
 
 const modalTitles={
 "Profil":"📐 Yeni Profil",
-"Boru":"🔩 Yeni Yuvarlak Boru",
+"Boru":"🔩 Yeni Boru",
 "Köşebent":"📐 Yeni Köşebent",
 "Lama":"▬ Yeni Lama",
 "NPU":"🏗️ Yeni NPU"
@@ -5706,7 +5790,7 @@ ${p.type}
 </td>
 
 <td>
-${p.shape}
+${p.type==="Boru"?"—":p.shape}
 </td>
 
 <td>
@@ -5717,7 +5801,7 @@ ${p.quality}
 
 <td>
 ${getProductFinish(p)==="Boyalı"
-?'<span class="finish-badge">🎨 Boyalı</span>'
+?'<span class="finish-badge">Boyalı</span>'
 :'<span class="finish-standard">Boyasız</span>'}
 </td>
 
@@ -5740,7 +5824,7 @@ ${p.thickness}
 </td>
 
 <td>
-<div class="length-usage-wrap">
+<div class="length-usage-wrap ${!isStandardLength(p.length)?'length-usage-nonstandard':''}">
 <div class="length-value-slot">${lengthHTML}</div>
 ${usageHTML}
 ${standardReservationHTML}
@@ -5908,7 +5992,7 @@ ${type||"-"}
 </td>
 
 <td>
-${shape||"-"}
+${type==="Boru"?"—":(shape||"-")}
 </td>
 
 <td>
@@ -6518,7 +6602,7 @@ let totalWeight=productTotalKg(p);
 
 return[
 excelSafeText(p.type),
-excelSafeText(p.shape),
+excelSafeText(p.type==="Boru"?"":p.shape),
 excelSafeText(p.quality),
 excelSafeText(getProductFinish(p)==="Boyalı"?"Boyalı":"Boyasız"),
 excelSafeText(p.type==="Boru"?getProductPipeSeam(p):""),

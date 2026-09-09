@@ -70,7 +70,7 @@ color:white
 
 .cards{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(5,1fr);
 gap:15px;
 margin-bottom:20px
 }
@@ -228,6 +228,37 @@ white-space:nowrap
 font-weight:normal
 }
 
+
+.length-usage-wrap{
+display:flex;
+align-items:flex-start;
+gap:10px;
+min-width:260px
+}
+
+.length-value-slot{
+flex:0 0 82px;
+width:82px;
+display:flex;
+align-items:flex-start
+}
+
+.length-usage-wrap .usage-area{
+flex:0 0 155px;
+width:155px;
+margin-left:0
+}
+
+.length-usage-wrap .usage-check{
+width:145px;
+justify-content:flex-start
+}
+
+.length-usage-wrap .usage-note-display,
+.length-usage-wrap .usage-note-input{
+width:145px
+}
+
 .usage-check{
 display:inline-flex;
 align-items:center;
@@ -265,6 +296,73 @@ background:#f0fdf4
 
 .reserved-row:hover{
 background:#dcfce7
+}
+
+.usage-area{
+display:inline-flex;
+flex-direction:column;
+align-items:flex-start;
+gap:6px;
+margin-left:10px;
+vertical-align:middle
+}
+
+.usage-area .usage-check{
+margin-left:0
+}
+
+.usage-note-input{
+width:145px;
+min-height:38px;
+padding:7px 9px;
+border:2px solid #86efac;
+border-radius:6px;
+background:#ffffff;
+color:#166534;
+font-size:13px;
+font-weight:900;
+letter-spacing:.3px;
+text-transform:uppercase
+}
+
+.usage-note-input::placeholder{
+color:#94a3b8;
+font-weight:normal;
+text-transform:none
+}
+
+.usage-note-input:focus{
+outline:3px solid #bbf7d0;
+border-color:#16a34a
+}
+
+.usage-note-display{
+display:inline-flex;
+align-items:center;
+min-height:32px;
+padding:5px 9px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+background:#f8fafc;
+color:#475569;
+font-size:12px;
+font-weight:800;
+letter-spacing:.25px;
+text-transform:uppercase;
+cursor:pointer;
+user-select:none;
+touch-action:manipulation
+}
+
+.usage-note-display:hover{
+background:#f1f5f9;
+border-color:#94a3b8
+}
+
+.usage-note-display.empty{
+font-weight:600;
+color:#64748b;
+text-transform:none
 }
 
 .quality{
@@ -649,6 +747,10 @@ gap:6px
 .alpha-keypad-grid .keypad-wide{grid-column:span 2}
 }
 </style>
+
+<!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
 </head>
 
 <body>
@@ -705,6 +807,18 @@ onchange="restoreData(event)"
 🔩 Yuvarlak Borular
 </button>
 
+<button class="tab" id="tabKosebent" onclick="changePage('Köşebent')">
+📐 Köşebent
+</button>
+
+<button class="tab" id="tabLama" onclick="changePage('Lama')">
+▬ Lama
+</button>
+
+<button class="tab" id="tabNPU" onclick="changePage('NPU')">
+🏗️ NPU
+</button>
+
 </div>
 
 <h2 id="pageTitle">
@@ -726,6 +840,11 @@ Genel Stok
 <div class="card">
 <div class="card-title">Toplam Metre</div>
 <div class="card-value blue" id="totalMeters">0</div>
+</div>
+
+<div class="card" title="Ölçü ve malzeme yoğunluğuna göre hesaplanan teorik ağırlık">
+<div class="card-title">Toplam Kg</div>
+<div class="card-value green" id="totalWeight">0 kg</div>
 </div>
 
 <div class="card">
@@ -803,6 +922,7 @@ oninput="showProducts()"
 <th>Boy</th>
 <th>Stok</th>
 <th>Metre</th>
+<th>Kg</th>
 <th>Durum</th>
 <th>İşlem</th>
 </tr>
@@ -902,13 +1022,25 @@ Profil
 Boru
 </option>
 
+<option value="Köşebent">
+Köşebent
+</option>
+
+<option value="Lama">
+Lama
+</option>
+
+<option value="NPU">
+NPU
+</option>
+
 </select>
 
 </div>
 
 <div class="form-group">
 
-<label>Profil Tipi</label>
+<label>Tip</label>
 
 <select id="productShape" onchange="shapeChanged()">
 
@@ -952,11 +1084,22 @@ Ebat
 <select id="productSize">
 </select>
 
+<input
+id="productSizeManual"
+type="text"
+inputmode="none"
+data-keypad="text"
+data-native-inputmode="text"
+data-keypad-label="Ebat / ölçü"
+placeholder="Örn: 40x40"
+style="display:none"
+>
+
 </div>
 
 <div class="form-group">
 
-<label>
+<label id="thicknessLabel">
 Kalınlık
 </label>
 
@@ -1197,19 +1340,45 @@ let currentPage="Genel";
 let currentProductId=null;
 let currentMovementType=null;
 
-/* 6 metre olmayan parçalar için "kullanılacak / ayrıldı" işareti */
+/* 6 metre olmayan parçalar için "kullanılacak / ayrıldı" işareti ve iş/proje kodu */
 const USAGE_STORAGE_KEY="stokTubeUsageSelections";
 let usageSelections={};
+let usageEditingId=null;
+
+function normalizeUsageEntry(entry){
+
+/* Eski sürümde kayıt sadece true idi. Yeni yapıya otomatik dönüştür. */
+if(entry===true){
+return {selected:true,note:""};
+}
+
+if(entry && typeof entry==="object"){
+return {
+selected:entry.selected!==false,
+note:String(entry.note||"")
+};
+}
+
+return null;
+
+}
 
 function loadUsageSelections(){
 
 try{
 
 let saved=localStorage.getItem(USAGE_STORAGE_KEY);
-usageSelections=saved ? JSON.parse(saved) : {};
-
-if(!usageSelections || typeof usageSelections!=="object")
+let raw=saved ? JSON.parse(saved) : {};
 usageSelections={};
+
+if(raw && typeof raw==="object"){
+Object.keys(raw).forEach(key=>{
+let normalized=normalizeUsageEntry(raw[key]);
+if(normalized && normalized.selected){
+usageSelections[key]=normalized;
+}
+});
+}
 
 }
 catch{
@@ -1228,23 +1397,91 @@ JSON.stringify(usageSelections)
 }
 
 function isUsageSelected(id){
-return !!usageSelections[String(id)];
+let entry=normalizeUsageEntry(usageSelections[String(id)]);
+return !!(entry && entry.selected);
+}
+
+function getUsageNote(id){
+let entry=normalizeUsageEntry(usageSelections[String(id)]);
+return entry ? String(entry.note||"") : "";
 }
 
 function toggleUsageSelection(id,checked){
 
 let key=String(id);
 
-if(checked)
-usageSelections[key]=true;
-else
+if(checked){
+let old=normalizeUsageEntry(usageSelections[key]);
+usageSelections[key]={
+selected:true,
+note:old ? String(old.note||"") : ""
+};
+usageEditingId=key;
+}
+else{
 delete usageSelections[key];
+if(usageEditingId===key)usageEditingId=null;
+}
 
 persistUsageSelections();
 showProducts();
 
+/* İlk tikte kod girişini bir kez aç. */
+if(checked){
+focusUsageNoteInput(id);
 }
 
+}
+
+function focusUsageNoteInput(id){
+
+setTimeout(()=>{
+let input=document.getElementById("usageNote_"+id);
+if(!input)return;
+try{input.focus({preventScroll:true});}catch{input.focus();}
+let toggle=document.getElementById("keypadEnabled");
+if(toggle && toggle.checked && typeof openNumericKeypad==="function"){
+openNumericKeypad(input);
+}
+},0);
+
+}
+
+function openUsageNoteEdit(id){
+
+usageEditingId=String(id);
+showProducts();
+focusUsageNoteInput(id);
+
+}
+
+function finishUsageNoteEdit(id,input){
+
+if(input)setUsageNote(id,input);
+usageEditingId=null;
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+showProducts();
+
+}
+
+function setUsageNote(id,input){
+
+let key=String(id);
+let value=typeof input==="string" ? input : input.value;
+value=String(value||"").toUpperCase();
+
+if(input && typeof input!=="string" && input.value!==value){
+input.value=value;
+}
+
+usageSelections[key]={
+selected:true,
+note:value
+};
+
+persistUsageSelections();
+
+}
 
 /* =====================================================
    SUPABASE İSTEK FONKSİYONU
@@ -1640,34 +1877,69 @@ document.getElementById("productShape").value;
 let select =
 document.getElementById("productSize");
 
+let manual =
+document.getElementById("productSizeManual");
+
+let sizeLabel =
+document.getElementById("sizeLabel");
+
+let thicknessLabel =
+document.getElementById("thicknessLabel");
+
 select.innerHTML="";
+
+/* Köşebent, Lama ve NPU ölçüleri serbest yazılır. */
+if(["Köşebent","Lama","NPU"].includes(type)){
+
+select.style.display="none";
+manual.style.display="block";
+manual.value="";
+
+if(type==="Köşebent"){
+sizeLabel.innerText="Ebat";
+manual.placeholder="Örn: 40x40";
+thicknessLabel.innerText="Kalınlık";
+}
+
+if(type==="Lama"){
+sizeLabel.innerText="Genişlik / Ebat";
+manual.placeholder="Örn: 50";
+thicknessLabel.innerText="Kalınlık";
+}
+
+if(type==="NPU"){
+sizeLabel.innerText="NPU Ölçüsü";
+manual.placeholder="Örn: 80 veya NPU 80";
+thicknessLabel.innerText="Kalınlık (isteğe bağlı)";
+}
+
+return;
+}
+
+manual.style.display="none";
+select.style.display="block";
+thicknessLabel.innerText="Kalınlık";
 
 let list=[];
 
 if(type==="Boru"){
 
 list=roundSizes;
-
-document.getElementById("sizeLabel")
-.innerText="Çap";
+sizeLabel.innerText="Çap";
 
 }
 
 else if(shape==="Kare"){
 
 list=kareSizes;
-
-document.getElementById("sizeLabel")
-.innerText="Ebat";
+sizeLabel.innerText="Ebat";
 
 }
 
 else{
 
 list=dikdortgenSizes;
-
-document.getElementById("sizeLabel")
-.innerText="Ebat";
+sizeLabel.innerText="Ebat";
 
 }
 
@@ -1702,19 +1974,26 @@ if(type==="Boru"){
 
 shape.innerHTML =
 '<option value="Yuvarlak">Yuvarlak</option>';
-
 shape.value="Yuvarlak";
 shape.disabled=true;
 
 }
 
-else{
+else if(type==="Profil"){
 
 shape.disabled=false;
-
 shape.innerHTML =
-'<option value="Kare">Kare</option>'+
+'<option value="Kare">Kare</option>'+ 
 '<option value="Dikdörtgen">Dikdörtgen</option>';
+
+}
+
+else{
+
+shape.disabled=true;
+shape.innerHTML =
+'<option value="'+type+'">'+type+'</option>';
+shape.value=type;
 
 }
 
@@ -1743,39 +2022,20 @@ function changePage(page){
 currentPage=page;
 
 document.querySelectorAll(".tab")
-.forEach(x=>
-x.classList.remove("active")
-);
+.forEach(x=>x.classList.remove("active"));
 
-if(page==="Genel"){
+const pageConfig={
+"Genel":{tab:"tabGenel",title:"Genel Stok"},
+"Profil":{tab:"tabProfil",title:"📐 Profil Stoğu"},
+"Boru":{tab:"tabBoru",title:"🔩 Yuvarlak Boru Stoğu"},
+"Köşebent":{tab:"tabKosebent",title:"📐 Köşebent Stoğu"},
+"Lama":{tab:"tabLama",title:"▬ Lama Stoğu"},
+"NPU":{tab:"tabNPU",title:"🏗️ NPU Stoğu"}
+};
 
-document.getElementById("tabGenel")
-.classList.add("active");
-
-document.getElementById("pageTitle")
-.innerText="Genel Stok";
-
-}
-
-if(page==="Profil"){
-
-document.getElementById("tabProfil")
-.classList.add("active");
-
-document.getElementById("pageTitle")
-.innerText="📐 Profil Stoğu";
-
-}
-
-if(page==="Boru"){
-
-document.getElementById("tabBoru")
-.classList.add("active");
-
-document.getElementById("pageTitle")
-.innerText="🔩 Yuvarlak Boru Stoğu";
-
-}
+let cfg=pageConfig[page]||pageConfig.Genel;
+document.getElementById(cfg.tab).classList.add("active");
+document.getElementById("pageTitle").innerText=cfg.title;
 
 document.getElementById("search").value="";
 document.getElementById("qualityFilter").value="";
@@ -1793,23 +2053,25 @@ showMovements();
 function openProductModal(){
 
 let type =
-currentPage==="Boru"
-?"Boru"
+["Profil","Boru","Köşebent","Lama","NPU"].includes(currentPage)
+?currentPage
 :"Profil";
 
-document.getElementById("productType")
-.value=type;
+document.getElementById("productType").value=type;
 
 typeChanged();
 
-document.getElementById("productModalTitle")
-.innerText =
-type==="Boru"
-?"🔩 Yeni Yuvarlak Boru"
-:"📐 Yeni Profil";
+const modalTitles={
+"Profil":"📐 Yeni Profil",
+"Boru":"🔩 Yeni Yuvarlak Boru",
+"Köşebent":"📐 Yeni Köşebent",
+"Lama":"▬ Yeni Lama",
+"NPU":"🏗️ Yeni NPU"
+};
 
-document.getElementById("productModal")
-.style.display="flex";
+document.getElementById("productModalTitle").innerText=modalTitles[type]||"Yeni Malzeme";
+
+document.getElementById("productModal").style.display="flex";
 
 }
 
@@ -1841,10 +2103,13 @@ normalizeQuality(
 document.getElementById("productQuality").value
 );
 
+let sizeSource =
+["Köşebent","Lama","NPU"].includes(type)
+?document.getElementById("productSizeManual").value
+:document.getElementById("productSize").value;
+
 let size =
-formatSize(
-document.getElementById("productSize").value
-);
+formatSize(sizeSource);
 
 let thickness =
 formatThickness(
@@ -1868,13 +2133,13 @@ document.getElementById("productDescription")
 
 if(
 !size ||
-!thickness ||
+(type!=="NPU" && !thickness) ||
 !Number.isFinite(length) ||
 length<=0
 ){
 
 alert(
-"Ebat/çap, kalınlık ve boy bilgilerini kontrol edin."
+"Ebat/ölçü, kalınlık ve boy bilgilerini kontrol edin."
 );
 
 return;
@@ -2074,6 +2339,7 @@ error.message
 
 function clearProductForm(){
 
+document.getElementById("productSizeManual").value="";
 document.getElementById("productThickness").value="";
 document.getElementById("productLength").value="6";
 document.getElementById("productStock").value="0";
@@ -2380,7 +2646,7 @@ return A-B;
 
 }
 
-if(a.type==="Profil" && b.type==="Profil"){
+if(a.type===b.type && ["Profil","Köşebent","Lama","NPU"].includes(a.type)){
 
 let A=getNumbers(a.size);
 let B=getNumbers(b.size);
@@ -2420,6 +2686,137 @@ String(b.quality),
 
 
 /* =====================================================
+   AĞIRLIK HESABI
+   Teorik kg/m hesaplarıdır. Profil ve borularda köşe/radyüs
+   detayları ihmal edilir; NPU değerleri standart kg/m tablosudur.
+===================================================== */
+
+const NPU_KG_PER_M={
+40:4.87,
+50:5.59,
+60:5.07,
+65:7.09,
+80:8.64,
+100:10.60,
+120:13.40,
+140:16.00,
+160:18.80,
+180:22.00,
+200:25.30,
+220:29.40,
+240:33.20,
+260:37.90,
+280:41.80,
+300:46.20,
+320:59.50,
+350:60.60,
+380:63.10,
+400:71.80
+};
+
+function getMaterialDensity(quality){
+let q=normalizeQuality(quality);
+if(q==="Alüminyum")return 2700;
+if(q==="304")return 7930;
+if(q==="316" || q==="316L")return 8000;
+/* ST37, ST52, Galvaniz ve bilinmeyen çelikler */
+return 7850;
+}
+
+function parseThicknessMm(value){
+let nums=getNumbers(value);
+let n=Number(nums[0]);
+return Number.isFinite(n) && n<999999 ? n : NaN;
+}
+
+function kgPerMeter(product){
+if(!product)return NaN;
+
+let type=String(product.type||"");
+let dims=getNumbers(product.size).filter(n=>Number.isFinite(n) && n<999999);
+let t=parseThicknessMm(product.thickness);
+let density=getMaterialDensity(product.quality);
+let areaMm2=NaN;
+
+if(type==="Boru"){
+let d=dims[0];
+if(Number.isFinite(d) && Number.isFinite(t) && t>0 && d>2*t){
+areaMm2=(Math.PI/4)*(d*d-Math.pow(d-2*t,2));
+}
+}
+
+else if(type==="Profil"){
+let a=dims[0];
+let b=dims.length>1 ? dims[1] : dims[0];
+if(Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(t) && t>0 && a>2*t && b>2*t){
+areaMm2=(a*b)-((a-2*t)*(b-2*t));
+}
+}
+
+else if(type==="Lama"){
+let width=dims[0];
+if(Number.isFinite(width) && Number.isFinite(t) && width>0 && t>0){
+areaMm2=width*t;
+}
+}
+
+else if(type==="Köşebent"){
+let a=dims[0];
+let b=dims.length>1 ? dims[1] : dims[0];
+if(Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(t) && t>0 && a>t && b>t){
+/* İki lamanın birleşimi: a*t + b*t - t*t */
+areaMm2=t*(a+b-t);
+}
+}
+
+else if(type==="NPU"){
+let npu=dims[0];
+if(Number.isFinite(npu) && NPU_KG_PER_M[npu]){
+/* Tablo çelik için. Farklı malzemede yoğunluk oranıyla ölçekle. */
+return NPU_KG_PER_M[npu]*(density/7850);
+}
+}
+
+if(!Number.isFinite(areaMm2) || areaMm2<=0)return NaN;
+return areaMm2*density/1000000;
+}
+
+function productTotalKg(product){
+let kgm=kgPerMeter(product);
+let length=parseLength(product.length);
+let stock=Number(product.stock)||0;
+if(!Number.isFinite(kgm) || !Number.isFinite(length))return NaN;
+return kgm*length*stock;
+}
+
+function formatKg(value,digits=1){
+if(!Number.isFinite(value))return "—";
+return value.toLocaleString("tr-TR",{
+minimumFractionDigits:digits,
+maximumFractionDigits:digits
+})+" kg";
+}
+
+/* =====================================================
+   HTML GÜVENLİ METİN
+===================================================== */
+
+function escapeHTML(value){
+return String(value||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+function productMatchesCurrentPage(product){
+if(currentPage==="Genel")return true;
+return product && product.type===currentPage;
+}
+
+
+/* =====================================================
    TABLO
 ===================================================== */
 
@@ -2440,16 +2837,7 @@ document.getElementById("qualityFilter")
 let filtered =
 products.filter(p=>{
 
-if(
-currentPage==="Profil" &&
-p.type!=="Profil"
-)
-return false;
-
-if(
-currentPage==="Boru" &&
-p.type!=="Boru"
-)
+if(!productMatchesCurrentPage(p))
 return false;
 
 let text =
@@ -2483,7 +2871,7 @@ if(filtered.length===0){
 
 tbody.innerHTML =
 '<tr>'+
-'<td colspan="10" class="empty">'+
+'<td colspan="11" class="empty">'+
 "Bu bölümde henüz malzeme bulunmuyor."+
 '</td>'+
 '</tr>';
@@ -2499,6 +2887,8 @@ filtered.map(p=>{
 let meters =
 Number(p.stock)*
 parseLength(p.length);
+
+let totalKg=productTotalKg(p);
 
 
 let status;
@@ -2539,10 +2929,43 @@ formatLength(p.length)+
 let usageHTML =
 !isStandardLength(p.length)
 ?
+'<div class="usage-area">'+
 '<label class="usage-check '+(isUsageSelected(p.id)?'checked':'')+'" title="Bu parçanın kullanılmak üzere ayrıldığını işaretle">'+
 '<input type="checkbox" '+(isUsageSelected(p.id)?'checked':'')+' onchange="toggleUsageSelection('+p.id+',this.checked)">'+
-'<span>'+(isUsageSelected(p.id)?'✓ Ayrıldı':'Kullanılacak')+'</span>'+
-'</label>'
+'<span>'+(isUsageSelected(p.id)?'✓ Ayrıldı':'Kullanılacak')+'</span>'+ 
+'</label>'+ 
+(
+ isUsageSelected(p.id)
+ ?
+ (
+   usageEditingId===String(p.id)
+   ?
+   '<input '+
+   'id="usageNote_'+p.id+'" '+
+   'class="usage-note-input" '+
+   'type="text" '+
+   'inputmode="none" '+
+   'data-keypad="text" '+
+   'data-usage-note-id="'+p.id+'" '+
+   'data-native-inputmode="text" '+
+   'data-keypad-label="Ayrıldığı iş / proje" '+
+   'placeholder="İş / proje no" '+
+   'value="'+escapeHTML(getUsageNote(p.id))+'" '+
+   'oninput="setUsageNote('+p.id+',this)" '+
+   'onfocus="openNumericKeypad(this)" '+
+   'onpointerup="openNumericKeypad(this)" '+
+   'onkeydown="if(event.key===\'Enter\'){event.preventDefault();finishUsageNoteEdit('+p.id+',this);}" '+
+   'aria-label="Ayrıldığı iş veya proje kodu">'
+   :
+   '<button type="button" class="usage-note-display '+(getUsageNote(p.id)?'':'empty')+'" '+
+   'onclick="openUsageNoteEdit('+p.id+')" '+
+   'title="Düzenlemek için tıkla">'+
+   (getUsageNote(p.id)?escapeHTML(getUsageNote(p.id)):'İş / proje no ekle')+
+   '</button>'
+ )
+ :''
+)+
+'</div>'
 :'';
 
 let rowClass =
@@ -2582,8 +3005,10 @@ ${p.thickness}
 </td>
 
 <td>
-${lengthHTML}
+<div class="length-usage-wrap">
+<div class="length-value-slot">${lengthHTML}</div>
 ${usageHTML}
+</div>
 </td>
 
 <td>
@@ -2595,6 +3020,10 @@ adet
 
 <td>
 ${meters.toFixed(2)} m
+</td>
+
+<td title="Teorik ağırlık">
+<strong>${formatKg(totalKg,1)}</strong>
 </td>
 
 <td>
@@ -2673,16 +3102,7 @@ return false;
 if(!p)
 return true;
 
-if(
-currentPage==="Profil" &&
-p.type!=="Profil"
-)
-return false;
-
-if(
-currentPage==="Boru" &&
-p.type!=="Boru"
-)
+if(!productMatchesCurrentPage(p))
 return false;
 
 return true;
@@ -2794,22 +3214,15 @@ ${m.description||"-"}
 
 function updateDashboard(){
 
-let list=products;
-
-
-if(currentPage==="Profil")
-list=products.filter(
-p=>p.type==="Profil"
-);
-
-if(currentPage==="Boru")
-list=products.filter(
-p=>p.type==="Boru"
-);
+let list=
+currentPage==="Genel"
+?products
+:products.filter(p=>productMatchesCurrentPage(p));
 
 
 let totalStock=0;
 let totalMeters=0;
+let totalWeight=0;
 let outOfStock=0;
 
 
@@ -2821,6 +3234,9 @@ Number(p.stock)||0;
 totalMeters+=
 (Number(p.stock)||0)*
 parseLength(p.length);
+
+let itemKg=productTotalKg(p);
+if(Number.isFinite(itemKg))totalWeight+=itemKg;
 
 if(Number(p.stock)<=0)
 outOfStock++;
@@ -2840,6 +3256,10 @@ document.getElementById(
 "totalMeters"
 ).innerText=
 totalMeters.toFixed(2);
+
+document.getElementById(
+"totalWeight"
+).innerText=formatKg(totalWeight,1);
 
 document.getElementById(
 "outOfStockCount"
@@ -2960,7 +3380,7 @@ function backupData(){
 
 let backup={
 
-version:3,
+version:4,
 
 createdAt:
 new Date().toISOString(),
@@ -3128,23 +3548,56 @@ reader.readAsText(file);
 
 
 /* =====================================================
-   EXCEL
+   EXCEL - GERÇEK XLSX / DÜZGÜN TABLO
 ===================================================== */
 
-function exportStock(){
+function excelNumber(value){
 
-let list=products;
+let n=Number(value);
+
+return Number.isFinite(n)
+?n
+:null;
+
+}
 
 
-if(currentPage==="Profil")
-list=products.filter(
-p=>p.type==="Profil"
-);
+function excelThickness(value){
 
-if(currentPage==="Boru")
-list=products.filter(
-p=>p.type==="Boru"
-);
+let v=String(value || "")
+.toLowerCase()
+.replace(/,/g,".")
+.replace(/\s+/g,"")
+.replace(/mm$/i,"")
+.trim();
+
+if(!v)
+return null;
+
+let n=Number(v);
+
+return Number.isFinite(n)
+?n
+:String(value || "");
+
+}
+
+
+function excelSafeText(value){
+
+return String(value ?? "")
+.replace(/[\r\n]+/g," ")
+.trim();
+
+}
+
+
+async function exportStock(){
+
+let list=
+currentPage==="Genel"
+?products
+:products.filter(p=>productMatchesCurrentPage(p));
 
 
 if(list.length===0){
@@ -3158,82 +3611,397 @@ return;
 }
 
 
+if(typeof ExcelJS==="undefined"){
+
+alert(
+"Excel modülü yüklenemedi.\n\nİnternet bağlantısını kontrol edip sayfayı yenileyin."
+);
+
+return;
+
+}
+
+
 list=sortProducts([...list]);
 
 
-let csv="\uFEFF";
+try{
+
+let workbook = new ExcelJS.Workbook();
+
+workbook.creator = "Profil & Boru Stok Takip";
+workbook.created = new Date();
+
+let sheet = workbook.addWorksheet("Stok Listesi",{
+views:[
+{
+state:"frozen",
+ySplit:4
+}
+]
+});
 
 
-csv +=
-"Malzeme Cinsi;Tip;Kalite;Ebat/Çap;Kalınlık;Boy;Kullanım Durumu;Stok;Toplam Metre;Durum\n";
+/* BAŞLIK */
+
+sheet.mergeCells("A1:M1");
+
+let titleCell=sheet.getCell("A1");
+
+titleCell.value =
+currentPage==="Genel"
+?"GENEL STOK LİSTESİ"
+:String(currentPage).toLocaleUpperCase("tr-TR")+" STOK LİSTESİ";
+
+titleCell.font={
+bold:true,
+size:16,
+color:{argb:"FFFFFFFF"}
+};
+
+titleCell.fill={
+type:"pattern",
+pattern:"solid",
+fgColor:{argb:"FF172033"}
+};
+
+titleCell.alignment={
+horizontal:"center",
+vertical:"middle"
+};
+
+sheet.getRow(1).height=28;
 
 
-list.forEach(p=>{
+/* ÜST ÖZET */
 
-let status =
-Number(p.stock)<=0
+let totalStock=list.reduce(
+(sum,p)=>sum+(Number(p.stock)||0),
+0
+);
+
+let totalMeters=list.reduce(
+(sum,p)=>sum+((Number(p.stock)||0)*(parseLength(p.length)||0)),
+0
+);
+
+let totalKg=list.reduce((sum,p)=>{
+
+let kg=productTotalKg(p);
+
+return sum+(
+Number.isFinite(kg)
+?kg
+:0
+);
+
+},0);
+
+let outOfStock=list.filter(
+p=>Number(p.stock)<=0
+).length;
+
+
+sheet.getCell("A2").value="Malzeme Çeşidi";
+sheet.getCell("B2").value=list.length;
+
+sheet.getCell("D2").value="Toplam Adet";
+sheet.getCell("E2").value=totalStock;
+
+sheet.getCell("G2").value="Toplam Metre";
+sheet.getCell("H2").value=totalMeters;
+
+sheet.getCell("J2").value="Toplam Kg";
+sheet.getCell("K2").value=totalKg;
+
+sheet.getCell("L2").value="Stokta Olmayan";
+sheet.getCell("M2").value=outOfStock;
+
+["A2","D2","G2","J2","L2"].forEach(address=>{
+
+let c=sheet.getCell(address);
+
+c.font={bold:true,color:{argb:"FF475569"}};
+
+c.fill={
+type:"pattern",
+pattern:"solid",
+fgColor:{argb:"FFF1F5F9"}
+};
+
+c.alignment={
+horizontal:"center",
+vertical:"middle"
+};
+
+});
+
+["B2","E2","H2","K2","M2"].forEach(address=>{
+
+let c=sheet.getCell(address);
+
+c.font={bold:true,size:12};
+
+c.alignment={
+horizontal:"center",
+vertical:"middle"
+};
+
+});
+
+sheet.getCell("H2").numFmt='0.00 "m"';
+sheet.getCell("K2").numFmt='0.00 "kg"';
+
+sheet.getRow(2).height=24;
+
+
+/* TABLO SATIRLARI */
+
+let rows=list.map(p=>{
+
+let length=parseLength(p.length);
+let stock=Number(p.stock)||0;
+let totalMeter=
+Number.isFinite(length)
+?stock*length
+:0;
+
+let unitKg=kgPerMeter(p);
+let totalWeight=productTotalKg(p);
+
+return[
+excelSafeText(p.type),
+excelSafeText(p.shape),
+excelSafeText(p.quality),
+excelSafeText(p.size),
+excelThickness(p.thickness),
+Number.isFinite(length)?length:null,
+(!isStandardLength(p.length) && isUsageSelected(p.id))
+?"Ayrıldı"
+:"",
+(!isStandardLength(p.length) && isUsageSelected(p.id))
+?excelSafeText(getUsageNote(p.id))
+:"",
+stock,
+totalMeter,
+Number.isFinite(unitKg)?unitKg:null,
+Number.isFinite(totalWeight)?totalWeight:null,
+stock<=0
 ?"Stok Yok"
-:"Stokta Var";
-
-
-csv +=
-
-p.type+";"+
-p.shape+";"+
-p.quality+";"+
-p.size+";"+
-p.thickness+";"+
-formatLength(p.length)+";"+
-(!isStandardLength(p.length) && isUsageSelected(p.id) ? "Ayrıldı" : "")+";"+
-p.stock+";"+
-(
-p.stock*
-parseLength(p.length)
-).toFixed(2)+";"+
-status+
-"\n";
+:"Stokta Var"
+];
 
 });
 
 
-downloadCSV(
-csv,
-"stok_listesi.csv"
-);
+let table=sheet.addTable({
+name:"StokTablosu",
+ref:"A4",
+headerRow:true,
+totalsRow:true,
+style:{
+theme:"TableStyleMedium2",
+showRowStripes:true,
+showFirstColumn:false,
+showLastColumn:false
+},
+columns:[
+{name:"Malzeme Cinsi",totalsRowLabel:"TOPLAM"},
+{name:"Tip"},
+{name:"Kalite"},
+{name:"Ebat / Çap"},
+{name:"Kalınlık (mm)"},
+{name:"Boy (m)"},
+{name:"Kullanım Durumu"},
+{name:"Ayrıldığı İş / Proje"},
+{name:"Stok (Adet)",totalsRowFunction:"sum"},
+{name:"Toplam Metre (m)",totalsRowFunction:"sum"},
+{name:"Birim Ağırlık (kg/m)"},
+{name:"Toplam Ağırlık (kg)",totalsRowFunction:"sum"},
+{name:"Durum"}
+],
+rows:rows
+});
+
+
+/* SAYI FORMATLARI */
+
+let firstDataRow=5;
+let lastDataRow=4+rows.length;
+let totalsRow=lastDataRow+1;
+
+if(rows.length>0){
+
+sheet.getColumn(5).numFmt="0.###";
+sheet.getColumn(6).numFmt="0.00";
+sheet.getColumn(9).numFmt="0";
+sheet.getColumn(10).numFmt="0.00";
+sheet.getColumn(11).numFmt="0.000";
+sheet.getColumn(12).numFmt="0.00";
+
+}
+
+sheet.getCell("I"+totalsRow).numFmt="0";
+sheet.getCell("J"+totalsRow).numFmt='0.00 "m"';
+sheet.getCell("L"+totalsRow).numFmt='0.00 "kg"';
+
+
+/* HİZALAMA */
+
+sheet.getColumn(1).alignment={vertical:"middle"};
+sheet.getColumn(2).alignment={vertical:"middle"};
+sheet.getColumn(3).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(4).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(5).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(6).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(7).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(8).alignment={vertical:"middle",wrapText:true};
+sheet.getColumn(9).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(10).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(11).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(12).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(13).alignment={horizontal:"center",vertical:"middle"};
+
+
+/* SÜTUN GENİŞLİKLERİ */
+
+let widths=[
+18,18,12,16,15,12,18,24,13,18,21,21,14
+];
+
+widths.forEach((width,index)=>{
+
+sheet.getColumn(index+1).width=width;
+
+});
+
+
+/* SATIR YÜKSEKLİĞİ */
+
+for(let r=4;r<=totalsRow;r++){
+
+sheet.getRow(r).height=22;
 
 }
 
 
-function downloadCSV(content,filename){
+/* STOK YOK SATIRLARINI HAFİF BELİRGİNLEŞTİR */
 
-let blob =
-new Blob(
-[content],
+for(let r=firstDataRow;r<=lastDataRow;r++){
+
+let status=sheet.getCell(r,13).value;
+
+if(status==="Stok Yok"){
+
+sheet.getCell(r,13).font={
+bold:true,
+color:{argb:"FF991B1B"}
+};
+
+sheet.getCell(r,13).fill={
+type:"pattern",
+pattern:"solid",
+fgColor:{argb:"FFFEE2E2"}
+};
+
+}
+
+else{
+
+sheet.getCell(r,13).font={
+bold:true,
+color:{argb:"FF166534"}
+};
+
+sheet.getCell(r,13).fill={
+type:"pattern",
+pattern:"solid",
+fgColor:{argb:"FFDCFCE7"}
+};
+
+}
+
+if(sheet.getCell(r,7).value==="Ayrıldı"){
+
+sheet.getCell(r,7).font={
+bold:true,
+color:{argb:"FF166534"}
+};
+
+}
+
+}
+
+
+/* SAYFA AYARLARI */
+
+sheet.pageSetup={
+orientation:"landscape",
+fitToPage:true,
+fitToWidth:1,
+fitToHeight:0,
+paperSize:9,
+margins:{
+left:0.25,
+right:0.25,
+top:0.5,
+bottom:0.5,
+header:0.2,
+footer:0.2
+}
+};
+
+sheet.autoFilter={
+from:"A4",
+to:"M"+lastDataRow
+};
+
+
+/* DOSYAYI İNDİR */
+
+let buffer=await workbook.xlsx.writeBuffer();
+
+let blob=new Blob(
+[buffer],
 {
-type:"text/csv;charset=utf-8;"
+type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 }
 );
 
+let url=URL.createObjectURL(blob);
+let link=document.createElement("a");
 
-let url =
-URL.createObjectURL(blob);
+let pageName =
+currentPage==="Genel"
+?"genel"
+:String(currentPage)
+.toLocaleLowerCase("tr-TR")
+.replace(/[^a-z0-9ğüşöçı]+/gi,"_");
 
-
-let link =
-document.createElement("a");
-
+let date=new Date()
+.toLocaleDateString("tr-TR")
+.replace(/\./g,"-");
 
 link.href=url;
-link.download=filename;
-
+link.download="stok_"+pageName+"_"+date+".xlsx";
 
 document.body.appendChild(link);
-
 link.click();
-
 document.body.removeChild(link);
 
 URL.revokeObjectURL(url);
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"Excel dosyası oluşturulamadı.\n\n"+
+error.message
+);
+
+}
 
 }
 
@@ -3244,46 +4012,28 @@ URL.revokeObjectURL(url);
 
 function normalizeExistingData(){
 
+const allowedTypes=["Profil","Boru","Köşebent","Lama","NPU"];
+
 products.forEach(p=>{
 
-p.type =
-p.type==="Boru"
-?"Boru"
-:"Profil";
-
+if(!allowedTypes.includes(p.type)){
+p.type="Profil";
+}
 
 if(!p.shape){
 
-p.shape =
-p.type==="Boru"
-?"Yuvarlak"
-:"Kare";
+if(p.type==="Boru")p.shape="Yuvarlak";
+else if(p.type==="Profil")p.shape="Kare";
+else p.shape=p.type;
 
 }
 
-
-p.quality =
-normalizeQuality(p.quality);
-
-
-p.size =
-formatSize(p.size);
-
-
-p.thickness =
-formatThickness(p.thickness);
-
-
-p.length =
-parseLength(p.length)||6;
-
-
-p.stock =
-Number(p.stock)||0;
-
-
-p.critical =
-Number(p.critical)||0;
+p.quality = normalizeQuality(p.quality);
+p.size = formatSize(p.size);
+p.thickness = formatThickness(p.thickness);
+p.length = parseLength(p.length)||6;
+p.stock = Number(p.stock)||0;
+p.critical = Number(p.critical)||0;
 
 });
 
@@ -3529,6 +4279,11 @@ Kısa gecikmeyle yalnızca ekran klavyesi kapanır.
 */
 if(keypadEnterTimer)clearTimeout(keypadEnterTimer);
 keypadEnterTimer=setTimeout(()=>{
+let usageId=input && input.dataset ? input.dataset.usageNoteId : null;
+if(usageId){
+finishUsageNoteEdit(usageId,input);
+return;
+}
 closeNumericKeypad();
 try{input.focus({preventScroll:true});}catch{}
 },140);

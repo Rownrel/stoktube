@@ -405,6 +405,42 @@ border-radius:5px;
 font-weight:bold
 }
 
+.finish-badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:5px;
+font-weight:bold;
+background:#fef3c7;
+color:#92400e;
+white-space:nowrap
+}
+
+.finish-standard{
+color:#64748b;
+font-size:13px;
+white-space:nowrap
+}
+
+.pipe-seam-badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:5px;
+font-weight:bold;
+white-space:nowrap;
+background:#e0f2fe;
+color:#075985
+}
+
+.pipe-seam-seamless{
+background:#ede9fe;
+color:#5b21b6
+}
+
+.pipe-seam-na{
+color:#94a3b8;
+font-size:13px
+}
+
 .type-badge{
 background:#f1f5f9;
 padding:5px 8px;
@@ -1161,7 +1197,7 @@ onchange="restoreData(event)"
 </button>
 
 <button class="tab" id="tabBoru" onclick="changePage('Boru')">
-🔩 Borular
+🔩 Yuvarlak Borular
 </button>
 
 <button class="tab" id="tabKosebent" onclick="changePage('Köşebent')">
@@ -1238,6 +1274,18 @@ oninput="showProducts()"
 
 </select>
 
+<select id="finishFilter" onchange="showProducts()">
+<option value="">Tüm Yüzeyler</option>
+<option value="Standart">Boyasız</option>
+<option value="Boyalı">Boyalı</option>
+</select>
+
+<select id="pipeSeamFilter" onchange="showProducts()">
+<option value="">Tüm Boru Yapıları</option>
+<option value="Dikişli">Dikişli</option>
+<option value="Dikişsiz">Dikişsiz</option>
+</select>
+
 <button class="btn-blue" onclick="openProductModal()">
 + Malzeme Ekle
 </button>
@@ -1278,6 +1326,8 @@ oninput="showProducts()"
 <th>Cinsi</th>
 <th>Tip</th>
 <th>Kalite</th>
+<th>Yüzey</th>
+<th>Boru Yapısı</th>
 <th>Ebat / Çap</th>
 <th>Kalınlık</th>
 <th>Boy</th>
@@ -1434,6 +1484,25 @@ Dikdörtgen
 
 </select>
 
+</div>
+
+<div class="form-group" id="productFinishGroup">
+
+<label>Yüzey / Kaplama</label>
+
+<select id="productFinish">
+<option value="Standart">Boyasız</option>
+<option value="Boyalı">Boyalı</option>
+</select>
+
+</div>
+
+<div class="form-group" id="productPipeSeamGroup" style="display:none">
+<label>Boru Yapısı</label>
+<select id="productPipeSeam">
+<option value="Dikişli">Dikişli</option>
+<option value="Dikişsiz">Dikişsiz</option>
+</select>
 </div>
 
 <div class="form-group">
@@ -1704,6 +1773,8 @@ Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik oku
 <th>Excel Satırı</th>
 <th>Cinsi</th>
 <th>Kalite</th>
+<th>Yüzey</th>
+<th>Boru Yapısı</th>
 <th>Ebat / Çap</th>
 <th>Kalınlık</th>
 <th>Boy</th>
@@ -1714,7 +1785,7 @@ Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik oku
 </thead>
 <tbody id="purchasePreviewBody">
 <tr>
-<td colspan="10" class="empty">Önizleme için bir satın alma Excel'i seç.</td>
+<td colspan="13" class="empty">Önizleme için bir satın alma Excel'i seç.</td>
 </tr>
 </tbody>
 </table>
@@ -1724,7 +1795,7 @@ Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik oku
 Excel'de kullanılan alanlar: <strong>Malzeme, Kalite Sınıfı, Kalınlık, Ebat, Miktar ve Birim.</strong>
 Örneğin gönderdiğin formdaki <strong>ST37 / 1,5 / 20×10 / 1 BOY</strong> satırı
 <strong>Profil • Dikdörtgen • ST37 • 20×10 • 1,5 mm • 6 m • 1 adet</strong> olarak okunur.
-<br><strong>Ebat / Çap, Kalınlık ve Adet</strong> alanları düzenlenebilir. Sipariş revize olduysa veya gelen malzeme talep formundan farklıysa, stoğa aktarmadan önce gerçek gelen bilgileri burada düzeltebilirsin.
+<br><strong>Yüzey, Boru Yapısı, Ebat / Çap, Kalınlık ve Adet</strong> alanları düzenlenebilir. Sipariş revize olduysa veya gelen malzeme talep formundan farklıysa, stoğa aktarmadan önce gerçek gelen bilgileri burada düzeltebilirsin.
 </div>
 
 <div class="modal-buttons">
@@ -2934,7 +3005,7 @@ if(file)file.value="";
 
 document.getElementById("purchaseImportFileInfo").textContent="Henüz Excel seçilmedi.";
 document.getElementById("purchasePreviewBody").innerHTML=
-'<tr><td colspan="10" class="empty">Önizleme için bir satın alma Excel\'i seç.</td></tr>';
+'<tr><td colspan="11" class="empty">Önizleme için bir satın alma Excel\'i seç.</td></tr>';
 
 setPurchaseImportStatus(
 "Excel dosyanı seçtiğinde “Hammadde Talep Detayları” tablosu otomatik okunacak."
@@ -3203,6 +3274,10 @@ normalizeText(p.type)===normalizeText(item.type)
 
 && normalizeText(p.quality)===normalizeText(item.quality)
 
+&& normalizeFinish(getProductFinish(p))===normalizeFinish(item.finish)
+
+&& (item.type!=="Boru" || getProductPipeSeam(p)===normalizePipeSeam(item.pipeSeam))
+
 && normalizeText(p.size)===normalizeText(item.size)
 
 && normalizeText(p.thickness)===normalizeText(item.thickness)
@@ -3323,6 +3398,11 @@ rawSize:String(size??"").trim(),
 quantity:purchaseNumber(quantity),
 unit:String(unit??"").trim(),
 quality:purchaseQualityFromFields(material,quality),
+finish:normalizePurchaseHeader(String(material||"")+" "+String(quality||"")).includes("boyali")?"Boyalı":"Standart",
+pipeSeam:(()=>{
+let t=normalizePurchaseHeader(String(material||"")+" "+String(quality||"")+" "+String(size||""));
+return (t.includes("dikissiz") || t.includes("seamless"))?"Dikişsiz":"Dikişli";
+})(),
 type:inferPurchaseType(material,size),
 shape:"",
 size:"",
@@ -3370,11 +3450,50 @@ return qualities.map(q=>
 ).join("");
 }
 
+function purchaseFinishOptions(selected){
+let current=normalizeFinish(selected);
+return ["Standart","Boyalı"].map(v=>
+'<option value="'+v+'" '+(v===current?"selected":"")+'>'+
+(v==="Standart"?"Boyasız":"Boyalı")+
+'</option>'
+).join("");
+}
+
+function changePurchaseItemFinish(index,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+item.finish=normalizeFinish(value);
+renderPurchaseImportPreview();
+}
+
+function purchasePipeSeamOptions(selected,isPipe){
+if(!isPipe){
+return '<option value="">—</option>';
+}
+let current=normalizePipeSeam(selected);
+return ["Dikişli","Dikişsiz"].map(v=>
+'<option value="'+v+'" '+(v===current?"selected":"")+'>'+v+'</option>'
+).join("");
+}
+
+function changePurchaseItemPipeSeam(index,value){
+let item=purchaseImportRows[index];
+if(!item)return;
+item.pipeSeam=item.type==="Boru"?normalizePipeSeam(value):"";
+renderPurchaseImportPreview();
+}
+
 function changePurchaseItemType(index,value){
 let item=purchaseImportRows[index];
 if(!item)return;
 
 item.type=value;
+if(item.type==="Boru"){
+item.pipeSeam=normalizePipeSeam(item.pipeSeam||"Dikişli");
+}
+else{
+item.pipeSeam="";
+}
 applyPurchaseTypeToItem(item);
 
 if(!validatePurchaseItem(item)){
@@ -3502,7 +3621,7 @@ let tbody=document.getElementById("purchasePreviewBody");
 
 if(!purchaseImportRows.length){
 tbody.innerHTML=
-'<tr><td colspan="10" class="empty">Excel içinde aktarılacak satır bulunamadı.</td></tr>';
+'<tr><td colspan="12" class="empty">Excel içinde aktarılacak satır bulunamadı.</td></tr>';
 renderPurchaseImportSummary();
 return;
 }
@@ -3561,6 +3680,25 @@ class="purchase-mini-select"
 onchange="changePurchaseItemQuality(${index},this.value)"
 >
 ${purchaseQualityOptions(item.quality)}
+</select>
+</td>
+
+<td>
+<select
+class="purchase-mini-select"
+onchange="changePurchaseItemFinish(${index},this.value)"
+>
+${purchaseFinishOptions(item.finish)}
+</select>
+</td>
+
+<td>
+<select
+class="purchase-mini-select"
+onchange="changePurchaseItemPipeSeam(${index},this.value)"
+${item.type!=="Boru"?'disabled title="Sadece borularda kullanılır"':''}
+>
+${purchasePipeSeamOptions(item.pipeSeam,item.type==="Boru")}
 </select>
 </td>
 
@@ -3681,7 +3819,7 @@ document.getElementById("purchaseImportFileInfo").innerHTML=
 "<strong>"+escapeHTML(file.name)+"</strong>";
 
 document.getElementById("purchasePreviewBody").innerHTML=
-'<tr><td colspan="10" class="empty">Excel okunamadı.</td></tr>';
+'<tr><td colspan="12" class="empty">Excel okunamadı.</td></tr>';
 
 setPurchaseImportStatus(
 "❌ <strong>Excel okunamadı.</strong><br>"+escapeHTML(error.message),
@@ -3786,7 +3924,11 @@ thickness:item.thickness,
 length:6,
 stock:Number(item.quantity),
 critical:0,
-description:"Satın alma Excel'inden eklendi"
+description:encodePipeSeamDescription(
+encodeFinishDescription("Satın alma Excel'inden eklendi",item.finish),
+item.type,
+item.pipeSeam
+)
 };
 
 let result=await supabaseRequest(
@@ -4124,6 +4266,82 @@ return text;
 
 
 /* =====================================================
+   YÜZEY / KAPLAMA
+   Supabase tablosuna yeni kolon gerekmeden description
+   alanında görünmeyen bir işaret olarak saklanır.
+===================================================== */
+
+function normalizeFinish(value){
+let v=normalizeText(value);
+return v.includes("boyal") ? "Boyalı" : "Standart";
+}
+
+function stripFinishMarker(description){
+return String(description || "")
+.replace(/\[YÜZEY:[^\]]+\]\s*/gi,"")
+.trim();
+}
+
+function encodeFinishDescription(description,finish){
+let clean=stripFinishMarker(description);
+let normalized=normalizeFinish(finish);
+
+if(normalized==="Boyalı"){
+return "[YÜZEY:Boyalı]"+(clean?" "+clean:"");
+}
+
+return clean;
+}
+
+function getProductFinish(product){
+if(!product)return "Standart";
+
+let match=String(product.description || "")
+.match(/\[YÜZEY:([^\]]+)\]/i);
+
+return match ? normalizeFinish(match[1]) : "Standart";
+}
+
+/* =====================================================
+   BORU YAPISI — DİKİŞLİ / DİKİŞSİZ
+   Supabase'e yeni kolon eklemeden description içinde saklanır.
+===================================================== */
+
+function normalizePipeSeam(value){
+let v=normalizeText(value);
+if(v.includes("dikissiz") || v.includes("seamless"))return "Dikişsiz";
+return "Dikişli";
+}
+
+function stripPipeSeamMarker(description){
+return String(description || "")
+.replace(/\[BORU_YAPISI:[^\]]+\]\s*/gi,"")
+.trim();
+}
+
+function encodePipeSeamDescription(description,type,pipeSeam){
+let clean=stripPipeSeamMarker(description);
+if(type!=="Boru")return clean;
+
+let normalized=normalizePipeSeam(pipeSeam);
+if(normalized==="Dikişsiz"){
+return "[BORU_YAPISI:Dikişsiz]"+(clean?" "+clean:"");
+}
+
+/* Eski borular ve işaretsiz borular dikişli kabul edilir. */
+return clean;
+}
+
+function getProductPipeSeam(product){
+if(!product || product.type!=="Boru")return "";
+
+let match=String(product.description || "")
+.match(/\[BORU_YAPISI:([^\]]+)\]/i);
+
+return match ? normalizePipeSeam(match[1]) : "Dikişli";
+}
+
+/* =====================================================
    EBATLAR
 ===================================================== */
 
@@ -4376,6 +4594,24 @@ shape.value=type;
 
 }
 
+let finishGroup=document.getElementById("productFinishGroup");
+if(finishGroup){
+/* Boyalı / boyasız tüm malzeme cinslerinde geçerli. */
+finishGroup.style.display="flex";
+}
+
+let pipeSeamGroup=document.getElementById("productPipeSeamGroup");
+let pipeSeamSelect=document.getElementById("productPipeSeam");
+if(pipeSeamGroup && pipeSeamSelect){
+if(type==="Boru"){
+pipeSeamGroup.style.display="flex";
+}
+else{
+pipeSeamGroup.style.display="none";
+pipeSeamSelect.value="Dikişli";
+}
+}
+
 fillSizeOptions();
 updateProductReservationVisibility();
 
@@ -4419,6 +4655,10 @@ document.getElementById("pageTitle").innerText=cfg.title;
 
 document.getElementById("search").value="";
 document.getElementById("qualityFilter").value="";
+let finishFilter=document.getElementById("finishFilter");
+if(finishFilter)finishFilter.value="";
+let pipeSeamFilter=document.getElementById("pipeSeamFilter");
+if(pipeSeamFilter)pipeSeamFilter.value="";
 
 showProducts();
 showMovements();
@@ -4487,6 +4727,14 @@ normalizeQuality(
 document.getElementById("productQuality").value
 );
 
+let finish =
+normalizeFinish(document.getElementById("productFinish").value);
+
+let pipeSeam =
+type==="Boru"
+?normalizePipeSeam(document.getElementById("productPipeSeam").value)
+:"";
+
 let sizeSource =
 ["Köşebent","Lama","NPU"].includes(type)
 ?document.getElementById("productSizeManual").value
@@ -4513,6 +4761,9 @@ document.getElementById("productStock").value
 let description =
 document.getElementById("productDescription")
 .value.trim();
+
+description=encodeFinishDescription(description,finish);
+description=encodePipeSeamDescription(description,type,pipeSeam);
 
 let pendingReservedTotal=pendingProductReservations.reduce((sum,r)=>sum+(Number(r.quantity)||0),0);
 if(isStandardLength(length) && pendingReservedTotal>stock){
@@ -4556,6 +4807,15 @@ normalizeText(quality)
 
 &&
 
+normalizeFinish(getProductFinish(p)) ===
+normalizeFinish(finish)
+
+&&
+
+(type!=="Boru" || getProductPipeSeam(p)===pipeSeam)
+
+&&
+
 normalizeText(p.size) ===
 normalizeText(size)
 
@@ -4583,6 +4843,9 @@ existing.type+
 " | "+
 existing.quality+
 " | "+
+(getProductFinish(existing)==="Boyalı"?"Boyalı":"Boyasız")+
+" | "+
+(existing.type==="Boru"?getProductPipeSeam(existing)+" | ":"")+
 existing.size+
 " | "+
 existing.thickness+
@@ -4732,6 +4995,11 @@ error.message
 
 function clearProductForm(){
 
+let finish=document.getElementById("productFinish");
+if(finish)finish.value="Standart";
+let pipeSeam=document.getElementById("productPipeSeam");
+if(pipeSeam)pipeSeam.value="Dikişli";
+
 document.getElementById("productSizeManual").value="";
 document.getElementById("productThickness").value="";
 document.getElementById("productLength").value="6";
@@ -4784,6 +5052,9 @@ product.type+
 "</strong> | "+
 product.quality+
 " | "+
+(getProductFinish(product)==="Boyalı"?"Boyalı":"Boyasız")+
+" | "+
+(product.type==="Boru"?getProductPipeSeam(product)+" | ":"")+
 product.size+
 " | "+
 product.thickness+
@@ -5256,6 +5527,16 @@ let quality =
 document.getElementById("qualityFilter")
 .value;
 
+let finishFilter =
+document.getElementById("finishFilter")
+?document.getElementById("finishFilter").value
+:"";
+
+let pipeSeamFilter =
+document.getElementById("pipeSeamFilter")
+?document.getElementById("pipeSeamFilter").value
+:"";
+
 
 let filtered =
 products.filter(p=>{
@@ -5267,6 +5548,8 @@ let text =
 p.type+" "+
 p.shape+" "+
 p.quality+" "+
+getProductFinish(p)+" "+
+getProductPipeSeam(p)+" "+
 p.size+" "+
 p.thickness+" "+
 getStandardReservations(p.id).map(r=>r.note+" "+r.quantity).join(" ");
@@ -5283,6 +5566,18 @@ p.quality!==quality
 )
 return false;
 
+if(
+finishFilter &&
+getProductFinish(p)!==finishFilter
+)
+return false;
+
+if(
+pipeSeamFilter &&
+(p.type!=="Boru" || getProductPipeSeam(p)!==pipeSeamFilter)
+)
+return false;
+
 return true;
 
 });
@@ -5295,7 +5590,7 @@ if(filtered.length===0){
 
 tbody.innerHTML =
 '<tr>'+
-'<td colspan="11" class="empty">'+
+'<td colspan="12" class="empty">'+
 "Bu bölümde henüz malzeme bulunmuyor."+
 '</td>'+
 '</tr>';
@@ -5418,6 +5713,20 @@ ${p.shape}
 <span class="quality">
 ${p.quality}
 </span>
+</td>
+
+<td>
+${getProductFinish(p)==="Boyalı"
+?'<span class="finish-badge">🎨 Boyalı</span>'
+:'<span class="finish-standard">Boyasız</span>'}
+</td>
+
+<td>
+${p.type==="Boru"
+?(getProductPipeSeam(p)==="Dikişsiz"
+?'<span class="pipe-seam-badge pipe-seam-seamless">Dikişsiz</span>'
+:'<span class="pipe-seam-badge">Dikişli</span>')
+:'<span class="pipe-seam-na">—</span>'}
 </td>
 
 <td>
@@ -5717,6 +6026,9 @@ p.type+
 " | "+
 p.quality+
 " | "+
+(getProductFinish(p)==="Boyalı"?"Boyalı":"Boyasız")+
+" | "+
+(p.type==="Boru"?getProductPipeSeam(p)+" | ":"")+
 p.size+
 " | "+
 p.thickness+
@@ -6079,7 +6391,7 @@ ySplit:4
 
 /* BAŞLIK */
 
-sheet.mergeCells("A1:M1");
+sheet.mergeCells("A1:N1");
 
 let titleCell=sheet.getCell("A1");
 
@@ -6208,6 +6520,8 @@ return[
 excelSafeText(p.type),
 excelSafeText(p.shape),
 excelSafeText(p.quality),
+excelSafeText(getProductFinish(p)==="Boyalı"?"Boyalı":"Boyasız"),
+excelSafeText(p.type==="Boru"?getProductPipeSeam(p):""),
 excelSafeText(p.size),
 excelThickness(p.thickness),
 Number.isFinite(length)?length:null,
@@ -6244,6 +6558,8 @@ columns:[
 {name:"Malzeme Cinsi",totalsRowLabel:"TOPLAM"},
 {name:"Tip"},
 {name:"Kalite"},
+{name:"Yüzey"},
+{name:"Boru Yapısı"},
 {name:"Ebat / Çap"},
 {name:"Kalınlık (mm)"},
 {name:"Boy (m)"},
@@ -6267,18 +6583,18 @@ let totalsRow=lastDataRow+1;
 
 if(rows.length>0){
 
-sheet.getColumn(5).numFmt="0.###";
-sheet.getColumn(6).numFmt="0.00";
-sheet.getColumn(9).numFmt="0";
-sheet.getColumn(10).numFmt="0.00";
-sheet.getColumn(11).numFmt="0.000";
+sheet.getColumn(7).numFmt="0.###";
+sheet.getColumn(8).numFmt="0.00";
+sheet.getColumn(11).numFmt="0";
 sheet.getColumn(12).numFmt="0.00";
+sheet.getColumn(13).numFmt="0.000";
+sheet.getColumn(14).numFmt="0.00";
 
 }
 
-sheet.getCell("I"+totalsRow).numFmt="0";
-sheet.getCell("J"+totalsRow).numFmt='0.00 "m"';
-sheet.getCell("L"+totalsRow).numFmt='0.00 "kg"';
+sheet.getCell("K"+totalsRow).numFmt="0";
+sheet.getCell("L"+totalsRow).numFmt='0.00 "m"';
+sheet.getCell("N"+totalsRow).numFmt='0.00 "kg"';
 
 
 /* HİZALAMA */
@@ -6290,18 +6606,20 @@ sheet.getColumn(4).alignment={horizontal:"center",vertical:"middle"};
 sheet.getColumn(5).alignment={horizontal:"center",vertical:"middle"};
 sheet.getColumn(6).alignment={horizontal:"center",vertical:"middle"};
 sheet.getColumn(7).alignment={horizontal:"center",vertical:"middle"};
-sheet.getColumn(8).alignment={vertical:"middle",wrapText:true};
+sheet.getColumn(8).alignment={horizontal:"center",vertical:"middle"};
 sheet.getColumn(9).alignment={horizontal:"center",vertical:"middle"};
-sheet.getColumn(10).alignment={horizontal:"right",vertical:"middle"};
-sheet.getColumn(11).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(10).alignment={vertical:"middle",wrapText:true};
+sheet.getColumn(11).alignment={horizontal:"center",vertical:"middle"};
 sheet.getColumn(12).alignment={horizontal:"right",vertical:"middle"};
-sheet.getColumn(13).alignment={horizontal:"center",vertical:"middle"};
+sheet.getColumn(13).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(14).alignment={horizontal:"right",vertical:"middle"};
+sheet.getColumn(15).alignment={horizontal:"center",vertical:"middle"};
 
 
 /* SÜTUN GENİŞLİKLERİ */
 
 let widths=[
-18,18,12,16,15,12,18,24,13,18,21,21,14
+18,18,12,16,15,16,15,12,18,24,13,18,21,21,14
 ];
 
 widths.forEach((width,index)=>{
@@ -6324,16 +6642,16 @@ sheet.getRow(r).height=22;
 
 for(let r=firstDataRow;r<=lastDataRow;r++){
 
-let status=sheet.getCell(r,13).value;
+let status=sheet.getCell(r,15).value;
 
 if(status==="Stok Yok"){
 
-sheet.getCell(r,13).font={
+sheet.getCell(r,15).font={
 bold:true,
 color:{argb:"FF991B1B"}
 };
 
-sheet.getCell(r,13).fill={
+sheet.getCell(r,15).fill={
 type:"pattern",
 pattern:"solid",
 fgColor:{argb:"FFFEE2E2"}
@@ -6343,12 +6661,12 @@ fgColor:{argb:"FFFEE2E2"}
 
 else{
 
-sheet.getCell(r,13).font={
+sheet.getCell(r,15).font={
 bold:true,
 color:{argb:"FF166534"}
 };
 
-sheet.getCell(r,13).fill={
+sheet.getCell(r,15).fill={
 type:"pattern",
 pattern:"solid",
 fgColor:{argb:"FFDCFCE7"}
@@ -6356,9 +6674,9 @@ fgColor:{argb:"FFDCFCE7"}
 
 }
 
-if(["Ayrıldı","Rezervasyonlu"].includes(sheet.getCell(r,7).value)){
+if(["Ayrıldı","Rezervasyonlu"].includes(sheet.getCell(r,9).value)){
 
-sheet.getCell(r,7).font={
+sheet.getCell(r,9).font={
 bold:true,
 color:{argb:"FF166534"}
 };
@@ -6388,7 +6706,7 @@ footer:0.2
 
 sheet.autoFilter={
 from:"A4",
-to:"M"+lastDataRow
+to:"O"+lastDataRow
 };
 
 

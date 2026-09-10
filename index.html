@@ -1355,13 +1355,41 @@ return Array.isArray(local)?local:[];
 }
 
 async function saveCloudArray(key,localKey,value){
-try{localStorage.setItem(localKey,JSON.stringify(value));}catch{}
+/* Bulut ana kaynak. Buluta yazılamayan veri localStorage'a da yazılmıyor;
+   böylece görünmeyen/eski kayıtların daha sonra tekrar buluta taşınması engellenir. */
 try{
 await cloudStateSet(key,value);
+try{localStorage.setItem(localKey,JSON.stringify(value));}catch{}
 return true;
 }catch(error){
 showCloudAddonError(error);
 return false;
+}
+}
+
+async function resetAddonCloudDataOnce(){
+try{
+let current=await cloudStateGet(CLOUD_KEY_ADDON_RESET_VERSION);
+if(current===ADDON_RESET_VERSION)return;
+
+/* Kullanıcının isteğiyle eski test kayıtlarını tamamen temizle. */
+await cloudStateSet(CLOUD_KEY_CONSUMABLES,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_RECORDS,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_VENDORS,[]);
+await cloudStateSet(CLOUD_KEY_ADDON_RESET_VERSION,ADDON_RESET_VERSION);
+
+consumables=[];
+maintenanceRecords=[];
+maintenanceEquipments=[];
+maintenanceVendors=[];
+
+[CONSUMABLES_STORAGE_KEY,MAINTENANCE_STORAGE_KEY,MAINTENANCE_EQUIPMENT_STORAGE_KEY,MAINTENANCE_VENDOR_STORAGE_KEY].forEach(key=>{
+try{localStorage.removeItem(key);}catch{}
+});
+}catch(error){
+console.error("Bakım/sarf ilk sıfırlama hatası:",error);
+showCloudAddonError(error);
 }
 }
 
@@ -2611,12 +2639,12 @@ oninput="renderPriceResults()"
 <select id="maintenanceEquipment">
 <option value="">Makine seç...</option>
 </select>
-<button type="button" class="btn-blue maintenance-master-btn" onclick="toggleMaintenanceMasterAdd('equipment',true)">+ Makine</button>
+<button type="button" id="maintenanceShowEquipmentAddButton" class="btn-blue maintenance-master-btn">+ Makine</button>
 </div>
 <div class="maintenance-master-add" id="maintenanceEquipmentAdd">
 <input id="maintenanceEquipmentNew" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni makine veya ekipman" placeholder="Yeni makine / ekipman adı">
-<button type="button" class="btn-green" onclick="saveMaintenanceMaster('equipment')">Kaydet</button>
-<button type="button" class="btn-gray" onclick="toggleMaintenanceMasterAdd('equipment',false)">Vazgeç</button>
+<button type="button" id="maintenanceEquipmentSaveButton" class="btn-green">Kaydet</button>
+<button type="button" id="maintenanceEquipmentCancelButton" class="btn-gray">Vazgeç</button>
 </div>
 </div>
 <div class="form-group">
@@ -2629,12 +2657,12 @@ oninput="renderPriceResults()"
 <select id="maintenancePerformedBy">
 <option value="">Firma / kişi seç...</option>
 </select>
-<button type="button" class="btn-blue maintenance-master-btn" onclick="toggleMaintenanceMasterAdd('vendor',true)">+ Firma</button>
+<button type="button" id="maintenanceShowVendorAddButton" class="btn-blue maintenance-master-btn">+ Firma</button>
 </div>
 <div class="maintenance-master-add" id="maintenanceVendorAdd">
 <input id="maintenanceVendorNew" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni bakım firması veya kişi" placeholder="Yeni firma / kişi adı">
-<button type="button" class="btn-green" onclick="saveMaintenanceMaster('vendor')">Kaydet</button>
-<button type="button" class="btn-gray" onclick="toggleMaintenanceMasterAdd('vendor',false)">Vazgeç</button>
+<button type="button" id="maintenanceVendorSaveButton" class="btn-green">Kaydet</button>
+<button type="button" id="maintenanceVendorCancelButton" class="btn-gray">Vazgeç</button>
 </div>
 </div>
 <div class="form-group">
@@ -2643,8 +2671,8 @@ oninput="renderPriceResults()"
 </div>
 </div>
 <div class="maintenance-add-actions">
-<button type="button" class="btn-gray" onclick="toggleMaintenanceAddPanel(false)">Vazgeç</button>
-<button type="button" class="btn-green" onclick="saveMaintenanceRecord()">Bakımı Kaydet</button>
+<button type="button" id="maintenanceRecordCancelButton" class="btn-gray">Vazgeç</button>
+<button type="button" id="maintenanceRecordSaveButton" class="btn-green">Bakımı Kaydet</button>
 </div>
 </div>
 
@@ -2714,8 +2742,8 @@ oninput="renderPriceResults()"
 <input id="consumableInitialQuantity" type="text" inputmode="none" data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Başlangıç miktarı" value="0">
 </div>
 <div style="display:flex;gap:7px;align-items:flex-end">
-<button type="button" class="btn-green" onclick="addConsumable()">Ekle</button>
-<button type="button" class="btn-gray" onclick="toggleConsumableAddPanel(false)">Vazgeç</button>
+<button type="button" id="consumableAddSaveButton" class="btn-green">Ekle</button>
+<button type="button" id="consumableAddCancelButton" class="btn-gray">Vazgeç</button>
 </div>
 </div>
 </div>
@@ -2740,7 +2768,7 @@ oninput="renderPriceResults()"
 </div>
 <div class="modal-buttons">
 <button type="button" class="btn-gray" onclick="closeConsumableMovementModal()">Vazgeç</button>
-<button type="button" id="consumableMovementSaveButton" class="btn-green" onclick="saveConsumableMovement()">Kaydet</button>
+<button type="button" id="consumableMovementSaveButton" class="btn-green">Kaydet</button>
 </div>
 </div>
 </div>
@@ -2853,6 +2881,10 @@ const MAINTENANCE_VENDOR_STORAGE_KEY="stokMaintenanceVendorListV1";
 const CLOUD_KEY_MAINTENANCE_RECORDS="maintenance_records";
 const CLOUD_KEY_MAINTENANCE_EQUIPMENTS="maintenance_equipments";
 const CLOUD_KEY_MAINTENANCE_VENDORS="maintenance_vendors";
+/* Bu sürümde kullanıcı eski test bakım/sarf kayıtlarını sıfırlamak istedi.
+   İşaret bulutta tutulduğu için hangi bilgisayar önce açarsa açsın yalnızca BİR KEZ çalışır. */
+const CLOUD_KEY_ADDON_RESET_VERSION="addon_reset_version";
+const ADDON_RESET_VERSION="2026-09-10-bakim-sarf-temiz-v1";
 const MAINTENANCE_DB_NAME="stokMaintenancePdfDBV1";
 const MAINTENANCE_DB_STORE="pdfs";
 let cloudAddonErrorShown=false;
@@ -6987,8 +7019,9 @@ renderConsumables();
 }
 
 async function saveConsumables(){
-await saveCloudArray(CLOUD_KEY_CONSUMABLES,CONSUMABLES_STORAGE_KEY,consumables);
+let ok=await saveCloudArray(CLOUD_KEY_CONSUMABLES,CONSUMABLES_STORAGE_KEY,consumables);
 updateConsumablesBadge();
+return ok;
 }
 
 function getLowConsumables(){
@@ -7063,16 +7096,23 @@ alert("Bu sarf malzemesi zaten kayıtlı. Mevcut kayıttan '+ Giriş' kullanın.
 return;
 }
 
-consumables.push({
+let newItem={
 id:Date.now(),
 name:name,
 unit:unit,
 quantity:quantity,
 createdAt:new Date().toISOString(),
 updatedAt:new Date().toISOString()
-});
+};
+consumables.push(newItem);
 
-await saveConsumables();
+let ok=await saveConsumables();
+if(!ok){
+consumables=consumables.filter(x=>String(x.id)!==String(newItem.id));
+renderConsumables();
+alert("Sarf malzemesi buluta kaydedilemedi. Lütfen bağlantıyı kontrol edip tekrar deneyin.");
+return;
+}
 toggleConsumableAddPanel(false);
 renderConsumables();
 }
@@ -7176,6 +7216,8 @@ return;
 }
 
 let current=Math.max(0,Number(item.quantity)||0);
+let previousQuantity=current;
+let previousUpdatedAt=item.updatedAt;
 if(currentConsumableMovementType==="Çıkış"){
 if(quantity>current){
 alert("Yeterli miktar yok. Mevcut: "+formatConsumableQuantity(current)+" "+item.unit);
@@ -7188,7 +7230,14 @@ item.quantity=current+quantity;
 }
 
 item.updatedAt=new Date().toISOString();
-await saveConsumables();
+let ok=await saveConsumables();
+if(!ok){
+item.quantity=previousQuantity;
+item.updatedAt=previousUpdatedAt;
+renderConsumables();
+alert("Sarf işlemi buluta kaydedilemedi. Lütfen tekrar deneyin.");
+return;
+}
 closeConsumableMovementModal();
 renderConsumables();
 }
@@ -7197,8 +7246,13 @@ async function deleteConsumable(id){
 let item=consumables.find(x=>String(x.id)===String(id));
 if(!item)return;
 if(!confirm(item.name+" kaydını silmek istediğinize emin misiniz?"))return;
+let previous=[...consumables];
 consumables=consumables.filter(x=>String(x.id)!==String(id));
-await saveConsumables();
+let ok=await saveConsumables();
+if(!ok){
+consumables=previous;
+alert("Sarf malzemesi buluttan silinemedi. Lütfen tekrar deneyin.");
+}
 renderConsumables();
 }
 
@@ -7233,11 +7287,12 @@ renderMaintenanceMasterSelects();
 }
 
 async function saveMaintenanceMasterLists(render=true){
-await Promise.all([
+let results=await Promise.all([
 saveCloudArray(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,MAINTENANCE_EQUIPMENT_STORAGE_KEY,maintenanceEquipments),
 saveCloudArray(CLOUD_KEY_MAINTENANCE_VENDORS,MAINTENANCE_VENDOR_STORAGE_KEY,maintenanceVendors)
 ]);
 if(render)renderMaintenanceMasterSelects();
+return results.every(Boolean);
 }
 
 function maintenanceSelectOptions(list,placeholder,selected){
@@ -7283,18 +7338,28 @@ async function saveMaintenanceMaster(kind){
 let isEquipment=kind==="equipment";
 let input=document.getElementById(isEquipment?"maintenanceEquipmentNew":"maintenanceVendorNew");
 let value=String(input?.value||"").trim();
-if(!value){alert(isEquipment?"Makine / ekipman adını girin.":"Firma / kişi adını girin.");return;}
+if(!value){alert(isEquipment?"Makine / ekipman adını girin.":"Firma / kişi adını girin.");return false;}
+let oldEquipments=[...maintenanceEquipments];
+let oldVendors=[...maintenanceVendors];
 let target=isEquipment?maintenanceEquipments:maintenanceVendors;
 let existing=target.find(x=>normalizeText(x)===normalizeText(value));
 if(!existing){
 target.push(value);
 if(isEquipment)maintenanceEquipments=maintenanceUniqueNames(target);
 else maintenanceVendors=maintenanceUniqueNames(target);
-await saveMaintenanceMasterLists(false);
+let ok=await saveMaintenanceMasterLists(false);
+if(!ok){
+maintenanceEquipments=oldEquipments;
+maintenanceVendors=oldVendors;
+renderMaintenanceMasterSelects();
+alert(isEquipment?"Makine buluta kaydedilemedi. Tekrar deneyin.":"Firma / kişi buluta kaydedilemedi. Tekrar deneyin.");
+return false;
+}
 existing=value;
 }
 renderMaintenanceMasterSelects(isEquipment?existing:null,isEquipment?null:existing);
 toggleMaintenanceMasterAdd(kind,false);
+return true;
 }
 
 async function loadMaintenanceRecords(){
@@ -7316,8 +7381,9 @@ renderMaintenanceRecords();
 }
 
 async function saveMaintenanceRecords(){
-await saveCloudArray(CLOUD_KEY_MAINTENANCE_RECORDS,MAINTENANCE_STORAGE_KEY,maintenanceRecords);
+let ok=await saveCloudArray(CLOUD_KEY_MAINTENANCE_RECORDS,MAINTENANCE_STORAGE_KEY,maintenanceRecords);
 updateMaintenanceBadge();
+return ok;
 }
 
 function openMaintenanceDb(){
@@ -7523,7 +7589,7 @@ try{pdfPath=await putMaintenancePdf(id,file);}
 catch(error){console.error(error);showCloudAddonError(error);alert("PDF buluta kaydedilemedi. Bakım kaydı oluşturulmadı.\n\n"+error.message);return;}
 }
 
-maintenanceRecords.push({
+let newRecord={
 id:id,
 equipment:equipment,
 date:date,
@@ -7531,11 +7597,21 @@ performedBy:performedBy,
 pdfName:file?file.name:"",
 pdfPath:pdfPath,
 createdAt:new Date().toISOString()
-});
+};
+maintenanceRecords.push(newRecord);
 maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,equipment]);
 maintenanceVendors=maintenanceUniqueNames([...maintenanceVendors,performedBy]);
+
+let recordOk=await saveMaintenanceRecords();
+if(!recordOk){
+maintenanceRecords=maintenanceRecords.filter(r=>String(r.id)!==String(id));
+if(pdfPath)await deleteMaintenancePdf(newRecord);
+renderMaintenanceRecords();
+alert("Bakım kaydı buluta kaydedilemedi. Kayıt eklenmedi; lütfen tekrar deneyin.");
+return false;
+}
+/* Liste kaydı başarısız olsa bile bakım kaydı kaybolmasın; listeler bir sonraki bakımda yeniden oluşturulabilir. */
 await saveMaintenanceMasterLists(false);
-await saveMaintenanceRecords();
 
 document.getElementById("maintenanceEquipment").value="";
 document.getElementById("maintenancePerformedBy").value="";
@@ -7543,6 +7619,8 @@ document.getElementById("maintenancePdf").value="";
 document.getElementById("maintenanceDate").value=maintenanceDateToISO(new Date());
 toggleMaintenanceAddPanel(false);
 renderMaintenanceRecords();
+alert("✅ Bakım kaydı buluta kaydedildi.");
+return true;
 }
 
 function renderMaintenanceRecords(){
@@ -7671,9 +7749,17 @@ async function deleteMaintenanceRecord(id){
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record)return;
 if(!confirm(record.equipment+" - "+formatMaintenanceDate(record.date)+" bakım kaydını silmek istediğinize emin misiniz?"))return;
-await deleteMaintenancePdf(record);
+let previous=[...maintenanceRecords];
 maintenanceRecords=maintenanceRecords.filter(r=>String(r.id)!==String(id));
-await saveMaintenanceRecords();
+let ok=await saveMaintenanceRecords();
+if(!ok){
+maintenanceRecords=previous;
+renderMaintenanceRecords();
+alert("Bakım kaydı buluttan silinemedi. Tekrar deneyin.");
+return;
+}
+/* Önce kayıt buluttan kaldırılır; ardından varsa PDF temizlenir. */
+await deleteMaintenancePdf(record);
 renderMaintenanceRecords();
 }
 
@@ -8795,12 +8881,81 @@ handleKeypadButton(btn);
 }
 
 /* =====================================================
+   DOKUNMATİKTE TEK BASIŞLA ÇALIŞAN BAKIM / SARF BUTONLARI
+===================================================== */
+
+function bindReliablePress(id,handler){
+let btn=document.getElementById(id);
+if(!btn || btn.dataset.reliablePressBound==="1")return;
+btn.dataset.reliablePressBound="1";
+btn.style.touchAction="manipulation";
+let lastPointer=0;
+
+btn.addEventListener("pointerup",event=>{
+/* Mouse'ta normal click/klavye erişilebilirliği kalsın; parmak/kalemde tek pointerup yeterli. */
+if(event.pointerType==="mouse")return;
+event.preventDefault();
+event.stopPropagation();
+lastPointer=Date.now();
+let result;
+try{result=handler(btn,event);}catch(error){console.error(error);alert("İşlem sırasında hata oluştu: "+error.message);}
+if(result && typeof result.catch==="function")result.catch(error=>{console.error(error);alert("İşlem sırasında hata oluştu: "+error.message);});
+});
+
+btn.addEventListener("click",event=>{
+/* Pointerup sonrasında tarayıcının ürettiği sentetik click ikinci kez çalışmasın. */
+if(Date.now()-lastPointer<700){event.preventDefault();event.stopPropagation();return;}
+event.preventDefault();
+event.stopPropagation();
+let result;
+try{result=handler(btn,event);}catch(error){console.error(error);alert("İşlem sırasında hata oluştu: "+error.message);}
+if(result && typeof result.catch==="function")result.catch(error=>{console.error(error);alert("İşlem sırasında hata oluştu: "+error.message);});
+});
+}
+
+async function runBusyButton(button,busyText,action){
+if(!button || button.dataset.busy==="1")return;
+button.dataset.busy="1";
+let oldText=button.textContent;
+button.disabled=true;
+button.textContent=busyText||"Kaydediliyor...";
+/* Açık ekran klavyesi butonun ilk dokunuşunu yutmasın. */
+closeNumericKeypad();
+try{await action();}
+finally{
+button.disabled=false;
+button.textContent=oldText;
+button.dataset.busy="0";
+}
+}
+
+function initReliableAddonButtons(){
+bindReliablePress("maintenanceShowEquipmentAddButton",()=>{closeNumericKeypad();toggleMaintenanceMasterAdd("equipment",true);});
+bindReliablePress("maintenanceShowVendorAddButton",()=>{closeNumericKeypad();toggleMaintenanceMasterAdd("vendor",true);});
+bindReliablePress("maintenanceEquipmentCancelButton",()=>{closeNumericKeypad();toggleMaintenanceMasterAdd("equipment",false);});
+bindReliablePress("maintenanceVendorCancelButton",()=>{closeNumericKeypad();toggleMaintenanceMasterAdd("vendor",false);});
+bindReliablePress("maintenanceRecordCancelButton",()=>{closeNumericKeypad();toggleMaintenanceAddPanel(false);});
+
+bindReliablePress("maintenanceEquipmentSaveButton",btn=>runBusyButton(btn,"Kaydediliyor...",()=>saveMaintenanceMaster("equipment")));
+bindReliablePress("maintenanceVendorSaveButton",btn=>runBusyButton(btn,"Kaydediliyor...",()=>saveMaintenanceMaster("vendor")));
+bindReliablePress("maintenanceRecordSaveButton",btn=>runBusyButton(btn,"Kaydediliyor...",()=>saveMaintenanceRecord()));
+
+bindReliablePress("consumableAddSaveButton",btn=>runBusyButton(btn,"Ekleniyor...",()=>addConsumable()));
+bindReliablePress("consumableAddCancelButton",()=>{closeNumericKeypad();toggleConsumableAddPanel(false);});
+bindReliablePress("consumableMovementSaveButton",btn=>runBusyButton(btn,"Kaydediliyor...",()=>saveConsumableMovement()));
+}
+
+/* =====================================================
    BAŞLANGIÇ
 ===================================================== */
 
 initNumericKeypad();
+initReliableAddonButtons();
 
-Promise.all([loadConsumables(),loadMaintenanceRecords()]).catch(console.error);
+(async()=>{
+await resetAddonCloudDataOnce();
+await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
+})().catch(console.error);
 setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
 loadUsageSelections();

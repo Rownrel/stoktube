@@ -1048,6 +1048,415 @@ padding:18px
 }
 
 
+
+/* =====================================================
+   BAKIM TAKİBİ
+===================================================== */
+.btn-maintenance{
+position:relative;
+background:#7c3aed;
+color:white;
+white-space:nowrap
+}
+
+.maintenance-badge{
+position:absolute;
+top:-9px;
+right:-9px;
+min-width:22px;
+height:22px;
+padding:0 6px;
+border-radius:999px;
+background:#dc2626;
+color:white;
+border:2px solid #172033;
+font-size:12px;
+font-weight:900;
+display:none;
+align-items:center;
+justify-content:center;
+line-height:1
+}
+
+.maintenance-modal-box{
+max-width:1120px
+}
+
+.maintenance-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.maintenance-head-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.maintenance-summary{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.maintenance-summary-chip{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:8px;
+padding:8px 11px;
+font-size:13px;
+font-weight:800
+}
+
+.maintenance-summary-chip.warning{
+background:#fff7ed;
+border-color:#fdba74;
+color:#9a3412
+}
+
+.maintenance-alert-box{
+display:none;
+background:#fff7ed;
+border:1px solid #fdba74;
+color:#9a3412;
+padding:12px 14px;
+border-radius:9px;
+margin-bottom:14px;
+font-size:13px;
+line-height:1.55
+}
+
+.maintenance-add-panel{
+display:none;
+background:#f8fafc;
+border:1px solid #cbd5e1;
+border-radius:10px;
+padding:14px;
+margin-bottom:14px
+}
+
+.maintenance-add-grid{
+display:grid;
+grid-template-columns:minmax(180px,1.4fr) minmax(145px,.8fr) minmax(180px,1.2fr) minmax(220px,1.6fr);
+gap:12px;
+align-items:end
+}
+
+.maintenance-add-actions{
+display:flex;
+gap:8px;
+justify-content:flex-end;
+margin-top:12px
+}
+
+.maintenance-table-wrap{
+overflow-x:auto;
+border:1px solid #e2e8f0;
+border-radius:10px
+}
+
+.maintenance-table{
+min-width:900px;
+margin:0
+}
+
+.maintenance-table th,
+.maintenance-table td{
+padding:10px 11px
+}
+
+.maintenance-table tr.maintenance-warning-row{
+background:#fff7ed
+}
+
+.maintenance-table tr.maintenance-overdue-row{
+background:#fef2f2
+}
+
+.maintenance-equipment{
+font-weight:900
+}
+
+.maintenance-status{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:29px;
+padding:5px 9px;
+border-radius:999px;
+font-size:12px;
+font-weight:900;
+white-space:nowrap
+}
+
+.maintenance-status.ok{background:#dcfce7;color:#166534}
+.maintenance-status.warning{background:#ffedd5;color:#9a3412}
+.maintenance-status.overdue{background:#fee2e2;color:#991b1b}
+.maintenance-status.history{background:#e2e8f0;color:#475569}
+
+.maintenance-file-name{
+max-width:230px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+font-size:12px;
+color:#64748b;
+margin-top:4px
+}
+
+.maintenance-empty{
+text-align:center;
+padding:34px 15px;
+color:#64748b
+}
+
+.maintenance-pdf-input{
+width:100%;
+background:white
+}
+
+.maintenance-picker-line{
+display:flex;
+gap:7px;
+align-items:stretch;
+min-width:0
+}
+
+.maintenance-picker-line select{
+flex:1;
+min-width:0;
+width:100%;
+background:white
+}
+
+.maintenance-master-btn{
+flex:0 0 auto;
+white-space:nowrap;
+padding-left:10px;
+padding-right:10px
+}
+
+.maintenance-master-add{
+display:none;
+grid-template-columns:minmax(0,1fr) auto auto;
+gap:6px;
+margin-top:7px;
+align-items:center
+}
+
+.maintenance-master-add input{
+min-width:0;
+width:100%;
+background:white
+}
+
+.maintenance-master-add button{
+padding:9px 10px;
+white-space:nowrap
+}
+
+@media(max-width:560px){
+.maintenance-picker-line{flex-wrap:wrap}
+.maintenance-picker-line select{flex:1 1 100%}
+.maintenance-master-btn{flex:1}
+.maintenance-master-add{grid-template-columns:1fr 1fr}
+.maintenance-master-add input{grid-column:1/-1}
+}
+
+@media(max-width:820px){
+.maintenance-add-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:560px){
+.maintenance-add-grid{grid-template-columns:1fr}
+.maintenance-head-actions{width:100%}
+.maintenance-head-actions button{flex:1}
+}
+
+/* =====================================================
+   SARF MALZEMELERİ
+===================================================== */
+.btn-consumables{
+position:relative;
+background:#0f766e;
+color:white;
+white-space:nowrap
+}
+
+.consumable-badge{
+position:absolute;
+top:-9px;
+right:-9px;
+min-width:22px;
+height:22px;
+padding:0 6px;
+border-radius:999px;
+background:#dc2626;
+color:white;
+border:2px solid #172033;
+font-size:12px;
+font-weight:900;
+display:none;
+align-items:center;
+justify-content:center;
+line-height:1
+}
+
+.consumables-modal-box{
+max-width:920px
+}
+
+.consumables-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.consumables-summary{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.consumable-summary-chip{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:8px;
+padding:8px 11px;
+font-size:13px;
+font-weight:800
+}
+
+.consumable-summary-chip.warning{
+background:#fff7ed;
+border-color:#fdba74;
+color:#9a3412
+}
+
+.consumable-add-panel{
+display:none;
+background:#f8fafc;
+border:1px solid #cbd5e1;
+border-radius:10px;
+padding:14px;
+margin-bottom:14px
+}
+
+.consumable-add-grid{
+display:grid;
+grid-template-columns:minmax(220px,2fr) minmax(140px,1fr) minmax(140px,1fr) auto;
+gap:10px;
+align-items:end
+}
+
+.consumable-list{
+display:grid;
+gap:9px
+}
+
+.consumable-row{
+display:grid;
+grid-template-columns:minmax(190px,1.7fr) minmax(95px,.7fr) minmax(115px,.8fr) minmax(95px,.7fr) auto;
+gap:10px;
+align-items:center;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:11px 12px;
+background:white
+}
+
+.consumable-row.low{
+background:#fff7ed;
+border-color:#fdba74
+}
+
+.consumable-row.empty-stock-row{
+background:#fef2f2;
+border-color:#fca5a5
+}
+
+.consumable-name{
+font-weight:900;
+min-width:0;
+word-break:break-word
+}
+
+.consumable-unit{
+color:#64748b;
+font-weight:800
+}
+
+.consumable-qty{
+font-size:19px;
+font-weight:900;
+white-space:nowrap
+}
+
+.consumable-status{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:30px;
+padding:5px 9px;
+border-radius:999px;
+font-size:12px;
+font-weight:900;
+white-space:nowrap
+}
+
+.consumable-status.ok{background:#dcfce7;color:#166534}
+.consumable-status.low{background:#ffedd5;color:#9a3412}
+.consumable-status.out{background:#fee2e2;color:#991b1b}
+
+.consumable-actions{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+justify-content:flex-end
+}
+
+.consumable-actions button{
+min-height:40px;
+padding:8px 10px
+}
+
+.consumable-empty{
+text-align:center;
+padding:32px 15px;
+color:#64748b;
+border:1px dashed #cbd5e1;
+border-radius:10px
+}
+
+.consumable-movement-box{
+max-width:520px
+}
+
+@media(max-width:780px){
+.consumable-add-grid{grid-template-columns:1fr 1fr}
+.consumable-add-grid .consumable-name-field{grid-column:1/-1}
+.consumable-row{grid-template-columns:1fr 1fr}
+.consumable-name{grid-column:1/-1}
+.consumable-actions{grid-column:1/-1;justify-content:flex-start}
+}
+
+@media(max-width:520px){
+.consumable-add-grid{grid-template-columns:1fr}
+.consumable-add-grid .consumable-name-field{grid-column:auto}
+.consumable-row{grid-template-columns:1fr}
+.consumable-name,.consumable-actions{grid-column:auto}
+}
+
+
 /* =====================================================
    SATIN ALMA EXCEL AKTARIMI
 ===================================================== */
@@ -1223,6 +1632,7 @@ padding:16px
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 </head>
 
@@ -1240,6 +1650,16 @@ padding:16px
 
 <button class="btn-price" type="button" onclick="openPriceModal()">
 💰 Fiyatlar
+</button>
+
+<button class="btn-maintenance" id="maintenanceButton" type="button" onclick="openMaintenanceModal()">
+🛠 Bakım
+<span class="maintenance-badge" id="maintenanceBadge" aria-label="Yaklaşan veya geciken bakım sayısı"></span>
+</button>
+
+<button class="btn-consumables" id="consumablesButton" type="button" onclick="openConsumablesModal()">
+🧰 Sarf Malzemeleri
+<span class="consumable-badge" id="consumablesBadge" aria-label="Azalan sarf malzemesi sayısı"></span>
 </button>
 
 <button class="btn-green" onclick="backupData()">
@@ -2012,6 +2432,171 @@ oninput="renderPriceResults()"
 </div>
 </div>
 
+<!-- BAKIM TAKİBİ MODALI -->
+<div class="modal" id="maintenanceModal">
+<div class="modal-box maintenance-modal-box">
+
+<div class="maintenance-head">
+<div>
+<h2 style="margin:0 0 4px">🛠 Bakım Takibi</h2>
+<div style="font-size:13px;color:#64748b">Her makine/ekipman için son bakım tarihinden 6 ay sonra yeni bakım planlanır. Son 1 ay kala uyarı başlar.</div>
+</div>
+<div class="maintenance-head-actions">
+<button type="button" class="btn-dark" onclick="downloadAllMaintenancePdfs()">📦 Tüm PDF'leri İndir</button>
+<button type="button" class="btn-blue" onclick="toggleMaintenanceAddPanel(true)">+ Yeni Bakım</button>
+</div>
+</div>
+
+<div class="maintenance-summary">
+<div class="maintenance-summary-chip" id="maintenanceEquipmentChip">0 ekipman</div>
+<div class="maintenance-summary-chip" id="maintenanceRecordChip">0 bakım kaydı</div>
+<div class="maintenance-summary-chip warning" id="maintenanceWarningChip" style="display:none">0 bakım bekliyor</div>
+</div>
+
+<div class="maintenance-alert-box" id="maintenanceAlertBox"></div>
+
+<div class="maintenance-add-panel" id="maintenanceAddPanel">
+<div class="maintenance-add-grid">
+<div class="form-group">
+<label>Makine / Ekipman</label>
+<div class="maintenance-picker-line">
+<select id="maintenanceEquipment">
+<option value="">Makine seç...</option>
+</select>
+<button type="button" class="btn-blue maintenance-master-btn" onclick="toggleMaintenanceMasterAdd('equipment',true)">+ Makine</button>
+</div>
+<div class="maintenance-master-add" id="maintenanceEquipmentAdd">
+<input id="maintenanceEquipmentNew" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni makine veya ekipman" placeholder="Yeni makine / ekipman adı">
+<button type="button" class="btn-green" onclick="saveMaintenanceMaster('equipment')">Kaydet</button>
+<button type="button" class="btn-gray" onclick="toggleMaintenanceMasterAdd('equipment',false)">Vazgeç</button>
+</div>
+</div>
+<div class="form-group">
+<label>Bakım Tarihi</label>
+<input id="maintenanceDate" type="date">
+</div>
+<div class="form-group">
+<label>Bakımı Yapan Firma / Kişi</label>
+<div class="maintenance-picker-line">
+<select id="maintenancePerformedBy">
+<option value="">Firma / kişi seç...</option>
+</select>
+<button type="button" class="btn-blue maintenance-master-btn" onclick="toggleMaintenanceMasterAdd('vendor',true)">+ Firma</button>
+</div>
+<div class="maintenance-master-add" id="maintenanceVendorAdd">
+<input id="maintenanceVendorNew" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni bakım firması veya kişi" placeholder="Yeni firma / kişi adı">
+<button type="button" class="btn-green" onclick="saveMaintenanceMaster('vendor')">Kaydet</button>
+<button type="button" class="btn-gray" onclick="toggleMaintenanceMasterAdd('vendor',false)">Vazgeç</button>
+</div>
+</div>
+<div class="form-group">
+<label>Bakım PDF'i</label>
+<input id="maintenancePdf" class="maintenance-pdf-input" type="file" accept="application/pdf,.pdf">
+</div>
+</div>
+<div class="maintenance-add-actions">
+<button type="button" class="btn-gray" onclick="toggleMaintenanceAddPanel(false)">Vazgeç</button>
+<button type="button" class="btn-green" onclick="saveMaintenanceRecord()">Bakımı Kaydet</button>
+</div>
+</div>
+
+<div class="maintenance-table-wrap">
+<table class="maintenance-table">
+<thead>
+<tr>
+<th>Makine / Ekipman</th>
+<th>Bakım Tarihi</th>
+<th>Bakımı Yapan</th>
+<th>Sonraki Bakım</th>
+<th>Durum</th>
+<th>PDF</th>
+<th>İşlem</th>
+</tr>
+</thead>
+<tbody id="maintenanceTableBody">
+<tr><td colspan="7" class="maintenance-empty">Henüz bakım kaydı yok.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeMaintenanceModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
+<!-- SARF MALZEMELERİ MODALI -->
+<div class="modal" id="consumablesModal">
+<div class="modal-box consumables-modal-box">
+
+<div class="consumables-head">
+<div>
+<h2 style="margin:0 0 4px">🧰 Sarf Malzemeleri</h2>
+<div style="font-size:13px;color:#64748b">Adet, metre, litre ve diğer sarf malzemelerini tek yerden takip et.</div>
+</div>
+<button type="button" class="btn-blue" onclick="toggleConsumableAddPanel(true)">+ Sarf Malzemesi</button>
+</div>
+
+<div class="consumables-summary">
+<div class="consumable-summary-chip" id="consumablesTotalChip">0 malzeme</div>
+<div class="consumable-summary-chip warning" id="consumablesLowChip" style="display:none">0 malzeme azaldı</div>
+</div>
+
+<div class="consumable-add-panel" id="consumableAddPanel">
+<div class="consumable-add-grid">
+<div class="form-group consumable-name-field">
+<label>Malzeme Adı</label>
+<input id="consumableName" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Sarf malzemesi adı" placeholder="Örn: Kesme spreyi, taşlama diski">
+</div>
+<div class="form-group">
+<label>Birim</label>
+<select id="consumableUnit">
+<option value="Adet">Adet</option>
+<option value="Metre">Metre</option>
+<option value="Litre">Litre</option>
+<option value="Kilogram">Kilogram</option>
+<option value="Paket">Paket</option>
+<option value="Kutu">Kutu</option>
+<option value="Rulo">Rulo</option>
+</select>
+</div>
+<div class="form-group">
+<label>Başlangıç Miktarı</label>
+<input id="consumableInitialQuantity" type="text" inputmode="none" data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Başlangıç miktarı" value="0">
+</div>
+<div style="display:flex;gap:7px;align-items:flex-end">
+<button type="button" class="btn-green" onclick="addConsumable()">Ekle</button>
+<button type="button" class="btn-gray" onclick="toggleConsumableAddPanel(false)">Vazgeç</button>
+</div>
+</div>
+</div>
+
+<div id="consumableList" class="consumable-list"></div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeConsumablesModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
+<!-- SARF MALZEMESİ GİRİŞ / ÇIKIŞ MODALI -->
+<div class="modal" id="consumableMovementModal">
+<div class="modal-box consumable-movement-box">
+<h2 id="consumableMovementTitle">Sarf Malzemesi İşlemi</h2>
+<div class="notice" id="consumableMovementInfo"></div>
+<div class="form-group">
+<label>Miktar</label>
+<input id="consumableMovementQuantity" type="text" inputmode="none" data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Sarf malzemesi miktarı" placeholder="Örn: 1 veya 0,5">
+</div>
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeConsumableMovementModal()">Vazgeç</button>
+<button type="button" id="consumableMovementSaveButton" class="btn-green" onclick="saveConsumableMovement()">Kaydet</button>
+</div>
+</div>
+</div>
+
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
   <div class="keypad-head">
@@ -2101,6 +2686,24 @@ let currentMovementType=null;
 /* Satın alma Excel aktarımı */
 let purchaseImportRows=[];
 let purchaseImportFileName="";
+
+/* Sarf malzemeleri */
+const CONSUMABLES_STORAGE_KEY="stokConsumablesV1";
+let consumables=[];
+let currentConsumableId=null;
+let currentConsumableMovementType=null;
+
+/* Bakım takibi */
+const MAINTENANCE_STORAGE_KEY="stokMaintenanceRecordsV1";
+const MAINTENANCE_EQUIPMENT_STORAGE_KEY="stokMaintenanceEquipmentListV1";
+const MAINTENANCE_VENDOR_STORAGE_KEY="stokMaintenanceVendorListV1";
+/* Bu sürümde test amaçlı makine/firma seçim listelerini yalnızca bir kez sıfırla. */
+const MAINTENANCE_MASTER_RESET_KEY="stokMaintenanceMasterReset20260910V1";
+const MAINTENANCE_DB_NAME="stokMaintenancePdfDBV1";
+const MAINTENANCE_DB_STORE="pdfs";
+let maintenanceRecords=[];
+let maintenanceEquipments=[];
+let maintenanceVendors=[];
 
 /* =====================================================
    FİYAT LİSTESİ VERİLERİ
@@ -6198,6 +6801,750 @@ error.message
 
 
 /* =====================================================
+   SARF MALZEMELERİ
+===================================================== */
+
+function normalizeConsumableNumber(value){
+let n=Number(String(value??"").replace(",",".").trim());
+return Number.isFinite(n)?n:null;
+}
+
+function formatConsumableQuantity(value){
+let n=Number(value);
+if(!Number.isFinite(n))n=0;
+return n.toLocaleString("tr-TR",{maximumFractionDigits:3});
+}
+
+function loadConsumables(){
+try{
+let raw=localStorage.getItem(CONSUMABLES_STORAGE_KEY);
+let parsed=raw?JSON.parse(raw):[];
+consumables=Array.isArray(parsed)?parsed:[];
+}
+catch{
+consumables=[];
+}
+
+consumables=consumables.map(item=>({
+id:item.id||Date.now()+Math.random(),
+name:String(item.name||"").trim(),
+unit:String(item.unit||"Adet"),
+quantity:Math.max(0,Number(item.quantity)||0),
+createdAt:item.createdAt||new Date().toISOString(),
+updatedAt:item.updatedAt||item.createdAt||new Date().toISOString()
+})).filter(item=>item.name);
+
+updateConsumablesBadge();
+}
+
+function saveConsumables(){
+try{
+localStorage.setItem(CONSUMABLES_STORAGE_KEY,JSON.stringify(consumables));
+}
+catch(error){
+console.error("Sarf malzemeleri kaydedilemedi:",error);
+}
+updateConsumablesBadge();
+}
+
+function getLowConsumables(){
+return consumables.filter(item=>(Number(item.quantity)||0)<=1);
+}
+
+function updateConsumablesBadge(){
+let badge=document.getElementById("consumablesBadge");
+let button=document.getElementById("consumablesButton");
+if(!badge || !button)return;
+
+let count=getLowConsumables().length;
+if(count>0){
+badge.textContent=String(count);
+badge.style.display="flex";
+button.title=count+" sarf malzemesi 1 veya altında";
+}
+else{
+badge.textContent="";
+badge.style.display="none";
+button.title="Sarf malzemelerini aç";
+}
+}
+
+function openConsumablesModal(){
+renderConsumables();
+toggleConsumableAddPanel(false);
+document.getElementById("consumablesModal").style.display="flex";
+}
+
+function closeConsumablesModal(){
+let modal=document.getElementById("consumablesModal");
+if(modal)modal.style.display="none";
+if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
+}
+
+function toggleConsumableAddPanel(show){
+let panel=document.getElementById("consumableAddPanel");
+if(!panel)return;
+panel.style.display=show?"block":"none";
+if(show){
+let name=document.getElementById("consumableName");
+let qty=document.getElementById("consumableInitialQuantity");
+if(name)name.value="";
+if(qty)qty.value="0";
+let unit=document.getElementById("consumableUnit");
+if(unit)unit.value="Adet";
+setTimeout(()=>{if(name)name.focus();},0);
+}
+else if(keypadTarget && panel.contains(keypadTarget)){
+closeNumericKeypad();
+}
+}
+
+function addConsumable(){
+let name=String(document.getElementById("consumableName")?.value||"").trim();
+let unit=String(document.getElementById("consumableUnit")?.value||"Adet");
+let quantity=normalizeConsumableNumber(document.getElementById("consumableInitialQuantity")?.value);
+
+if(!name){
+alert("Sarf malzemesi adını girin.");
+return;
+}
+if(quantity===null || quantity<0){
+alert("Geçerli bir başlangıç miktarı girin.");
+return;
+}
+
+let duplicate=consumables.find(item=>normalizeText(item.name)===normalizeText(name) && item.unit===unit);
+if(duplicate){
+alert("Bu sarf malzemesi zaten kayıtlı. Mevcut kayıttan '+ Giriş' kullanın.");
+return;
+}
+
+consumables.push({
+id:Date.now(),
+name:name,
+unit:unit,
+quantity:quantity,
+createdAt:new Date().toISOString(),
+updatedAt:new Date().toISOString()
+});
+
+saveConsumables();
+toggleConsumableAddPanel(false);
+renderConsumables();
+}
+
+function renderConsumables(){
+let list=document.getElementById("consumableList");
+let totalChip=document.getElementById("consumablesTotalChip");
+let lowChip=document.getElementById("consumablesLowChip");
+if(!list)return;
+
+let low=getLowConsumables();
+if(totalChip)totalChip.textContent=consumables.length+" malzeme";
+if(lowChip){
+lowChip.textContent=low.length+" malzeme azaldı";
+lowChip.style.display=low.length?"block":"none";
+}
+
+if(consumables.length===0){
+list.innerHTML='<div class="consumable-empty">Henüz sarf malzemesi yok. <strong>+ Sarf Malzemesi</strong> ile ilk kaydı ekleyebilirsin.</div>';
+return;
+}
+
+let sorted=[...consumables].sort((a,b)=>{
+let aq=Number(a.quantity)||0;
+let bq=Number(b.quantity)||0;
+let al=aq<=1?0:1;
+let bl=bq<=1?0:1;
+if(al!==bl)return al-bl;
+return String(a.name).localeCompare(String(b.name),"tr");
+});
+
+list.innerHTML=sorted.map(item=>{
+let q=Math.max(0,Number(item.quantity)||0);
+let rowClass=q<=0?"empty-stock-row":(q<=1?"low":"");
+let statusClass=q<=0?"out":(q<=1?"low":"ok");
+let statusText=q<=0?"Tükendi":(q<=1?"Azaldı":"Yeterli");
+return `
+<div class="consumable-row ${rowClass}">
+<div class="consumable-name">${escapeHTML(item.name)}</div>
+<div class="consumable-unit">${escapeHTML(item.unit)}</div>
+<div class="consumable-qty">${formatConsumableQuantity(q)} ${escapeHTML(item.unit)}</div>
+<div><span class="consumable-status ${statusClass}">${statusText}</span></div>
+<div class="consumable-actions">
+<button type="button" class="btn-green" onclick="openConsumableMovement(${JSON.stringify(item.id)},'Giriş')">+ Giriş</button>
+<button type="button" class="btn-red" onclick="openConsumableMovement(${JSON.stringify(item.id)},'Çıkış')">- Çıkış</button>
+<button type="button" class="btn-gray" onclick="deleteConsumable(${JSON.stringify(item.id)})">Sil</button>
+</div>
+</div>`;
+}).join("");
+}
+
+function openConsumableMovement(id,type){
+let item=consumables.find(x=>String(x.id)===String(id));
+if(!item)return;
+
+currentConsumableId=item.id;
+currentConsumableMovementType=type;
+
+let title=document.getElementById("consumableMovementTitle");
+let info=document.getElementById("consumableMovementInfo");
+let btn=document.getElementById("consumableMovementSaveButton");
+let input=document.getElementById("consumableMovementQuantity");
+
+if(title)title.textContent=type==="Giriş"?"➕ Sarf Malzemesi Girişi":"➖ Sarf Malzemesi Çıkışı";
+if(info)info.innerHTML='<strong>'+escapeHTML(item.name)+'</strong><br>Mevcut: <strong>'+formatConsumableQuantity(item.quantity)+' '+escapeHTML(item.unit)+'</strong>';
+if(btn){
+btn.className=type==="Giriş"?"btn-green":"btn-red";
+btn.textContent=type==="Giriş"?"Stok Ekle":"Stok Çıkar";
+}
+if(input){
+input.value="";
+input.dataset.keypad=(item.unit==="Adet" || item.unit==="Paket" || item.unit==="Kutu" || item.unit==="Rulo")?"integer":"decimal";
+input.dataset.keypadLabel=item.name+" miktarı";
+}
+
+document.getElementById("consumableMovementModal").style.display="flex";
+setTimeout(()=>{if(input)input.focus();},0);
+}
+
+function closeConsumableMovementModal(){
+let modal=document.getElementById("consumableMovementModal");
+if(modal)modal.style.display="none";
+if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
+currentConsumableId=null;
+currentConsumableMovementType=null;
+}
+
+function saveConsumableMovement(){
+let item=consumables.find(x=>String(x.id)===String(currentConsumableId));
+if(!item)return;
+
+let quantity=normalizeConsumableNumber(document.getElementById("consumableMovementQuantity")?.value);
+if(quantity===null || quantity<=0){
+alert("Geçerli bir miktar girin.");
+return;
+}
+
+if(["Adet","Paket","Kutu","Rulo"].includes(item.unit) && !Number.isInteger(quantity)){
+alert(item.unit+" birimi için tam sayı girin.");
+return;
+}
+
+let current=Math.max(0,Number(item.quantity)||0);
+if(currentConsumableMovementType==="Çıkış"){
+if(quantity>current){
+alert("Yeterli miktar yok. Mevcut: "+formatConsumableQuantity(current)+" "+item.unit);
+return;
+}
+item.quantity=current-quantity;
+}
+else{
+item.quantity=current+quantity;
+}
+
+item.updatedAt=new Date().toISOString();
+saveConsumables();
+closeConsumableMovementModal();
+renderConsumables();
+}
+
+function deleteConsumable(id){
+let item=consumables.find(x=>String(x.id)===String(id));
+if(!item)return;
+if(!confirm(item.name+" kaydını silmek istediğinize emin misiniz?"))return;
+consumables=consumables.filter(x=>String(x.id)!==String(id));
+saveConsumables();
+renderConsumables();
+}
+
+
+
+/* =====================================================
+   BAKIM TAKİBİ
+===================================================== */
+
+function maintenanceUniqueNames(values){
+let result=[];
+let seen=new Set();
+(values||[]).forEach(value=>{
+let name=String(value||"").trim();
+if(!name)return;
+let key=normalizeText(name);
+if(!key || seen.has(key))return;
+seen.add(key);
+result.push(name);
+});
+return result.sort((a,b)=>a.localeCompare(b,"tr",{sensitivity:"base"}));
+}
+
+function resetMaintenanceMasterListsOnce(){
+try{
+if(localStorage.getItem(MAINTENANCE_MASTER_RESET_KEY)==="1")return;
+
+/* Önceki testlerde eklenen rastgele makine ve firma seçimlerini temizle.
+   Bakım geçmişi/PDF'ler silinmez; sadece açılır seçim listeleri sıfırlanır. */
+localStorage.removeItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY);
+localStorage.removeItem(MAINTENANCE_VENDOR_STORAGE_KEY);
+maintenanceEquipments=[];
+maintenanceVendors=[];
+localStorage.setItem(MAINTENANCE_MASTER_RESET_KEY,"1");
+}catch(error){
+console.warn("Bakım makine/firma listeleri sıfırlanamadı:",error);
+}
+}
+
+function loadMaintenanceMasterLists(){
+resetMaintenanceMasterListsOnce();
+try{
+let rawEquipment=localStorage.getItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY);
+let rawVendors=localStorage.getItem(MAINTENANCE_VENDOR_STORAGE_KEY);
+let equipmentParsed=rawEquipment?JSON.parse(rawEquipment):[];
+let vendorParsed=rawVendors?JSON.parse(rawVendors):[];
+maintenanceEquipments=Array.isArray(equipmentParsed)?equipmentParsed:[];
+maintenanceVendors=Array.isArray(vendorParsed)?vendorParsed:[];
+}catch(error){
+console.warn("Bakım makine/firma listeleri okunamadı:",error);
+maintenanceEquipments=[];
+maintenanceVendors=[];
+}
+
+/* Seçim listeleri artık bakım geçmişinden otomatik doldurulmaz.
+   Listede yalnızca + Makine / + Firma ile senin eklediğin kayıtlar görünür. */
+maintenanceEquipments=maintenanceUniqueNames(maintenanceEquipments);
+maintenanceVendors=maintenanceUniqueNames(maintenanceVendors);
+saveMaintenanceMasterLists(false);
+renderMaintenanceMasterSelects();
+}
+
+function saveMaintenanceMasterLists(render=true){
+try{
+localStorage.setItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY,JSON.stringify(maintenanceEquipments));
+localStorage.setItem(MAINTENANCE_VENDOR_STORAGE_KEY,JSON.stringify(maintenanceVendors));
+}catch(error){
+console.error("Bakım makine/firma listeleri kaydedilemedi:",error);
+alert("Makine / firma seçim listeleri tarayıcıya kaydedilemedi.");
+}
+if(render)renderMaintenanceMasterSelects();
+}
+
+function maintenanceSelectOptions(list,placeholder,selected){
+let html='<option value="">'+escapeHTML(placeholder)+'</option>';
+list.forEach(name=>{
+let isSelected=String(name)===String(selected)?' selected':'';
+html+='<option value="'+escapeHTML(name)+'"'+isSelected+'>'+escapeHTML(name)+'</option>';
+});
+return html;
+}
+
+function renderMaintenanceMasterSelects(selectedEquipment=null,selectedVendor=null){
+let equipmentSelect=document.getElementById("maintenanceEquipment");
+let vendorSelect=document.getElementById("maintenancePerformedBy");
+let currentEquipment=selectedEquipment!==null?selectedEquipment:(equipmentSelect?.value||"");
+let currentVendor=selectedVendor!==null?selectedVendor:(vendorSelect?.value||"");
+if(equipmentSelect){
+equipmentSelect.innerHTML=maintenanceSelectOptions(maintenanceEquipments,"Makine seç...",currentEquipment);
+if(currentEquipment && maintenanceEquipments.some(x=>x===currentEquipment))equipmentSelect.value=currentEquipment;
+}
+if(vendorSelect){
+vendorSelect.innerHTML=maintenanceSelectOptions(maintenanceVendors,"Firma / kişi seç...",currentVendor);
+if(currentVendor && maintenanceVendors.some(x=>x===currentVendor))vendorSelect.value=currentVendor;
+}
+}
+
+function toggleMaintenanceMasterAdd(kind,show){
+let isEquipment=kind==="equipment";
+let panel=document.getElementById(isEquipment?"maintenanceEquipmentAdd":"maintenanceVendorAdd");
+let input=document.getElementById(isEquipment?"maintenanceEquipmentNew":"maintenanceVendorNew");
+if(!panel)return;
+panel.style.display=show?"grid":"none";
+if(show){
+if(input)input.value="";
+setTimeout(()=>input?.focus(),0);
+}else{
+if(input)input.value="";
+if(keypadTarget && input===keypadTarget)closeNumericKeypad();
+}
+}
+
+function saveMaintenanceMaster(kind){
+let isEquipment=kind==="equipment";
+let input=document.getElementById(isEquipment?"maintenanceEquipmentNew":"maintenanceVendorNew");
+let value=String(input?.value||"").trim();
+if(!value){alert(isEquipment?"Makine / ekipman adını girin.":"Firma / kişi adını girin.");return;}
+let target=isEquipment?maintenanceEquipments:maintenanceVendors;
+let existing=target.find(x=>normalizeText(x)===normalizeText(value));
+if(!existing){
+target.push(value);
+if(isEquipment)maintenanceEquipments=maintenanceUniqueNames(target);
+else maintenanceVendors=maintenanceUniqueNames(target);
+saveMaintenanceMasterLists(false);
+existing=value;
+}
+renderMaintenanceMasterSelects(isEquipment?existing:null,isEquipment?null:existing);
+toggleMaintenanceMasterAdd(kind,false);
+}
+
+function loadMaintenanceRecords(){
+try{
+let raw=localStorage.getItem(MAINTENANCE_STORAGE_KEY);
+let parsed=raw?JSON.parse(raw):[];
+maintenanceRecords=Array.isArray(parsed)?parsed:[];
+}
+catch(error){
+console.error("Bakım kayıtları okunamadı:",error);
+maintenanceRecords=[];
+}
+maintenanceRecords=maintenanceRecords.map(r=>({
+id:r.id || (Date.now()+Math.random()),
+equipment:String(r.equipment||"").trim(),
+date:String(r.date||"").trim(),
+performedBy:String(r.performedBy||"").trim(),
+pdfName:String(r.pdfName||"").trim(),
+createdAt:r.createdAt || new Date().toISOString()
+})).filter(r=>r.equipment && r.date);
+updateMaintenanceBadge();
+loadMaintenanceMasterLists();
+}
+
+function saveMaintenanceRecords(){
+try{
+localStorage.setItem(MAINTENANCE_STORAGE_KEY,JSON.stringify(maintenanceRecords));
+}
+catch(error){
+console.error("Bakım kayıtları kaydedilemedi:",error);
+alert("Bakım bilgileri tarayıcıya kaydedilemedi.");
+}
+updateMaintenanceBadge();
+}
+
+function openMaintenanceDb(){
+return new Promise((resolve,reject)=>{
+if(!window.indexedDB){reject(new Error("Bu tarayıcı PDF saklamayı desteklemiyor."));return;}
+let request=indexedDB.open(MAINTENANCE_DB_NAME,1);
+request.onupgradeneeded=()=>{
+let db=request.result;
+if(!db.objectStoreNames.contains(MAINTENANCE_DB_STORE)){
+db.createObjectStore(MAINTENANCE_DB_STORE,{keyPath:"id"});
+}
+};
+request.onsuccess=()=>resolve(request.result);
+request.onerror=()=>reject(request.error || new Error("Bakım PDF veritabanı açılamadı."));
+});
+}
+
+async function putMaintenancePdf(id,file){
+let db=await openMaintenanceDb();
+return new Promise((resolve,reject)=>{
+let tx=db.transaction(MAINTENANCE_DB_STORE,"readwrite");
+tx.objectStore(MAINTENANCE_DB_STORE).put({id:String(id),name:file.name,type:file.type||"application/pdf",blob:file});
+tx.oncomplete=()=>{db.close();resolve();};
+tx.onerror=()=>{let e=tx.error;db.close();reject(e||new Error("PDF kaydedilemedi."));};
+});
+}
+
+async function getMaintenancePdf(id){
+let db=await openMaintenanceDb();
+return new Promise((resolve,reject)=>{
+let tx=db.transaction(MAINTENANCE_DB_STORE,"readonly");
+let req=tx.objectStore(MAINTENANCE_DB_STORE).get(String(id));
+req.onsuccess=()=>resolve(req.result||null);
+req.onerror=()=>reject(req.error||new Error("PDF okunamadı."));
+tx.oncomplete=()=>db.close();
+});
+}
+
+async function deleteMaintenancePdf(id){
+try{
+let db=await openMaintenanceDb();
+await new Promise((resolve,reject)=>{
+let tx=db.transaction(MAINTENANCE_DB_STORE,"readwrite");
+tx.objectStore(MAINTENANCE_DB_STORE).delete(String(id));
+tx.oncomplete=resolve;
+tx.onerror=()=>reject(tx.error);
+});
+db.close();
+}catch(error){console.warn("Bakım PDF'i silinemedi:",error);}
+}
+
+function maintenanceDateFromISO(value){
+let m=String(value||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+if(!m)return null;
+let d=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
+d.setHours(0,0,0,0);
+return d;
+}
+
+function maintenanceDateToISO(date){
+let y=date.getFullYear();
+let m=String(date.getMonth()+1).padStart(2,"0");
+let d=String(date.getDate()).padStart(2,"0");
+return y+"-"+m+"-"+d;
+}
+
+function addMaintenanceMonths(date,months){
+let source=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+let day=source.getDate();
+let target=new Date(source.getFullYear(),source.getMonth()+months,1);
+let lastDay=new Date(target.getFullYear(),target.getMonth()+1,0).getDate();
+target.setDate(Math.min(day,lastDay));
+target.setHours(0,0,0,0);
+return target;
+}
+
+function formatMaintenanceDate(value){
+let date=value instanceof Date?value:maintenanceDateFromISO(value);
+if(!date)return "-";
+return date.toLocaleDateString("tr-TR");
+}
+
+function getMaintenanceEquipmentKey(name){
+return normalizeText(name).replace(/[^a-z0-9çğıöşü]/g,"");
+}
+
+function getLatestMaintenanceMap(){
+let map={};
+maintenanceRecords.forEach(record=>{
+let key=getMaintenanceEquipmentKey(record.equipment);
+let current=map[key];
+if(!current){map[key]=record;return;}
+let a=maintenanceDateFromISO(record.date);
+let b=maintenanceDateFromISO(current.date);
+if(a && b && (a>b || (a.getTime()===b.getTime() && String(record.createdAt)>String(current.createdAt)))) map[key]=record;
+});
+return map;
+}
+
+function getMaintenanceStatus(record){
+let maintenanceDate=maintenanceDateFromISO(record?.date);
+if(!maintenanceDate)return {kind:"ok",text:"Güncel",due:null,warningStart:null};
+let due=addMaintenanceMonths(maintenanceDate,6);
+let warningStart=addMaintenanceMonths(maintenanceDate,5);
+let today=new Date();today.setHours(0,0,0,0);
+if(today>=due)return {kind:"overdue",text:"Bakım zamanı geçti",due,warningStart};
+if(today>=warningStart)return {kind:"warning",text:"Bakım yaklaşıyor",due,warningStart};
+return {kind:"ok",text:"Güncel",due,warningStart};
+}
+
+function getMaintenanceAlerts(){
+let latest=getLatestMaintenanceMap();
+return Object.values(latest).map(record=>({record,status:getMaintenanceStatus(record)})).filter(x=>x.status.kind==="warning" || x.status.kind==="overdue");
+}
+
+function updateMaintenanceBadge(){
+let alerts=getMaintenanceAlerts();
+let badge=document.getElementById("maintenanceBadge");
+let button=document.getElementById("maintenanceButton");
+if(badge){
+badge.textContent=String(alerts.length);
+badge.style.display=alerts.length?"flex":"none";
+}
+if(button){
+button.title=alerts.length?alerts.length+" bakım yaklaşıyor veya gecikmiş":"Bakım kayıtlarını aç";
+}
+}
+
+function openMaintenanceModal(){
+renderMaintenanceRecords();
+document.getElementById("maintenanceModal").style.display="flex";
+}
+
+function closeMaintenanceModal(){
+let modal=document.getElementById("maintenanceModal");
+if(modal)modal.style.display="none";
+if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
+}
+
+function toggleMaintenanceAddPanel(show){
+let panel=document.getElementById("maintenanceAddPanel");
+if(!panel)return;
+panel.style.display=show?"block":"none";
+if(show){
+renderMaintenanceMasterSelects();
+let date=document.getElementById("maintenanceDate");
+if(date && !date.value)date.value=maintenanceDateToISO(new Date());
+setTimeout(()=>document.getElementById("maintenanceEquipment")?.focus(),0);
+}else{
+toggleMaintenanceMasterAdd("equipment",false);
+toggleMaintenanceMasterAdd("vendor",false);
+let modal=document.getElementById("maintenanceModal");
+if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
+}
+}
+
+async function saveMaintenanceRecord(){
+let equipment=String(document.getElementById("maintenanceEquipment")?.value||"").trim();
+let date=document.getElementById("maintenanceDate")?.value||"";
+let performedBy=String(document.getElementById("maintenancePerformedBy")?.value||"").trim();
+let file=document.getElementById("maintenancePdf")?.files?.[0]||null;
+
+if(!equipment){alert("Makine / ekipman seçin.");return;}
+if(!maintenanceDateFromISO(date)){alert("Geçerli bir bakım tarihi seçin.");return;}
+if(!performedBy){alert("Bakımı yapan firma / kişiyi seçin.");return;}
+if(file && file.type && file.type!=="application/pdf" && !file.name.toLowerCase().endsWith(".pdf")){
+alert("Bakım belgesi PDF olmalıdır.");return;
+}
+
+let id=String(Date.now())+"_"+Math.random().toString(36).slice(2,8);
+if(file){
+try{await putMaintenancePdf(id,file);}
+catch(error){console.error(error);alert("PDF kaydedilemedi. Bakım kaydı oluşturulmadı.\n\n"+error.message);return;}
+}
+
+maintenanceRecords.push({
+id:id,
+equipment:equipment,
+date:date,
+performedBy:performedBy,
+pdfName:file?file.name:"",
+createdAt:new Date().toISOString()
+});
+maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,equipment]);
+maintenanceVendors=maintenanceUniqueNames([...maintenanceVendors,performedBy]);
+saveMaintenanceMasterLists(false);
+saveMaintenanceRecords();
+
+document.getElementById("maintenanceEquipment").value="";
+document.getElementById("maintenancePerformedBy").value="";
+document.getElementById("maintenancePdf").value="";
+document.getElementById("maintenanceDate").value=maintenanceDateToISO(new Date());
+toggleMaintenanceAddPanel(false);
+renderMaintenanceRecords();
+}
+
+function renderMaintenanceRecords(){
+let body=document.getElementById("maintenanceTableBody");
+let equipmentChip=document.getElementById("maintenanceEquipmentChip");
+let recordChip=document.getElementById("maintenanceRecordChip");
+let warningChip=document.getElementById("maintenanceWarningChip");
+let alertBox=document.getElementById("maintenanceAlertBox");
+if(!body)return;
+
+let latest=getLatestMaintenanceMap();
+let equipmentCount=Object.keys(latest).length;
+let alerts=getMaintenanceAlerts();
+if(equipmentChip)equipmentChip.textContent=equipmentCount+" ekipman";
+if(recordChip)recordChip.textContent=maintenanceRecords.length+" bakım kaydı";
+if(warningChip){warningChip.textContent=alerts.length+" bakım bekliyor";warningChip.style.display=alerts.length?"block":"none";}
+if(alertBox){
+if(alerts.length){
+alertBox.style.display="block";
+alertBox.innerHTML="<strong>⚠️ Bakım uyarıları</strong><br>"+alerts.sort((a,b)=>a.status.due-b.status.due).map(x=>
+escapeHTML(x.record.equipment)+" — "+(x.status.kind==="overdue"?"bakım tarihi geçti":"bakıma 1 aydan az kaldı")+" (sonraki bakım: <strong>"+formatMaintenanceDate(x.status.due)+"</strong>)"
+).join("<br>");
+}else{
+alertBox.style.display="none";
+alertBox.innerHTML="";
+}
+}
+updateMaintenanceBadge();
+
+if(!maintenanceRecords.length){
+body.innerHTML='<tr><td colspan="7" class="maintenance-empty">Henüz bakım kaydı yok. <strong>+ Yeni Bakım</strong> ile ilk kaydı ekleyebilirsin.</td></tr>';
+return;
+}
+
+let sorted=[...maintenanceRecords].sort((a,b)=>{
+let ad=maintenanceDateFromISO(a.date)?.getTime()||0;
+let bd=maintenanceDateFromISO(b.date)?.getTime()||0;
+if(ad!==bd)return bd-ad;
+return String(a.equipment).localeCompare(String(b.equipment),"tr");
+});
+
+body.innerHTML=sorted.map(record=>{
+let key=getMaintenanceEquipmentKey(record.equipment);
+let isLatest=latest[key] && String(latest[key].id)===String(record.id);
+let status=isLatest?getMaintenanceStatus(record):{kind:"history",text:"Geçmiş kayıt",due:null};
+let rowClass=status.kind==="warning"?"maintenance-warning-row":(status.kind==="overdue"?"maintenance-overdue-row":"");
+let safeId=escapeHTML(String(record.id));
+let pdfCell=record.pdfName
+?'<button type="button" class="btn-dark" data-maint-action="download" data-maint-id="'+safeId+'">PDF İndir</button><div class="maintenance-file-name" title="'+escapeHTML(record.pdfName)+'">'+escapeHTML(record.pdfName)+'</div>'
+:'<span style="color:#94a3b8">PDF yok</span>';
+return `
+<tr class="${rowClass}">
+<td class="maintenance-equipment">${escapeHTML(record.equipment)}</td>
+<td>${formatMaintenanceDate(record.date)}</td>
+<td>${escapeHTML(record.performedBy)}</td>
+<td>${isLatest?formatMaintenanceDate(status.due):"—"}</td>
+<td><span class="maintenance-status ${status.kind}">${status.text}</span></td>
+<td>${pdfCell}</td>
+<td><button type="button" class="btn-gray" data-maint-action="delete" data-maint-id="${safeId}">Sil</button></td>
+</tr>`;
+}).join("");
+
+/* Inline onclick yerine olay delegasyonu: dokunmatikta ve özel karakterli ID'lerde güvenli çalışır. */
+body.onclick=function(event){
+let btn=event.target.closest("button[data-maint-action]");
+if(!btn || !body.contains(btn))return;
+event.preventDefault();
+event.stopPropagation();
+let id=btn.dataset.maintId||"";
+if(btn.dataset.maintAction==="download")downloadMaintenancePdf(id);
+if(btn.dataset.maintAction==="delete")deleteMaintenanceRecord(id);
+};
+}
+
+async function downloadMaintenancePdf(id){
+let record=maintenanceRecords.find(r=>String(r.id)===String(id));
+if(!record)return;
+try{
+let stored=await getMaintenancePdf(id);
+if(!stored || !stored.blob){alert("Bu kaydın PDF dosyası bu tarayıcıda bulunamadı.");return;}
+let url=URL.createObjectURL(stored.blob);
+let a=document.createElement("a");
+a.href=url;
+a.download=record.pdfName || stored.name || "bakim.pdf";
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}catch(error){console.error(error);alert("PDF indirilemedi.\n\n"+error.message);}
+}
+
+function maintenanceSafeFileName(text){
+return String(text||"").replace(/[\\/:*?"<>|]+/g,"_").replace(/\s+/g," ").trim();
+}
+
+async function downloadAllMaintenancePdfs(){
+let withPdf=maintenanceRecords.filter(r=>r.pdfName);
+if(!withPdf.length){alert("İndirilecek bakım PDF'i bulunmuyor.");return;}
+if(typeof JSZip==="undefined"){alert("Toplu PDF indirme bileşeni yüklenemedi. İnternet bağlantısını kontrol edin.");return;}
+
+let zip=new JSZip();
+let added=0;
+for(let record of withPdf){
+try{
+let stored=await getMaintenancePdf(record.id);
+if(!stored || !stored.blob)continue;
+let folder=maintenanceSafeFileName(record.equipment)||"Bakım";
+let original=maintenanceSafeFileName(record.pdfName||stored.name||"bakim.pdf");
+let fileName=record.date+" - "+original;
+zip.folder(folder).file(fileName,stored.blob);
+added++;
+}catch(error){console.warn("PDF ZIP'e eklenemedi:",record.id,error);}
+}
+if(!added){alert("PDF kayıtları bu tarayıcıda bulunamadı.");return;}
+
+try{
+let blob=await zip.generateAsync({type:"blob"});
+let url=URL.createObjectURL(blob);
+let a=document.createElement("a");
+a.href=url;
+a.download="bakim_pdfleri_"+maintenanceDateToISO(new Date())+".zip";
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}catch(error){console.error(error);alert("Toplu PDF dosyası oluşturulamadı.");}
+}
+
+async function deleteMaintenanceRecord(id){
+let record=maintenanceRecords.find(r=>String(r.id)===String(id));
+if(!record)return;
+if(!confirm(record.equipment+" - "+formatMaintenanceDate(record.date)+" bakım kaydını silmek istediğinize emin misiniz?"))return;
+maintenanceRecords=maintenanceRecords.filter(r=>String(r.id)!==String(id));
+saveMaintenanceRecords();
+await deleteMaintenancePdf(id);
+renderMaintenanceRecords();
+}
+
+/* =====================================================
    YEDEK AL
 ===================================================== */
 
@@ -6216,7 +7563,9 @@ movements:movements,
 
 usageSelections:usageSelections,
 
-standardReservations:standardReservations
+standardReservations:standardReservations,
+
+consumables:consumables
 
 };
 
@@ -6345,6 +7694,11 @@ persistUsageSelections();
 if(backup.standardReservations && typeof backup.standardReservations==="object"){
 standardReservations=backup.standardReservations;
 persistStandardReservations();
+}
+
+if(Array.isArray(backup.consumables)){
+consumables=backup.consumables;
+saveConsumables();
 }
 
 await loadData();
@@ -6895,6 +8249,15 @@ document.getElementById("reservationModal");
 let priceModal=
 document.getElementById("priceModal");
 
+let maintenanceModal=
+document.getElementById("maintenanceModal");
+
+let consumablesModal=
+document.getElementById("consumablesModal");
+
+let consumableMovementModal=
+document.getElementById("consumableMovementModal");
+
 let purchaseImportModal=
 document.getElementById("purchaseImportModal");
 
@@ -6919,6 +8282,24 @@ closeReservationModal();
 if(event.target===priceModal){
 
 closePriceModal();
+
+}
+
+if(event.target===maintenanceModal){
+
+closeMaintenanceModal();
+
+}
+
+if(event.target===consumablesModal){
+
+closeConsumablesModal();
+
+}
+
+if(event.target===consumableMovementModal){
+
+closeConsumableMovementModal();
 
 }
 
@@ -7268,6 +8649,9 @@ handleKeypadButton(btn);
 
 initNumericKeypad();
 
+loadConsumables();
+loadMaintenanceRecords();
+setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
 loadUsageSelections();
 loadStandardReservations();

@@ -1667,6 +1667,113 @@ padding:16px
 }
 }
 
+
+/* =====================================================
+   SAYFA GİRİŞ ŞİFRESİ
+===================================================== */
+body.page-locked{
+overflow:hidden
+}
+
+.page-login-gate{
+position:fixed;
+inset:0;
+z-index:20000;
+background:#f1f5f9;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.page-login-card{
+width:min(430px,100%);
+background:white;
+border:1px solid #dbe3ee;
+border-radius:16px;
+padding:26px;
+box-shadow:0 16px 45px #0f172a24
+}
+
+.page-login-logo{
+font-size:42px;
+text-align:center;
+margin-bottom:10px
+}
+
+.page-login-title{
+margin:0;
+text-align:center;
+font-size:23px;
+color:#172033
+}
+
+.page-login-subtitle{
+margin:8px 0 22px;
+text-align:center;
+color:#64748b;
+font-size:14px;
+line-height:1.45
+}
+
+.page-login-form{
+display:none;
+flex-direction:column;
+gap:12px
+}
+
+.page-login-form.active{
+display:flex
+}
+
+.page-login-form label{
+font-size:13px;
+font-weight:bold;
+color:#475569
+}
+
+.page-login-form input[type="password"]{
+width:100%;
+font-size:17px;
+padding:12px 13px
+}
+
+.page-login-remember{
+display:flex;
+align-items:center;
+gap:9px;
+font-size:14px;
+color:#334155;
+cursor:pointer;
+user-select:none
+}
+
+.page-login-remember input{
+width:20px;
+height:20px;
+accent-color:#2563eb
+}
+
+.page-login-error{
+min-height:18px;
+font-size:13px;
+font-weight:bold;
+color:#b91c1c
+}
+
+.page-login-button{
+min-height:46px;
+font-size:15px;
+touch-action:manipulation
+}
+
+.page-login-loading{
+text-align:center;
+color:#64748b;
+padding:12px 0 2px;
+font-size:14px
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -1676,7 +1783,43 @@ padding:16px
 
 </head>
 
-<body>
+<body class="page-locked">
+
+<!-- SAYFA GİRİŞ ŞİFRESİ -->
+<div class="page-login-gate" id="pageLoginGate" aria-modal="true" role="dialog" aria-labelledby="pageLoginTitle">
+  <div class="page-login-card">
+    <div class="page-login-logo">🔐</div>
+    <h2 class="page-login-title" id="pageLoginTitle">Stok Takip Girişi</h2>
+    <div class="page-login-subtitle" id="pageLoginSubtitle">Giriş güvenliği kontrol ediliyor...</div>
+
+    <div class="page-login-loading" id="pageLoginLoading">Lütfen bekleyin...</div>
+
+    <form class="page-login-form" id="pageLoginForm" autocomplete="off">
+      <label for="pageLoginPassword">Giriş Şifresi</label>
+      <input id="pageLoginPassword" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
+      <label class="page-login-remember">
+        <input id="pageLoginRemember" type="checkbox" checked>
+        Bu bilgisayarda hatırla
+      </label>
+      <div class="page-login-error" id="pageLoginError"></div>
+      <button class="btn-blue page-login-button" id="pageLoginButton" type="submit">Giriş Yap</button>
+    </form>
+
+    <form class="page-login-form" id="pageLoginSetupForm" autocomplete="off">
+      <label for="pageLoginNewPassword">Yeni Giriş Şifresi</label>
+      <input id="pageLoginNewPassword" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
+      <label for="pageLoginNewPasswordRepeat">Şifreyi Tekrar Yaz</label>
+      <input id="pageLoginNewPasswordRepeat" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
+      <label class="page-login-remember">
+        <input id="pageLoginSetupRemember" type="checkbox" checked>
+        Bu bilgisayarda hatırla
+      </label>
+      <div class="page-login-error" id="pageLoginSetupError"></div>
+      <button class="btn-green page-login-button" id="pageLoginSetupButton" type="submit">Şifreyi Belirle ve Gir</button>
+    </form>
+  </div>
+</div>
+
 
 <header>
 
@@ -2796,6 +2939,12 @@ const CLOUD_KEY_MAINTENANCE_RECORDS="maintenance_records";
 const CLOUD_KEY_MAINTENANCE_EQUIPMENTS="maintenance_equipments";
 const CLOUD_KEY_MAINTENANCE_VENDORS="maintenance_vendors";
 const CLOUD_KEY_MAINTENANCE_DOWNLOAD_PASSWORD="maintenance_download_password_v1";
+
+/* Sayfa giriş şifresi bakım/indirme şifresinden tamamen ayrıdır. */
+const CLOUD_KEY_PAGE_LOGIN_PASSWORD="page_login_password_v1";
+const PAGE_LOGIN_REMEMBER_KEY="stok_page_login_remember_v1";
+let pageLoginPasswordConfig=null;
+let pageLoginPasswordConfigLoaded=false;
 let maintenanceDownloadPasswordConfig=null;
 let maintenancePasswordConfigLoaded=false;
 /* Bu sürümde kullanıcı eski test bakım/sarf kayıtlarını sıfırlamak istedi.
@@ -9424,10 +9573,191 @@ bindReliablePress("consumableAddCancelButton",()=>{closeNumericKeypad();toggleCo
 bindReliablePress("consumableMovementSaveButton",btn=>runBusyButton(btn,"Kaydediliyor...",()=>saveConsumableMovement()));
 }
 
+
+
+/* =====================================================
+   SAYFA GİRİŞ ŞİFRESİ — BAKIM ŞİFRESİNDEN AYRI
+===================================================== */
+
+function pageLoginRandomBase64(byteCount=24){
+let bytes=new Uint8Array(byteCount);
+crypto.getRandomValues(bytes);
+return maintenanceBytesToBase64(bytes);
+}
+
+async function loadPageLoginPasswordConfig(force=false){
+if(pageLoginPasswordConfigLoaded && !force)return pageLoginPasswordConfig;
+let value=await cloudStateGet(CLOUD_KEY_PAGE_LOGIN_PASSWORD);
+if(value && typeof value==="object" && value.salt && value.hash){
+pageLoginPasswordConfig=value;
+}else{
+pageLoginPasswordConfig=null;
+}
+pageLoginPasswordConfigLoaded=true;
+return pageLoginPasswordConfig;
+}
+
+async function verifyPageLoginPassword(password){
+let config=await loadPageLoginPasswordConfig();
+if(!config)return false;
+let hash=await deriveMaintenancePasswordHash(password,config.salt,config.iterations||150000);
+return hash===config.hash;
+}
+
+function getPageLoginRememberRecord(){
+try{
+let raw=localStorage.getItem(PAGE_LOGIN_REMEMBER_KEY);
+if(!raw)return null;
+let value=JSON.parse(raw);
+return value && typeof value==="object" ? value : null;
+}catch{return null;}
+}
+
+function savePageLoginRemember(config){
+try{
+localStorage.setItem(PAGE_LOGIN_REMEMBER_KEY,JSON.stringify({
+version:String(config?.rememberVersion||""),
+rememberedAt:new Date().toISOString()
+}));
+}catch{}
+}
+
+function clearPageLoginRemember(){
+try{localStorage.removeItem(PAGE_LOGIN_REMEMBER_KEY);}catch{}
+}
+
+function isPageLoginRememberValid(config){
+let local=getPageLoginRememberRecord();
+return !!(
+config &&
+local &&
+String(local.version||"")!=="" &&
+String(local.version)===String(config.rememberVersion||"")
+);
+}
+
+function unlockPageAfterLogin(){
+document.body.classList.remove("page-locked");
+let gate=document.getElementById("pageLoginGate");
+if(gate)gate.style.display="none";
+}
+
+function showPageLoginMode(mode){
+let loading=document.getElementById("pageLoginLoading");
+let login=document.getElementById("pageLoginForm");
+let setup=document.getElementById("pageLoginSetupForm");
+let subtitle=document.getElementById("pageLoginSubtitle");
+if(loading)loading.style.display="none";
+if(login)login.classList.toggle("active",mode==="login");
+if(setup)setup.classList.toggle("active",mode==="setup");
+if(subtitle)subtitle.textContent=mode==="setup"
+?"İlk kullanım için bakım şifresinden ayrı bir giriş şifresi belirleyin."
+:"Devam etmek için giriş şifresini yazın.";
+setTimeout(()=>document.getElementById(mode==="setup"?"pageLoginNewPassword":"pageLoginPassword")?.focus(),40);
+}
+
+async function handlePageLoginSubmit(){
+let input=document.getElementById("pageLoginPassword");
+let error=document.getElementById("pageLoginError");
+let button=document.getElementById("pageLoginButton");
+let password=String(input?.value||"");
+if(error)error.textContent="";
+if(!password){if(error)error.textContent="Giriş şifresini yazın.";return;}
+try{
+if(button){button.disabled=true;button.textContent="Kontrol ediliyor...";}
+let valid=await verifyPageLoginPassword(password);
+if(!valid){
+if(error)error.textContent="Giriş şifresi yanlış.";
+if(input){input.value="";input.focus();}
+return;
+}
+let config=await loadPageLoginPasswordConfig();
+if(document.getElementById("pageLoginRemember")?.checked)savePageLoginRemember(config);
+else clearPageLoginRemember();
+unlockPageAfterLogin();
+}catch(err){
+console.error(err);
+if(error)error.textContent=err?.message||"Giriş doğrulanamadı.";
+}finally{
+if(button){button.disabled=false;button.textContent="Giriş Yap";}
+}
+}
+
+async function handlePageLoginSetupSubmit(){
+let first=String(document.getElementById("pageLoginNewPassword")?.value||"");
+let repeat=String(document.getElementById("pageLoginNewPasswordRepeat")?.value||"");
+let error=document.getElementById("pageLoginSetupError");
+let button=document.getElementById("pageLoginSetupButton");
+if(error)error.textContent="";
+if(first.length<4){if(error)error.textContent="Giriş şifresi en az 4 karakter olmalı.";return;}
+if(first!==repeat){if(error)error.textContent="Yazdığınız iki şifre aynı değil.";return;}
+try{
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+/* Başka bilgisayar aynı anda şifre oluşturmuş olabilir; tekrar kontrol et. */
+let existing=await loadPageLoginPasswordConfig(true);
+if(existing){
+showPageLoginMode("login");
+if(error)error.textContent="";
+let loginError=document.getElementById("pageLoginError");
+if(loginError)loginError.textContent="Giriş şifresi başka bir bilgisayarda zaten belirlenmiş. Mevcut şifreyle giriş yapın.";
+return;
+}
+let salt=new Uint8Array(16);crypto.getRandomValues(salt);
+let saltBase64=maintenanceBytesToBase64(salt);
+let iterations=150000;
+let hash=await deriveMaintenancePasswordHash(first,saltBase64,iterations);
+let config={
+version:1,
+salt:saltBase64,
+hash:hash,
+iterations:iterations,
+rememberVersion:pageLoginRandomBase64(24),
+updatedAt:new Date().toISOString()
+};
+await cloudStateSet(CLOUD_KEY_PAGE_LOGIN_PASSWORD,config);
+pageLoginPasswordConfig=config;
+pageLoginPasswordConfigLoaded=true;
+if(document.getElementById("pageLoginSetupRemember")?.checked)savePageLoginRemember(config);
+else clearPageLoginRemember();
+unlockPageAfterLogin();
+}catch(err){
+console.error(err);
+if(error)error.textContent=err?.message||"Giriş şifresi kaydedilemedi.";
+}finally{
+if(button){button.disabled=false;button.textContent="Şifreyi Belirle ve Gir";}
+}
+}
+
+async function initPageLoginGate(){
+let gate=document.getElementById("pageLoginGate");
+if(!gate)return;
+let loginForm=document.getElementById("pageLoginForm");
+let setupForm=document.getElementById("pageLoginSetupForm");
+loginForm?.addEventListener("submit",event=>{event.preventDefault();handlePageLoginSubmit();});
+setupForm?.addEventListener("submit",event=>{event.preventDefault();handlePageLoginSetupSubmit();});
+try{
+let config=await loadPageLoginPasswordConfig(true);
+if(config && isPageLoginRememberValid(config)){
+unlockPageAfterLogin();
+return;
+}
+if(!config)clearPageLoginRemember();
+showPageLoginMode(config?"login":"setup");
+}catch(err){
+console.error(err);
+let loading=document.getElementById("pageLoginLoading");
+let subtitle=document.getElementById("pageLoginSubtitle");
+if(loading)loading.textContent="Giriş sistemi yüklenemedi.";
+if(subtitle)subtitle.textContent=err?.message||"Bulut bağlantısını kontrol edin.";
+}
+}
+
+
 /* =====================================================
    BAŞLANGIÇ
 ===================================================== */
 
+initPageLoginGate();
 initNumericKeypad();
 initReliableAddonButtons();
 initMaintenancePasswordDownloadUi();

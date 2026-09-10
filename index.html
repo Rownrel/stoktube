@@ -2833,9 +2833,26 @@ function encodeStoragePath(path){
 return String(path||"").split("/").map(encodeURIComponent).join("/");
 }
 
+function maintenanceCloudSafeId(value){
+let safe=String(value||"")
+.normalize("NFKD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^A-Za-z0-9_-]+/g,"_")
+.replace(/_+/g,"_")
+.replace(/^_+|_+$/g,"");
+return safe || String(Date.now());
+}
+
 async function uploadMaintenancePdfToCloud(id,file){
-let safeName=maintenanceSafeFileName(file.name||"bakim.pdf")||"bakim.pdf";
-let path=String(id)+"/"+safeName;
+/*
+   Supabase Storage object key'inde kullanıcının PDF adını kullanmıyoruz.
+   Türkçe karakterler, boşluklar veya özel işaretler InvalidKey üretebildiği için
+   bulut yolu yalnızca güvenli ASCII karakterlerden oluşturulur.
+   Orijinal dosya adı maintenanceRecords.pdfName içinde aynen korunur.
+*/
+let safeId=maintenanceCloudSafeId(id);
+let path="maintenance_"+safeId+".pdf";
+
 let response=await fetch(
 SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
 {
@@ -2843,7 +2860,7 @@ method:"POST",
 headers:{
 "apikey":SUPABASE_KEY,
 "Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":file.type||"application/pdf",
+"Content-Type":"application/pdf",
 "x-upsert":"true"
 },
 body:file

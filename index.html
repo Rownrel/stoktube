@@ -1774,6 +1774,86 @@ padding:12px 0 2px;
 font-size:14px
 }
 
+/* =====================================================
+   AYARLAR / ŞİFRE YÖNETİMİ
+===================================================== */
+
+.btn-settings{
+background:#475569;
+color:white;
+min-width:44px;
+font-size:18px;
+padding:10px 12px
+}
+
+.settings-modal-box{
+max-width:760px
+}
+
+.settings-intro{
+color:#64748b;
+font-size:13px;
+margin:-4px 0 16px
+}
+
+.settings-section{
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:16px;
+margin-bottom:14px;
+background:#f8fafc
+}
+
+.settings-section h3{
+margin:0 0 6px;
+font-size:16px
+}
+
+.settings-section-note{
+font-size:12px;
+color:#64748b;
+margin-bottom:12px
+}
+
+.settings-password-grid{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:10px
+}
+
+.settings-password-grid .form-group{
+min-width:0
+}
+
+.settings-password-grid input{
+width:100%;
+min-width:0
+}
+
+.settings-section-actions{
+display:flex;
+justify-content:flex-end;
+align-items:center;
+gap:10px;
+margin-top:12px;
+flex-wrap:wrap
+}
+
+.settings-message{
+font-size:12px;
+font-weight:bold;
+min-height:18px;
+margin-right:auto
+}
+
+.settings-message.error{color:#b91c1c}
+.settings-message.success{color:#166534}
+
+@media(max-width:700px){
+.settings-password-grid{grid-template-columns:1fr}
+.settings-section-actions button{width:100%}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -1851,6 +1931,10 @@ font-size:14px
 
 <button class="btn-orange" onclick="document.getElementById('backupFile').click()">
 📂 Yedek Yükle
+</button>
+
+<button class="btn-settings" id="settingsButton" type="button" onclick="openSettingsModal()" title="Ayarlar" aria-label="Ayarlar">
+⚙️
 </button>
 
 <input
@@ -2625,7 +2709,6 @@ oninput="renderPriceResults()"
 <div style="font-size:13px;color:#64748b">Her makine/ekipman için son bakım tarihinden 6 ay sonra yeni bakım planlanır. Son 1 ay kala uyarı başlar.</div>
 </div>
 <div class="maintenance-head-actions">
-<button type="button" class="btn-gray" id="maintenancePasswordSettingsButton">🔐 İndirme Şifresi</button>
 <button type="button" class="btn-dark" onclick="requestMaintenanceDownload('all')">📦 Tüm PDF'leri İndir</button>
 <button type="button" class="btn-blue" onclick="toggleMaintenanceAddPanel(true)">+ Yeni Bakım</button>
 </div>
@@ -2732,29 +2815,60 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 </div>
 </div>
 
-<!-- BAKIM İNDİRME ŞİFRESİ AYAR MODALI -->
-<div class="modal" id="maintenancePasswordSetupModal">
-<div class="modal-box maintenance-download-password-box">
-<h2 id="maintenancePasswordSetupTitle" style="margin-top:0">🔐 İndirme Şifresi Belirle</h2>
-<div class="maintenance-password-info" id="maintenancePasswordSetupInfo">
-Bu şifre bakım PDF'lerini indirmek ve bakım kayıtlarını silmek için kullanılacak. Bulutta şifrenin kendisi değil doğrulama özeti saklanır.
-</div>
-<div class="form-group" id="maintenanceCurrentPasswordGroup" style="display:none">
-<label>Mevcut Şifre</label>
-<input id="maintenanceCurrentPassword" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
+<!-- AYARLAR MODALI -->
+<div class="modal" id="settingsModal">
+<div class="modal-box settings-modal-box">
+<h2 style="margin-top:0">⚙️ Ayarlar</h2>
+<div class="settings-intro">Giriş şifresi ile bakım PDF indirme / silme şifresi birbirinden ayrıdır.</div>
+
+<div class="settings-section">
+<h3>🔑 Giriş Şifresi</h3>
+<div class="settings-section-note">Sayfayı açarken kullanılan şifre. Değiştirildiğinde diğer bilgisayarlardaki “hatırla” oturumları geçersiz olur; bu bilgisayar hatırlanmaya devam eder.</div>
+<div class="settings-password-grid">
+<div class="form-group">
+<label>Mevcut Giriş Şifresi</label>
+<input id="settingsLoginCurrent" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
 </div>
 <div class="form-group">
-<label>Yeni Şifre</label>
-<input id="maintenanceNewPassword" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+<label>Yeni Giriş Şifresi</label>
+<input id="settingsLoginNew" type="password" autocomplete="new-password" placeholder="Yeni şifre">
 </div>
 <div class="form-group">
 <label>Yeni Şifre Tekrar</label>
-<input id="maintenanceNewPasswordRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
-<div class="maintenance-password-error" id="maintenancePasswordSetupError"></div>
+<input id="settingsLoginRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
 </div>
+</div>
+<div class="settings-section-actions">
+<div class="settings-message" id="settingsLoginMessage"></div>
+<button type="button" class="btn-blue" id="settingsLoginSaveButton">Giriş Şifresini Değiştir</button>
+</div>
+</div>
+
+<div class="settings-section">
+<h3>🔐 Bakım PDF İndirme / Silme Şifresi</h3>
+<div class="settings-section-note">Bakım PDF'lerini indirmek ve bakım kayıtlarını silmek için kullanılan ayrı şifre.</div>
+<div class="settings-password-grid">
+<div class="form-group" id="settingsMaintenanceCurrentGroup">
+<label>Mevcut Bakım Şifresi</label>
+<input id="settingsMaintenanceCurrent" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
+</div>
+<div class="form-group">
+<label>Yeni Bakım Şifresi</label>
+<input id="settingsMaintenanceNew" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+</div>
+<div class="form-group">
+<label>Yeni Şifre Tekrar</label>
+<input id="settingsMaintenanceRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
+</div>
+</div>
+<div class="settings-section-actions">
+<div class="settings-message" id="settingsMaintenanceMessage"></div>
+<button type="button" class="btn-dark" id="settingsMaintenanceSaveButton">Bakım Şifresini Değiştir</button>
+</div>
+</div>
+
 <div class="modal-buttons">
-<button type="button" class="btn-gray" id="maintenancePasswordSetupCancelButton">Vazgeç</button>
-<button type="button" class="btn-green" id="maintenancePasswordSetupSaveButton">Şifreyi Kaydet</button>
+<button type="button" class="btn-gray" onclick="closeSettingsModal()">Kapat</button>
 </div>
 </div>
 </div>
@@ -8111,8 +8225,8 @@ async function ensureMaintenancePasswordConfigured(){
 try{
 let config=await loadMaintenanceDownloadPasswordConfig();
 if(config)return true;
-alert("Önce bakım işlemleri için bir şifre belirleyin.");
-await openMaintenancePasswordSetupModal();
+alert("Önce Ayarlar bölümünden bakım işlemleri için bir şifre belirleyin.");
+await openSettingsModal("maintenance");
 return false;
 }catch(err){
 console.error(err);
@@ -9120,6 +9234,9 @@ document.getElementById("consumableMovementModal");
 let purchaseImportModal=
 document.getElementById("purchaseImportModal");
 
+let settingsModal=
+document.getElementById("settingsModal");
+
 if(event.target===productModal){
 
 closeProductModal();
@@ -9171,6 +9288,12 @@ closeConsumableMovementModal();
 if(event.target===purchaseImportModal){
 
 closePurchaseImportModal();
+
+}
+
+if(event.target===settingsModal){
+
+closeSettingsModal();
 
 }
 
@@ -9576,6 +9699,163 @@ bindReliablePress("consumableMovementSaveButton",btn=>runBusyButton(btn,"Kaydedi
 
 
 /* =====================================================
+   AYARLAR — GİRİŞ VE BAKIM ŞİFRELERİ TEK PENCEREDE
+===================================================== */
+
+function settingsSetMessage(id,message,type=""){
+let el=document.getElementById(id);
+if(!el)return;
+el.textContent=message||"";
+el.className="settings-message"+(type?" "+type:"");
+}
+
+function settingsClearInputs(prefix){
+["Current","New","Repeat"].forEach(suffix=>{
+let el=document.getElementById(prefix+suffix);
+if(el)el.value="";
+});
+}
+
+async function openSettingsModal(focusSection=""){
+let modal=document.getElementById("settingsModal");
+if(!modal)return;
+settingsSetMessage("settingsLoginMessage","");
+settingsSetMessage("settingsMaintenanceMessage","");
+settingsClearInputs("settingsLogin");
+settingsClearInputs("settingsMaintenance");
+try{
+let [loginConfig,maintenanceConfig]=await Promise.all([
+loadPageLoginPasswordConfig(true),
+loadMaintenanceDownloadPasswordConfig(true)
+]);
+let maintenanceGroup=document.getElementById("settingsMaintenanceCurrentGroup");
+if(maintenanceGroup)maintenanceGroup.style.display=maintenanceConfig?"flex":"none";
+let maintenanceButton=document.getElementById("settingsMaintenanceSaveButton");
+if(maintenanceButton)maintenanceButton.textContent=maintenanceConfig?"Bakım Şifresini Değiştir":"Bakım Şifresi Belirle";
+let loginButton=document.getElementById("settingsLoginSaveButton");
+if(loginButton)loginButton.textContent=loginConfig?"Giriş Şifresini Değiştir":"Giriş Şifresi Belirle";
+modal.style.display="flex";
+let focusId=focusSection==="maintenance"
+?(maintenanceConfig?"settingsMaintenanceCurrent":"settingsMaintenanceNew")
+:(loginConfig?"settingsLoginCurrent":"settingsLoginNew");
+setTimeout(()=>document.getElementById(focusId)?.focus(),40);
+}catch(err){
+console.error(err);
+modal.style.display="flex";
+settingsSetMessage("settingsLoginMessage",err?.message||"Ayarlar yüklenemedi.","error");
+}
+}
+
+function closeSettingsModal(){
+let modal=document.getElementById("settingsModal");
+if(modal)modal.style.display="none";
+settingsClearInputs("settingsLogin");
+settingsClearInputs("settingsMaintenance");
+settingsSetMessage("settingsLoginMessage","");
+settingsSetMessage("settingsMaintenanceMessage","");
+}
+
+async function saveSettingsLoginPassword(){
+let current=String(document.getElementById("settingsLoginCurrent")?.value||"");
+let next=String(document.getElementById("settingsLoginNew")?.value||"");
+let repeat=String(document.getElementById("settingsLoginRepeat")?.value||"");
+let button=document.getElementById("settingsLoginSaveButton");
+settingsSetMessage("settingsLoginMessage","");
+if(next.length<4){settingsSetMessage("settingsLoginMessage","Yeni giriş şifresi en az 4 karakter olmalı.","error");return;}
+if(next!==repeat){settingsSetMessage("settingsLoginMessage","Yeni giriş şifreleri aynı değil.","error");return;}
+try{
+let existing=await loadPageLoginPasswordConfig(true);
+if(existing){
+if(!current){settingsSetMessage("settingsLoginMessage","Mevcut giriş şifresini yazın.","error");return;}
+let valid=await verifyPageLoginPassword(current);
+if(!valid){settingsSetMessage("settingsLoginMessage","Mevcut giriş şifresi yanlış.","error");return;}
+}
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+let salt=new Uint8Array(16);crypto.getRandomValues(salt);
+let saltBase64=maintenanceBytesToBase64(salt);
+let iterations=150000;
+let hash=await deriveMaintenancePasswordHash(next,saltBase64,iterations);
+let config={
+version:1,
+salt:saltBase64,
+hash:hash,
+iterations:iterations,
+rememberVersion:pageLoginRandomBase64(24),
+updatedAt:new Date().toISOString()
+};
+await cloudStateSet(CLOUD_KEY_PAGE_LOGIN_PASSWORD,config);
+pageLoginPasswordConfig=config;
+pageLoginPasswordConfigLoaded=true;
+/* Diğer bilgisayarlardaki eski hatırlama kayıtlarını geçersiz kıl, bu bilgisayar hatırlanmaya devam etsin. */
+savePageLoginRemember(config);
+settingsClearInputs("settingsLogin");
+settingsSetMessage("settingsLoginMessage","Giriş şifresi değiştirildi.","success");
+}catch(err){
+console.error(err);
+settingsSetMessage("settingsLoginMessage",err?.message||"Giriş şifresi değiştirilemedi.","error");
+}finally{
+if(button){button.disabled=false;button.textContent="Giriş Şifresini Değiştir";}
+}
+}
+
+async function saveSettingsMaintenancePassword(){
+let current=String(document.getElementById("settingsMaintenanceCurrent")?.value||"");
+let next=String(document.getElementById("settingsMaintenanceNew")?.value||"");
+let repeat=String(document.getElementById("settingsMaintenanceRepeat")?.value||"");
+let button=document.getElementById("settingsMaintenanceSaveButton");
+settingsSetMessage("settingsMaintenanceMessage","");
+if(next.length<4){settingsSetMessage("settingsMaintenanceMessage","Yeni bakım şifresi en az 4 karakter olmalı.","error");return;}
+if(next!==repeat){settingsSetMessage("settingsMaintenanceMessage","Yeni bakım şifreleri aynı değil.","error");return;}
+try{
+let existing=await loadMaintenanceDownloadPasswordConfig(true);
+if(existing){
+if(!current){settingsSetMessage("settingsMaintenanceMessage","Mevcut bakım şifresini yazın.","error");return;}
+let valid=await verifyMaintenanceDownloadPassword(current);
+if(!valid){settingsSetMessage("settingsMaintenanceMessage","Mevcut bakım şifresi yanlış.","error");return;}
+}
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+let salt=new Uint8Array(16);crypto.getRandomValues(salt);
+let saltBase64=maintenanceBytesToBase64(salt);
+let iterations=150000;
+let hash=await deriveMaintenancePasswordHash(next,saltBase64,iterations);
+let config={version:1,salt:saltBase64,hash:hash,iterations:iterations,updatedAt:new Date().toISOString()};
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_DOWNLOAD_PASSWORD,config);
+maintenanceDownloadPasswordConfig=config;
+maintenancePasswordConfigLoaded=true;
+let group=document.getElementById("settingsMaintenanceCurrentGroup");
+if(group)group.style.display="flex";
+settingsClearInputs("settingsMaintenance");
+settingsSetMessage("settingsMaintenanceMessage","Bakım indirme / silme şifresi değiştirildi.","success");
+}catch(err){
+console.error(err);
+settingsSetMessage("settingsMaintenanceMessage",err?.message||"Bakım şifresi değiştirilemedi.","error");
+}finally{
+if(button){button.disabled=false;button.textContent="Bakım Şifresini Değiştir";}
+}
+}
+
+function initSettingsUi(){
+/* Dokunmatik ekranda da tek basışla çalışsın. */
+bindReliablePress("settingsLoginSaveButton",()=>saveSettingsLoginPassword());
+bindReliablePress("settingsMaintenanceSaveButton",()=>saveSettingsMaintenancePassword());
+["settingsLoginCurrent","settingsLoginNew","settingsLoginRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el && !el.dataset.bound){
+el.dataset.bound="1";
+el.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();saveSettingsLoginPassword();}});
+}
+});
+["settingsMaintenanceCurrent","settingsMaintenanceNew","settingsMaintenanceRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el && !el.dataset.bound){
+el.dataset.bound="1";
+el.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();saveSettingsMaintenancePassword();}});
+}
+});
+}
+
+
+/* =====================================================
    SAYFA GİRİŞ ŞİFRESİ — BAKIM ŞİFRESİNDEN AYRI
 ===================================================== */
 
@@ -9761,7 +10041,7 @@ initPageLoginGate();
 initNumericKeypad();
 initReliableAddonButtons();
 initMaintenancePasswordDownloadUi();
-initMaintenancePasswordSetupUi();
+initSettingsUi();
 
 (async()=>{
 await resetAddonCloudDataOnce();

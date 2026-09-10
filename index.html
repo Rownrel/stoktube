@@ -6759,8 +6759,21 @@ areaMm2=(Math.PI/4)*(d*d-Math.pow(d-2*t,2));
 else if(type==="Profil"){
 let a=dims[0];
 let b=dims.length>1 ? dims[1] : dims[0];
-if(Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(t) && t>0 && a>2*t && b>2*t){
+if(Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(t) && t>0){
+
+/* ST37 PROFİL AĞIRLIK HESABI — kullanıcı tarafından onaylanan yöntem:
+   kg/m = ((2 × kısa kenar) + (2 × uzun kenar)) × kalınlık × 6,8 / 1000
+   Kare profilde a ve b aynı olabilir; dikdörtgende sıra önemli değildir. */
+if(normalizeQuality(product.quality)==="ST37"){
+let shortSide=Math.min(a,b);
+let longSide=Math.max(a,b);
+return (((shortSide*2)+(longSide*2))*t*6.8)/1000;
+}
+
+/* Diğer kalitelerde mevcut teorik kesit alanı hesabı korunur. */
+if(a>2*t && b>2*t){
 areaMm2=(a*b)-((a-2*t)*(b-2*t));
+}
 }
 }
 

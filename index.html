@@ -1279,6 +1279,154 @@ white-space:nowrap
 }
 
 /* =====================================================
+   BAKIM + SARF BULUT DURUMU
+===================================================== */
+
+function showCloudAddonError(error){
+console.error("Bakım/Sarf Supabase hatası:",error);
+if(cloudAddonErrorShown)return;
+cloudAddonErrorShown=true;
+setTimeout(()=>alert(
+"Bakım ve Sarf Malzemeleri bulut alanına bağlanamadı.\n\n"+
+"StokAppData tablosu ve maintenance-pdfs bucket'ı Supabase'de bir kez kurulmalıdır. " +
+"Kurulumdan sonra bu dosya bütün bilgisayarlarda aynı bakım/sarf verisini gösterecek.\n\n"+
+(error?.message||String(error||""))
+),250);
+}
+
+async function cloudStateGet(key){
+let response=await fetch(
+SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?select=value&key=eq."+encodeURIComponent(key)+"&limit=1",
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Accept":"application/json"
+}
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("Bulut veri okuma hatası: "+response.status+" "+text);
+let rows=text?JSON.parse(text):[];
+return Array.isArray(rows)&&rows.length?rows[0].value:null;
+}
+
+async function cloudStateSet(key,value){
+let response=await fetch(
+SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?on_conflict=key",
+{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json",
+"Prefer":"resolution=merge-duplicates,return=minimal"
+},
+body:JSON.stringify({key:key,value:value,updated_at:new Date().toISOString()})
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("Bulut veri kaydetme hatası: "+response.status+" "+text);
+}
+
+function getLocalJson(storageKey,fallback){
+try{
+let raw=localStorage.getItem(storageKey);
+if(!raw)return fallback;
+return JSON.parse(raw);
+}catch{return fallback;}
+}
+
+async function loadCloudArray(key,localKey){
+try{
+let cloud=await cloudStateGet(key);
+if(Array.isArray(cloud))return cloud;
+let local=getLocalJson(localKey,[]);
+if(Array.isArray(local)&&local.length){
+await cloudStateSet(key,local);
+return local;
+}
+return [];
+}catch(error){
+showCloudAddonError(error);
+let local=getLocalJson(localKey,[]);
+return Array.isArray(local)?local:[];
+}
+}
+
+async function saveCloudArray(key,localKey,value){
+try{localStorage.setItem(localKey,JSON.stringify(value));}catch{}
+try{
+await cloudStateSet(key,value);
+return true;
+}catch(error){
+showCloudAddonError(error);
+return false;
+}
+}
+
+function encodeStoragePath(path){
+return String(path||"").split("/").map(encodeURIComponent).join("/");
+}
+
+async function uploadMaintenancePdfToCloud(id,file){
+let safeName=maintenanceSafeFileName(file.name||"bakim.pdf")||"bakim.pdf";
+let path=String(id)+"/"+safeName;
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
+{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":file.type||"application/pdf",
+"x-upsert":"true"
+},
+body:file
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("PDF buluta yüklenemedi: "+response.status+" "+text);
+return path;
+}
+
+async function downloadMaintenancePdfFromCloud(path){
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/authenticated/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY
+}
+}
+);
+let text="";
+if(!response.ok){
+try{text=await response.text();}catch{}
+throw new Error("PDF buluttan okunamadı: "+response.status+" "+text);
+}
+return await response.blob();
+}
+
+async function deleteMaintenancePdfFromCloud(path){
+if(!path)return;
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET,
+{
+method:"DELETE",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({prefixes:[path]})
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("PDF buluttan silinemedi: "+response.status+" "+text);
+}
+
+/* =====================================================
    SARF MALZEMELERİ
 ===================================================== */
 .btn-consumables{
@@ -2671,6 +2819,10 @@ const SUPABASE_KEY =
 const PRODUCTS_TABLE = "StokTube";
 const MOVEMENTS_TABLE = "StokTubeMovements";
 
+/* Bakım ve sarf malzemelerinin ortak bulut verisi */
+const APP_DATA_TABLE = "StokAppData";
+const MAINTENANCE_BUCKET = "maintenance-pdfs";
+
 
 /* =====================================================
    UYGULAMA VERİLERİ
@@ -2687,20 +2839,23 @@ let currentMovementType=null;
 let purchaseImportRows=[];
 let purchaseImportFileName="";
 
-/* Sarf malzemeleri */
+/* Sarf malzemeleri — Supabase ana kaynak, localStorage yalnızca eski veriyi taşıma/yedek için */
 const CONSUMABLES_STORAGE_KEY="stokConsumablesV1";
+const CLOUD_KEY_CONSUMABLES="consumables";
 let consumables=[];
 let currentConsumableId=null;
 let currentConsumableMovementType=null;
 
-/* Bakım takibi */
+/* Bakım takibi — kayıtlar/listeler Supabase'de, eski IndexedDB PDF'leri otomatik taşınabilir */
 const MAINTENANCE_STORAGE_KEY="stokMaintenanceRecordsV1";
 const MAINTENANCE_EQUIPMENT_STORAGE_KEY="stokMaintenanceEquipmentListV1";
 const MAINTENANCE_VENDOR_STORAGE_KEY="stokMaintenanceVendorListV1";
-/* Bu sürümde test amaçlı makine/firma seçim listelerini yalnızca bir kez sıfırla. */
-const MAINTENANCE_MASTER_RESET_KEY="stokMaintenanceMasterReset20260910V1";
+const CLOUD_KEY_MAINTENANCE_RECORDS="maintenance_records";
+const CLOUD_KEY_MAINTENANCE_EQUIPMENTS="maintenance_equipments";
+const CLOUD_KEY_MAINTENANCE_VENDORS="maintenance_vendors";
 const MAINTENANCE_DB_NAME="stokMaintenancePdfDBV1";
 const MAINTENANCE_DB_STORE="pdfs";
+let cloudAddonErrorShown=false;
 let maintenanceRecords=[];
 let maintenanceEquipments=[];
 let maintenanceVendors=[];
@@ -6815,15 +6970,8 @@ if(!Number.isFinite(n))n=0;
 return n.toLocaleString("tr-TR",{maximumFractionDigits:3});
 }
 
-function loadConsumables(){
-try{
-let raw=localStorage.getItem(CONSUMABLES_STORAGE_KEY);
-let parsed=raw?JSON.parse(raw):[];
-consumables=Array.isArray(parsed)?parsed:[];
-}
-catch{
-consumables=[];
-}
+async function loadConsumables(){
+consumables=await loadCloudArray(CLOUD_KEY_CONSUMABLES,CONSUMABLES_STORAGE_KEY);
 
 consumables=consumables.map(item=>({
 id:item.id||Date.now()+Math.random(),
@@ -6835,15 +6983,11 @@ updatedAt:item.updatedAt||item.createdAt||new Date().toISOString()
 })).filter(item=>item.name);
 
 updateConsumablesBadge();
+renderConsumables();
 }
 
-function saveConsumables(){
-try{
-localStorage.setItem(CONSUMABLES_STORAGE_KEY,JSON.stringify(consumables));
-}
-catch(error){
-console.error("Sarf malzemeleri kaydedilemedi:",error);
-}
+async function saveConsumables(){
+await saveCloudArray(CLOUD_KEY_CONSUMABLES,CONSUMABLES_STORAGE_KEY,consumables);
 updateConsumablesBadge();
 }
 
@@ -6865,7 +7009,7 @@ button.title=count+" sarf malzemesi 1 veya altında";
 else{
 badge.textContent="";
 badge.style.display="none";
-button.title="Sarf malzemelerini aç";
+button.title="Sarf malzemelerini aç (bulut)";
 }
 }
 
@@ -6899,7 +7043,7 @@ closeNumericKeypad();
 }
 }
 
-function addConsumable(){
+async function addConsumable(){
 let name=String(document.getElementById("consumableName")?.value||"").trim();
 let unit=String(document.getElementById("consumableUnit")?.value||"Adet");
 let quantity=normalizeConsumableNumber(document.getElementById("consumableInitialQuantity")?.value);
@@ -6928,7 +7072,7 @@ createdAt:new Date().toISOString(),
 updatedAt:new Date().toISOString()
 });
 
-saveConsumables();
+await saveConsumables();
 toggleConsumableAddPanel(false);
 renderConsumables();
 }
@@ -7016,7 +7160,7 @@ currentConsumableId=null;
 currentConsumableMovementType=null;
 }
 
-function saveConsumableMovement(){
+async function saveConsumableMovement(){
 let item=consumables.find(x=>String(x.id)===String(currentConsumableId));
 if(!item)return;
 
@@ -7044,17 +7188,17 @@ item.quantity=current+quantity;
 }
 
 item.updatedAt=new Date().toISOString();
-saveConsumables();
+await saveConsumables();
 closeConsumableMovementModal();
 renderConsumables();
 }
 
-function deleteConsumable(id){
+async function deleteConsumable(id){
 let item=consumables.find(x=>String(x.id)===String(id));
 if(!item)return;
 if(!confirm(item.name+" kaydını silmek istediğinize emin misiniz?"))return;
 consumables=consumables.filter(x=>String(x.id)!==String(id));
-saveConsumables();
+await saveConsumables();
 renderConsumables();
 }
 
@@ -7078,53 +7222,21 @@ result.push(name);
 return result.sort((a,b)=>a.localeCompare(b,"tr",{sensitivity:"base"}));
 }
 
-function resetMaintenanceMasterListsOnce(){
-try{
-if(localStorage.getItem(MAINTENANCE_MASTER_RESET_KEY)==="1")return;
-
-/* Önceki testlerde eklenen rastgele makine ve firma seçimlerini temizle.
-   Bakım geçmişi/PDF'ler silinmez; sadece açılır seçim listeleri sıfırlanır. */
-localStorage.removeItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY);
-localStorage.removeItem(MAINTENANCE_VENDOR_STORAGE_KEY);
-maintenanceEquipments=[];
-maintenanceVendors=[];
-localStorage.setItem(MAINTENANCE_MASTER_RESET_KEY,"1");
-}catch(error){
-console.warn("Bakım makine/firma listeleri sıfırlanamadı:",error);
-}
-}
-
-function loadMaintenanceMasterLists(){
-resetMaintenanceMasterListsOnce();
-try{
-let rawEquipment=localStorage.getItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY);
-let rawVendors=localStorage.getItem(MAINTENANCE_VENDOR_STORAGE_KEY);
-let equipmentParsed=rawEquipment?JSON.parse(rawEquipment):[];
-let vendorParsed=rawVendors?JSON.parse(rawVendors):[];
-maintenanceEquipments=Array.isArray(equipmentParsed)?equipmentParsed:[];
-maintenanceVendors=Array.isArray(vendorParsed)?vendorParsed:[];
-}catch(error){
-console.warn("Bakım makine/firma listeleri okunamadı:",error);
-maintenanceEquipments=[];
-maintenanceVendors=[];
-}
-
-/* Seçim listeleri artık bakım geçmişinden otomatik doldurulmaz.
-   Listede yalnızca + Makine / + Firma ile senin eklediğin kayıtlar görünür. */
-maintenanceEquipments=maintenanceUniqueNames(maintenanceEquipments);
-maintenanceVendors=maintenanceUniqueNames(maintenanceVendors);
-saveMaintenanceMasterLists(false);
+async function loadMaintenanceMasterLists(){
+let [equipments,vendors]=await Promise.all([
+loadCloudArray(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,MAINTENANCE_EQUIPMENT_STORAGE_KEY),
+loadCloudArray(CLOUD_KEY_MAINTENANCE_VENDORS,MAINTENANCE_VENDOR_STORAGE_KEY)
+]);
+maintenanceEquipments=maintenanceUniqueNames(equipments);
+maintenanceVendors=maintenanceUniqueNames(vendors);
 renderMaintenanceMasterSelects();
 }
 
-function saveMaintenanceMasterLists(render=true){
-try{
-localStorage.setItem(MAINTENANCE_EQUIPMENT_STORAGE_KEY,JSON.stringify(maintenanceEquipments));
-localStorage.setItem(MAINTENANCE_VENDOR_STORAGE_KEY,JSON.stringify(maintenanceVendors));
-}catch(error){
-console.error("Bakım makine/firma listeleri kaydedilemedi:",error);
-alert("Makine / firma seçim listeleri tarayıcıya kaydedilemedi.");
-}
+async function saveMaintenanceMasterLists(render=true){
+await Promise.all([
+saveCloudArray(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,MAINTENANCE_EQUIPMENT_STORAGE_KEY,maintenanceEquipments),
+saveCloudArray(CLOUD_KEY_MAINTENANCE_VENDORS,MAINTENANCE_VENDOR_STORAGE_KEY,maintenanceVendors)
+]);
 if(render)renderMaintenanceMasterSelects();
 }
 
@@ -7167,7 +7279,7 @@ if(keypadTarget && input===keypadTarget)closeNumericKeypad();
 }
 }
 
-function saveMaintenanceMaster(kind){
+async function saveMaintenanceMaster(kind){
 let isEquipment=kind==="equipment";
 let input=document.getElementById(isEquipment?"maintenanceEquipmentNew":"maintenanceVendorNew");
 let value=String(input?.value||"").trim();
@@ -7178,43 +7290,33 @@ if(!existing){
 target.push(value);
 if(isEquipment)maintenanceEquipments=maintenanceUniqueNames(target);
 else maintenanceVendors=maintenanceUniqueNames(target);
-saveMaintenanceMasterLists(false);
+await saveMaintenanceMasterLists(false);
 existing=value;
 }
 renderMaintenanceMasterSelects(isEquipment?existing:null,isEquipment?null:existing);
 toggleMaintenanceMasterAdd(kind,false);
 }
 
-function loadMaintenanceRecords(){
-try{
-let raw=localStorage.getItem(MAINTENANCE_STORAGE_KEY);
-let parsed=raw?JSON.parse(raw):[];
-maintenanceRecords=Array.isArray(parsed)?parsed:[];
-}
-catch(error){
-console.error("Bakım kayıtları okunamadı:",error);
-maintenanceRecords=[];
-}
+async function loadMaintenanceRecords(){
+maintenanceRecords=await loadCloudArray(CLOUD_KEY_MAINTENANCE_RECORDS,MAINTENANCE_STORAGE_KEY);
 maintenanceRecords=maintenanceRecords.map(r=>({
 id:r.id || (Date.now()+Math.random()),
 equipment:String(r.equipment||"").trim(),
 date:String(r.date||"").trim(),
 performedBy:String(r.performedBy||"").trim(),
 pdfName:String(r.pdfName||"").trim(),
+pdfPath:String(r.pdfPath||"").trim(),
 createdAt:r.createdAt || new Date().toISOString()
 })).filter(r=>r.equipment && r.date);
+
+await loadMaintenanceMasterLists();
+await migrateLocalMaintenancePdfsToCloud();
 updateMaintenanceBadge();
-loadMaintenanceMasterLists();
+renderMaintenanceRecords();
 }
 
-function saveMaintenanceRecords(){
-try{
-localStorage.setItem(MAINTENANCE_STORAGE_KEY,JSON.stringify(maintenanceRecords));
-}
-catch(error){
-console.error("Bakım kayıtları kaydedilemedi:",error);
-alert("Bakım bilgileri tarayıcıya kaydedilemedi.");
-}
+async function saveMaintenanceRecords(){
+await saveCloudArray(CLOUD_KEY_MAINTENANCE_RECORDS,MAINTENANCE_STORAGE_KEY,maintenanceRecords);
 updateMaintenanceBadge();
 }
 
@@ -7233,7 +7335,7 @@ request.onerror=()=>reject(request.error || new Error("Bakım PDF veritabanı a�
 });
 }
 
-async function putMaintenancePdf(id,file){
+async function putMaintenancePdfLocal(id,file){
 let db=await openMaintenanceDb();
 return new Promise((resolve,reject)=>{
 let tx=db.transaction(MAINTENANCE_DB_STORE,"readwrite");
@@ -7243,43 +7345,72 @@ tx.onerror=()=>{let e=tx.error;db.close();reject(e||new Error("PDF kaydedilemedi
 });
 }
 
-async function getMaintenancePdf(id){
+async function getMaintenancePdfLocal(id){
 let db=await openMaintenanceDb();
 return new Promise((resolve,reject)=>{
 let tx=db.transaction(MAINTENANCE_DB_STORE,"readonly");
 let req=tx.objectStore(MAINTENANCE_DB_STORE).get(String(id));
-req.onsuccess=()=>resolve(req.result||null);
-req.onerror=()=>reject(req.error||new Error("PDF okunamadı."));
-tx.oncomplete=()=>db.close();
+req.onsuccess=()=>{let result=req.result;db.close();resolve(result||null);};
+req.onerror=()=>{let e=req.error;db.close();reject(e||new Error("PDF okunamadı."));};
 });
 }
 
-async function deleteMaintenancePdf(id){
+async function deleteMaintenancePdfLocal(id){
 try{
 let db=await openMaintenanceDb();
-await new Promise((resolve,reject)=>{
+return new Promise((resolve,reject)=>{
 let tx=db.transaction(MAINTENANCE_DB_STORE,"readwrite");
 tx.objectStore(MAINTENANCE_DB_STORE).delete(String(id));
-tx.oncomplete=resolve;
-tx.onerror=()=>reject(tx.error);
+tx.oncomplete=()=>{db.close();resolve();};
+tx.onerror=()=>{let e=tx.error;db.close();reject(e||new Error("PDF silinemedi."));};
 });
-db.close();
-}catch(error){console.warn("Bakım PDF'i silinemedi:",error);}
+}catch(error){console.warn("Yerel PDF silinemedi:",error);}
 }
 
-function maintenanceDateFromISO(value){
-let m=String(value||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);
-if(!m)return null;
-let d=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
-d.setHours(0,0,0,0);
-return d;
+async function putMaintenancePdf(id,file){
+let path=await uploadMaintenancePdfToCloud(id,file);
+/* Bulut kaydı esas; aynı tarayıcıda geçici yedek olarak IndexedDB'ye de yazmayı dene. */
+try{await putMaintenancePdfLocal(id,file);}catch{}
+return path;
 }
 
-function maintenanceDateToISO(date){
-let y=date.getFullYear();
-let m=String(date.getMonth()+1).padStart(2,"0");
-let d=String(date.getDate()).padStart(2,"0");
-return y+"-"+m+"-"+d;
+async function getMaintenancePdf(id){
+let record=maintenanceRecords.find(r=>String(r.id)===String(id));
+if(record?.pdfPath){
+try{
+let blob=await downloadMaintenancePdfFromCloud(record.pdfPath);
+return {id:String(id),name:record.pdfName||"bakim.pdf",type:"application/pdf",blob};
+}catch(error){
+console.warn("Bulut PDF okunamadı, yerel yedek deneniyor:",error);
+}
+}
+try{return await getMaintenancePdfLocal(id);}catch{return null;}
+}
+
+async function deleteMaintenancePdf(recordOrId){
+let record=typeof recordOrId==="object"?recordOrId:maintenanceRecords.find(r=>String(r.id)===String(recordOrId));
+let id=record?.id ?? recordOrId;
+if(record?.pdfPath){
+try{await deleteMaintenancePdfFromCloud(record.pdfPath);}catch(error){showCloudAddonError(error);}
+}
+await deleteMaintenancePdfLocal(id);
+}
+
+async function migrateLocalMaintenancePdfsToCloud(){
+let changed=false;
+for(let record of maintenanceRecords){
+if(!record.pdfName || record.pdfPath)continue;
+try{
+let local=await getMaintenancePdfLocal(record.id);
+if(!local?.blob)continue;
+let file=new File([local.blob],record.pdfName||local.name||"bakim.pdf",{type:local.type||"application/pdf"});
+record.pdfPath=await uploadMaintenancePdfToCloud(record.id,file);
+changed=true;
+}catch(error){
+console.warn("Eski bakım PDF'i buluta taşınamadı:",record.id,error);
+}
+}
+if(changed)await saveMaintenanceRecords();
 }
 
 function addMaintenanceMonths(date,months){
@@ -7340,7 +7471,7 @@ badge.textContent=String(alerts.length);
 badge.style.display=alerts.length?"flex":"none";
 }
 if(button){
-button.title=alerts.length?alerts.length+" bakım yaklaşıyor veya gecikmiş":"Bakım kayıtlarını aç";
+button.title=alerts.length?alerts.length+" bakım yaklaşıyor veya gecikmiş":"Bakım kayıtlarını aç (bulut)";
 }
 }
 
@@ -7386,9 +7517,10 @@ alert("Bakım belgesi PDF olmalıdır.");return;
 }
 
 let id=String(Date.now())+"_"+Math.random().toString(36).slice(2,8);
+let pdfPath="";
 if(file){
-try{await putMaintenancePdf(id,file);}
-catch(error){console.error(error);alert("PDF kaydedilemedi. Bakım kaydı oluşturulmadı.\n\n"+error.message);return;}
+try{pdfPath=await putMaintenancePdf(id,file);}
+catch(error){console.error(error);showCloudAddonError(error);alert("PDF buluta kaydedilemedi. Bakım kaydı oluşturulmadı.\n\n"+error.message);return;}
 }
 
 maintenanceRecords.push({
@@ -7397,12 +7529,13 @@ equipment:equipment,
 date:date,
 performedBy:performedBy,
 pdfName:file?file.name:"",
+pdfPath:pdfPath,
 createdAt:new Date().toISOString()
 });
 maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,equipment]);
 maintenanceVendors=maintenanceUniqueNames([...maintenanceVendors,performedBy]);
-saveMaintenanceMasterLists(false);
-saveMaintenanceRecords();
+await saveMaintenanceMasterLists(false);
+await saveMaintenanceRecords();
 
 document.getElementById("maintenanceEquipment").value="";
 document.getElementById("maintenancePerformedBy").value="";
@@ -7538,9 +7671,9 @@ async function deleteMaintenanceRecord(id){
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record)return;
 if(!confirm(record.equipment+" - "+formatMaintenanceDate(record.date)+" bakım kaydını silmek istediğinize emin misiniz?"))return;
+await deleteMaintenancePdf(record);
 maintenanceRecords=maintenanceRecords.filter(r=>String(r.id)!==String(id));
-saveMaintenanceRecords();
-await deleteMaintenancePdf(id);
+await saveMaintenanceRecords();
 renderMaintenanceRecords();
 }
 
@@ -7565,7 +7698,10 @@ usageSelections:usageSelections,
 
 standardReservations:standardReservations,
 
-consumables:consumables
+consumables:consumables,
+maintenanceRecords:maintenanceRecords,
+maintenanceEquipments:maintenanceEquipments,
+maintenanceVendors:maintenanceVendors
 
 };
 
@@ -7698,9 +7834,24 @@ persistStandardReservations();
 
 if(Array.isArray(backup.consumables)){
 consumables=backup.consumables;
-saveConsumables();
+await saveConsumables();
 }
 
+if(Array.isArray(backup.maintenanceRecords)){
+maintenanceRecords=backup.maintenanceRecords;
+await saveMaintenanceRecords();
+}
+if(Array.isArray(backup.maintenanceEquipments)){
+maintenanceEquipments=maintenanceUniqueNames(backup.maintenanceEquipments);
+}
+if(Array.isArray(backup.maintenanceVendors)){
+maintenanceVendors=maintenanceUniqueNames(backup.maintenanceVendors);
+}
+if(Array.isArray(backup.maintenanceEquipments) || Array.isArray(backup.maintenanceVendors)){
+await saveMaintenanceMasterLists(false);
+}
+
+await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
 await loadData();
 
 
@@ -8649,8 +8800,7 @@ handleKeypadButton(btn);
 
 initNumericKeypad();
 
-loadConsumables();
-loadMaintenanceRecords();
+Promise.all([loadConsumables(),loadMaintenanceRecords()]).catch(console.error);
 setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
 loadUsageSelections();

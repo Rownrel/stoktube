@@ -7479,6 +7479,42 @@ console.warn("Eski bakım PDF'i buluta taşınamadı:",record.id,error);
 if(changed)await saveMaintenanceRecords();
 }
 
+function maintenanceDateFromISO(value){
+if(value instanceof Date){
+if(Number.isNaN(value.getTime()))return null;
+let copy=new Date(value.getFullYear(),value.getMonth(),value.getDate());
+copy.setHours(0,0,0,0);
+return copy;
+}
+
+let text=String(value||"").trim();
+let match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+if(!match)return null;
+
+let year=Number(match[1]);
+let month=Number(match[2]);
+let day=Number(match[3]);
+let date=new Date(year,month-1,day);
+date.setHours(0,0,0,0);
+
+if(
+date.getFullYear()!==year ||
+date.getMonth()!==month-1 ||
+date.getDate()!==day
+)return null;
+
+return date;
+}
+
+function maintenanceDateToISO(value){
+let date=value instanceof Date?maintenanceDateFromISO(value):maintenanceDateFromISO(value);
+if(!date)return "";
+let year=String(date.getFullYear()).padStart(4,"0");
+let month=String(date.getMonth()+1).padStart(2,"0");
+let day=String(date.getDate()).padStart(2,"0");
+return year+"-"+month+"-"+day;
+}
+
 function addMaintenanceMonths(date,months){
 let source=new Date(date.getFullYear(),date.getMonth(),date.getDate());
 let day=source.getDate();

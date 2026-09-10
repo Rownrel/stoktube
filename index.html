@@ -2482,6 +2482,7 @@ oninput="renderPriceResults()"
 <div style="font-size:13px;color:#64748b">Her makine/ekipman için son bakım tarihinden 6 ay sonra yeni bakım planlanır. Son 1 ay kala uyarı başlar.</div>
 </div>
 <div class="maintenance-head-actions">
+<button type="button" class="btn-gray" id="maintenancePasswordSettingsButton">🔐 İndirme Şifresi</button>
 <button type="button" class="btn-dark" onclick="requestMaintenanceDownload('all')">📦 Tüm PDF'leri İndir</button>
 <button type="button" class="btn-blue" onclick="toggleMaintenanceAddPanel(true)">+ Yeni Bakım</button>
 </div>
@@ -2569,21 +2570,48 @@ oninput="renderPriceResults()"
 <!-- BAKIM PDF ŞİFRELİ İNDİRME MODALI -->
 <div class="modal" id="maintenancePasswordModal">
 <div class="modal-box maintenance-download-password-box">
-<h2 id="maintenancePasswordTitle" style="margin-top:0">🔒 Şifreli PDF İndirme</h2>
+<h2 id="maintenancePasswordTitle" style="margin-top:0">🔒 Şifre Doğrulama</h2>
 <div class="maintenance-password-info" id="maintenancePasswordInfo">
-İndirme başlamadan önce bir şifre belirle. Dosya AES-256 şifreli ZIP olarak oluşturulacak ve açarken aynı şifre istenecek.
+Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme veya silme işlemi yapılamaz.
 </div>
 <div class="form-group">
-<label>ZIP Şifresi</label>
+<label>İndirme Şifresi</label>
 <div class="maintenance-password-input-wrap">
-<input id="maintenanceDownloadPassword" type="password" autocomplete="new-password" placeholder="Şifreyi gir">
+<input id="maintenanceDownloadPassword" type="password" autocomplete="current-password" placeholder="Belirlenmiş şifreyi gir">
 <button type="button" class="btn-gray" id="maintenancePasswordToggleButton">Göster</button>
 </div>
 <div class="maintenance-password-error" id="maintenancePasswordError"></div>
 </div>
 <div class="modal-buttons">
 <button type="button" class="btn-gray" id="maintenancePasswordCancelButton">Vazgeç</button>
-<button type="button" class="btn-dark" id="maintenancePasswordDownloadButton">🔒 Şifreli İndir</button>
+<button type="button" class="btn-dark" id="maintenancePasswordDownloadButton">Devam Et</button>
+</div>
+</div>
+</div>
+
+<!-- BAKIM İNDİRME ŞİFRESİ AYAR MODALI -->
+<div class="modal" id="maintenancePasswordSetupModal">
+<div class="modal-box maintenance-download-password-box">
+<h2 id="maintenancePasswordSetupTitle" style="margin-top:0">🔐 İndirme Şifresi Belirle</h2>
+<div class="maintenance-password-info" id="maintenancePasswordSetupInfo">
+Bu şifre bakım PDF'lerini indirmek ve bakım kayıtlarını silmek için kullanılacak. Bulutta şifrenin kendisi değil doğrulama özeti saklanır.
+</div>
+<div class="form-group" id="maintenanceCurrentPasswordGroup" style="display:none">
+<label>Mevcut Şifre</label>
+<input id="maintenanceCurrentPassword" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
+</div>
+<div class="form-group">
+<label>Yeni Şifre</label>
+<input id="maintenanceNewPassword" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+</div>
+<div class="form-group">
+<label>Yeni Şifre Tekrar</label>
+<input id="maintenanceNewPasswordRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
+<div class="maintenance-password-error" id="maintenancePasswordSetupError"></div>
+</div>
+<div class="modal-buttons">
+<button type="button" class="btn-gray" id="maintenancePasswordSetupCancelButton">Vazgeç</button>
+<button type="button" class="btn-green" id="maintenancePasswordSetupSaveButton">Şifreyi Kaydet</button>
 </div>
 </div>
 </div>
@@ -2767,6 +2795,9 @@ const MAINTENANCE_VENDOR_STORAGE_KEY="stokMaintenanceVendorListV1";
 const CLOUD_KEY_MAINTENANCE_RECORDS="maintenance_records";
 const CLOUD_KEY_MAINTENANCE_EQUIPMENTS="maintenance_equipments";
 const CLOUD_KEY_MAINTENANCE_VENDORS="maintenance_vendors";
+const CLOUD_KEY_MAINTENANCE_DOWNLOAD_PASSWORD="maintenance_download_password_v1";
+let maintenanceDownloadPasswordConfig=null;
+let maintenancePasswordConfigLoaded=false;
 /* Bu sürümde kullanıcı eski test bakım/sarf kayıtlarını sıfırlamak istedi.
    İşaret bulutta tutulduğu için hangi bilgisayar önce açarsa açsın yalnızca BİR KEZ çalışır. */
 const CLOUD_KEY_ADDON_RESET_VERSION="addon_reset_version";
@@ -7808,35 +7839,193 @@ event.preventDefault();
 event.stopPropagation();
 let id=btn.dataset.maintId||"";
 if(btn.dataset.maintAction==="download")requestMaintenanceDownload("single",id);
-if(btn.dataset.maintAction==="delete")deleteMaintenanceRecord(id);
+if(btn.dataset.maintAction==="delete")requestMaintenanceDelete(id);
 };
 }
 
 let maintenanceDownloadRequest=null;
 
-function requestMaintenanceDownload(mode,id=""){
+function maintenanceBytesToBase64(bytes){
+let binary="";
+let arr=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
+for(let i=0;i<arr.length;i++)binary+=String.fromCharCode(arr[i]);
+return btoa(binary);
+}
+
+function maintenanceBase64ToBytes(value){
+let binary=atob(String(value||""));
+let arr=new Uint8Array(binary.length);
+for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
+return arr;
+}
+
+async function deriveMaintenancePasswordHash(password,saltBase64,iterations=150000){
+if(!window.crypto?.subtle)throw new Error("Bu tarayıcı güvenli şifre doğrulamayı desteklemiyor.");
+let encoder=new TextEncoder();
+let key=await crypto.subtle.importKey(
+"raw",encoder.encode(String(password)),{name:"PBKDF2"},false,["deriveBits"]
+);
+let bits=await crypto.subtle.deriveBits(
+{name:"PBKDF2",salt:maintenanceBase64ToBytes(saltBase64),iterations:Number(iterations)||150000,hash:"SHA-256"},
+key,256
+);
+return maintenanceBytesToBase64(new Uint8Array(bits));
+}
+
+async function loadMaintenanceDownloadPasswordConfig(force=false){
+if(maintenancePasswordConfigLoaded && !force)return maintenanceDownloadPasswordConfig;
+let value=await cloudStateGet(CLOUD_KEY_MAINTENANCE_DOWNLOAD_PASSWORD);
+if(value && typeof value==="object" && value.salt && value.hash){
+maintenanceDownloadPasswordConfig=value;
+}else{
+maintenanceDownloadPasswordConfig=null;
+}
+maintenancePasswordConfigLoaded=true;
+return maintenanceDownloadPasswordConfig;
+}
+
+async function verifyMaintenanceDownloadPassword(password){
+let config=await loadMaintenanceDownloadPasswordConfig();
+if(!config)return false;
+let hash=await deriveMaintenancePasswordHash(password,config.salt,config.iterations||150000);
+return hash===config.hash;
+}
+
+async function openMaintenancePasswordSetupModal(){
+let modal=document.getElementById("maintenancePasswordSetupModal");
+if(!modal)return;
+let error=document.getElementById("maintenancePasswordSetupError");
+if(error)error.textContent="";
+try{
+let config=await loadMaintenanceDownloadPasswordConfig(true);
+let hasPassword=!!config;
+let currentGroup=document.getElementById("maintenanceCurrentPasswordGroup");
+if(currentGroup)currentGroup.style.display=hasPassword?"flex":"none";
+let title=document.getElementById("maintenancePasswordSetupTitle");
+if(title)title.textContent=hasPassword?"🔐 İndirme Şifresini Değiştir":"🔐 İndirme Şifresi Belirle";
+let info=document.getElementById("maintenancePasswordSetupInfo");
+if(info)info.textContent=hasPassword
+?"Şifreyi değiştirmek için önce mevcut şifreyi doğrula. Yeni şifre bütün bilgisayarlarda geçerli olacak."
+:"Bakım PDF'lerini indirebilmek ve bakım kayıtlarını silebilmek için bir şifre belirle. Yeni şifre bütün bilgisayarlarda geçerli olacak.";
+["maintenanceCurrentPassword","maintenanceNewPassword","maintenanceNewPasswordRepeat"].forEach(id=>{let el=document.getElementById(id);if(el)el.value="";});
+modal.style.display="flex";
+setTimeout(()=>document.getElementById(hasPassword?"maintenanceCurrentPassword":"maintenanceNewPassword")?.focus(),30);
+}catch(err){
+console.error(err);
+showCloudAddonError(err);
+}
+}
+
+function closeMaintenancePasswordSetupModal(){
+let modal=document.getElementById("maintenancePasswordSetupModal");
+if(modal)modal.style.display="none";
+["maintenanceCurrentPassword","maintenanceNewPassword","maintenanceNewPasswordRepeat"].forEach(id=>{let el=document.getElementById(id);if(el)el.value="";});
+let error=document.getElementById("maintenancePasswordSetupError");
+if(error)error.textContent="";
+}
+
+async function saveMaintenanceDownloadPassword(){
+let current=String(document.getElementById("maintenanceCurrentPassword")?.value||"");
+let next=String(document.getElementById("maintenanceNewPassword")?.value||"");
+let repeat=String(document.getElementById("maintenanceNewPasswordRepeat")?.value||"");
+let error=document.getElementById("maintenancePasswordSetupError");
+let button=document.getElementById("maintenancePasswordSetupSaveButton");
+if(error)error.textContent="";
+if(next.length<4){if(error)error.textContent="Yeni şifre en az 4 karakter olmalı.";return;}
+if(next!==repeat){if(error)error.textContent="Yeni şifreler birbiriyle aynı değil.";return;}
+try{
+let existing=await loadMaintenanceDownloadPasswordConfig(true);
+if(existing){
+let valid=await verifyMaintenanceDownloadPassword(current);
+if(!valid){if(error)error.textContent="Mevcut şifre yanlış.";return;}
+}
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+let salt=new Uint8Array(16);crypto.getRandomValues(salt);
+let saltBase64=maintenanceBytesToBase64(salt);
+let iterations=150000;
+let hash=await deriveMaintenancePasswordHash(next,saltBase64,iterations);
+let config={version:1,salt:saltBase64,hash:hash,iterations:iterations,updatedAt:new Date().toISOString()};
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_DOWNLOAD_PASSWORD,config);
+maintenanceDownloadPasswordConfig=config;
+maintenancePasswordConfigLoaded=true;
+closeMaintenancePasswordSetupModal();
+alert("✅ Bakım şifresi kaydedildi. Bundan sonra yanlış şifreyle PDF indirilemez veya bakım kaydı silinemez.");
+}catch(err){
+console.error(err);
+if(error)error.textContent=err?.message||"Şifre kaydedilemedi.";
+}finally{
+if(button){button.disabled=false;button.textContent="Şifreyi Kaydet";}
+}
+}
+
+async function ensureMaintenancePasswordConfigured(){
+try{
+let config=await loadMaintenanceDownloadPasswordConfig();
+if(config)return true;
+alert("Önce bakım işlemleri için bir şifre belirleyin.");
+await openMaintenancePasswordSetupModal();
+return false;
+}catch(err){
+console.error(err);
+showCloudAddonError(err);
+return false;
+}
+}
+
+async function requestMaintenanceDownload(mode,id=""){
+if(!(await ensureMaintenancePasswordConfigured()))return;
+
 let modal=document.getElementById("maintenancePasswordModal");
 let input=document.getElementById("maintenanceDownloadPassword");
 let title=document.getElementById("maintenancePasswordTitle");
 let info=document.getElementById("maintenancePasswordInfo");
 let error=document.getElementById("maintenancePasswordError");
+let actionButton=document.getElementById("maintenancePasswordDownloadButton");
 if(!modal || !input)return;
 
 if(mode==="single"){
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record){alert("Bakım kaydı bulunamadı.");return;}
 if(!record.pdfName){alert("Bu bakım kaydında PDF bulunmuyor.");return;}
-maintenanceDownloadRequest={mode:"single",id:String(id)};
-if(title)title.textContent="🔒 PDF'i Şifreli İndir";
-if(info)info.innerHTML="<strong>"+escapeHTML(record.pdfName)+"</strong><br>PDF, AES-256 şifreli ZIP içine konacak. ZIP'i açarken aşağıda belirlediğin şifre istenecek.";
+maintenanceDownloadRequest={action:"download",mode:"single",id:String(id)};
+if(title)title.textContent="🔒 PDF İndirme Yetkisi";
+if(info)info.innerHTML="<strong>"+escapeHTML(record.pdfName)+"</strong><br>İndirmek için bakım şifresini gir. Şifre doğrulandıktan sonra normal, şifresiz ZIP indirilecek.";
+if(actionButton)actionButton.textContent="İndir";
 }else{
 let count=maintenanceRecords.filter(r=>r.pdfName).length;
 if(!count){alert("İndirilecek bakım PDF'i bulunmuyor.");return;}
-maintenanceDownloadRequest={mode:"all",id:""};
-if(title)title.textContent="🔒 Tüm PDF'leri Şifreli İndir";
-if(info)info.innerHTML="<strong>"+count+" bakım PDF'i</strong> tek AES-256 şifreli ZIP içinde indirilecek. ZIP'i açarken aşağıda belirlediğin şifre istenecek.";
+maintenanceDownloadRequest={action:"download",mode:"all",id:""};
+if(title)title.textContent="🔒 Tüm PDF'leri İndirme Yetkisi";
+if(info)info.innerHTML="<strong>"+count+" bakım PDF'i</strong> indirilecek. Şifre doğrulandıktan sonra PDF'ler normal, şifresiz ZIP içinde hazırlanacak.";
+if(actionButton)actionButton.textContent="İndir";
 }
 
+input.type="password";
+input.value="";
+if(error)error.textContent="";
+let toggle=document.getElementById("maintenancePasswordToggleButton");
+if(toggle)toggle.textContent="Göster";
+modal.style.display="flex";
+setTimeout(()=>input.focus(),30);
+}
+
+async function requestMaintenanceDelete(id){
+let record=maintenanceRecords.find(r=>String(r.id)===String(id));
+if(!record){alert("Bakım kaydı bulunamadı.");return;}
+if(!(await ensureMaintenancePasswordConfigured()))return;
+
+let modal=document.getElementById("maintenancePasswordModal");
+let input=document.getElementById("maintenanceDownloadPassword");
+let title=document.getElementById("maintenancePasswordTitle");
+let info=document.getElementById("maintenancePasswordInfo");
+let error=document.getElementById("maintenancePasswordError");
+let actionButton=document.getElementById("maintenancePasswordDownloadButton");
+if(!modal || !input)return;
+
+maintenanceDownloadRequest={action:"delete",mode:"single",id:String(id)};
+if(title)title.textContent="🔒 Bakım Kaydını Sil";
+if(info)info.innerHTML="<strong>"+escapeHTML(record.equipment)+" — "+escapeHTML(formatMaintenanceDate(record.date))+"</strong><br>Bu bakım kaydını ve bağlı PDF'i silebilmek için şifreyi gir.";
+if(actionButton)actionButton.textContent="Sil";
 input.type="password";
 input.value="";
 if(error)error.textContent="";
@@ -7854,7 +8043,7 @@ if(input){input.value="";input.type="password";}
 let error=document.getElementById("maintenancePasswordError");
 if(error)error.textContent="";
 let btn=document.getElementById("maintenancePasswordDownloadButton");
-if(btn){btn.disabled=false;btn.textContent="🔒 Şifreli İndir";}
+if(btn){btn.disabled=false;btn.textContent="Devam Et";}
 maintenanceDownloadRequest=null;
 }
 
@@ -7868,12 +8057,6 @@ if(button)button.textContent=show?"Gizle":"Göster";
 input.focus();
 }
 
-function ensureEncryptedZipLibrary(){
-if(typeof zip==="undefined" || !zip.ZipWriter || !zip.BlobWriter || !zip.BlobReader){
-throw new Error("Şifreli ZIP bileşeni yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin.");
-}
-}
-
 function triggerMaintenanceBlobDownload(blob,fileName){
 let url=URL.createObjectURL(blob);
 let a=document.createElement("a");
@@ -7885,55 +8068,30 @@ a.remove();
 setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
 
-async function createEncryptedMaintenanceZip(entries,password){
-ensureEncryptedZipLibrary();
-let writer=new zip.ZipWriter(
-new zip.BlobWriter("application/zip"),
-{
-password:password,
-encryptionStrength:3,
-zipCrypto:false,
-useWebWorkers:false
-}
-);
-
-try{
-for(let entry of entries){
-await writer.add(
-entry.path,
-new zip.BlobReader(entry.blob),
-{
-password:password,
-encryptionStrength:3,
-zipCrypto:false,
-useWebWorkers:false
-}
-);
-}
-return await writer.close();
-}catch(error){
-try{await writer.close();}catch{}
-throw error;
-}
-}
-
 function maintenanceSafeFileName(text){
 return String(text||"").replace(/[\\/:*?"<>|]+/g,"_").replace(/\s+/g," ").trim();
 }
 
-async function downloadMaintenancePdfEncrypted(id,password){
+async function createMaintenanceZip(entries){
+if(typeof JSZip==="undefined")throw new Error("ZIP bileşeni yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin.");
+let archive=new JSZip();
+for(let entry of entries)archive.file(entry.path,entry.blob);
+return await archive.generateAsync({type:"blob",compression:"DEFLATE",compressionOptions:{level:6}});
+}
+
+async function downloadMaintenancePdfAuthorized(id){
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record)throw new Error("Bakım kaydı bulunamadı.");
 let stored=await getMaintenancePdf(id);
 if(!stored || !stored.blob)throw new Error("Bu kaydın PDF dosyası bulunamadı.");
 
 let pdfName=maintenanceSafeFileName(record.pdfName || stored.name || "bakim.pdf") || "bakim.pdf";
-let zipBlob=await createEncryptedMaintenanceZip([{path:pdfName,blob:stored.blob}],password);
+let zipBlob=await createMaintenanceZip([{path:pdfName,blob:stored.blob}]);
 let base=pdfName.replace(/\.pdf$/i,"") || "bakim";
-triggerMaintenanceBlobDownload(zipBlob,base+"_sifreli.zip");
+triggerMaintenanceBlobDownload(zipBlob,base+".zip");
 }
 
-async function downloadAllMaintenancePdfsEncrypted(password){
+async function downloadAllMaintenancePdfsAuthorized(){
 let withPdf=maintenanceRecords.filter(r=>r.pdfName);
 if(!withPdf.length)throw new Error("İndirilecek bakım PDF'i bulunmuyor.");
 
@@ -7947,13 +8105,13 @@ let original=maintenanceSafeFileName(record.pdfName||stored.name||"bakim.pdf")||
 let fileName=(record.date?record.date+" - ":"")+original;
 entries.push({path:folder+"/"+fileName,blob:stored.blob});
 }catch(error){
-console.warn("PDF şifreli ZIP'e eklenemedi:",record.id,error);
+console.warn("PDF ZIP'e eklenemedi:",record.id,error);
 }
 }
 if(!entries.length)throw new Error("İndirilebilecek bakım PDF'i bulunamadı.");
 
-let zipBlob=await createEncryptedMaintenanceZip(entries,password);
-triggerMaintenanceBlobDownload(zipBlob,"bakim_pdfleri_"+maintenanceDateToISO(new Date())+"_sifreli.zip");
+let zipBlob=await createMaintenanceZip(entries);
+triggerMaintenanceBlobDownload(zipBlob,"bakim_pdfleri_"+maintenanceDateToISO(new Date())+".zip");
 }
 
 async function confirmMaintenancePasswordDownload(){
@@ -7970,16 +8128,38 @@ input.focus();
 return;
 }
 if(error)error.textContent="";
-if(button){button.disabled=true;button.textContent="Hazırlanıyor...";}
+if(button){button.disabled=true;button.textContent="Şifre doğrulanıyor...";}
 
 try{
-if(request.mode==="single")await downloadMaintenancePdfEncrypted(request.id,password);
-else await downloadAllMaintenancePdfsEncrypted(password);
+let valid=await verifyMaintenanceDownloadPassword(password);
+if(!valid){
+if(error)error.textContent=request.action==="delete"?"Şifre yanlış. Kayıt silinmedi.":"Şifre yanlış. Dosya indirilmedi.";
+if(button){button.disabled=false;button.textContent=request.action==="delete"?"Sil":"İndir";}
+input.select();
+return;
+}
+
+if(request.action==="delete"){
+let record=maintenanceRecords.find(r=>String(r.id)===String(request.id));
+if(!record)throw new Error("Bakım kaydı bulunamadı.");
+if(!confirm(record.equipment+" - "+formatMaintenanceDate(record.date)+" bakım kaydını ve bağlı PDF'i silmek istediğinize emin misiniz?")){
+if(button){button.disabled=false;button.textContent="Sil";}
+return;
+}
+if(button)button.textContent="Siliniyor...";
+await deleteMaintenanceRecordAuthorized(request.id);
+closeMaintenancePasswordModal();
+return;
+}
+
+if(button)button.textContent="Hazırlanıyor...";
+if(request.mode==="single")await downloadMaintenancePdfAuthorized(request.id);
+else await downloadAllMaintenancePdfsAuthorized();
 closeMaintenancePasswordModal();
 }catch(err){
 console.error(err);
-if(error)error.textContent=err?.message||"Şifreli ZIP oluşturulamadı.";
-if(button){button.disabled=false;button.textContent="🔒 Şifreli İndir";}
+if(error)error.textContent=err?.message||(request.action==="delete"?"Kayıt silinemedi.":"ZIP oluşturulamadı.");
+if(button){button.disabled=false;button.textContent=request.action==="delete"?"Sil":"İndir";}
 }
 }
 
@@ -8011,10 +8191,34 @@ confirmMaintenancePasswordDownload();
 }
 }
 
-async function deleteMaintenanceRecord(id){
+function initMaintenancePasswordSetupUi(){
+let settings=document.getElementById("maintenancePasswordSettingsButton");
+let save=document.getElementById("maintenancePasswordSetupSaveButton");
+let cancel=document.getElementById("maintenancePasswordSetupCancelButton");
+if(settings && !settings.dataset.bound){
+settings.dataset.bound="1";
+settings.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();openMaintenancePasswordSetupModal();});
+}
+if(save && !save.dataset.bound){
+save.dataset.bound="1";
+save.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();saveMaintenanceDownloadPassword();});
+}
+if(cancel && !cancel.dataset.bound){
+cancel.dataset.bound="1";
+cancel.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();closeMaintenancePasswordSetupModal();});
+}
+["maintenanceCurrentPassword","maintenanceNewPassword","maintenanceNewPasswordRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el && !el.dataset.bound){
+el.dataset.bound="1";
+el.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();saveMaintenanceDownloadPassword();}});
+}
+});
+}
+
+async function deleteMaintenanceRecordAuthorized(id){
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record)return;
-if(!confirm(record.equipment+" - "+formatMaintenanceDate(record.date)+" bakım kaydını silmek istediğinize emin misiniz?"))return;
 let previous=[...maintenanceRecords];
 maintenanceRecords=maintenanceRecords.filter(r=>String(r.id)!==String(id));
 let ok=await saveMaintenanceRecords();
@@ -9227,6 +9431,7 @@ bindReliablePress("consumableMovementSaveButton",btn=>runBusyButton(btn,"Kaydedi
 initNumericKeypad();
 initReliableAddonButtons();
 initMaintenancePasswordDownloadUi();
+initMaintenancePasswordSetupUi();
 
 (async()=>{
 await resetAddonCloudDataOnce();

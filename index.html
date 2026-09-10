@@ -3922,10 +3922,13 @@ event.target.value="";
 
 /* 6 metre olmayan parçalar için "kullanılacak / ayrıldı" işareti ve iş/proje kodu */
 const USAGE_STORAGE_KEY="stokTubeUsageSelections";
+const CLOUD_KEY_USAGE_SELECTIONS="stock_usage_selections_v1";
 let usageSelections={};
 let usageEditingId=null;
+let usageCloudSaveTimer=null;
 
 const STANDARD_RESERVATION_STORAGE_KEY="stokTubeStandardReservations";
+const CLOUD_KEY_STANDARD_RESERVATIONS="stock_standard_reservations_v1";
 let standardReservations={};
 let pendingProductReservations=[];
 let reservationProductId=null;
@@ -3948,12 +3951,33 @@ return null;
 
 }
 
-function loadUsageSelections(){
+async function loadUsageSelections(){
+
+let raw={};
 
 try{
+let cloud=await cloudStateGet(CLOUD_KEY_USAGE_SELECTIONS);
 
+if(cloud && typeof cloud==="object" && !Array.isArray(cloud)){
+raw=cloud;
+}
+else{
+/* İlk geçişte bu bilgisayardaki eski kayıtları buluta taşı. */
 let saved=localStorage.getItem(USAGE_STORAGE_KEY);
-let raw=saved ? JSON.parse(saved) : {};
+raw=saved ? JSON.parse(saved) : {};
+if(raw && typeof raw==="object" && Object.keys(raw).length){
+await cloudStateSet(CLOUD_KEY_USAGE_SELECTIONS,raw);
+}
+}
+}
+catch(error){
+console.error("Kullanılabilir/Ayrıldı bulut okuma hatası:",error);
+try{
+let saved=localStorage.getItem(USAGE_STORAGE_KEY);
+raw=saved ? JSON.parse(saved) : {};
+}catch{raw={};}
+}
+
 usageSelections={};
 
 if(raw && typeof raw==="object"){
@@ -3965,19 +3989,35 @@ usageSelections[key]=normalized;
 });
 }
 
-}
-catch{
-usageSelections={};
-}
+try{localStorage.setItem(USAGE_STORAGE_KEY,JSON.stringify(usageSelections));}catch{}
+if(typeof showProducts==="function")showProducts();
 
 }
 
-function persistUsageSelections(){
+function persistUsageSelections(immediate=false){
 
-localStorage.setItem(
-USAGE_STORAGE_KEY,
-JSON.stringify(usageSelections)
-);
+try{
+localStorage.setItem(USAGE_STORAGE_KEY,JSON.stringify(usageSelections));
+}catch{}
+
+if(usageCloudSaveTimer){
+clearTimeout(usageCloudSaveTimer);
+usageCloudSaveTimer=null;
+}
+
+let saveNow=()=>{
+cloudStateSet(CLOUD_KEY_USAGE_SELECTIONS,usageSelections).catch(error=>{
+console.error("Kullanılabilir/Ayrıldı bulut kaydetme hatası:",error);
+});
+};
+
+if(immediate){
+saveNow();
+}
+else{
+/* İş/proje kodu yazarken her harfte istek atma; kısa gecikmeyle tek sefer kaydet. */
+usageCloudSaveTimer=setTimeout(saveNow,300);
+}
 
 }
 
@@ -4008,7 +4048,7 @@ delete usageSelections[key];
 if(usageEditingId===key)usageEditingId=null;
 }
 
-persistUsageSelections();
+persistUsageSelections(true);
 showProducts();
 
 /* İlk tikte kod girişini bir kez aç. */
@@ -4043,6 +4083,7 @@ focusUsageNoteInput(id);
 function finishUsageNoteEdit(id,input){
 
 if(input)setUsageNote(id,input);
+persistUsageSelections(true);
 usageEditingId=null;
 if(typeof closeNumericKeypad==="function")closeNumericKeypad();
 showProducts();
@@ -4064,7 +4105,7 @@ selected:true,
 note:value
 };
 
-persistUsageSelections();
+persistUsageSelections(false);
 
 }
 
@@ -4081,10 +4122,29 @@ if(!Number.isFinite(quantity) || quantity<=0 || !note)return null;
 if(!id)id="r"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 return {id:id,quantity:Math.floor(quantity),note:note};
 }
-function loadStandardReservations(){
+async function loadStandardReservations(){
+let raw={};
+try{
+let cloud=await cloudStateGet(CLOUD_KEY_STANDARD_RESERVATIONS);
+if(cloud && typeof cloud==="object" && !Array.isArray(cloud)){
+raw=cloud;
+}
+else{
+/* İlk geçişte mevcut bilgisayardaki + Ayır kayıtlarını buluta taşı. */
+let saved=localStorage.getItem(STANDARD_RESERVATION_STORAGE_KEY);
+raw=saved ? JSON.parse(saved) : {};
+if(raw && typeof raw==="object" && Object.keys(raw).length){
+await cloudStateSet(CLOUD_KEY_STANDARD_RESERVATIONS,raw);
+}
+}
+}catch(error){
+console.error("+ Ayır rezervasyonları bulut okuma hatası:",error);
 try{
 let saved=localStorage.getItem(STANDARD_RESERVATION_STORAGE_KEY);
-let raw=saved ? JSON.parse(saved) : {};
+raw=saved ? JSON.parse(saved) : {};
+}catch{raw={};}
+}
+
 standardReservations={};
 if(raw && typeof raw==="object"){
 Object.keys(raw).forEach(key=>{
@@ -4093,10 +4153,15 @@ let clean=list.map(normalizeReservation).filter(Boolean);
 if(clean.length)standardReservations[String(key)]=clean;
 });
 }
-}catch{standardReservations={};}
+try{localStorage.setItem(STANDARD_RESERVATION_STORAGE_KEY,JSON.stringify(standardReservations));}catch{}
+if(typeof showProducts==="function")showProducts();
 }
+
 function persistStandardReservations(){
 try{localStorage.setItem(STANDARD_RESERVATION_STORAGE_KEY,JSON.stringify(standardReservations));}catch{}
+cloudStateSet(CLOUD_KEY_STANDARD_RESERVATIONS,standardReservations).catch(error=>{
+console.error("+ Ayır rezervasyonları bulut kaydetme hatası:",error);
+});
 }
 function isStandardReservableProduct(product){
 if(!product || !isStandardLength(product.length))return false;
@@ -6659,10 +6724,13 @@ const NPU_KG_PER_M={
 
 function getMaterialDensity(quality){
 let q=normalizeQuality(quality);
+/* Kullanıcı talebi: ST37 kg hesabında 6,8 katsayısı kullanılır.
+   Formüldeki yoğunluk karşılığı 6,8 g/cm³ = 6800 kg/m³. */
+if(q==="ST37")return 6800;
 if(q==="Alüminyum")return 2700;
 if(q==="304")return 7930;
 if(q==="316" || q==="316L")return 8000;
-/* ST37, ST52, Galvaniz ve bilinmeyen çelikler */
+/* ST52, Galvaniz ve bilinmeyen çelikler */
 return 7850;
 }
 
@@ -10049,8 +10117,11 @@ await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
 })().catch(console.error);
 setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
-loadUsageSelections();
-loadStandardReservations();
+
+/* + Ayır ve Kullanılabilir/Ayrıldı bilgileri artık Supabase ortak verisinden yüklenir. */
+Promise.all([loadUsageSelections(),loadStandardReservations()])
+.then(()=>{showProducts();})
+.catch(console.error);
 
 fillSizeOptions();
 updateProductReservationVisibility();

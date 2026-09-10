@@ -1279,182 +1279,6 @@ white-space:nowrap
 }
 
 /* =====================================================
-   BAKIM + SARF BULUT DURUMU
-===================================================== */
-
-function showCloudAddonError(error){
-console.error("Bakım/Sarf Supabase hatası:",error);
-if(cloudAddonErrorShown)return;
-cloudAddonErrorShown=true;
-setTimeout(()=>alert(
-"Bakım ve Sarf Malzemeleri bulut alanına bağlanamadı.\n\n"+
-"StokAppData tablosu ve maintenance-pdfs bucket'ı Supabase'de bir kez kurulmalıdır. " +
-"Kurulumdan sonra bu dosya bütün bilgisayarlarda aynı bakım/sarf verisini gösterecek.\n\n"+
-(error?.message||String(error||""))
-),250);
-}
-
-async function cloudStateGet(key){
-let response=await fetch(
-SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?select=value&key=eq."+encodeURIComponent(key)+"&limit=1",
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Accept":"application/json"
-}
-}
-);
-let text=await response.text();
-if(!response.ok)throw new Error("Bulut veri okuma hatası: "+response.status+" "+text);
-let rows=text?JSON.parse(text):[];
-return Array.isArray(rows)&&rows.length?rows[0].value:null;
-}
-
-async function cloudStateSet(key,value){
-let response=await fetch(
-SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?on_conflict=key",
-{
-method:"POST",
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":"application/json",
-"Prefer":"resolution=merge-duplicates,return=minimal"
-},
-body:JSON.stringify({key:key,value:value,updated_at:new Date().toISOString()})
-}
-);
-let text=await response.text();
-if(!response.ok)throw new Error("Bulut veri kaydetme hatası: "+response.status+" "+text);
-}
-
-function getLocalJson(storageKey,fallback){
-try{
-let raw=localStorage.getItem(storageKey);
-if(!raw)return fallback;
-return JSON.parse(raw);
-}catch{return fallback;}
-}
-
-async function loadCloudArray(key,localKey){
-try{
-let cloud=await cloudStateGet(key);
-if(Array.isArray(cloud))return cloud;
-let local=getLocalJson(localKey,[]);
-if(Array.isArray(local)&&local.length){
-await cloudStateSet(key,local);
-return local;
-}
-return [];
-}catch(error){
-showCloudAddonError(error);
-let local=getLocalJson(localKey,[]);
-return Array.isArray(local)?local:[];
-}
-}
-
-async function saveCloudArray(key,localKey,value){
-/* Bulut ana kaynak. Buluta yazılamayan veri localStorage'a da yazılmıyor;
-   böylece görünmeyen/eski kayıtların daha sonra tekrar buluta taşınması engellenir. */
-try{
-await cloudStateSet(key,value);
-try{localStorage.setItem(localKey,JSON.stringify(value));}catch{}
-return true;
-}catch(error){
-showCloudAddonError(error);
-return false;
-}
-}
-
-async function resetAddonCloudDataOnce(){
-try{
-let current=await cloudStateGet(CLOUD_KEY_ADDON_RESET_VERSION);
-if(current===ADDON_RESET_VERSION)return;
-
-/* Kullanıcının isteğiyle eski test kayıtlarını tamamen temizle. */
-await cloudStateSet(CLOUD_KEY_CONSUMABLES,[]);
-await cloudStateSet(CLOUD_KEY_MAINTENANCE_RECORDS,[]);
-await cloudStateSet(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,[]);
-await cloudStateSet(CLOUD_KEY_MAINTENANCE_VENDORS,[]);
-await cloudStateSet(CLOUD_KEY_ADDON_RESET_VERSION,ADDON_RESET_VERSION);
-
-consumables=[];
-maintenanceRecords=[];
-maintenanceEquipments=[];
-maintenanceVendors=[];
-
-[CONSUMABLES_STORAGE_KEY,MAINTENANCE_STORAGE_KEY,MAINTENANCE_EQUIPMENT_STORAGE_KEY,MAINTENANCE_VENDOR_STORAGE_KEY].forEach(key=>{
-try{localStorage.removeItem(key);}catch{}
-});
-}catch(error){
-console.error("Bakım/sarf ilk sıfırlama hatası:",error);
-showCloudAddonError(error);
-}
-}
-
-function encodeStoragePath(path){
-return String(path||"").split("/").map(encodeURIComponent).join("/");
-}
-
-async function uploadMaintenancePdfToCloud(id,file){
-let safeName=maintenanceSafeFileName(file.name||"bakim.pdf")||"bakim.pdf";
-let path=String(id)+"/"+safeName;
-let response=await fetch(
-SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
-{
-method:"POST",
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":file.type||"application/pdf",
-"x-upsert":"true"
-},
-body:file
-}
-);
-let text=await response.text();
-if(!response.ok)throw new Error("PDF buluta yüklenemedi: "+response.status+" "+text);
-return path;
-}
-
-async function downloadMaintenancePdfFromCloud(path){
-let response=await fetch(
-SUPABASE_URL+"/storage/v1/object/authenticated/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
-}
-}
-);
-let text="";
-if(!response.ok){
-try{text=await response.text();}catch{}
-throw new Error("PDF buluttan okunamadı: "+response.status+" "+text);
-}
-return await response.blob();
-}
-
-async function deleteMaintenancePdfFromCloud(path){
-if(!path)return;
-let response=await fetch(
-SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET,
-{
-method:"DELETE",
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({prefixes:[path]})
-}
-);
-let text=await response.text();
-if(!response.ok)throw new Error("PDF buluttan silinemedi: "+response.status+" "+text);
-}
-
-/* =====================================================
    SARF MALZEMELERİ
 ===================================================== */
 .btn-consumables{
@@ -2888,6 +2712,184 @@ const ADDON_RESET_VERSION="2026-09-10-bakim-sarf-temiz-v1";
 const MAINTENANCE_DB_NAME="stokMaintenancePdfDBV1";
 const MAINTENANCE_DB_STORE="pdfs";
 let cloudAddonErrorShown=false;
+
+
+/* =====================================================
+   BAKIM + SARF BULUT DURUMU
+===================================================== */
+
+function showCloudAddonError(error){
+console.error("Bakım/Sarf Supabase hatası:",error);
+if(cloudAddonErrorShown)return;
+cloudAddonErrorShown=true;
+setTimeout(()=>alert(
+"Bakım ve Sarf Malzemeleri bulut alanına bağlanamadı.\n\n"+
+"StokAppData tablosu ve maintenance-pdfs bucket'ı Supabase'de bir kez kurulmalıdır. " +
+"Kurulumdan sonra bu dosya bütün bilgisayarlarda aynı bakım/sarf verisini gösterecek.\n\n"+
+(error?.message||String(error||""))
+),250);
+}
+
+async function cloudStateGet(key){
+let response=await fetch(
+SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?select=value&key=eq."+encodeURIComponent(key)+"&limit=1",
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Accept":"application/json"
+}
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("Bulut veri okuma hatası: "+response.status+" "+text);
+let rows=text?JSON.parse(text):[];
+return Array.isArray(rows)&&rows.length?rows[0].value:null;
+}
+
+async function cloudStateSet(key,value){
+let response=await fetch(
+SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?on_conflict=key",
+{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json",
+"Prefer":"resolution=merge-duplicates,return=minimal"
+},
+body:JSON.stringify({key:key,value:value,updated_at:new Date().toISOString()})
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("Bulut veri kaydetme hatası: "+response.status+" "+text);
+}
+
+function getLocalJson(storageKey,fallback){
+try{
+let raw=localStorage.getItem(storageKey);
+if(!raw)return fallback;
+return JSON.parse(raw);
+}catch{return fallback;}
+}
+
+async function loadCloudArray(key,localKey){
+try{
+let cloud=await cloudStateGet(key);
+if(Array.isArray(cloud))return cloud;
+let local=getLocalJson(localKey,[]);
+if(Array.isArray(local)&&local.length){
+await cloudStateSet(key,local);
+return local;
+}
+return [];
+}catch(error){
+showCloudAddonError(error);
+let local=getLocalJson(localKey,[]);
+return Array.isArray(local)?local:[];
+}
+}
+
+async function saveCloudArray(key,localKey,value){
+/* Bulut ana kaynak. Buluta yazılamayan veri localStorage'a da yazılmıyor;
+   böylece görünmeyen/eski kayıtların daha sonra tekrar buluta taşınması engellenir. */
+try{
+await cloudStateSet(key,value);
+try{localStorage.setItem(localKey,JSON.stringify(value));}catch{}
+return true;
+}catch(error){
+showCloudAddonError(error);
+return false;
+}
+}
+
+async function resetAddonCloudDataOnce(){
+try{
+let current=await cloudStateGet(CLOUD_KEY_ADDON_RESET_VERSION);
+if(current===ADDON_RESET_VERSION)return;
+
+/* Kullanıcının isteğiyle eski test kayıtlarını tamamen temizle. */
+await cloudStateSet(CLOUD_KEY_CONSUMABLES,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_RECORDS,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_EQUIPMENTS,[]);
+await cloudStateSet(CLOUD_KEY_MAINTENANCE_VENDORS,[]);
+await cloudStateSet(CLOUD_KEY_ADDON_RESET_VERSION,ADDON_RESET_VERSION);
+
+consumables=[];
+maintenanceRecords=[];
+maintenanceEquipments=[];
+maintenanceVendors=[];
+
+[CONSUMABLES_STORAGE_KEY,MAINTENANCE_STORAGE_KEY,MAINTENANCE_EQUIPMENT_STORAGE_KEY,MAINTENANCE_VENDOR_STORAGE_KEY].forEach(key=>{
+try{localStorage.removeItem(key);}catch{}
+});
+}catch(error){
+console.error("Bakım/sarf ilk sıfırlama hatası:",error);
+showCloudAddonError(error);
+}
+}
+
+function encodeStoragePath(path){
+return String(path||"").split("/").map(encodeURIComponent).join("/");
+}
+
+async function uploadMaintenancePdfToCloud(id,file){
+let safeName=maintenanceSafeFileName(file.name||"bakim.pdf")||"bakim.pdf";
+let path=String(id)+"/"+safeName;
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
+{
+method:"POST",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":file.type||"application/pdf",
+"x-upsert":"true"
+},
+body:file
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("PDF buluta yüklenemedi: "+response.status+" "+text);
+return path;
+}
+
+async function downloadMaintenancePdfFromCloud(path){
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/authenticated/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path),
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY
+}
+}
+);
+let text="";
+if(!response.ok){
+try{text=await response.text();}catch{}
+throw new Error("PDF buluttan okunamadı: "+response.status+" "+text);
+}
+return await response.blob();
+}
+
+async function deleteMaintenancePdfFromCloud(path){
+if(!path)return;
+let response=await fetch(
+SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET,
+{
+method:"DELETE",
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({prefixes:[path]})
+}
+);
+let text=await response.text();
+if(!response.ok)throw new Error("PDF buluttan silinemedi: "+response.status+" "+text);
+}
+
 let maintenanceRecords=[];
 let maintenanceEquipments=[];
 let maintenanceVendors=[];

@@ -564,6 +564,41 @@ padding:7px 9px;
 font-size:12px
 }
 
+.product-menu-button{
+min-width:34px;
+font-size:20px !important;
+line-height:1;
+padding:5px 9px !important;
+}
+
+.product-action-menu{
+display:none;
+position:fixed;
+z-index:2500;
+min-width:145px;
+background:white;
+border:1px solid #cbd5e1;
+border-radius:9px;
+box-shadow:0 10px 28px #0003;
+padding:5px;
+}
+
+.product-action-menu.open{display:block}
+
+.product-action-menu button{
+display:block;
+width:100%;
+text-align:left;
+background:white;
+color:#1e293b;
+padding:10px 12px;
+border-radius:6px;
+font-size:13px;
+}
+
+.product-action-menu button:hover{background:#f1f5f9}
+.product-action-menu .danger{color:#b91c1c}
+
 .empty{
 text-align:center;
 padding:35px;
@@ -2337,7 +2372,7 @@ placeholder="Örn: 5,4"
 
 <div class="form-group">
 
-<label>
+<label id="productStockLabel">
 Başlangıç Stoku
 </label>
 
@@ -2396,7 +2431,7 @@ placeholder="İsteğe bağlı"
 Vazgeç
 </button>
 
-<button class="btn-blue" onclick="addProduct()">
+<button class="btn-blue" id="productSaveButton" onclick="addProduct()">
 Kaydet
 </button>
 
@@ -3033,6 +3068,8 @@ let movements=[];
 let currentPage="Genel";
 let currentProductId=null;
 let currentMovementType=null;
+let editingProductId=null;
+let productActionMenuProductId=null;
 
 /* Satın alma Excel aktarımı */
 let purchaseImportRows=[];
@@ -5984,15 +6021,64 @@ showMovements();
    MALZEME MODALI
 ===================================================== */
 
-function openProductModal(){
+function setSelectValueFlexible(select,value){
+if(!select)return;
+let wanted=normalizeText(value);
+let found=Array.from(select.options).find(opt=>normalizeText(opt.value)===wanted);
+if(!found && String(value||"").trim()){
+let option=document.createElement("option");
+option.value=String(value);
+option.textContent=String(value);
+select.appendChild(option);
+found=option;
+}
+if(found)select.value=found.value;
+}
 
+function getEditableDescription(product){
+let text=String(product?.description||"");
+text=stripFinishMarker(text);
+text=stripPipeSeamMarker(text);
+return text.trim();
+}
+
+function setProductEditMode(isEditing){
+let saveButton=document.getElementById("productSaveButton");
+let stockInput=document.getElementById("productStock");
+let stockLabel=document.getElementById("productStockLabel");
+let reservationSection=document.getElementById("productReservationSection");
+
+if(saveButton)saveButton.innerText=isEditing?"Değişiklikleri Kaydet":"Kaydet";
+if(stockInput){
+stockInput.disabled=!!isEditing;
+stockInput.style.background=isEditing?"#f1f5f9":"";
+stockInput.title=isEditing?"Stok miktarını + Giriş / - Çıkış ile değiştirin.":"";
+}
+if(stockLabel)stockLabel.innerText=isEditing?"Mevcut Stok":"Başlangıç Stoku";
+if(isEditing && reservationSection)reservationSection.style.display="none";
+}
+
+function openProductModal(editId=null){
+
+editingProductId=editId!==null && editId!==undefined ? Number(editId) : null;
+let editingProduct=editingProductId!==null
+?products.find(p=>Number(p.id)===Number(editingProductId))
+:null;
+
+if(editingProductId!==null && !editingProduct){
+editingProductId=null;
+alert("Düzenlenecek malzeme bulunamadı.");
+return;
+}
+
+if(!editingProduct){
+clearProductForm();
 let type =
 ["Profil","Boru","Köşebent","Lama","NPU"].includes(currentPage)
 ?currentPage
 :"Profil";
 
 document.getElementById("productType").value=type;
-
 typeChanged();
 
 const modalTitles={
@@ -6004,13 +6090,44 @@ const modalTitles={
 };
 
 document.getElementById("productModalTitle").innerText=modalTitles[type]||"Yeni Malzeme";
-
 pendingProductReservations=[];
 renderPendingProductReservations();
 updateProductReservationVisibility();
+setProductEditMode(false);
+}
+else{
+let type=editingProduct.type;
+setSelectValueFlexible(document.getElementById("productType"),type);
+typeChanged();
+
+if(type==="Profil"){
+setSelectValueFlexible(document.getElementById("productShape"),editingProduct.shape||"Kare");
+shapeChanged();
+}
+
+setSelectValueFlexible(document.getElementById("productQuality"),editingProduct.quality);
+setSelectValueFlexible(document.getElementById("productFinish"),getProductFinish(editingProduct));
+if(type==="Boru")setSelectValueFlexible(document.getElementById("productPipeSeam"),getProductPipeSeam(editingProduct));
+
+if(["Köşebent","Lama","NPU"].includes(type)){
+document.getElementById("productSizeManual").value=editingProduct.size||"";
+}
+else{
+setSelectValueFlexible(document.getElementById("productSize"),editingProduct.size);
+}
+
+document.getElementById("productThickness").value=String(editingProduct.thickness||"").replace(/\s*mm$/i,"");
+document.getElementById("productLength").value=String(parseLength(editingProduct.length)).replace(".",",");
+document.getElementById("productStock").value=String(Number(editingProduct.stock)||0);
+document.getElementById("productDescription").value=getEditableDescription(editingProduct);
+
+pendingProductReservations=[];
+renderPendingProductReservations();
+document.getElementById("productModalTitle").innerText="✏️ Malzeme Düzenle";
+setProductEditMode(true);
+}
 
 document.getElementById("productModal").style.display="flex";
-
 }
 
 
@@ -6020,6 +6137,9 @@ closeNumericKeypad();
 
 document.getElementById("productModal")
 .style.display="none";
+
+editingProductId=null;
+setProductEditMode(false);
 
 }
 
@@ -6106,6 +6226,10 @@ return;
 let existing =
 products.find(p =>
 
+Number(p.id)!==Number(editingProductId)
+
+&&
+
 normalizeText(p.type) ===
 normalizeText(type)
 
@@ -6172,6 +6296,77 @@ formatLength(existing.length)+
 
 return;
 
+}
+
+
+if(editingProductId!==null){
+let original=products.find(p=>Number(p.id)===Number(editingProductId));
+if(!original){alert("Düzenlenecek malzeme bulunamadı.");return;}
+
+/* 6 m bir malzeme daha kısa/uzun boya çevriliyorsa mevcut + Ayır kayıtlarının kaybolmasına izin verme. */
+if(!isStandardLength(length) && getStandardReservations(original.id).length){
+alert("Bu malzemede aktif '+ Ayır' kayıtları var.\n\nBoy bilgisini 6 metreden farklı yapmadan önce ana tablodaki ayırma kayıtlarını kaldırın.");
+return;
+}
+
+let updatePayload={
+type:type,
+shape:shape,
+quality:quality,
+size:size,
+thickness:thickness,
+length:length,
+description:description
+};
+
+try{
+let result=await supabaseRequest(
+PRODUCTS_TABLE,
+"PATCH",
+updatePayload,
+"?id=eq."+encodeURIComponent(original.id)
+);
+
+let updated=(Array.isArray(result)&&result.length)?result[0]:{...original,...updatePayload};
+let index=products.findIndex(p=>Number(p.id)===Number(original.id));
+if(index>=0)products[index]={...products[index],...updated,stock:original.stock};
+
+/* Hareket snapshot'larını da düzelt; ürün ileride silinse bile güncel tanım geçmişte kalır. */
+let relatedMovements=movements.filter(m=>Number(m.product_id)===Number(original.id));
+for(let m of relatedMovements){
+let movementPatch={
+product_name:type,
+shape:shape,
+quality:quality,
+size:size,
+thickness:thickness,
+length:length
+};
+await supabaseRequest(
+MOVEMENTS_TABLE,
+"PATCH",
+movementPatch,
+"?id=eq."+encodeURIComponent(m.id)
+);
+Object.assign(m,movementPatch);
+}
+
+/* 6 m'ye dönüşte 6 m dışı Kullanılabilir/Ayrıldı işareti artık geçerli değildir. */
+if(isStandardLength(length) && usageSelections[String(original.id)]){
+delete usageSelections[String(original.id)];
+persistUsageSelections();
+}
+
+closeProductModal();
+showProducts();
+showMovements();
+alert("✅ Malzeme düzenlendi ve Supabase'e kaydedildi.");
+}
+catch(error){
+console.error(error);
+alert("❌ Malzeme düzenlenemedi.\n\n"+error.message);
+}
+return;
 }
 
 
@@ -7115,9 +7310,11 @@ onclick="openMovementModal(${p.id},'Çıkış')">
 </button>
 
 <button
-class="btn-gray"
-onclick="deleteProduct(${p.id})">
-Sil
+class="btn-gray product-menu-button"
+onclick="openProductActionMenu(${p.id},this,event)"
+title="Düzenle / Sil"
+aria-label="Malzeme işlemleri">
+⋮
 </button>
 
 </div>
@@ -7333,6 +7530,66 @@ document.getElementById(
 
 }
 
+
+/* =====================================================
+   MALZEME İŞLEM MENÜSÜ — DÜZENLE / SİL
+===================================================== */
+function ensureProductActionMenu(){
+let menu=document.getElementById("productActionMenu");
+if(menu)return menu;
+menu=document.createElement("div");
+menu.id="productActionMenu";
+menu.className="product-action-menu";
+menu.innerHTML='<button type="button" id="productMenuEdit">✏️ Düzenle</button><button type="button" id="productMenuDelete" class="danger">🗑️ Sil</button>';
+document.body.appendChild(menu);
+
+document.getElementById("productMenuEdit").addEventListener("click",function(event){
+event.preventDefault();event.stopPropagation();
+let id=productActionMenuProductId;
+closeProductActionMenu();
+if(id!==null)openProductModal(id);
+});
+
+document.getElementById("productMenuDelete").addEventListener("click",function(event){
+event.preventDefault();event.stopPropagation();
+let id=productActionMenuProductId;
+closeProductActionMenu();
+if(id!==null)deleteProduct(id);
+});
+return menu;
+}
+
+function openProductActionMenu(id,button,event){
+if(event){event.preventDefault();event.stopPropagation();}
+let menu=ensureProductActionMenu();
+productActionMenuProductId=Number(id);
+menu.classList.add("open");
+menu.style.visibility="hidden";
+menu.style.left="0px";
+menu.style.top="0px";
+
+let rect=button.getBoundingClientRect();
+let menuRect=menu.getBoundingClientRect();
+let left=Math.max(8,Math.min(window.innerWidth-menuRect.width-8,rect.right-menuRect.width));
+let top=rect.bottom+5;
+if(top+menuRect.height>window.innerHeight-8)top=Math.max(8,rect.top-menuRect.height-5);
+menu.style.left=left+"px";
+menu.style.top=top+"px";
+menu.style.visibility="visible";
+}
+
+function closeProductActionMenu(){
+let menu=document.getElementById("productActionMenu");
+if(menu){menu.classList.remove("open");menu.style.visibility="";}
+productActionMenuProductId=null;
+}
+
+document.addEventListener("click",function(event){
+let menu=document.getElementById("productActionMenu");
+if(menu && menu.classList.contains("open") && !menu.contains(event.target))closeProductActionMenu();
+});
+window.addEventListener("scroll",closeProductActionMenu,true);
+window.addEventListener("resize",closeProductActionMenu);
 
 /* =====================================================
    SİL

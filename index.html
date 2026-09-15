@@ -1889,6 +1889,544 @@ margin-right:auto
 .settings-section-actions button{width:100%}
 }
 
+
+/* =====================================================
+   İŞ PLANLAMA
+===================================================== */
+
+.btn-jobplan{
+position:relative;
+background:#0f766e;
+color:white;
+white-space:nowrap
+}
+
+.jobplan-badge{
+position:absolute;
+top:-9px;
+right:-9px;
+min-width:22px;
+height:22px;
+padding:0 6px;
+border-radius:999px;
+background:#f59e0b;
+color:#1e293b;
+border:2px solid #172033;
+font-size:12px;
+font-weight:900;
+display:none;
+align-items:center;
+justify-content:center;
+line-height:1
+}
+
+.jobplan-modal-box{
+max-width:1280px
+}
+
+.jobplan-head{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:14px;
+flex-wrap:wrap;
+margin-bottom:12px
+}
+
+.jobplan-head-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.jobplan-settings{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:12px 14px;
+margin-bottom:14px;
+display:flex;
+gap:18px;
+flex-wrap:wrap;
+align-items:center
+}
+
+.jobplan-settings{
+flex-direction:column;
+align-items:stretch
+}
+
+.jobplan-shift-row{
+display:flex;
+gap:14px;
+align-items:center;
+flex-wrap:wrap;
+padding:8px 10px;
+border-radius:8px;
+background:white;
+border:1px solid #e2e8f0
+}
+
+.jobplan-shift-row.off{
+opacity:.45;
+background:#f1f5f9
+}
+
+.jobplan-shift-name{
+min-width:104px
+}
+
+.jobplan-shift-hours{
+font-size:13px;
+font-weight:bold;
+color:#0f766e;
+min-width:96px
+}
+
+.jobplan-switch{
+display:flex;
+align-items:center;
+gap:7px;
+font-weight:bold;
+font-size:13px;
+cursor:pointer;
+user-select:none
+}
+
+.jobplan-switch input{
+width:18px;
+height:18px;
+cursor:pointer
+}
+
+.jobplan-days{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+align-items:center
+}
+
+.jobplan-day{
+display:flex;
+align-items:center;
+gap:4px;
+background:white;
+border:1px solid #cbd5e1;
+border-radius:6px;
+padding:4px 8px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer
+}
+
+.jobplan-day.on{
+background:#0f766e;
+border-color:#0f766e;
+color:white
+}
+
+.jobplan-day input{
+display:none
+}
+
+.jobplan-hours{
+font-size:12px;
+color:#475569;
+line-height:1.6;
+flex:1;
+min-width:240px
+}
+
+.jobplan-hours strong{
+color:#0f766e
+}
+
+.jobplan-summary{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:12px
+}
+
+.jobplan-chip{
+background:#e2e8f0;
+border-radius:999px;
+padding:6px 14px;
+font-size:13px;
+font-weight:bold;
+color:#1e293b
+}
+
+.jobplan-chip.warning{
+background:#fee2e2;
+color:#b91c1c
+}
+
+.jobplan-chip.ok{
+background:#dcfce7;
+color:#166534
+}
+
+.jobplan-import-panel{
+display:none;
+background:#fff7ed;
+border:2px solid #fdba74;
+border-radius:10px;
+padding:14px;
+margin-bottom:14px
+}
+
+.jobplan-import-panel.open{
+display:block
+}
+
+.jobplan-import-title{
+font-weight:bold;
+font-size:15px;
+margin-bottom:10px
+}
+
+.jobplan-table-wrap{
+overflow-x:auto;
+border:1px solid #e2e8f0;
+border-radius:10px
+}
+
+.jobplan-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+min-width:960px
+}
+
+.jobplan-table th,
+.jobplan-table td{
+border:1px solid #e2e8f0;
+padding:8px 10px;
+font-size:13px;
+text-align:left;
+vertical-align:middle
+}
+
+.jobplan-table th{
+background:#f1f5f9;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.3px;
+color:#475569
+}
+
+.jobplan-table tr.jobplan-dt-row{
+background:#f8fafc;
+font-weight:bold;
+cursor:pointer
+}
+
+.jobplan-table tr.jobplan-dt-row:hover{
+background:#eef2f7
+}
+
+.jobplan-table tr.jobplan-dt-row.shortage{
+background:#fef2f2
+}
+
+.jobplan-table tr.jobplan-file-row td{
+background:white;
+font-weight:normal
+}
+
+.jobplan-table tr.jobplan-file-row.done td{
+background:#f0fdf4
+}
+
+.jobplan-table tr.jobplan-file-row.running td{
+background:#eff6ff
+}
+
+.jobplan-dt-name{
+font-size:15px;
+color:#0f766e
+}
+
+.jobplan-caret{
+display:inline-block;
+width:14px;
+color:#64748b
+}
+
+.jobplan-percent{
+width:62px;
+padding:4px 6px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+font-size:13px;
+text-align:right
+}
+
+.jobplan-order-btns{
+display:flex;
+flex-direction:column;
+gap:2px
+}
+
+.jobplan-order-btns button{
+border:1px solid #cbd5e1;
+background:white;
+border-radius:5px;
+width:26px;
+height:20px;
+line-height:1;
+cursor:pointer;
+font-size:11px;
+padding:0
+}
+
+.jobplan-order-btns button:hover{
+background:#e2e8f0
+}
+
+.jobplan-mini{
+border:0;
+border-radius:6px;
+padding:5px 11px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+color:white
+}
+
+.jobplan-mini.start{background:#2563eb}
+.jobplan-mini.finish{background:#16a34a}
+.jobplan-mini.undo{background:#94a3b8}
+.jobplan-mini.del{background:#dc2626}
+
+.jobplan-state{
+display:inline-block;
+padding:3px 9px;
+border-radius:999px;
+font-size:11px;
+font-weight:bold
+}
+
+.jobplan-state.bekliyor{background:#e2e8f0;color:#475569}
+.jobplan-state.basladi{background:#dbeafe;color:#1d4ed8}
+.jobplan-state.bitti{background:#dcfce7;color:#166534}
+
+.jobplan-stock-ok{color:#166534;font-weight:bold}
+.jobplan-stock-bad{color:#b91c1c;font-weight:bold}
+.jobplan-stock-none{color:#b45309;font-weight:bold}
+
+.jobplan-termin{
+font-weight:bold;
+color:#0f172a;
+white-space:nowrap
+}
+
+.jobplan-sub{
+font-size:11px;
+color:#64748b;
+font-weight:normal;
+white-space:nowrap
+}
+
+.jobplan-empty{
+text-align:center;
+color:#94a3b8;
+padding:24px
+}
+
+.jobplan-section-title{
+font-weight:bold;
+font-size:16px;
+margin:20px 0 10px
+}
+
+.jobplan-select{
+padding:4px 6px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+font-size:12px;
+max-width:280px
+}
+
+.jobplan-num{
+width:64px;
+padding:4px 6px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+font-size:12px;
+text-align:right
+}
+
+.jobplan-warn{
+color:#b91c1c;
+font-size:11px;
+font-weight:bold
+}
+
+/* Stok tablosunda planlama yüzünden yetersiz kalan kart */
+.stock-table tr.jobplan-shortage-row{
+background:#fef2f2 !important;
+box-shadow:inset 4px 0 0 #dc2626
+}
+
+.jobplan-shortage-flag{
+display:block;
+margin-top:2px;
+color:#b91c1c;
+font-size:11px;
+font-weight:bold;
+white-space:nowrap
+}
+
+.jobplan-newcard{
+display:flex;
+flex-wrap:wrap;
+gap:4px;
+margin-top:4px;
+align-items:center
+}
+
+.jobplan-select-sm{
+padding:3px 5px;
+font-size:11px;
+max-width:120px
+}
+
+.jobplan-newcard .jobplan-warn{
+flex-basis:100%
+}
+
+@media(max-width:900px){
+.jobplan-settings{gap:12px}
+.jobplan-head-actions{width:100%}
+.jobplan-head-actions button{flex:1}
+}
+
+.jobplan-time{
+padding:5px 7px;
+border:1px solid #cbd5e1;
+border-radius:6px;
+font-size:13px;
+font-weight:bold
+}
+
+.jobplan-mini.pause{background:#d97706}
+
+.jobplan-table tr.jobplan-file-row.paused td{
+background:#fffbeb
+}
+
+.jobplan-state.durakladi{
+background:#fef3c7;
+color:#92400e
+}
+
+.jobplan-stock-musteri{
+color:#475569;
+font-weight:bold
+}
+
+.jobplan-customer{
+display:flex;
+align-items:center;
+gap:5px;
+margin-top:4px;
+font-size:11px;
+font-weight:bold;
+color:#475569;
+cursor:pointer;
+white-space:nowrap
+}
+
+.jobplan-customer input{
+width:15px;
+height:15px;
+cursor:pointer;
+margin:0
+}
+
+/* Son stok hareketleri başlığı */
+.movement-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:12px 18px;
+flex-wrap:wrap
+}
+
+.movement-toggle{
+display:flex;
+align-items:center;
+gap:9px;
+background:none;
+border:0;
+padding:6px 0;
+font-size:18px;
+font-weight:bold;
+color:#1e293b;
+cursor:pointer;
+text-align:left
+}
+
+.movement-toggle:hover{color:#2563eb}
+
+.movement-count{
+background:#e2e8f0;
+color:#475569;
+border-radius:999px;
+padding:3px 11px;
+font-size:12px;
+font-weight:bold
+}
+
+.movement-clear{
+background:#dc2626;
+color:white;
+border:0;
+border-radius:8px;
+padding:9px 16px;
+font-weight:bold;
+font-size:13px;
+cursor:pointer;
+white-space:nowrap
+}
+
+.movement-clear:hover{background:#b91c1c}
+
+/* İş planlama penceresi: başlık ve Kapat sabit, orta alan kayar */
+.jobplan-modal-box{
+display:flex;
+flex-direction:column;
+max-height:90vh;
+overflow:hidden;
+padding:18px 22px
+}
+
+.jobplan-scroll{
+flex:1 1 auto;
+min-height:0;
+overflow-y:auto;
+margin:0 -22px;
+padding:0 22px
+}
+
+.jobplan-modal-box .jobplan-head{
+flex:0 0 auto
+}
+
+.jobplan-modal-box .modal-buttons{
+flex:0 0 auto;
+margin:0;
+padding-top:12px;
+border-top:1px solid #e2e8f0
+}
+
+.jobplan-modal-box .jobplan-section-title:first-child{
+margin-top:4px
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -1953,6 +2491,11 @@ margin-right:auto
 <button class="btn-maintenance" id="maintenanceButton" type="button" onclick="openMaintenanceModal()">
 🛠 Bakım
 <span class="maintenance-badge" id="maintenanceBadge" aria-label="Yaklaşan veya geciken bakım sayısı"></span>
+</button>
+
+<button class="btn-jobplan" id="jobPlanButton" type="button" onclick="openJobPlanModal()">
+📋 İş Planlama
+<span class="jobplan-badge" id="jobPlanBadge" aria-label="Aktif iş sayısı"></span>
 </button>
 
 <button class="btn-consumables" id="consumablesButton" type="button" onclick="openConsumablesModal()">
@@ -2155,15 +2698,21 @@ oninput="showProducts()"
 
 <div class="table-box">
 
-<div style="
-padding:18px;
-font-size:18px;
-font-weight:bold
-">
+<div class="movement-head">
 
+<button type="button" class="movement-toggle" onclick="toggleMovementPanel()">
+<span id="movementCaret">▼</span>
 📋 Son Stok Hareketleri
+<span class="movement-count" id="movementCount"></span>
+</button>
+
+<button type="button" class="movement-clear" onclick="requestMovementClear()" title="Bakım PDF şifresiyle tüm stok hareketlerini siler">
+🗑 Tümünü Sil
+</button>
 
 </div>
+
+<div id="movementPanel">
 
 <table>
 
@@ -2187,6 +2736,8 @@ font-weight:bold
 </tbody>
 
 </table>
+
+</div>
 
 </div>
 
@@ -2978,6 +3529,141 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 </div>
 </div>
 </div>
+
+<!-- İŞ PLANLAMA MODALI -->
+<div class="modal" id="jobPlanModal">
+<div class="modal-box jobplan-modal-box">
+
+<div class="jobplan-head">
+<div>
+<h2 style="margin:0 0 4px">📋 İş Planlama</h2>
+<div style="font-size:13px;color:#64748b">TruLaser üretim paketi HTML dosyalarını yükle; süre, ebat ve boy bilgisine göre termin hesaplanır, 6 m malzeme stoktan ayrılır.</div>
+</div>
+<div class="jobplan-head-actions">
+<button type="button" class="btn-orange" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
+<button type="button" class="btn-blue" onclick="jobPlanRefreshAll()">🔄 Planı Yenile</button>
+<input type="file" id="jobPlanFiles" accept=".html,.htm" multiple style="display:none" onchange="jobPlanReadFiles(event)">
+</div>
+</div>
+
+<div class="jobplan-scroll">
+
+<div class="jobplan-settings">
+
+<div class="jobplan-shift-row" id="jobPlanDayBlock">
+<label class="jobplan-switch jobplan-shift-name">
+<input type="checkbox" id="jobPlanDayEnabled" onchange="jobPlanSetShiftEnabled('gunduz',this.checked)">
+<span>☀️ Gündüz</span>
+</label>
+<span class="jobplan-shift-hours" id="jobPlanDayHours"></span>
+<label class="jobplan-switch">
+<input type="checkbox" id="jobPlanDayOvertime" onchange="jobPlanSetOvertime('gunduz',this.checked)">
+<span>⏱ Mesai</span>
+</label>
+<div class="jobplan-days" id="jobPlanDayDays"></div>
+<label class="jobplan-switch" id="jobPlanShortDayWrap" title="Cumartesi gibi yarım günlerde paydos saati. Boş bırakılırsa tam gün çalışılır.">
+<span>Cmt bitiş</span>
+<select id="jobPlanSaturdayEnd" class="jobplan-select jobplan-select-sm" onchange="jobPlanSetShortDay('gunduz',6,this.value)"></select>
+</label>
+</div>
+
+<div class="jobplan-shift-row" id="jobPlanNightBlock">
+<label class="jobplan-switch jobplan-shift-name">
+<input type="checkbox" id="jobPlanNightEnabled" onchange="jobPlanSetShiftEnabled('gece',this.checked)">
+<span>🌙 Gece</span>
+</label>
+<span class="jobplan-shift-hours" id="jobPlanNightHours"></span>
+<label class="jobplan-switch">
+<input type="checkbox" id="jobPlanNightOvertime" onchange="jobPlanSetOvertime('gece',this.checked)">
+<span>⏱ Mesai</span>
+</label>
+<div class="jobplan-days" id="jobPlanNightDays"></div>
+</div>
+
+<div class="jobplan-hours" id="jobPlanHoursInfo"></div>
+
+</div>
+
+<div class="jobplan-summary" id="jobPlanSummary"></div>
+
+<div class="jobplan-import-panel" id="jobPlanImportPanel">
+<div class="jobplan-import-title" id="jobPlanImportTitle">Okunan dosyalar</div>
+<div class="jobplan-table-wrap">
+<table class="jobplan-table" id="jobPlanImportTable">
+<thead>
+<tr>
+<th style="width:36px">Ekle</th>
+<th>Dosya</th>
+<th>DT</th>
+<th>Ebat</th>
+<th>Boy</th>
+<th>Adet</th>
+<th>Süre</th>
+<th style="width:74px" title="Ek süre yüzdesi. 0 = HTML süresi aynen.">Ek %</th>
+<th>Stok Kartı</th>
+</tr>
+</thead>
+<tbody id="jobPlanImportBody"></tbody>
+</table>
+</div>
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+<button type="button" class="btn-gray" onclick="jobPlanCancelImport()">Vazgeç</button>
+<button type="button" class="btn-green" onclick="jobPlanCommitImport()">Plana Ekle</button>
+</div>
+</div>
+
+<div class="jobplan-section-title">🗓 Aktif Plan</div>
+<div class="jobplan-table-wrap">
+<table class="jobplan-table">
+<thead>
+<tr>
+<th style="width:44px">Sıra</th>
+<th>DT / Dosya</th>
+<th>Ebat</th>
+<th>Boy</th>
+<th>Toplam Süre</th>
+<th style="width:74px" title="Ek süre yüzdesi. 0 = HTML süresi aynen.">Ek %</th>
+<th>Başlangıç</th>
+<th>Termin</th>
+<th>Stok</th>
+<th>Durum</th>
+<th style="width:150px">İşlem</th>
+</tr>
+</thead>
+<tbody id="jobPlanBody">
+<tr><td colspan="12" class="jobplan-empty">Henüz plana eklenmiş iş yok.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="jobplan-section-title">✅ Tamamlananlar</div>
+<div class="jobplan-table-wrap">
+<table class="jobplan-table">
+<thead>
+<tr>
+<th>DT</th>
+<th>Dosya</th>
+<th title="HTML'den gelen planlanan süre">Planlanan Süre</th>
+<th title="Başlat ile Bitir arasında geçen gerçek süre">Gerçekleşen Süre</th>
+<th>Bitiş</th>
+<th style="width:110px">İşlem</th>
+</tr>
+</thead>
+<tbody id="jobPlanDoneBody">
+<tr><td colspan="7" class="jobplan-empty">Tamamlanmış iş yok.</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeJobPlanModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
@@ -4201,7 +4887,7 @@ console.error("+ Ayır rezervasyonları bulut kaydetme hatası:",error);
 });
 }
 function isStandardReservableProduct(product){
-if(!product || !isStandardLength(product.length))return false;
+if(!product)return false;
 
 /* 6 metre olan tüm stok malzemeleri ayırılabilir.
    Böylece Excel'den eklenen Boru / Profil / Köşebent / Lama / NPU kayıtlarında da + Ayır görünür. */
@@ -5660,7 +6346,7 @@ return match ? normalizeFinish(match[1]) : "Standart";
 
 function normalizePipeSeam(value){
 let v=normalizeText(value);
-if(v.includes("dikissiz") || v.includes("seamless"))return "Dikişsiz";
+if(v.includes("dikissiz") || v.includes("dikişsiz") || v.includes("seamless"))return "Dikişsiz";
 return "Dikişli";
 }
 
@@ -6681,8 +7367,14 @@ if(currentMovementType==="Çıkış" && isStandardReservableProduct(product)){
 let reservedAfter=getReservedQuantity(product.id);
 if(selectedReservation)reservedAfter-=Number(selectedReservation.quantity)||0;
 if(newStock<reservedAfter){
-alert("Bu çıkış yapılamaz.\n\nÇıkıştan sonra stok: "+newStock+" boy\nKalan ayrılmış işler: "+reservedAfter+" boy\n\nÖnce ilgili ayrılan işi seçin veya ayırma kaydını kaldırın.");
-return;
+if(!confirm(
+"\u26a0\ufe0f Bu çıkıştan sonra stok, ayrılmış işlerin altına düşecek.\n\n"+
+"Çıkıştan sonra stok: "+newStock+" boy\n"+
+"Ayrılmış işler: "+reservedAfter+" boy\n"+
+"Eksik kalacak: "+(reservedAfter-newStock)+" boy\n\n"+
+"Yine de çıkış yapılsın mı?\n"+
+"Stok kartı \"stok yetersiz\" olarak işaretlenecek, malzeme girişi yapınca uyarı kalkar."
+))return;
 }
 }
 
@@ -7041,6 +7733,15 @@ return product && product.type===currentPage;
 
 function showProducts(){
 
+/* İş planı bilgileri her çizimde tazelenir; stok girişi sonrası
+   "stok yetersiz" uyarısı veya kaybolan ayırma kaydı ekranda kalmasın. */
+if(typeof jobPlanSyncReservations==="function" && Array.isArray(jobPlanJobs) && jobPlanJobs.length){
+try{
+jobPlanSyncReservations();
+jobPlanRefreshShortages();
+}catch(err){console.error("İş planı stok kontrolü:",err);}
+}
+
 let tbody =
 document.getElementById("productTable");
 
@@ -7110,6 +7811,13 @@ return true;
 
 filtered=sortProducts(filtered);
 
+/* İş planlamasında stoku yetmeyen malzemeler listenin en üstüne alınır. */
+if(typeof jobPlanShortageIds!=="undefined" && jobPlanShortageIds.size){
+filtered=filtered.slice().sort((a,b)=>
+(jobPlanShortageIds.has(String(b.id))?1:0)-(jobPlanShortageIds.has(String(a.id))?1:0)
+);
+}
+
 
 if(filtered.length===0){
 
@@ -7173,7 +7881,7 @@ formatLength(p.length)+
 let standardReservationHTML=isStandardReservableProduct(p)?renderStandardReservationsHTML(p):"";
 
 let usageHTML =
-!isStandardLength(p.length)
+false
 ?
 '<div class="usage-area">'+
 '<label class="usage-check '+(isUsageSelected(p.id)?'checked':'')+'" title="Bu parçayı bir iş için ayırmak istiyorsan işaretle">'+
@@ -7214,10 +7922,21 @@ let usageHTML =
 '</div>'
 :'';
 
+let jobPlanShort =
+typeof jobPlanShortageIds!=="undefined" &&
+jobPlanShortageIds.has(String(p.id));
+
+let jobPlanShortHTML =
+jobPlanShort
+?'<div class="jobplan-shortage-flag">⚠️ Stok yetersiz</div>'
+:'';
+
 let rowClass =
-(isUsageSelected(p.id) || getStandardReservations(p.id).length>0)
+getStandardReservations(p.id).length>0
 ?'reserved-row'
 :'';
+
+if(jobPlanShort)rowClass+=' jobplan-shortage-row';
 
 
 return`
@@ -7277,6 +7996,7 @@ ${standardReservationHTML}
 ${p.stock}
 </strong>
 adet
+${jobPlanShortHTML}
 </td>
 
 <td>
@@ -7340,6 +8060,9 @@ updateDashboard();
 ===================================================== */
 
 function showMovements(){
+
+if(typeof applyMovementPanel==="function")applyMovementPanel();
+
 
 let tbody =
 document.getElementById("movementBody");
@@ -8734,9 +9457,25 @@ if(button){button.disabled=true;button.textContent="Şifre doğrulanıyor...";}
 try{
 let valid=await verifyMaintenanceDownloadPassword(password);
 if(!valid){
-if(error)error.textContent=request.action==="delete"?"Şifre yanlış. Kayıt silinmedi.":"Şifre yanlış. Dosya indirilmedi.";
-if(button){button.disabled=false;button.textContent=request.action==="delete"?"Sil":"İndir";}
+let silme=request.action==="delete" || request.action==="movement-clear";
+if(error)error.textContent=silme?"Şifre yanlış. Kayıt silinmedi.":"Şifre yanlış. Dosya indirilmedi.";
+if(button){button.disabled=false;button.textContent=silme?"Sil":"İndir";}
 input.select();
+return;
+}
+
+if(request.action==="movement-clear"){
+if(!confirm(
+movements.length+" stok hareketi kalıcı olarak silinecek.\n\n"+
+"Stok adetleri değişmez, yalnızca geçmiş temizlenir.\n\nEmin misiniz?"
+)){
+if(button){button.disabled=false;button.textContent="Sil";}
+return;
+}
+
+await clearAllMovementsAuthorized();
+closeMaintenancePasswordModal();
+alert("✅ Stok hareketleri silindi.");
 return;
 }
 
@@ -10371,6 +11110,2364 @@ if(subtitle)subtitle.textContent=err?.message||"Bulut bağlantısını kontrol e
 }
 
 
+
+/* =====================================================
+   İŞ PLANLAMA
+   TruLaser üretim paketi HTML'i -> süre / ebat / boy
+   -> sıralı kuyruk -> vardiya + mola + mesai -> termin
+   -> 6 m malzeme için stoktan ayırma ve çıkış
+===================================================== */
+
+const CLOUD_KEY_JOB_PLAN_JOBS="job_plan_jobs_v1";
+const CLOUD_KEY_JOB_PLAN_SETTINGS="job_plan_settings_v1";
+
+let jobPlanJobs=[];
+let jobPlanSettings=null;
+let jobPlanImportFiles=[];
+let jobPlanExpanded={};
+let jobPlanShortageIds=new Set();
+let jobPlanBusy=false;
+
+/* Stoklar ve ayırma kayıtları buluttan gelmeden ayırma senkronu çalışmaz. */
+let jobPlanStockReady=false;
+
+const JOB_PLAN_DAY_NAMES=["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+
+
+/* ---------- AYARLAR ---------- */
+
+function jobPlanDefaultSettings(){
+return {
+/* Gündüz her zaman temel vardiya. Gece açılırsa kapasite ÜSTÜNE eklenir,
+   ayrı bir mod değildir: 10 saatlik iş pazartesi gündüzü bitmezse
+   aynı gecenin vardiyasından devam eder. */
+dayEnabled:true,
+nightEnabled:false,
+
+gunduz:{
+start:"08:00",
+end:"18:00",
+overtimeEnd:"20:00",
+overtime:false,
+breaks:[["10:00","10:15"],["12:45","13:45"],["15:00","15:15"]],
+workDays:[1,2,3,4,5,6],
+shortDays:{"6":"13:00"}
+},
+
+gece:{
+start:"20:00",
+end:"06:00",
+overtimeEnd:"08:00",
+overtime:false,
+breaks:[["22:00","22:15"],["00:45","01:45"],["03:00","03:15"]],
+workDays:[0,1,2,3,4,5],
+shortDays:{}
+}
+};
+}
+
+function jobPlanCleanDays(value,fallback){
+if(!Array.isArray(value))return fallback;
+let days=value.map(Number).filter(d=>Number.isInteger(d) && d>=0 && d<=6);
+return days.length?[...new Set(days)].sort():fallback;
+}
+
+function jobPlanCleanShortDays(value,fallback){
+if(!value || typeof value!=="object")return fallback;
+let clean={};
+Object.keys(value).forEach(k=>{
+let day=Number(k);
+let time=String(value[k]||"").trim();
+if(Number.isInteger(day) && day>=0 && day<=6 && /^\d{1,2}:\d{2}$/.test(time))clean[String(day)]=time;
+});
+return clean;
+}
+
+function jobPlanNormalizeSettings(value){
+let base=jobPlanDefaultSettings();
+if(!value || typeof value!=="object")return base;
+
+/* Eski sürümler: shift:"gece"/"gunduz" ile tek vardiya, ortak overtime/workDays/shortDays */
+let legacySingleShift=typeof value.shift==="string";
+let legacyOvertime=value.overtime===true;
+let legacyDays=Array.isArray(value.workDays)?value.workDays:null;
+let legacyShort=(value.shortDays && typeof value.shortDays==="object")?value.shortDays:null;
+
+base.dayEnabled=value.dayEnabled===undefined?true:value.dayEnabled!==false;
+base.nightEnabled=value.nightEnabled===undefined
+?(legacySingleShift && value.shift==="gece")
+:value.nightEnabled===true;
+
+["gunduz","gece"].forEach(key=>{
+let src=(value[key] && typeof value[key]==="object")?value[key]:{};
+
+if(src.start)base[key].start=String(src.start);
+if(src.end)base[key].end=String(src.end);
+if(src.overtimeEnd)base[key].overtimeEnd=String(src.overtimeEnd);
+
+if(Array.isArray(src.breaks) && src.breaks.length){
+let clean=src.breaks
+.filter(b=>Array.isArray(b) && b.length===2)
+.map(b=>[String(b[0]),String(b[1])]);
+if(clean.length)base[key].breaks=clean;
+}
+
+let legacyThisShift=legacySingleShift &&
+((key==="gece" && value.shift==="gece") || (key==="gunduz" && value.shift!=="gece"));
+
+base[key].overtime=src.overtime===undefined
+?(legacyThisShift && legacyOvertime)
+:src.overtime===true;
+
+base[key].workDays=jobPlanCleanDays(
+src.workDays,
+(legacyThisShift && legacyDays)?jobPlanCleanDays(legacyDays,base[key].workDays):base[key].workDays
+);
+
+base[key].shortDays=jobPlanCleanShortDays(
+src.shortDays,
+(legacyThisShift && legacyShort)?jobPlanCleanShortDays(legacyShort,base[key].shortDays):base[key].shortDays
+);
+});
+
+return base;
+}
+
+function jobPlanShiftEnabled(key){
+return key==="gece"
+?jobPlanSettings.nightEnabled!==false && jobPlanSettings.nightEnabled===true
+:jobPlanSettings.dayEnabled!==false;
+}
+
+function jobPlanAnyShiftEnabled(){
+return jobPlanShiftEnabled("gunduz") || jobPlanShiftEnabled("gece");
+}
+
+
+/* ---------- ZAMAN YARDIMCILARI ---------- */
+
+function jobPlanMinutes(hhmm){
+let parts=String(hhmm||"0:00").split(":");
+let h=Number(parts[0])||0;
+let m=Number(parts[1])||0;
+return h*60+m;
+}
+
+function jobPlanDateAt(baseDate,hhmm,startMin){
+let mins=jobPlanMinutes(hhmm);
+let d=new Date(baseDate.getFullYear(),baseDate.getMonth(),baseDate.getDate());
+if(mins<startMin)d.setDate(d.getDate()+1);
+return new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(mins/60),mins%60,0,0);
+}
+
+/* Tek bir vardiyanın, verilen güne ait çalışma aralıkları (molalar çıkarılmış). */
+function jobPlanShiftWindows(baseDate,key){
+if(!jobPlanShiftEnabled(key))return [];
+
+let cfg=jobPlanSettings[key];
+if(!cfg)return [];
+if(!(cfg.workDays||[]).includes(baseDate.getDay()))return [];
+
+let startMin=jobPlanMinutes(cfg.start);
+let start=jobPlanDateAt(baseDate,cfg.start,startMin).getTime();
+let endStr=cfg.overtime?cfg.overtimeEnd:cfg.end;
+let end=jobPlanDateAt(baseDate,endStr,startMin).getTime();
+
+/* Kısa gün (örn. cumartesi 13:00). Sadece normal bitişi ÖNE çekiyorsa uygulanır. */
+let shortEndStr=cfg.shortDays?cfg.shortDays[String(baseDate.getDay())]:null;
+let isShortDay=false;
+
+if(shortEndStr){
+let shortEnd=jobPlanDateAt(baseDate,shortEndStr,startMin).getTime();
+if(shortEnd>start && shortEnd<end){
+end=shortEnd;
+isShortDay=true;
+}
+}
+
+if(!(end>start))return [];
+
+let windows=[{start:start,end:end}];
+
+(cfg.breaks||[]).forEach(pair=>{
+let b1=jobPlanDateAt(baseDate,pair[0],startMin).getTime();
+let b2=jobPlanDateAt(baseDate,pair[1],startMin).getTime();
+if(!(b2>b1))return;
+/* Kısa günde paydos saatine taşan mola hiç kullanılmaz. */
+if(isShortDay && b2>end)return;
+let next=[];
+windows.forEach(w=>{
+if(b2<=w.start || b1>=w.end){next.push(w);return;}
+if(b1>w.start)next.push({start:w.start,end:Math.min(b1,w.end)});
+if(b2<w.end)next.push({start:Math.max(b2,w.start),end:w.end});
+});
+windows=next;
+});
+
+return windows.filter(w=>w.end>w.start);
+}
+
+/* Günün TOPLAM kapasitesi: gündüz + (açıksa) gece, tek bir zaman çizgisinde birleştirilir.
+   Gündüz mesaisi 20:00'ye kadarsa gece vardiyası onun bittiği yerden devam eder. */
+function jobPlanDayWindows(baseDate){
+let all=jobPlanShiftWindows(baseDate,"gunduz")
+.concat(jobPlanShiftWindows(baseDate,"gece"))
+.sort((a,b)=>a.start-b.start);
+
+let merged=[];
+all.forEach(w=>{
+let last=merged[merged.length-1];
+if(last && w.start<=last.end){
+if(w.end>last.end)last.end=w.end;
+}
+else merged.push({start:w.start,end:w.end});
+});
+
+return merged;
+}
+
+/* fromMs anından itibaren "seconds" kadar çalışma süresi tüketir. */
+function jobPlanAddWorkSeconds(fromMs,seconds){
+let remaining=Math.max(0,Number(seconds)||0);
+let startMs=null;
+
+let cursor=new Date(fromMs);
+cursor.setDate(cursor.getDate()-1);
+cursor.setHours(0,0,0,0);
+
+for(let day=0;day<730;day++){
+let windows=jobPlanDayWindows(cursor);
+
+for(let i=0;i<windows.length;i++){
+let w=windows[i];
+if(w.end<=fromMs)continue;
+
+let s=Math.max(w.start,fromMs);
+if(startMs===null)startMs=s;
+if(remaining<=0)return {start:startMs,end:s};
+
+let avail=(w.end-s)/1000;
+if(remaining<=avail)return {start:startMs,end:s+remaining*1000};
+remaining-=avail;
+}
+
+cursor.setDate(cursor.getDate()+1);
+}
+
+return {start:startMs,end:null};
+}
+
+function jobPlanFormatDuration(seconds){
+let s=Math.round(Number(seconds)||0);
+if(!Number.isFinite(s) || s<0)return "—";
+if(s<60)return s+" sn";
+let h=Math.floor(s/3600);
+let m=Math.floor((s%3600)/60);
+let rest=s%60;
+if(h>0)return h+" sa "+m+" dk";
+if(m>0)return m+" dk "+(rest?rest+" sn":"");
+return rest+" sn";
+}
+
+function jobPlanFormatClock(seconds){
+let s=Math.round(Number(seconds)||0);
+let h=Math.floor(s/3600);
+let m=Math.floor((s%3600)/60);
+let r=s%60;
+let pad=n=>String(n).padStart(2,"0");
+return pad(h)+":"+pad(m)+":"+pad(r);
+}
+
+function jobPlanFormatDateTime(ms){
+if(!ms || !Number.isFinite(Number(ms)))return "—";
+return new Date(Number(ms)).toLocaleString("tr-TR",{
+day:"2-digit",month:"2-digit",year:"numeric",
+hour:"2-digit",minute:"2-digit"
+});
+}
+
+
+/* ---------- HTML AYRIŞTIRMA ---------- */
+
+function jobPlanCleanText(value){
+return String(value||"")
+.replace(/ /g," ")
+.replace(/\s+/g," ")
+.trim();
+}
+
+function jobPlanTightText(value){
+return String(value||"")
+.replace(/ /g,"")
+.replace(/\s+/g,"")
+.trim();
+}
+
+function jobPlanTimeToSeconds(value){
+let v=jobPlanTightText(value);
+if(!v)return NaN;
+let parts=v.split(":").map(Number);
+if(parts.some(n=>!Number.isFinite(n)))return NaN;
+if(parts.length===3)return parts[0]*3600+parts[1]*60+parts[2];
+if(parts.length===2)return parts[0]*60+parts[1];
+if(parts.length===1)return parts[0];
+return NaN;
+}
+
+/* "Total time:" gibi bir etiketten sonraki değeri bulur. */
+function jobPlanValueAfterLabel(doc,patterns){
+let nodes=Array.from(doc.querySelectorAll("h1,h2,h3,td,th,b,strong,p"));
+for(let i=0;i<nodes.length;i++){
+let text=jobPlanCleanText(nodes[i].textContent).toLowerCase().replace(/:/g,"").trim();
+let hit=patterns.some(p=>text===p || text.startsWith(p));
+if(!hit)continue;
+for(let j=i+1;j<Math.min(nodes.length,i+6);j++){
+let val=jobPlanCleanText(nodes[j].textContent);
+if(val && !patterns.some(p=>val.toLowerCase().replace(/:/g,"").trim().startsWith(p)))return val;
+}
+}
+return "";
+}
+
+/* Başlıklarında aranan metin geçen tabloyu bulur. */
+function jobPlanFindTableByHeader(doc,needle){
+let tables=Array.from(doc.querySelectorAll("table"));
+let want=String(needle).toLowerCase();
+for(let table of tables){
+let heads=Array.from(table.querySelectorAll("th"))
+.map(th=>jobPlanCleanText(th.textContent).toLowerCase());
+if(heads.some(h=>h.includes(want)))return table;
+}
+return null;
+}
+
+/* Başlıktan SADECE iş numarası alınır.
+   Firma adı ve ebat başlıktan okunmaz — ebat "Tube profile" kodundan gelir. */
+function jobPlanParseName(rawName){
+let base=String(rawName||"")
+.replace(/\.(html?|svg|pdf)$/i,"")
+.trim();
+
+let parts=base.split("_").filter(Boolean);
+
+return {
+dtNo:(parts[0]||base||"DT?").toUpperCase(),
+fullName:base
+};
+}
+
+/* "40X40X4MM" / "Ø60X3MM" / "100X50X3MM" -> stok kartı bilgisi */
+function jobPlanParseSizeCode(code){
+let raw=String(code||"").toUpperCase().replace(/\s+/g,"").replace(/,/g,".");
+if(!raw)return null;
+
+let isRound=/^(Ø|O|D|DIA|ROUND|YUV)/.test(raw) || raw.includes("Ø");
+let nums=(raw.match(/\d+(?:\.\d+)?/g)||[]).map(Number).filter(n=>Number.isFinite(n));
+if(!nums.length)return null;
+
+let trim=n=>Number(n.toFixed(2));
+
+if(nums.length>=3 && !isRound){
+let a=trim(nums[0]);
+let b=trim(nums[1]);
+let t=trim(nums[2]);
+return {
+type:"Profil",
+shape:a===b?"Kare":"Dikdörtgen",
+sizeText:a+"x"+b,
+thickness:t
+};
+}
+
+if(nums.length===2){
+let d=trim(nums[0]);
+let t=trim(nums[1]);
+return {
+type:"Boru",
+shape:"Yuvarlak",
+sizeText:"Ø"+d,
+thickness:t
+};
+}
+
+return null;
+}
+
+/* Trumpf profil kodu: 1_400X400X60_1_40 -> 40x40 / 4 mm (1/10 mm) */
+function jobPlanParseTubeProfile(code){
+let raw=String(code||"").toUpperCase().replace(/\s+/g,"");
+let rect=raw.match(/^(\d+)_(\d+)X(\d+)X(\d+)_(\d+)_(\d+)$/);
+if(rect){
+let a=Number(rect[2])/10;
+let b=Number(rect[3])/10;
+let t=Number(rect[6])/10;
+if(a>0 && b>0 && t>0){
+return {
+type:"Profil",
+shape:a===b?"Kare":"Dikdörtgen",
+sizeText:Number(a.toFixed(2))+"x"+Number(b.toFixed(2)),
+thickness:Number(t.toFixed(2))
+};
+}
+}
+let round=raw.match(/^(\d+)_(\d+)_(\d+)_(\d+)$/);
+if(round){
+let d=Number(round[2])/10;
+let t=Number(round[4])/10;
+if(d>0 && t>0){
+return {
+type:"Boru",
+shape:"Yuvarlak",
+sizeText:"Ø"+Number(d.toFixed(2)),
+thickness:Number(t.toFixed(2))
+};
+}
+}
+return null;
+}
+
+function jobPlanParseHtml(text,fileName){
+let doc=new DOMParser().parseFromString(String(text||""),"text/html");
+
+let h1=jobPlanCleanText(doc.querySelector("h1")?.textContent||"");
+let jobName=h1.includes(":")?h1.split(":").pop().trim():"";
+if(!jobName)jobName=String(fileName||"").replace(/\.(html?|htm)$/i,"");
+
+let nameInfo=jobPlanParseName(jobName||fileName);
+
+/* Toplam süre */
+let totalTimeText=jobPlanValueAfterLabel(doc,["total time","gesamtzeit","toplam süre","toplam sure"]);
+let totalSeconds=jobPlanTimeToSeconds(totalTimeText);
+
+/* Parça sayısı */
+let partsText=jobPlanValueAfterLabel(doc,["number of parts","anzahl teile","parça sayısı","parca sayisi"]);
+let parts=Number(jobPlanTightText(partsText));
+
+/* Boru / ham boy tablosu */
+let tubes=NaN;
+let rawLengthMm=NaN;
+let allocatedM=NaN;
+
+let tubeTable=jobPlanFindTableByHeader(doc,"number of tubes")
+|| jobPlanFindTableByHeader(doc,"raw material length")
+|| jobPlanFindTableByHeader(doc,"boru sayısı");
+
+if(tubeTable){
+let headers=Array.from(tubeTable.querySelectorAll("th"))
+.map(th=>jobPlanCleanText(th.textContent).toLowerCase());
+let row=Array.from(tubeTable.querySelectorAll("tr")).find(tr=>tr.querySelector("td"))||null;
+let cells=row?Array.from(row.querySelectorAll("td")).map(td=>jobPlanCleanText(td.textContent)):[];
+
+headers.forEach((h,idx)=>{
+let val=cells[idx]||"";
+let num=Number(String(val).replace(/[^\d.,-]/g,"").replace(",","."));
+if(h.includes("number of tubes")||h.includes("boru sayısı"))tubes=num;
+else if(h.includes("raw material length")){
+rawLengthMm=/\bm\b/.test(val.toLowerCase()) && !/mm/.test(val.toLowerCase())?num*1000:num;
+}
+else if(h.includes("allocated")){
+allocatedM=/mm/.test(val.toLowerCase())?num/1000:num;
+}
+});
+}
+
+/* NC programları */
+let ncPrograms=[];
+let tubeProfiles=[];
+let tubeProfile="";
+let ncTable=jobPlanFindTableByHeader(doc,"main program");
+if(ncTable){
+Array.from(ncTable.querySelectorAll("tr")).forEach(tr=>{
+let tds=Array.from(tr.querySelectorAll("td"));
+if(tds.length<6)return;
+let item={
+program:jobPlanCleanText(tds[0].textContent),
+rpt:jobPlanCleanText(tds[2].textContent),
+profile:jobPlanCleanText(tds[3].textContent),
+weight:jobPlanCleanText(tds[4].textContent),
+seconds:jobPlanTimeToSeconds(tds[5].textContent)
+};
+ncPrograms.push(item);
+if(item.profile && !tubeProfiles.includes(item.profile))tubeProfiles.push(item.profile);
+});
+}
+
+tubeProfile=tubeProfiles[0]||"";
+
+/* EBAT YALNIZCA "Tube profile" kodundan okunur.
+   1_600X300X40_1_20  ->  600/10 x 300/10  ve  20/10  =  60 x 30 x 2 mm */
+let size=jobPlanParseTubeProfile(tubeProfile);
+let sizeSource=size?"Tube profile":"";
+
+/* Süre okunamadıysa NC satırlarının toplamını kullan */
+if(!Number.isFinite(totalSeconds)){
+let sum=ncPrograms.reduce((acc,p)=>acc+(Number.isFinite(p.seconds)?p.seconds:0),0);
+totalSeconds=sum>0?sum:NaN;
+}
+
+if(!Number.isFinite(tubes) || tubes<=0)tubes=1;
+
+return {
+fileName:String(fileName||""),
+jobName:jobName,
+dtNo:nameInfo.dtNo,
+customer:"",
+sizeCode:"",
+tubeProfile:tubeProfile,
+tubeProfiles:tubeProfiles,
+sizeSource:sizeSource,
+totalSeconds:Number.isFinite(totalSeconds)?totalSeconds:0,
+parts:Number.isFinite(parts)?parts:0,
+tubes:Math.round(tubes),
+rawLengthMm:Number.isFinite(rawLengthMm)?rawLengthMm:NaN,
+allocatedM:Number.isFinite(allocatedM)?allocatedM:NaN,
+ncPrograms:ncPrograms,
+size:size
+};
+}
+
+
+/* ---------- STOK EŞLEŞTİRME ---------- */
+
+function jobPlanIsStandardRaw(rawLengthMm){
+return Number.isFinite(rawLengthMm) && Math.abs(rawLengthMm-6000)<=5;
+}
+
+/* Ham boy artık 6 m ile sınırlı değil; HTML'deki boy ile eşleşen kart aranır. */
+function jobPlanRawLengthM(rawLengthMm){
+let n=Number(rawLengthMm);
+if(!Number.isFinite(n) || n<=0)return 6;
+return Number((n/1000).toFixed(3));
+}
+
+function jobPlanProductCandidates(size,rawLengthMm){
+if(!size || !size.sizeText)return [];
+let wantSize=normalizeText(size.sizeText);
+let wantThickness=Number(size.thickness);
+let wantLength=jobPlanRawLengthM(rawLengthMm);
+
+return products.filter(p=>{
+if(normalizeText(p.size)!==wantSize)return false;
+let t=parseFloat(String(p.thickness||"").replace(",","."));
+if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
+return Math.abs(parseLength(p.length)-wantLength)<0.005;
+})
+.sort((a,b)=>Number(b.stock||0)-Number(a.stock||0));
+}
+
+function jobPlanProductLabel(p){
+if(!p)return "";
+let parts=[p.type+" "+p.size,formatThickness(p.thickness),formatLength(p.length),p.quality];
+if(getProductFinish(p)==="Boyalı")parts.push("Boyalı");
+if(p.type==="Boru" && getProductPipeSeam(p)==="Dikişsiz")parts.push("Dikişsiz");
+return parts.join(" · ")+" · stok "+Number(p.stock||0)+" boy";
+}
+
+/* Plandaki dosyaların stok kartı bazında ihtiyacı */
+function jobPlanDemandByProduct(){
+let demand={};
+jobPlanJobs.forEach(job=>{
+if(job.status==="completed")return;
+(job.files||[]).forEach(file=>{
+if(file.status==="bitti")return;
+if(file.customerMaterial)return;
+if(!file.productId)return;
+let key=String(file.productId);
+demand[key]=(demand[key]||0)+jobPlanRemainingTubes(job,file);
+});
+});
+return demand;
+}
+
+/* Plan, ayırma kayıtlarının tek doğru kaynağıdır.
+   Stok girişi, kart düzenleme ya da başka bir bilgisayardaki değişiklik
+   sonrası kaybolan/bozulan ayırmaları yeniden kurar.
+
+   ÖNEMLİ: stoklar ve mevcut ayırma kayıtları buluttan gelmeden çalışamaz,
+   yoksa her sayfa yenilemesinde aynı kayıt yeniden eklenip kopyalanır. */
+function jobPlanSyncReservations(){
+if(!jobPlanStockReady)return false;
+
+let changed=false;
+let claimed={};
+
+jobPlanJobs.forEach(job=>{
+if(job.status==="completed")return;
+
+(job.files||[]).forEach(file=>{
+if(file.status==="bitti")return;
+
+/* Müşteri malzemesi stok kartına hiç bağlanmaz. */
+if(file.customerMaterial){
+if(file.reservationId)jobPlanRemoveReservation(file);
+return;
+}
+
+if(!file.productId)return;
+
+let pid=String(file.productId);
+let product=products.find(p=>String(p.id)===pid);
+
+/* Kart bulunamadıysa hiçbir şeye dokunma; veri henüz gelmemiş olabilir. */
+if(!product)return;
+
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+if(!claimed[pid])claimed[pid]=new Set();
+
+let quantity=jobPlanRemainingTubes(job,file);
+let note=jobPlanReservationNote(job);
+
+let existing=file.reservationId
+?list.find(r=>String(r.id)===String(file.reservationId))
+:null;
+
+/* Kayıt kimliği kaybolduysa aynı nota ait sahipsiz kaydı devral.
+   Böylece yeni kopya üretilmez. */
+if(!existing){
+existing=list.find(r=>
+String(r.note)===note && !claimed[pid].has(String(r.id))
+);
+if(existing){
+file.reservationId=existing.id;
+changed=true;
+}
+}
+
+/* Hepsi kesildiyse ayırmaya gerek kalmaz. */
+if(quantity<=0){
+if(existing){
+standardReservations[pid]=list.filter(r=>String(r.id)!==String(existing.id));
+if(!standardReservations[pid].length)delete standardReservations[pid];
+file.reservationId="";
+changed=true;
+}
+return;
+}
+
+if(!existing){
+existing=createReservation(quantity,note);
+existing.source="jobplan";
+list.push(existing);
+standardReservations[pid]=list;
+file.reservationId=existing.id;
+changed=true;
+}
+else if(Number(existing.quantity)!==quantity || String(existing.note)!==note){
+existing.quantity=quantity;
+existing.note=note;
+changed=true;
+}
+
+claimed[pid].add(String(existing.id));
+});
+});
+
+/* Plandaki iş numaralarına ait fazla kopyaları temizle.
+   Plan dışındaki (elle açılan) ayırmalara dokunulmaz. */
+let planNotes=new Set();
+jobPlanJobs.forEach(job=>{
+if(job.status==="completed")return;
+planNotes.add(jobPlanReservationNote(job));
+});
+
+Object.keys(standardReservations).forEach(pid=>{
+let list=standardReservations[pid]||[];
+let keep=list.filter(r=>{
+if(!planNotes.has(String(r.note)))return true;
+return !!(claimed[pid] && claimed[pid].has(String(r.id)));
+});
+
+if(keep.length!==list.length){
+if(keep.length)standardReservations[pid]=keep;
+else delete standardReservations[pid];
+changed=true;
+}
+});
+
+if(changed)persistStandardReservations();
+return changed;
+}
+
+function jobPlanRefreshShortages(){
+let demand=jobPlanDemandByProduct();
+jobPlanShortageIds=new Set();
+
+Object.keys(demand).forEach(pid=>{
+let product=products.find(p=>String(p.id)===pid);
+if(!product){jobPlanShortageIds.add(pid);return;}
+if(Number(product.stock||0)<demand[pid])jobPlanShortageIds.add(pid);
+});
+
+return jobPlanShortageIds;
+}
+
+function jobPlanFileStockState(file){
+if(!file)return {code:"yok",text:"—"};
+
+if(file.customerMaterial){
+return {code:"musteri",text:"Müşteri malı"};
+}
+
+if(file.status==="bitti"){
+return {code:"dusuldu",text:file.stockDeducted?"Düşüldü":"Düşülmedi"};
+}
+
+if(!file.productId)return {code:"kartyok",text:"Kart yok"};
+
+let product=products.find(p=>String(p.id)===String(file.productId));
+if(!product)return {code:"kartyok",text:"Kart silinmiş"};
+
+let quantity=jobPlanRemainingTubes(null,file);
+let done=jobPlanDoneTubes(file);
+let demand=jobPlanDemandByProduct()[String(product.id)]||0;
+let stock=Number(product.stock||0);
+let prefix=done>0?done+" boy kesildi · ":"";
+
+if(stock<demand){
+return {
+code:"yetersiz",
+text:prefix+quantity+" boy ayrıldı · "+(demand-stock)+" boy yetersiz"
+};
+}
+return {code:"tamam",text:prefix+quantity+" boy ayrıldı"};
+}
+
+
+/* ---------- REZERVASYON ---------- */
+
+/* Stok kartında "80 boy DT00000 için ayrıldı" görünsün diye not sadece iş numarasıdır. */
+function jobPlanReservationNote(job){
+return String(job.dtNo||"").trim();
+}
+
+function jobPlanAddReservation(job,file){
+if(file.customerMaterial)return;
+if(!file.productId)return;
+if(file.reservationId)return;
+
+let pid=String(file.productId);
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+let reservation=createReservation(Number(file.tubes)||1,jobPlanReservationNote(job));
+reservation.source="jobplan";
+list.push(reservation);
+standardReservations[pid]=list;
+file.reservationId=reservation.id;
+persistStandardReservations();
+}
+
+function jobPlanRemoveReservation(file){
+if(!file || !file.reservationId || !file.productId)return;
+let pid=String(file.productId);
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+standardReservations[pid]=list.filter(r=>String(r.id)!==String(file.reservationId));
+if(!standardReservations[pid].length)delete standardReservations[pid];
+file.reservationId="";
+persistStandardReservations();
+}
+
+
+/* ---------- PLAN HESABI ---------- */
+
+function jobPlanActiveJobs(){
+return jobPlanJobs
+.filter(j=>j.status!=="completed")
+.sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
+}
+
+function jobPlanDoneJobs(){
+return jobPlanJobs
+.filter(j=>j.status==="completed")
+.sort((a,b)=>(Number(b.completedAt)||0)-(Number(a.completedAt)||0));
+}
+
+/* % EK SÜREDİR, çarpan değildir.
+   HTML'den okunan "Total time" her zaman sabit kalır:
+     %0  -> 100 dk iş 100 dk
+     %20 -> 100 dk iş 120 dk
+   Eksi değer yazılırsa süre kısalır. DT satırındaki kutu toplu ayardır. */
+function jobPlanFilePercent(job,file){
+let percent=Number(file&&file.percent);
+if(Number.isFinite(percent))return percent;
+percent=Number(job&&job.percent);
+return Number.isFinite(percent)?percent:0;
+}
+
+function jobPlanFileSeconds(job,file){
+let base=Number(file.totalSeconds)||0;
+let seconds=base*(100+jobPlanFilePercent(job,file))/100;
+return seconds>0?seconds:0;
+}
+
+/* Tüm dosyalar aynı ek orandaysa o oran, değilse null. */
+function jobPlanCommonPercent(job){
+let list=(job.files||[]);
+if(!list.length)return 0;
+let first=jobPlanFilePercent(job,list[0]);
+return list.every(f=>jobPlanFilePercent(job,f)===first)?first:null;
+}
+
+function jobPlanSizeSummary(job){
+let parts=[];
+(job.files||[]).forEach(f=>{
+if(!f.size)return;
+let label=f.size.sizeText+" x "+f.size.thickness;
+if(!parts.includes(label))parts.push(label);
+});
+if(!parts.length)return "\u2014";
+if(parts.length>2)return parts.slice(0,2).join(", ")+" +"+(parts.length-2);
+return parts.join(", ");
+}
+
+function jobPlanTubeSummary(job){
+let total=(job.files||[]).reduce((s,f)=>s+(jobPlanIsStandardRaw(f.rawLengthMm)?(Number(f.tubes)||0):0),0);
+let other=(job.files||[]).some(f=>!jobPlanIsStandardRaw(f.rawLengthMm));
+if(!total)return other?'<span class="jobplan-warn">6 m d\u0131\u015f\u0131</span>':"\u2014";
+return "6 m \u00d7 "+total+(other?' <span class="jobplan-warn">+6 m d\u0131\u015f\u0131</span>':"");
+}
+
+function jobPlanJobSeconds(job){
+return (job.files||[]).reduce((sum,f)=>sum+jobPlanFileSeconds(job,f),0);
+}
+
+function jobPlanRemainingSeconds(job){
+return (job.files||[])
+.filter(f=>f.status!=="bitti")
+.reduce((sum,f)=>sum+jobPlanFileRemainingSeconds(job,f),0);
+}
+
+/* PLANIN ÇAPASI
+   - Kuyrukta başlatılmış (Başlat'a basılmış) bir dosya varsa plan onun
+     GERÇEK başlama anına sabitlenir; terminler artık kaymaz, süre işler.
+   - Hiçbir iş başlamadıysa plan "şimdi"den hesaplanır ve 10 dakikada bir
+     yapılan kontrolle ileri kayar. */
+function jobPlanAnchor(){
+let running=null;
+
+jobPlanActiveJobs().forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(file.status!=="basladi")return;
+let started=Number(file.startedAt);
+if(!Number.isFinite(started))return;
+if(running===null || started<running)running=started;
+});
+});
+
+if(running!==null)return {ms:running,running:true};
+return {ms:Date.now(),running:false};
+}
+
+function jobPlanRecalculate(){
+let anchor=jobPlanAnchor();
+let cursor=anchor.ms;
+
+jobPlanActiveJobs().forEach(job=>{
+let jobStart=null;
+let jobEnd=null;
+
+(job.files||[]).forEach(file=>{
+/* Biten dosya gerçek saatleriyle durur ve kuyruğu kendi bitiş anına taşır. */
+if(file.status==="bitti"){
+file.planStart=file.startedAt||null;
+file.planEnd=file.finishedAt||null;
+let finished=Number(file.finishedAt);
+if(Number.isFinite(finished) && finished>cursor)cursor=finished;
+if(jobStart===null && file.startedAt)jobStart=file.startedAt;
+if(Number.isFinite(finished))jobEnd=finished;
+return;
+}
+
+/* Başlamış dosya kendi gerçek başlangıcından işler. */
+let from=cursor;
+if(file.status==="basladi"){
+let started=Number(file.startedAt);
+if(Number.isFinite(started))from=started;
+}
+
+let seconds=jobPlanFileRemainingSeconds(job,file);
+let result=jobPlanAddWorkSeconds(from,seconds);
+
+file.planStart=result.start;
+file.planEnd=result.end;
+
+if(result.end)cursor=result.end;
+if(jobStart===null && result.start)jobStart=result.start;
+if(result.end)jobEnd=result.end;
+});
+
+job.planStart=jobStart;
+job.planEnd=jobEnd;
+});
+}
+
+
+/* ---------- BULUT ---------- */
+
+async function jobPlanLoad(){
+try{
+let settings=await cloudStateGet(CLOUD_KEY_JOB_PLAN_SETTINGS);
+jobPlanSettings=jobPlanNormalizeSettings(settings);
+}catch(error){
+console.error("İş planlama ayarları okunamadı:",error);
+jobPlanSettings=jobPlanDefaultSettings();
+}
+
+try{
+let jobs=await cloudStateGet(CLOUD_KEY_JOB_PLAN_JOBS);
+jobPlanJobs=Array.isArray(jobs)?jobs:[];
+}catch(error){
+console.error("İş planı okunamadı:",error);
+jobPlanJobs=[];
+}
+
+jobPlanJobs.forEach((job,idx)=>{
+if(!Number.isFinite(Number(job.order)))job.order=idx;
+if(!Array.isArray(job.files))job.files=[];
+if(!job.status)job.status="planned";
+
+/* Eski sürümde % bir çarpandı (100 = değişiklik yok).
+   Yeni sürümde EK süredir (0 = değişiklik yok). Bir kez dönüştürülür. */
+if(job.percentMode!=="ek"){
+let jobPercent=Number(job.percent);
+job.percent=Number.isFinite(jobPercent)?jobPercent-100:0;
+
+job.files.forEach(file=>{
+let filePercent=Number(file.percent);
+file.percent=Number.isFinite(filePercent)?filePercent-100:job.percent;
+});
+
+job.percentMode="ek";
+}
+
+if(!Number.isFinite(Number(job.percent)))job.percent=0;
+job.files.forEach(file=>{
+if(!Number.isFinite(Number(file.percent)))file.percent=Number(job.percent)||0;
+});
+});
+
+jobPlanRecalculate();
+jobPlanSyncReservations();
+jobPlanRefreshShortages();
+jobPlanUpdateBadge();
+jobPlanRenderSettings();
+jobPlanRender();
+jobPlanStartCheckTimer();
+if(typeof showProducts==="function")showProducts();
+}
+
+async function jobPlanSaveJobs(){
+try{
+await cloudStateSet(CLOUD_KEY_JOB_PLAN_JOBS,jobPlanJobs);
+}catch(error){
+console.error("İş planı kaydedilemedi:",error);
+alert("❌ İş planı buluta kaydedilemedi.\n\n"+(error?.message||""));
+}
+}
+
+async function jobPlanSaveSettings(){
+try{
+await cloudStateSet(CLOUD_KEY_JOB_PLAN_SETTINGS,jobPlanSettings);
+}catch(error){
+console.error("İş planlama ayarları kaydedilemedi:",error);
+}
+}
+
+
+/* ---------- AYAR ARAYÜZÜ ---------- */
+
+function jobPlanSetShiftEnabled(key,checked){
+if(key==="gece")jobPlanSettings.nightEnabled=!!checked;
+else jobPlanSettings.dayEnabled=!!checked;
+
+if(!jobPlanAnyShiftEnabled()){
+alert("En az bir vardiya açık olmalı.");
+if(key==="gece")jobPlanSettings.nightEnabled=true;
+else jobPlanSettings.dayEnabled=true;
+}
+
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+jobPlanSaveSettings();
+}
+
+function jobPlanSetOvertime(key,checked){
+let cfg=jobPlanSettings[key];
+if(!cfg)return;
+cfg.overtime=!!checked;
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+jobPlanSaveSettings();
+}
+
+function jobPlanToggleDay(key,day){
+let cfg=jobPlanSettings[key];
+if(!cfg)return;
+let d=Number(day);
+let set=new Set(cfg.workDays||[]);
+if(set.has(d))set.delete(d);
+else set.add(d);
+if(!set.size){alert("En az bir çalışma günü seçili olmalı.");return;}
+cfg.workDays=[...set].sort();
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+jobPlanSaveSettings();
+}
+
+function jobPlanSetShortDay(key,day,value){
+let cfg=jobPlanSettings[key];
+if(!cfg)return;
+let id=String(Number(day));
+if(!cfg.shortDays)cfg.shortDays={};
+let time=String(value||"").trim();
+if(/^\d{1,2}:\d{2}$/.test(time))cfg.shortDays[id]=time;
+else delete cfg.shortDays[id];
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+jobPlanSaveSettings();
+}
+
+function jobPlanClock(ms){
+return new Date(ms).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
+}
+
+function jobPlanNextWeekday(day){
+let d=new Date();
+d.setHours(0,0,0,0);
+for(let i=0;i<8;i++){
+if(d.getDay()===Number(day))return d;
+d.setDate(d.getDate()+1);
+}
+return d;
+}
+
+function jobPlanWindowHours(windows){
+return windows.reduce((sum,w)=>sum+(w.end-w.start),0)/3600000;
+}
+
+/* Kısa gün olmayan ilk tam çalışma günü — bilgi satırındaki "saat/gün" için. */
+function jobPlanNextFullDay(){
+let d=new Date();
+d.setHours(0,0,0,0);
+for(let i=0;i<14;i++){
+let day=d.getDay();
+let dayShort=jobPlanSettings.gunduz.shortDays && jobPlanSettings.gunduz.shortDays[String(day)];
+if(jobPlanDayWindows(d).length && !dayShort)return d;
+d.setDate(d.getDate()+1);
+}
+return new Date();
+}
+
+/* Haftanın ilk ve son çalışma anı (birleşik kapasiteye göre). */
+function jobPlanWeekSpan(){
+let order=[1,2,3,4,5,6,0];
+if(jobPlanShiftEnabled("gece") && (jobPlanSettings.gece.workDays||[]).includes(0)){
+order=[0,1,2,3,4,5,6];
+}
+
+let first=null;
+let last=null;
+
+order.forEach(d=>{
+let w=jobPlanDayWindows(jobPlanNextWeekday(d));
+if(!w.length)return;
+if(!first)first={day:d,ms:w[0].start};
+last={day:d,ms:w[w.length-1].end};
+});
+
+if(!first || !last)return "";
+
+let lastDate=new Date(last.ms);
+return JOB_PLAN_DAY_NAMES[first.day]+" "+jobPlanClock(first.ms)+
+" → "+JOB_PLAN_DAY_NAMES[lastDate.getDay()]+" "+jobPlanClock(last.ms);
+}
+
+function jobPlanRenderDayChips(key,elementId,order){
+let box=document.getElementById(elementId);
+if(!box)return;
+let cfg=jobPlanSettings[key];
+box.innerHTML=order.map(d=>{
+let on=(cfg.workDays||[]).includes(d);
+return '<label class="jobplan-day '+(on?"on":"")+'">'+
+'<input type="checkbox" '+(on?"checked":"")+
+' onchange="jobPlanToggleDay(\''+key+'\','+d+')">'+
+JOB_PLAN_DAY_NAMES[d]+
+'</label>';
+}).join("");
+}
+
+function jobPlanShiftHoursLabel(key){
+let cfg=jobPlanSettings[key];
+return cfg.start+"–"+(cfg.overtime?cfg.overtimeEnd:cfg.end);
+}
+
+function jobPlanRenderSettings(){
+if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
+
+let dayOn=jobPlanShiftEnabled("gunduz");
+let nightOn=jobPlanShiftEnabled("gece");
+
+let dayCheck=document.getElementById("jobPlanDayEnabled");
+if(dayCheck)dayCheck.checked=dayOn;
+
+let nightCheck=document.getElementById("jobPlanNightEnabled");
+if(nightCheck)nightCheck.checked=nightOn;
+
+let dayBlock=document.getElementById("jobPlanDayBlock");
+if(dayBlock)dayBlock.classList.toggle("off",!dayOn);
+
+let nightBlock=document.getElementById("jobPlanNightBlock");
+if(nightBlock)nightBlock.classList.toggle("off",!nightOn);
+
+let dayOvertime=document.getElementById("jobPlanDayOvertime");
+if(dayOvertime)dayOvertime.checked=!!jobPlanSettings.gunduz.overtime;
+
+let nightOvertime=document.getElementById("jobPlanNightOvertime");
+if(nightOvertime)nightOvertime.checked=!!jobPlanSettings.gece.overtime;
+
+let dayHours=document.getElementById("jobPlanDayHours");
+if(dayHours)dayHours.textContent=jobPlanShiftHoursLabel("gunduz");
+
+let nightHours=document.getElementById("jobPlanNightHours");
+if(nightHours)nightHours.textContent=jobPlanShiftHoursLabel("gece");
+
+jobPlanRenderDayChips("gunduz","jobPlanDayDays",[1,2,3,4,5,6,0]);
+jobPlanRenderDayChips("gece","jobPlanNightDays",[0,1,2,3,4,5,6]);
+
+let saturday=document.getElementById("jobPlanSaturdayEnd");
+if(saturday){
+let current=(jobPlanSettings.gunduz.shortDays && jobPlanSettings.gunduz.shortDays["6"])||"";
+let times=[];
+
+/* 09:00 - 20:00 arası çeyrek saatlik seçenekler */
+for(let minute=9*60;minute<=20*60;minute+=15){
+times.push(String(Math.floor(minute/60)).padStart(2,"0")+":"+String(minute%60).padStart(2,"0"));
+}
+
+/* Elle kaydedilmiş farklı bir saat varsa listede kalsın. */
+if(current && !times.includes(current))times.push(current);
+
+saturday.innerHTML=
+'<option value="">Tam gün</option>'+
+times.map(v=>'<option value="'+v+'" '+(v===current?"selected":"")+'>'+v+'</option>').join("");
+
+saturday.value=current;
+}
+
+let shortWrap=document.getElementById("jobPlanShortDayWrap");
+if(shortWrap){
+shortWrap.style.display=(jobPlanSettings.gunduz.workDays||[]).includes(6)?"flex":"none";
+}
+
+let info=document.getElementById("jobPlanHoursInfo");
+if(info){
+let lines=[];
+
+let probe=jobPlanNextFullDay();
+let dayHoursValue=jobPlanWindowHours(jobPlanShiftWindows(probe,"gunduz"));
+let nightHoursValue=jobPlanWindowHours(jobPlanShiftWindows(probe,"gece"));
+let total=jobPlanWindowHours(jobPlanDayWindows(probe));
+
+let capacity=[];
+if(dayOn)capacity.push("gündüz "+Number(dayHoursValue.toFixed(2))+" sa");
+if(nightOn)capacity.push("gece "+Number(nightHoursValue.toFixed(2))+" sa");
+
+lines.push(
+"<strong>Günlük kapasite:</strong> "+
+(capacity.length?capacity.join(" + "):"—")+
+(capacity.length>1?" = <strong>"+Number(total.toFixed(2))+" saat</strong>":"")
+);
+
+let span=jobPlanWeekSpan();
+if(span)lines.push("<strong>Hafta:</strong> "+span);
+
+if(dayOn){
+let cmt=jobPlanShiftWindows(jobPlanNextWeekday(6),"gunduz");
+if(cmt.length){
+lines.push("Cumartesi gündüz: "+jobPlanClock(cmt[0].start)+" – "+
+jobPlanClock(cmt[cmt.length-1].end)+" ("+Number(jobPlanWindowHours(cmt).toFixed(2))+" saat)");
+}
+}
+
+if(nightOn){
+lines.push("<em>Gece vardiyası gündüzün devamıdır; süreler tek kuyrukta birleşir.</em>");
+}
+
+info.innerHTML=lines.join("<br>");
+}
+}
+
+
+/* ---------- HTML YÜKLEME / ÖNİZLEME ---------- */
+
+async function jobPlanReadFiles(event){
+let files=Array.from(event.target.files||[]);
+event.target.value="";
+if(!files.length)return;
+
+let existing=new Set();
+jobPlanJobs.forEach(job=>(job.files||[]).forEach(f=>existing.add(String(f.fileName||"").toLowerCase())));
+
+let parsed=[];
+
+for(let file of files){
+try{
+let text=await file.text();
+let data=jobPlanParseHtml(text,file.name);
+data.include=true;
+data.percent=0;
+data.rowId="imp"+Math.random().toString(36).slice(2,9);
+data.duplicate=existing.has(String(file.name).toLowerCase());
+data.candidates=jobPlanProductCandidates(data.size,data.rawLengthMm);
+data.productId=data.candidates.length?String(data.candidates[0].id):"";
+/* Yeni kart açılırken kullanılacak varsayılanlar */
+data.newQuality="ST37";
+data.newFinish="Standart";
+data.newPipeSeam="Dikişli";
+data.customerMaterial=false;
+if(data.duplicate)data.include=false;
+parsed.push(data);
+}catch(error){
+console.error("HTML okunamadı:",file.name,error);
+alert("❌ "+file.name+" okunamadı.\n\n"+(error?.message||""));
+}
+}
+
+if(!parsed.length)return;
+
+parsed.sort((a,b)=>String(a.dtNo).localeCompare(String(b.dtNo),"tr")||String(a.fileName).localeCompare(String(b.fileName),"tr"));
+jobPlanImportFiles=parsed;
+jobPlanRenderImport();
+}
+
+function jobPlanRenderImport(){
+let panel=document.getElementById("jobPlanImportPanel");
+let body=document.getElementById("jobPlanImportBody");
+let title=document.getElementById("jobPlanImportTitle");
+if(!panel || !body)return;
+
+if(!jobPlanImportFiles.length){
+panel.classList.remove("open");
+body.innerHTML="";
+return;
+}
+
+panel.classList.add("open");
+
+let totalSeconds=jobPlanImportFiles
+.filter(f=>f.include)
+.reduce((sum,f)=>sum+((Number(f.totalSeconds)||0)*(100+jobPlanCleanPercent(f.percent))/100),0);
+
+if(title){
+title.textContent=
+jobPlanImportFiles.length+" dosya okundu · seçili toplam süre "+
+jobPlanFormatDuration(totalSeconds)+" ("+jobPlanFormatClock(totalSeconds)+")";
+}
+
+body.innerHTML=jobPlanImportFiles.map(f=>{
+let sizeText=f.size
+?(escapeHTML(f.size.sizeText+" · "+formatThickness(f.size.thickness))+
+'<div class="jobplan-sub">'+escapeHTML(f.tubeProfile||f.sizeCode||"")+
+(f.sizeSource?" ("+escapeHTML(f.sizeSource)+")":"")+'</div>'+
+(f.sizeConflict?'<div class="jobplan-warn">Dosya adı farklı ebat söylüyor</div>':'')+
+((f.tubeProfiles||[]).length>1?'<div class="jobplan-warn">Dosyada '+f.tubeProfiles.length+' farklı profil var</div>':''))
+:'<span class="jobplan-warn">Ebat çözülemedi</span>';
+
+let lengthText=Number.isFinite(f.rawLengthMm)
+?jobPlanRawLengthM(f.rawLengthMm)+" m"
+:'<span class="jobplan-warn">? (6 m varsayılacak)</span>';
+
+let customerToggle=
+'<label class="jobplan-customer">'+
+'<input type="checkbox" '+(f.customerMaterial?"checked":"")+
+' onchange="jobPlanImportSetCustomer(\''+f.rowId+'\',this.checked)">'+
+'<span>🧾 Müşteri malı</span>'+
+'</label>';
+
+let stockCell;
+if(f.customerMaterial){
+stockCell=customerToggle+
+'<div class="jobplan-sub">Stok kartına dokunulmaz</div>';
+}
+else if(!f.size){
+stockCell=customerToggle+
+'<div class="jobplan-warn">Ebat okunamadı — stok işlemi yapılamaz</div>';
+}
+else{
+let options='<select class="jobplan-select" onchange="jobPlanImportSetProduct(\''+f.rowId+'\',this.value)">'+
+f.candidates.map(p=>
+'<option value="'+p.id+'" '+(String(p.id)===String(f.productId)?"selected":"")+'>'+
+escapeHTML(jobPlanProductLabel(p))+
+'</option>'
+).join("")+
+'<option value="" '+(f.productId?"":"selected")+'>+ Yeni stok kartı aç</option>'+
+'</select>';
+
+let extra="";
+if(!f.productId){
+let pick=(field,list,current)=>
+'<select class="jobplan-select jobplan-select-sm" onchange="jobPlanImportSetField(\''+f.rowId+'\',\''+field+'\',this.value)">'+
+list.map(v=>'<option value="'+v+'" '+(v===current?"selected":"")+'>'+v+'</option>').join("")+
+'</select>';
+
+extra='<div class="jobplan-newcard">'+
+pick("newQuality",["ST37","ST52","304","316","316L","Galvaniz","Alüminyum","Diğer"],f.newQuality||"ST37")+
+pick("newFinish",["Boyasız","Boyalı"],(f.newFinish==="Boyalı"?"Boyalı":"Boyasız"))+
+((f.size && f.size.type==="Boru")
+?pick("newPipeSeam",["Dikişli","Dikişsiz"],f.newPipeSeam||"Dikişli")
+:"")+
+'<div class="jobplan-warn">Yeni kart · stok 0</div>'+
+'</div>';
+}
+stockCell=customerToggle+options+extra;
+}
+
+return '<tr>'+
+'<td><input type="checkbox" '+(f.include?"checked":"")+
+' onchange="jobPlanImportToggle(\''+f.rowId+'\',this.checked)"></td>'+
+'<td>'+escapeHTML(f.fileName)+
+(f.duplicate?'<div class="jobplan-warn">Bu dosya zaten planda</div>':'')+
+'</td>'+
+'<td><strong>'+escapeHTML(f.dtNo)+'</strong>'+
+(f.customer?'<div class="jobplan-sub">'+escapeHTML(f.customer)+'</div>':'')+'</td>'+
+'<td>'+sizeText+'</td>'+
+'<td>'+lengthText+'</td>'+
+'<td><input class="jobplan-num" type="number" min="1" step="1" value="'+(Number(f.tubes)||1)+
+'" onchange="jobPlanImportSetTubes(\''+f.rowId+'\',this.value)"></td>'+
+'<td>'+jobPlanFormatDuration(f.totalSeconds)+
+'<div class="jobplan-sub">'+jobPlanFormatClock(f.totalSeconds)+' · '+(Number(f.parts)||0)+' parça</div></td>'+
+'<td><input class="jobplan-percent" type="number" step="1" value="'+jobPlanCleanPercent(f.percent)+
+'" onchange="jobPlanImportSetPercent(\''+f.rowId+'\',this.value)" title="Ek süre %. 0 = HTML süresi aynen."></td>'+
+'<td>'+stockCell+'</td>'+
+'</tr>';
+}).join("");
+}
+
+function jobPlanImportFind(rowId){
+return jobPlanImportFiles.find(f=>f.rowId===rowId);
+}
+
+function jobPlanImportToggle(rowId,checked){
+let f=jobPlanImportFind(rowId);
+if(f)f.include=!!checked;
+jobPlanRenderImport();
+}
+
+function jobPlanImportSetProduct(rowId,productId){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+f.productId=String(productId||"");
+jobPlanRenderImport();
+}
+
+function jobPlanImportSetCustomer(rowId,checked){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+f.customerMaterial=!!checked;
+if(f.customerMaterial)f.productId="";
+else if(f.candidates && f.candidates.length)f.productId=String(f.candidates[0].id);
+jobPlanRenderImport();
+}
+
+function jobPlanImportSetField(rowId,field,value){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+f[field]=String(value||"");
+jobPlanRenderImport();
+}
+
+function jobPlanImportSetPercent(rowId,value){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+f.percent=jobPlanCleanPercent(value);
+jobPlanRenderImport();
+}
+
+function jobPlanImportSetTubes(rowId,value){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+let n=Math.floor(Number(value));
+f.tubes=Number.isFinite(n) && n>0?n:1;
+jobPlanRenderImport();
+}
+
+function jobPlanCancelImport(){
+jobPlanImportFiles=[];
+jobPlanRenderImport();
+}
+
+/* HTML'den okunan ebat/boy ile eşleşen kart yoksa stok kartını açar (stok 0). */
+async function jobPlanCreateStockCard(data){
+if(!data.size)throw new Error("Ebat okunamadığı için stok kartı açılamaz.");
+
+let lengthM=jobPlanRawLengthM(data.rawLengthMm);
+
+/* Alan biçimleri uygulamanın kendi kayıtlarıyla birebir aynı olmalı:
+   size "60x30", thickness "2 mm", length sayı. */
+/* Yüzey ve boru yapısı uygulamanın kendi kodlamasıyla description içine yazılır. */
+let description=encodeFinishDescription("",data.newFinish||"Standart");
+description=encodePipeSeamDescription(description,data.size.type,data.newPipeSeam||"Dikişli");
+
+let product={
+id:Date.now()+Math.floor(Math.random()*1000),
+type:data.size.type,
+shape:data.size.shape,
+quality:normalizeQuality(data.newQuality||"ST37"),
+size:formatSize(data.size.sizeText),
+thickness:formatThickness(data.size.thickness),
+length:lengthM,
+stock:0,
+critical:0,
+description:description
+};
+
+let result=await supabaseRequest(PRODUCTS_TABLE,"POST",product);
+if(!result || !result.length)throw new Error("Stok kartı Supabase'e kaydedilemedi.");
+
+let saved=result[0];
+
+saved.quality=normalizeQuality(saved.quality);
+saved.size=formatSize(saved.size);
+saved.thickness=formatThickness(saved.thickness);
+saved.length=parseLength(saved.length)||6;
+saved.stock=Number(saved.stock)||0;
+saved.critical=Number(saved.critical)||0;
+
+products.push(saved);
+return saved;
+}
+
+async function jobPlanCommitImport(){
+let selected=jobPlanImportFiles.filter(f=>f.include);
+if(!selected.length){alert("Plana eklenecek dosya seçilmedi.");return;}
+
+let now=Date.now();
+let maxOrder=jobPlanJobs.reduce((m,j)=>Math.max(m,Number(j.order)||0),0);
+let createdCards=[];
+let noSize=[];
+
+/* Aynı ebat için birden çok dosya varsa kart bir kez açılır. */
+let newCardCache={};
+
+for(let data of selected){
+if(data.customerMaterial)continue;
+if(data.productId)continue;
+if(!data.size){noSize.push(data.fileName);continue;}
+
+let key=normalizeText(data.size.sizeText)+"|"+data.size.thickness+"|"+
+jobPlanRawLengthM(data.rawLengthMm)+"|"+(data.newQuality||"ST37");
+
+if(newCardCache[key]){
+data.productId=String(newCardCache[key].id);
+continue;
+}
+
+try{
+let saved=await jobPlanCreateStockCard(data);
+newCardCache[key]=saved;
+data.productId=String(saved.id);
+createdCards.push(saved);
+}
+catch(error){
+console.error(error);
+alert("❌ "+data.fileName+" için stok kartı açılamadı.\n\n"+(error?.message||""));
+}
+}
+
+selected.forEach(data=>{
+let job=jobPlanJobs.find(j=>j.status!=="completed" && String(j.dtNo)===String(data.dtNo));
+
+if(!job){
+maxOrder++;
+job={
+id:"job"+now.toString(36)+Math.random().toString(36).slice(2,7),
+dtNo:data.dtNo,
+createdAt:now,
+order:maxOrder,
+percent:0,
+percentMode:"ek",
+status:"planned",
+files:[]
+};
+jobPlanJobs.push(job);
+}
+
+let file={
+id:"f"+Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+fileName:data.fileName,
+jobName:data.jobName,
+size:data.size,
+tubeProfile:data.tubeProfile,
+sizeSource:data.sizeSource||"",
+percent:jobPlanCleanPercent(data.percent),
+totalSeconds:Number(data.totalSeconds)||0,
+parts:Number(data.parts)||0,
+tubes:Number(data.tubes)||1,
+rawLengthMm:Number.isFinite(data.rawLengthMm)?data.rawLengthMm:null,
+allocatedM:Number.isFinite(data.allocatedM)?data.allocatedM:null,
+productId:data.customerMaterial?"":(data.productId?String(data.productId):""),
+customerMaterial:!!data.customerMaterial,
+reservationId:"",
+status:"bekliyor",
+startedAt:null,
+finishedAt:null,
+stockDeducted:false,
+uploadedAt:now
+};
+
+job.files.push(file);
+jobPlanAddReservation(job,file);
+jobPlanExpanded[job.id]=true;
+});
+
+jobPlanImportFiles=[];
+jobPlanRenderImport();
+jobPlanRefreshAll();
+if(typeof showMovements==="function")showMovements();
+await jobPlanSaveJobs();
+
+let messages=[];
+
+if(createdCards.length){
+messages.push("🆕 "+createdCards.length+" yeni stok kartı açıldı (stok 0):\n"+
+createdCards.map(p=>"• "+jobPlanProductLabel(p)).join("\n"));
+}
+
+if(noSize.length){
+messages.push("⚠️ Ebat okunamadığı için stok işlemi yapılamayan dosya:\n"+noSize.map(n=>"• "+n).join("\n"));
+}
+
+let shortageLines=jobPlanShortageLines();
+if(shortageLines.length){
+messages.push("⚠️ Yetersiz stok:\n"+shortageLines.join("\n"));
+}
+
+if(messages.length)alert(messages.join("\n\n"));
+}
+
+/* "60x30 / 2 mm / 6 m → 1 boy yetersiz" satırları */
+function jobPlanShortageLines(){
+let demand=jobPlanDemandByProduct();
+let lines=[];
+
+Object.keys(demand).forEach(pid=>{
+let product=products.find(p=>String(p.id)===pid);
+if(!product)return;
+let missing=demand[pid]-Number(product.stock||0);
+if(missing>0){
+lines.push("• "+product.type+" "+product.size+" / "+formatThickness(product.thickness)+
+" / "+formatLength(product.length)+" → "+missing+" boy yetersiz");
+}
+});
+
+return lines;
+}
+
+/* ---------- SIRALAMA / DÜZENLEME ---------- */
+
+function jobPlanMove(jobId,direction){
+let list=jobPlanActiveJobs();
+let index=list.findIndex(j=>j.id===jobId);
+if(index<0)return;
+let target=index+(direction<0?-1:1);
+if(target<0 || target>=list.length)return;
+
+let a=list[index];
+let b=list[target];
+let temp=a.order;
+a.order=b.order;
+b.order=temp;
+
+jobPlanRefreshAll();
+jobPlanSaveJobs();
+}
+
+function jobPlanCleanPercent(value){
+let n=Number(String(value===undefined||value===null?"":value).replace(",","."));
+if(!Number.isFinite(n))return 0;
+if(n<-99)n=-99;
+return n;
+}
+
+/* DT kutusu: tüm dosyaları tek seferde aynı ek orana çeker. */
+function jobPlanSetPercent(jobId,value){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+if(!job)return;
+let percent=jobPlanCleanPercent(value);
+job.percent=percent;
+(job.files||[]).forEach(f=>{f.percent=percent;});
+jobPlanRefreshAll();
+jobPlanSaveJobs();
+}
+
+/* Dosya kutusu: sadece o HTML'in ek oranını değiştirir. */
+function jobPlanSetFilePercent(jobId,fileId,value){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job&&(job.files||[]).find(f=>f.id===fileId);
+if(!file)return;
+file.percent=jobPlanCleanPercent(value);
+jobPlanRefreshAll();
+jobPlanSaveJobs();
+}
+
+function jobPlanToggleExpand(jobId){
+jobPlanExpanded[jobId]=!jobPlanExpanded[jobId];
+jobPlanRender();
+}
+
+async function jobPlanDeleteJob(jobId){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+if(!job)return;
+if(!confirm(job.dtNo+" plandan kaldırılsın mı?\n\nAyrılan stok kayıtları da silinir."))return;
+
+(job.files||[]).forEach(file=>jobPlanRemoveReservation(file));
+jobPlanJobs=jobPlanJobs.filter(j=>j.id!==jobId);
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+
+/* ---------- BAŞLAT / DURAKLA / BİTİR ---------- */
+
+function jobPlanDoneTubes(file){
+let n=Number(file&&file.doneTubes);
+return Number.isFinite(n) && n>0?Math.floor(n):0;
+}
+
+/* Başlat→Bitir arasında geçen gerçek süre.
+   Durakla/Devam ile bölünürse parçalar toplanır. */
+function jobPlanWorkedMs(file){
+let n=Number(file&&file.workedMs);
+if(Number.isFinite(n) && n>0)return n;
+
+/* Eski kayıtlarda biriktirme yoktu: başlangıç ve bitişten hesapla. */
+let start=Number(file&&file.startedAt);
+let end=Number(file&&file.finishedAt);
+if(Number.isFinite(start) && Number.isFinite(end) && end>start)return end-start;
+return 0;
+}
+
+function jobPlanAddWorked(file){
+let start=Number(file&&file.startedAt);
+if(!Number.isFinite(start))return;
+let piece=Date.now()-start;
+if(piece<=0)return;
+file.workedMs=(Number(file.workedMs)||0)+piece;
+}
+
+function jobPlanJobWorkedMs(job){
+return (job.files||[]).reduce((sum,f)=>sum+jobPlanWorkedMs(f),0);
+}
+
+function jobPlanFormatWorked(ms){
+let n=Number(ms);
+if(!Number.isFinite(n) || n<=0)return "—";
+return jobPlanFormatDuration(n/1000)+" ("+jobPlanFormatClock(n/1000)+")";
+}
+
+function jobPlanDeductedTubes(file){
+let n=Number(file&&file.deductedTubes);
+return Number.isFinite(n) && n>0?Math.floor(n):0;
+}
+
+/* Planda hâlâ yapılacak boy sayısı */
+function jobPlanRemainingTubes(job,file){
+if(!file)return 0;
+if(file.status==="bitti")return 0;
+let total=Math.floor(Number(file.tubes)||0);
+let done=jobPlanDoneTubes(file);
+return Math.max(0,total-done);
+}
+
+/* Kalan süre: yapılan boy oranında kısalır. */
+function jobPlanFileRemainingSeconds(job,file){
+if(!file || file.status==="bitti")return 0;
+let full=jobPlanFileSeconds(job,file);
+let total=Math.floor(Number(file.tubes)||0);
+if(total<=0)return full;
+let remaining=jobPlanRemainingTubes(job,file);
+return full*remaining/total;
+}
+
+/* MÜŞTERİ MALZEMESİ: stok kartı yok, hiçbir kartın adedi değişmez.
+   Sadece hareket geçmişine bilgi amaçlı bir kayıt düşülür.
+   Tablo product_id boş kabul etmiyorsa kayıt yazılmaz ama iş akışı durmaz. */
+async function jobPlanCustomerMovement(job,file,quantity,label){
+let qty=Math.floor(Number(quantity)||0);
+if(qty<=0)return 0;
+
+let size=file.size||{};
+
+let movement={
+id:Date.now(),
+product_id:null,
+type:"Çıkış",
+quantity:qty,
+date:new Date().toLocaleString("tr-TR"),
+description:"Müşteri malzemesi — "+job.dtNo+" — "+file.fileName+(label?" ("+label+")":""),
+product_name:size.type||"Profil",
+shape:size.shape||"",
+quality:"Müşteri",
+size:size.sizeText||"",
+thickness:size.thickness?formatThickness(size.thickness):"",
+length:jobPlanRawLengthM(file.rawLengthMm)
+};
+
+try{
+let result=await supabaseRequest(MOVEMENTS_TABLE,"POST",movement);
+if(result && result.length)movements.push(result[0]);
+}
+catch(error){
+console.warn("Müşteri malzemesi hareket kaydı yazılamadı (product_id boş kabul edilmiyor olabilir):",error);
+}
+
+return qty;
+}
+
+/* Stoktan boy düşer, hareket kaydı yazar, gerekiyorsa 6 m dışı kartı siler.
+   Dönüş: gerçekten düşülen boy sayısı. */
+async function jobPlanDeductTubes(job,file,quantity,label){
+let qty=Math.floor(Number(quantity)||0);
+if(qty<=0)return 0;
+
+/* Müşteri malzemesinde stok kartına dokunulmaz. */
+if(file.customerMaterial){
+await jobPlanCustomerMovement(job,file,qty,label);
+file.deductedTubes=jobPlanDeductedTubes(file)+qty;
+return qty;
+}
+
+if(!file.productId)return 0;
+
+let product=products.find(p=>String(p.id)===String(file.productId));
+
+if(!product){
+if(!confirm("Stok kartı bulunamadı, stok düşülemeyecek.\n\nDevam edilsin mi?"))throw new Error("iptal");
+return 0;
+}
+
+if(qty>Number(product.stock||0)){
+if(!confirm(
+"⚠️ Stok yetersiz.\n\n"+
+jobPlanProductLabel(product)+"\n"+
+"Gereken: "+qty+" boy\n\n"+
+"Stok düşülmeden devam edilsin mi?"
+))throw new Error("iptal");
+return 0;
+}
+
+let newStock=Number(product.stock)-qty;
+
+await supabaseRequest(
+PRODUCTS_TABLE,
+"PATCH",
+{stock:newStock},
+"?id=eq."+encodeURIComponent(product.id)
+);
+
+let movement={
+id:Date.now(),
+product_id:product.id,
+type:"Çıkış",
+quantity:qty,
+date:new Date().toLocaleString("tr-TR"),
+description:"İş planı: "+job.dtNo+" — "+file.fileName+(label?" ("+label+")":""),
+product_name:product.type,
+shape:product.shape,
+quality:product.quality,
+size:product.size,
+thickness:product.thickness,
+length:product.length
+};
+
+let movementResult=await supabaseRequest(MOVEMENTS_TABLE,"POST",movement);
+
+product.stock=newStock;
+if(movementResult && movementResult.length)movements.push(movementResult[0]);
+
+file.deductedTubes=jobPlanDeductedTubes(file)+qty;
+
+/* 6 metre dışı malzeme bitince kart "Stok Yok" olarak kalmaz, silinir. */
+if(product.stock<=0 && !isStandardLength(product.length)){
+await supabaseRequest(
+PRODUCTS_TABLE,
+"DELETE",
+null,
+"?id=eq."+encodeURIComponent(product.id)
+);
+
+products=products.filter(p=>Number(p.id)!==Number(product.id));
+delete standardReservations[String(product.id)];
+delete usageSelections[String(product.id)];
+persistStandardReservations();
+persistUsageSelections();
+}
+
+return qty;
+}
+
+/* Plan tablosundan müşteri malı işaretini değiştirme.
+   Açılınca ayırma kaldırılır; otomatik açılmış boş kart silinmez.
+   Kapatılınca eşleşen stok kartı varsa otomatik bağlanır. */
+async function jobPlanSetCustomerMaterial(jobId,fileId,checked){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!file)return;
+
+file.customerMaterial=!!checked;
+
+if(file.customerMaterial){
+jobPlanRemoveReservation(file);
+}
+else if(!file.productId){
+let candidates=jobPlanProductCandidates(file.size,file.rawLengthMm);
+if(candidates.length)file.productId=String(candidates[0].id);
+}
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+async function jobPlanStartFile(jobId,fileId){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!file)return;
+
+file.status="basladi";
+file.startedAt=Date.now();
+file.pausedAt=null;
+if(job.status==="planned")job.status="active";
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+/* DURAKLA: kaç boy kesildiği sorulur, o kadarı stoktan düşülür,
+   kalan boy ve kalan süre plana yansır. */
+async function jobPlanPauseFile(jobId,fileId){
+if(jobPlanBusy)return;
+
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!job || !file)return;
+
+let total=Math.floor(Number(file.tubes)||0);
+let already=jobPlanDoneTubes(file);
+
+let answer=prompt(
+"⏸ "+job.dtNo+" — "+file.fileName+"\n\n"+
+"Toplam "+total+" boy.\n"+
+(already?"Daha önce girilen: "+already+" boy.\n":"")+
+"\nŞu ana kadar KAÇ BOY kesildi?",
+String(already)
+);
+
+if(answer===null)return;
+
+let done=Math.floor(Number(String(answer).replace(",",".")));
+if(!Number.isFinite(done) || done<0){alert("Geçerli bir boy sayısı girin.");return;}
+if(done>total){alert("En fazla "+total+" boy girebilirsin.");return;}
+if(done<already){alert("Daha önce "+already+" boy girilmişti, daha azını giremezsin.");return;}
+
+jobPlanBusy=true;
+
+try{
+let newlyDone=done-jobPlanDeductedTubes(file);
+if(newlyDone>0){
+await jobPlanDeductTubes(job,file,newlyDone,"kısmi");
+}
+
+jobPlanAddWorked(file);
+
+file.doneTubes=done;
+file.status="durakladi";
+file.pausedAt=Date.now();
+
+/* Ayırma kaydı kalan boya göre küçülür. */
+jobPlanSyncReservations();
+
+if(done>=total){
+if(confirm("Tüm boylar kesilmiş görünüyor.\n\nİş bitmiş sayılsın mı?")){
+jobPlanBusy=false;
+await jobPlanFinishFile(jobId,fileId);
+return;
+}
+}
+
+jobPlanRefreshAll();
+if(typeof showMovements==="function")showMovements();
+await jobPlanSaveJobs();
+
+alert("⏸ Duraklatıldı.\n\nKesilen: "+done+" boy\nKalan: "+(total-done)+" boy");
+}
+catch(error){
+if(String(error&&error.message)!=="iptal"){
+console.error(error);
+alert("❌ Duraklatılamadı.\n\n"+(error?.message||""));
+}
+}
+finally{
+jobPlanBusy=false;
+}
+}
+
+async function jobPlanResumeFile(jobId,fileId){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!file)return;
+
+file.status="basladi";
+file.startedAt=Date.now();
+file.pausedAt=null;
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+async function jobPlanUndoFile(jobId,fileId){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!file)return;
+
+if(jobPlanDeductedTubes(file)>0){
+alert("Bu dosyada "+jobPlanDeductedTubes(file)+" boy stoktan düşülmüş.\n\nGeri alınamaz; gerekirse stoktan giriş yapın.");
+return;
+}
+
+file.status="bekliyor";
+file.startedAt=null;
+file.pausedAt=null;
+file.doneTubes=0;
+file.workedMs=0;
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+async function jobPlanFinishFile(jobId,fileId){
+if(jobPlanBusy)return;
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job?.files?.find(f=>f.id===fileId);
+if(!job || !file)return;
+
+jobPlanBusy=true;
+
+try{
+let total=Math.floor(Number(file.tubes)||0);
+let rest=total-jobPlanDeductedTubes(file);
+
+if(rest>0 && (file.productId || file.customerMaterial)){
+await jobPlanDeductTubes(job,file,rest,jobPlanDeductedTubes(file)>0?"kalan":"");
+}
+
+if(file.status==="basladi")jobPlanAddWorked(file);
+
+jobPlanRemoveReservation(file);
+
+file.status="bitti";
+file.finishedAt=Date.now();
+file.doneTubes=total;
+file.stockDeducted=jobPlanDeductedTubes(file)>0;
+if(!file.startedAt)file.startedAt=file.finishedAt;
+
+let allDone=(job.files||[]).every(f=>f.status==="bitti");
+if(allDone){
+job.status="completed";
+job.completedAt=Date.now();
+}
+else if(job.status==="planned"){
+job.status="active";
+}
+
+jobPlanRefreshAll();
+if(typeof showMovements==="function")showMovements();
+await jobPlanSaveJobs();
+
+if(allDone)alert("✅ "+job.dtNo+" tamamlandı ve tamamlananlara taşındı.");
+}
+catch(error){
+if(String(error&&error.message)!=="iptal"){
+console.error(error);
+alert("❌ İş bitirilemedi.\n\n"+(error?.message||""));
+}
+}
+finally{
+jobPlanBusy=false;
+}
+}
+
+async function jobPlanReopenJob(jobId){
+let job=jobPlanJobs.find(j=>j.id===jobId);
+if(!job)return;
+if(!confirm(job.dtNo+" tekrar aktif plana alınsın mı?\n\nStok hareketleri geri alınmaz."))return;
+
+let maxOrder=jobPlanJobs.reduce((m,j)=>Math.max(m,Number(j.order)||0),0);
+job.status="active";
+job.order=maxOrder+1;
+job.completedAt=null;
+(job.files||[]).forEach(file=>{
+file.status="bekliyor";
+file.startedAt=null;
+file.finishedAt=null;
+file.pausedAt=null;
+file.doneTubes=0;
+file.deductedTubes=0;
+file.workedMs=0;
+file.stockDeducted=false;
+});
+
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+}
+
+
+/* ---------- EKRAN ---------- */
+
+function jobPlanRefreshAll(){
+jobPlanLastCheck=Date.now();
+jobPlanRecalculate();
+jobPlanSyncReservations();
+jobPlanRefreshShortages();
+jobPlanRender();
+jobPlanUpdateBadge();
+if(typeof showProducts==="function")showProducts();
+}
+
+function jobPlanUpdateBadge(){
+let badge=document.getElementById("jobPlanBadge");
+if(!badge)return;
+let count=jobPlanActiveJobs().length;
+badge.textContent=count>99?"99+":String(count);
+badge.style.display=count>0?"flex":"none";
+badge.style.background=jobPlanShortageIds.size?"#dc2626":"#f59e0b";
+badge.style.color=jobPlanShortageIds.size?"#fff":"#1e293b";
+}
+
+function jobPlanRenderSummary(){
+let box=document.getElementById("jobPlanSummary");
+if(!box)return;
+
+let active=jobPlanActiveJobs();
+let remaining=active.reduce((sum,job)=>sum+jobPlanRemainingSeconds(job),0);
+let last=active.reduce((max,job)=>Math.max(max,Number(job.planEnd)||0),0);
+
+let anchor=jobPlanAnchor();
+
+let checkText=jobPlanLastCheck
+?" · son kontrol "+new Date(jobPlanLastCheck).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})
+:"";
+
+let chips=[
+(anchor.running
+?'<div class="jobplan-chip ok">▶️ Süre işliyor · '+jobPlanFormatDateTime(anchor.ms)+"'den beri</div>"
+:'<div class="jobplan-chip">⏸ İş başlamadı · 10 dk\'da bir güncelleniyor'+checkText+'</div>'),
+'<div class="jobplan-chip">'+active.length+' aktif iş</div>',
+'<div class="jobplan-chip">'+active.reduce((s,j)=>s+(j.files||[]).length,0)+' dosya</div>',
+'<div class="jobplan-chip">Kalan süre: '+jobPlanFormatDuration(remaining)+'</div>'
+];
+
+if(last){
+chips.push('<div class="jobplan-chip ok">Son termin: '+jobPlanFormatDateTime(last)+'</div>');
+}
+if(jobPlanShortageIds.size){
+chips.push('<div class="jobplan-chip warning">⚠️ '+jobPlanShortageIds.size+' malzemede stok yetersiz</div>');
+}
+else{
+chips.push('<div class="jobplan-chip ok">Stok yeterli</div>');
+}
+
+box.innerHTML=chips.join("");
+}
+
+function jobPlanRender(){
+jobPlanRenderSummary();
+
+let body=document.getElementById("jobPlanBody");
+if(body){
+let active=jobPlanActiveJobs();
+
+if(!active.length){
+body.innerHTML='<tr><td colspan="11" class="jobplan-empty">Henüz plana eklenmiş iş yok.</td></tr>';
+}
+else{
+body.innerHTML=active.map((job,index)=>{
+let open=!!jobPlanExpanded[job.id];
+let jobShortage=(job.files||[]).some(f=>jobPlanFileStockState(f).code==="yetersiz");
+let totalSeconds=jobPlanJobSeconds(job);
+let rawSeconds=(job.files||[]).reduce((s,f)=>s+(Number(f.totalSeconds)||0),0);
+
+let rows=[];
+
+rows.push(
+'<tr class="jobplan-dt-row '+(jobShortage?"shortage":"")+'" onclick="jobPlanToggleExpand(\''+job.id+'\')">'+
+'<td onclick="event.stopPropagation()">'+
+'<div class="jobplan-order-btns">'+
+'<button type="button" onclick="jobPlanMove(\''+job.id+'\',-1)" '+(index===0?"disabled":"")+' title="Yukarı al">▲</button>'+
+'<button type="button" onclick="jobPlanMove(\''+job.id+'\',1)" '+(index===active.length-1?"disabled":"")+' title="Aşağı al">▼</button>'+
+'</div>'+
+'</td>'+
+'<td><span class="jobplan-caret">'+(open?"▼":"►")+'</span>'+
+'<span class="jobplan-dt-name">'+escapeHTML(job.dtNo)+'</span>'+
+'<div class="jobplan-sub">'+(job.files||[]).length+' dosya · yüklendi '+jobPlanFormatDateTime(job.createdAt)+'</div></td>'+
+'<td>'+escapeHTML(jobPlanSizeSummary(job))+'</td>'+
+'<td>'+jobPlanTubeSummary(job)+'</td>'+
+'<td>'+jobPlanFormatDuration(totalSeconds)+
+'<div class="jobplan-sub">'+jobPlanFormatClock(totalSeconds)+
+(Math.abs(totalSeconds-rawSeconds)>0.5?' · ham '+jobPlanFormatClock(rawSeconds):'')+'</div></td>'+
+'<td onclick="event.stopPropagation()">'+
+'<input class="jobplan-percent" type="number" step="1" '+
+'value="'+(jobPlanCommonPercent(job)===null?"":jobPlanCommonPercent(job))+'" '+
+'placeholder="karışık" '+
+'onchange="jobPlanSetPercent(\''+job.id+'\',this.value)" '+
+'title="Ek süre %. 0 = HTML süresi aynen. Bu DT\'deki tüm dosyalara uygulanır.">'+
+'</td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.planStart)+'</td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.planEnd)+'</td>'+
+'<td>'+(jobShortage
+?'<span class="jobplan-stock-bad">Yetersiz</span>'
+:'<span class="jobplan-stock-ok">Tamam</span>')+'</td>'+
+'<td><span class="jobplan-state '+(job.status==="active"?"basladi":"bekliyor")+'">'+
+(job.status==="active"?"Devam ediyor":"Bekliyor")+'</span></td>'+
+'<td onclick="event.stopPropagation()">'+
+'<button type="button" class="jobplan-mini del" onclick="jobPlanDeleteJob(\''+job.id+'\')">Kaldır</button>'+
+'</td>'+
+'</tr>'
+);
+
+if(open){
+(job.files||[]).forEach(file=>{
+let stock=jobPlanFileStockState(file);
+let stockClass=
+stock.code==="yetersiz"?"jobplan-stock-bad":
+stock.code==="musteri"?"jobplan-stock-musteri":
+stock.code==="tamam"||stock.code==="dusuldu"?"jobplan-stock-ok":
+"jobplan-stock-none";
+
+let ref="'"+job.id+"','"+file.id+"'";
+let actions="";
+
+if(file.status==="bekliyor"){
+actions='<button type="button" class="jobplan-mini start" onclick="jobPlanStartFile('+ref+')">Başlat</button>';
+}
+else if(file.status==="basladi"){
+actions='<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')">Durakla</button> '+
+'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')">Bitir</button> '+
+'<button type="button" class="jobplan-mini undo" onclick="jobPlanUndoFile('+ref+')">Geri</button>';
+}
+else if(file.status==="durakladi"){
+actions='<button type="button" class="jobplan-mini start" onclick="jobPlanResumeFile('+ref+')">Devam</button> '+
+'<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')">Boy</button> '+
+'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')">Bitir</button>';
+}
+else{
+actions='<span class="jobplan-sub">'+jobPlanFormatDateTime(file.finishedAt)+'</span>';
+}
+
+let sizeText=file.size
+?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+:'<span class="jobplan-warn">?</span>';
+
+let doneTubes=jobPlanDoneTubes(file);
+let lengthText=jobPlanRawLengthM(file.rawLengthMm)+" m × "+(Number(file.tubes)||1)+
+(doneTubes>0 && file.status!=="bitti"
+?'<div class="jobplan-sub">kalan '+jobPlanRemainingTubes(job,file)+' boy</div>'
+:'');
+
+let seconds=jobPlanFileSeconds(job,file);
+
+rows.push(
+'<tr class="jobplan-file-row '+
+(file.status==="bitti"?"done":
+file.status==="basladi"?"running":
+file.status==="durakladi"?"paused":"")+'">'+
+'<td></td>'+
+'<td style="padding-left:26px">'+escapeHTML(file.fileName)+
+'<div class="jobplan-sub">'+(Number(file.parts)||0)+' parça'+
+(file.tubeProfile?' · '+escapeHTML(file.tubeProfile):'')+'</div></td>'+
+'<td>'+sizeText+'</td>'+
+'<td>'+lengthText+'</td>'+
+'<td>'+jobPlanFormatDuration(seconds)+
+'<div class="jobplan-sub">'+jobPlanFormatClock(seconds)+
+(jobPlanFilePercent(job,file)!==0
+?' · ham '+jobPlanFormatClock(file.totalSeconds)
+:'')+
+(jobPlanDoneTubes(file)>0 && file.status!=="bitti"
+?'<br>kalan '+jobPlanFormatClock(jobPlanFileRemainingSeconds(job,file))
+:'')+'</div></td>'+
+'<td><input class="jobplan-percent" type="number" step="1" '+
+'value="'+jobPlanFilePercent(job,file)+'" '+
+'onchange="jobPlanSetFilePercent(\''+job.id+'\',\''+file.id+'\',this.value)" '+
+'title="Bu HTML için ek süre %. 0 = HTML süresi aynen."></td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planStart)+'</td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planEnd)+'</td>'+
+'<td class="'+stockClass+'">'+escapeHTML(stock.text)+
+(file.status!=="bitti"
+?'<label class="jobplan-customer">'+
+'<input type="checkbox" '+(file.customerMaterial?"checked":"")+
+' onchange="jobPlanSetCustomerMaterial('+ref+',this.checked)">'+
+'<span>Müşteri malı</span>'+
+'</label>'
+:'')+
+'</td>'+
+'<td><span class="jobplan-state '+file.status+'">'+
+(file.status==="bekliyor"?"Bekliyor":
+file.status==="basladi"?"Başladı":
+file.status==="durakladi"?"Duraklatıldı":"Bitti")+
+'</span>'+
+(jobPlanDoneTubes(file)>0 && file.status!=="bitti"
+?'<div class="jobplan-sub">'+jobPlanDoneTubes(file)+"/"+(Number(file.tubes)||0)+' boy</div>'
+:'')+
+'</td>'+
+'<td>'+actions+'</td>'+
+'</tr>'
+);
+});
+}
+
+return rows.join("");
+}).join("");
+}
+}
+
+let doneBody=document.getElementById("jobPlanDoneBody");
+if(doneBody){
+let done=jobPlanDoneJobs();
+if(!done.length){
+doneBody.innerHTML='<tr><td colspan="6" class="jobplan-empty">Tamamlanmış iş yok.</td></tr>';
+}
+else{
+doneBody.innerHTML=done.map(job=>{
+let planned=jobPlanJobSeconds(job);
+let worked=jobPlanJobWorkedMs(job);
+let diff=worked>0?(worked/1000-planned):0;
+
+return '<tr>'+
+'<td><strong>'+escapeHTML(job.dtNo)+'</strong></td>'+
+'<td>'+(job.files||[]).length+
+'<div class="jobplan-sub">'+(job.files||[]).map(f=>escapeHTML(f.fileName)).join("<br>")+'</div></td>'+
+'<td>'+jobPlanFormatDuration(planned)+
+'<div class="jobplan-sub">'+jobPlanFormatClock(planned)+'</div></td>'+
+'<td>'+jobPlanFormatWorked(worked)+
+(worked>0
+?'<div class="jobplan-sub">'+(diff>0?"+":"")+jobPlanFormatDuration(Math.abs(diff))+(diff>0?" fazla":" az")+'</div>'
+:'')+'</td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.completedAt)+'</td>'+
+'<td><button type="button" class="jobplan-mini undo" onclick="jobPlanReopenJob(\''+job.id+'\')">Geri Al</button></td>'+
+'</tr>';
+}).join("");
+}
+}
+}
+
+/* ---------- 10 DAKİKALIK KONTROL ----------
+   İş başlamadığı sürece terminler her kontrolde yeniden hesaplanır.
+   Bir dosya başlatıldığı anda çapa sabitlenir ve kontrol planı değiştirmez;
+   iş bitip sıradaki başlamadığında mekanizma yeniden devreye girer. */
+
+const JOB_PLAN_CHECK_MS=10*60*1000;
+let jobPlanCheckTimer=null;
+let jobPlanLastCheck=null;
+
+function jobPlanRunCheck(){
+jobPlanLastCheck=Date.now();
+if(!jobPlanJobs.length)return;
+
+jobPlanRecalculate();
+jobPlanRefreshShortages();
+jobPlanRender();
+jobPlanUpdateBadge();
+}
+
+function jobPlanStartCheckTimer(){
+if(jobPlanCheckTimer)clearInterval(jobPlanCheckTimer);
+jobPlanLastCheck=Date.now();
+jobPlanCheckTimer=setInterval(jobPlanRunCheck,JOB_PLAN_CHECK_MS);
+}
+
+function openJobPlanModal(){
+if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+document.getElementById("jobPlanModal").style.display="flex";
+}
+
+function closeJobPlanModal(){
+document.getElementById("jobPlanModal").style.display="none";
+}
+
+
+
+/* =====================================================
+   SON STOK HAREKETLERİ — AÇ/KAPA + ŞİFRELİ TOPLU SİLME
+   Şifre bakım PDF indirme şifresiyle aynıdır.
+===================================================== */
+
+const MOVEMENT_PANEL_KEY="stokMovementPanelOpenV1";
+
+function isMovementPanelOpen(){
+try{return localStorage.getItem(MOVEMENT_PANEL_KEY)!=="0";}
+catch{return true;}
+}
+
+function applyMovementPanel(){
+let panel=document.getElementById("movementPanel");
+let caret=document.getElementById("movementCaret");
+let count=document.getElementById("movementCount");
+let open=isMovementPanelOpen();
+
+if(panel)panel.style.display=open?"":"none";
+if(caret)caret.textContent=open?"▼":"►";
+if(count)count.textContent=Array.isArray(movements)&&movements.length?movements.length+" kayıt":"";
+}
+
+function toggleMovementPanel(){
+let open=!isMovementPanelOpen();
+try{localStorage.setItem(MOVEMENT_PANEL_KEY,open?"1":"0");}catch{}
+applyMovementPanel();
+}
+
+/* Toplu silme bakım şifresini sorar; onay bakım şifre modalında verilir. */
+async function requestMovementClear(){
+if(!Array.isArray(movements) || !movements.length){
+alert("Silinecek stok hareketi yok.");
+return;
+}
+
+if(!(await ensureMaintenancePasswordConfigured()))return;
+
+let modal=document.getElementById("maintenancePasswordModal");
+let input=document.getElementById("maintenanceDownloadPassword");
+let title=document.getElementById("maintenancePasswordTitle");
+let info=document.getElementById("maintenancePasswordInfo");
+let error=document.getElementById("maintenancePasswordError");
+let actionButton=document.getElementById("maintenancePasswordDownloadButton");
+if(!modal || !input)return;
+
+maintenanceDownloadRequest={action:"movement-clear",mode:"all",id:""};
+
+if(title)title.textContent="🔒 Stok Hareketlerini Sil";
+if(info)info.innerHTML=
+"<strong>"+movements.length+" stok hareketi</strong> kalıcı olarak silinecek.<br>"+
+"Stok adetleri değişmez, yalnızca geçmiş kayıtları temizlenir.<br>"+
+"Bakım PDF şifresiyle aynı şifre kullanılır.";
+if(actionButton)actionButton.textContent="Sil";
+
+input.type="password";
+input.value="";
+if(error)error.textContent="";
+let toggle=document.getElementById("maintenancePasswordToggleButton");
+if(toggle)toggle.textContent="Göster";
+
+modal.style.display="flex";
+setTimeout(()=>input.focus(),30);
+}
+
+async function clearAllMovementsAuthorized(){
+await supabaseRequest(MOVEMENTS_TABLE,"DELETE",null,"?id=gt.0");
+movements=[];
+showMovements();
+}
+
+
 /* =====================================================
    BAŞLANGIÇ
 ===================================================== */
@@ -10388,17 +13485,24 @@ await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
 setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
 
-/* + Ayır ve Kullanılabilir/Ayrıldı bilgileri artık Supabase ortak verisinden yüklenir. */
-Promise.all([loadUsageSelections(),loadStandardReservations()])
-.then(()=>{showProducts();})
-.catch(console.error);
-
 fillSizeOptions();
 updateProductReservationVisibility();
 
 changePage("Genel");
 
-loadData();
+/* Stoklar ve ayırma kayıtları buluttan gelmeden iş planı senkronu çalışmamalı;
+   yoksa her sayfa yenilemesinde ayırma kayıtları kopyalanır. */
+Promise.all([
+loadData(),
+loadUsageSelections(),
+loadStandardReservations()
+])
+.then(()=>{
+jobPlanStockReady=true;
+showProducts();
+return jobPlanLoad();
+})
+.catch(console.error);
 
 </script>
 

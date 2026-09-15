@@ -910,7 +910,14 @@ font-size:14px
 }
 
 .alpha-keypad-grid .keypad-space{
-grid-column:span 6;
+grid-column:span 4;
+font-size:14px
+}
+
+.alpha-keypad-grid .keypad-case{
+background:#0f766e;
+color:white;
+font-weight:bold;
 font-size:14px
 }
 
@@ -1111,6 +1118,30 @@ display:none;
 align-items:center;
 justify-content:center;
 line-height:1
+}
+
+/* Uzun pencerelerde Kapat butonu ekranda kalsın */
+.maintenance-modal-box,
+.consumables-modal-box{
+display:flex;
+flex-direction:column;
+max-height:90vh;
+overflow:hidden
+}
+
+.maintenance-modal-box .modal-buttons,
+.consumables-modal-box .modal-buttons{
+flex:0 0 auto;
+margin:0;
+padding-top:12px;
+border-top:1px solid #e2e8f0
+}
+
+.maintenance-modal-box .maintenance-table-wrap,
+.consumables-modal-box #consumableList{
+flex:1 1 auto;
+min-height:0;
+overflow-y:auto
 }
 
 .maintenance-modal-box{
@@ -2427,6 +2458,86 @@ border-top:1px solid #e2e8f0
 margin-top:4px
 }
 
+/* DT arama kutusu */
+.jobplan-search{
+display:flex;
+align-items:center;
+gap:6px;
+background:white;
+border:1px solid #cbd5e1;
+border-radius:8px;
+padding:4px 10px;
+min-width:210px
+}
+
+.jobplan-search span{
+font-size:14px;
+color:#64748b
+}
+
+.jobplan-search input{
+border:0;
+outline:0;
+flex:1;
+min-width:0;
+font-size:13px;
+padding:5px 0;
+background:transparent
+}
+
+.jobplan-search button{
+border:0;
+background:#e2e8f0;
+color:#475569;
+border-radius:999px;
+width:22px;
+height:22px;
+line-height:1;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+display:none;
+padding:0
+}
+
+.jobplan-search button:hover{
+background:#cbd5e1
+}
+
+/* Tamamlananlar açılır / kapanır başlık */
+.jobplan-done-toggle{
+display:flex;
+align-items:center;
+gap:9px;
+background:none;
+border:0;
+padding:6px 0;
+margin:20px 0 10px;
+font-size:16px;
+font-weight:bold;
+color:#1e293b;
+cursor:pointer;
+text-align:left
+}
+
+.jobplan-done-toggle:hover{
+color:#0f766e
+}
+
+/* Kesilen boy penceresi ekran klavyesinin altında kalmasın */
+.jobplan-pause-modal{
+z-index:200
+}
+
+.jobplan-pause-modal .modal-box{
+margin-bottom:0
+}
+
+#jobPlanPauseInput:focus{
+border-color:#0f766e;
+outline:0
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -2449,7 +2560,7 @@ margin-top:4px
 
     <form class="page-login-form" id="pageLoginForm" autocomplete="off">
       <label for="pageLoginPassword">Giriş Şifresi</label>
-      <input id="pageLoginPassword" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
+      <input id="pageLoginPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Giriş şifresi" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
       <label class="page-login-remember">
         <input id="pageLoginRemember" type="checkbox" checked>
         Bu bilgisayarda hatırla
@@ -2460,9 +2571,9 @@ margin-top:4px
 
     <form class="page-login-form" id="pageLoginSetupForm" autocomplete="off">
       <label for="pageLoginNewPassword">Yeni Giriş Şifresi</label>
-      <input id="pageLoginNewPassword" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
+      <input id="pageLoginNewPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
       <label for="pageLoginNewPasswordRepeat">Şifreyi Tekrar Yaz</label>
-      <input id="pageLoginNewPasswordRepeat" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
+      <input id="pageLoginNewPasswordRepeat" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni şifre tekrar" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
       <label class="page-login-remember">
         <input id="pageLoginSetupRemember" type="checkbox" checked>
         Bu bilgisayarda hatırla
@@ -3389,7 +3500,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 <div class="form-group">
 <label>İndirme Şifresi</label>
 <div class="maintenance-password-input-wrap">
-<input id="maintenanceDownloadPassword" type="password" autocomplete="current-password" placeholder="Belirlenmiş şifreyi gir">
+<input id="maintenanceDownloadPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="PDF indirme şifresi" type="password" autocomplete="current-password" placeholder="Belirlenmiş şifreyi gir">
 <button type="button" class="btn-gray" id="maintenancePasswordToggleButton">Göster</button>
 </div>
 <div class="maintenance-password-error" id="maintenancePasswordError"></div>
@@ -3413,15 +3524,15 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 <div class="settings-password-grid">
 <div class="form-group">
 <label>Mevcut Giriş Şifresi</label>
-<input id="settingsLoginCurrent" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
+<input id="settingsLoginCurrent" data-keypad="text" data-native-inputmode="text" data-keypad-label="Mevcut giriş şifresi" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
 </div>
 <div class="form-group">
 <label>Yeni Giriş Şifresi</label>
-<input id="settingsLoginNew" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+<input id="settingsLoginNew" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi" type="password" autocomplete="new-password" placeholder="Yeni şifre">
 </div>
 <div class="form-group">
 <label>Yeni Şifre Tekrar</label>
-<input id="settingsLoginRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
+<input id="settingsLoginRepeat" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi tekrar" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
 </div>
 </div>
 <div class="settings-section-actions">
@@ -3436,15 +3547,15 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 <div class="settings-password-grid">
 <div class="form-group" id="settingsMaintenanceCurrentGroup">
 <label>Mevcut Bakım Şifresi</label>
-<input id="settingsMaintenanceCurrent" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
+<input id="settingsMaintenanceCurrent" data-keypad="text" data-native-inputmode="text" data-keypad-label="Mevcut bakım şifresi" type="password" autocomplete="current-password" placeholder="Mevcut şifre">
 </div>
 <div class="form-group">
 <label>Yeni Bakım Şifresi</label>
-<input id="settingsMaintenanceNew" type="password" autocomplete="new-password" placeholder="Yeni şifre">
+<input id="settingsMaintenanceNew" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni bakım şifresi" type="password" autocomplete="new-password" placeholder="Yeni şifre">
 </div>
 <div class="form-group">
 <label>Yeni Şifre Tekrar</label>
-<input id="settingsMaintenanceRepeat" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
+<input id="settingsMaintenanceRepeat" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni bakım şifresi tekrar" type="password" autocomplete="new-password" placeholder="Yeni şifreyi tekrar gir">
 </div>
 </div>
 <div class="settings-section-actions">
@@ -3540,8 +3651,16 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 <div style="font-size:13px;color:#64748b">TruLaser üretim paketi HTML dosyalarını yükle; süre, ebat ve boy bilgisine göre termin hesaplanır, 6 m malzeme stoktan ayrılır.</div>
 </div>
 <div class="jobplan-head-actions">
+<div class="jobplan-search" data-jobplan-keep="1">
+<span>🔍</span>
+<input id="jobPlanSearchBox" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya arama"
+placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
+<button type="button" id="jobPlanSearchClear" title="Aramayı temizle" onclick="jobPlanClearSearch()">✕</button>
+</div>
 <button type="button" class="btn-orange" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
 <button type="button" class="btn-blue" onclick="jobPlanRefreshAll()">🔄 Planı Yenile</button>
+<button type="button" class="btn-green" onclick="exportJobPlan()">📊 Excel'e Aktar</button>
 <input type="file" id="jobPlanFiles" accept=".html,.htm" multiple style="display:none" onchange="jobPlanReadFiles(event)">
 </div>
 </div>
@@ -3636,7 +3755,13 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 </table>
 </div>
 
-<div class="jobplan-section-title">✅ Tamamlananlar</div>
+<button type="button" class="jobplan-done-toggle" onclick="jobPlanToggleDone()">
+<span class="jobplan-caret" id="jobPlanDoneCaret">►</span>
+<span>✅ Tamamlananlar</span>
+<span class="movement-count" id="jobPlanDoneCount">0 kayıt</span>
+</button>
+
+<div id="jobPlanDoneWrap" style="display:none">
 <div class="jobplan-table-wrap">
 <table class="jobplan-table">
 <thead>
@@ -3654,11 +3779,38 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 </tbody>
 </table>
 </div>
+</div>
 
 </div>
 
 <div class="modal-buttons">
 <button type="button" class="btn-gray" onclick="closeJobPlanModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
+<!-- DURAKLA: KESİLEN BOY PENCERESİ -->
+<div class="modal jobplan-pause-modal" id="jobPlanPauseModal">
+<div class="modal-box" style="max-width:420px">
+
+<h2 style="margin:0 0 10px">⏸ Kesilen Boy</h2>
+
+<div id="jobPlanPauseInfo" style="font-size:13px;color:#475569;margin-bottom:14px"></div>
+
+<label style="display:block;font-weight:bold;font-size:13px;margin-bottom:6px">
+Şu ana kadar kaç boy kesildi?
+</label>
+
+<input id="jobPlanPauseInput" type="text" inputmode="none"
+data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Kesilen boy sayısı"
+style="width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;font-size:20px;font-weight:bold;text-align:center">
+
+<div id="jobPlanPauseWarn" class="jobplan-warn" style="margin-top:8px;min-height:16px"></div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="jobPlanPauseCancel()">Vazgeç</button>
+<button type="button" class="btn-green" onclick="jobPlanPauseConfirm()">Kaydet</button>
 </div>
 
 </div>
@@ -3716,6 +3868,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 
       <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" data-key="Ø">Ø</button><button type="button" data-key="-">-</button><button type="button" data-key=".">.</button><button type="button" data-key=",">,</button>
 
+      <button type="button" class="keypad-case keypad-wide" id="keypadCaseBtn" data-action="case" title="Küçük / büyük harf">abc</button>
       <button type="button" class="keypad-action keypad-wide" data-key="/">/</button>
       <button type="button" class="keypad-space" data-key=" ">Boşluk</button>
       <button type="button" class="keypad-action keypad-wide" data-key=":">:</button>
@@ -9581,10 +9734,16 @@ function backupData(){
 
 let backup={
 
-version:5,
+version:6,
 
 createdAt:
 new Date().toISOString(),
+
+jobPlanJobs:
+typeof jobPlanJobs!=="undefined"?jobPlanJobs:[],
+
+jobPlanSettings:
+typeof jobPlanSettings!=="undefined"?jobPlanSettings:null,
 
 products:products,
 
@@ -9745,6 +9904,17 @@ maintenanceVendors=maintenanceUniqueNames(backup.maintenanceVendors);
 }
 if(Array.isArray(backup.maintenanceEquipments) || Array.isArray(backup.maintenanceVendors)){
 await saveMaintenanceMasterLists(false);
+}
+
+/* İş planı (yedek sürüm 6 ve sonrası) */
+if(Array.isArray(backup.jobPlanJobs)){
+jobPlanJobs=backup.jobPlanJobs;
+await jobPlanSaveJobs();
+}
+
+if(backup.jobPlanSettings && typeof backup.jobPlanSettings==="object"){
+jobPlanSettings=jobPlanNormalizeSettings(backup.jobPlanSettings);
+await jobPlanSaveSettings();
 }
 
 await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
@@ -10393,7 +10563,30 @@ return !!(toggle && toggle.checked);
 }
 
 function isLetterKey(key){
-return /^[A-ZÇĞİÖŞÜ]$/i.test(key);
+return /^[A-ZÇĞİÖŞÜa-zçğıiöşü]$/.test(key);
+}
+
+/* Büyük/küçük harf durumu — şifre gibi alanlarda gerekli. */
+let keypadUpper=true;
+
+function applyKeypadCase(){
+document.querySelectorAll("#alphaKeypadPanel [data-key]").forEach(btn=>{
+let key=btn.dataset.key;
+if(!isLetterKey(key))return;
+let next=keypadUpper
+?key.toLocaleUpperCase("tr-TR")
+:key.toLocaleLowerCase("tr-TR");
+btn.dataset.key=next;
+btn.textContent=next;
+});
+
+let toggle=document.getElementById("keypadCaseBtn");
+if(toggle)toggle.textContent=keypadUpper?"abc":"ABC";
+}
+
+function toggleKeypadCase(){
+keypadUpper=!keypadUpper;
+applyKeypadCase();
 }
 
 function keypadAllowed(key,mode){
@@ -10403,6 +10596,10 @@ return /^\d$/.test(key);
 
 if(mode==="decimal")
 return /^\d$/.test(key) || key==="." || key===",";
+
+/* İş planı Ek % kutuları: eksi de girilebilir. */
+if(mode==="signed")
+return /^\d$/.test(key) || key==="." || key==="," || key==="-";
 
 /* Arama ve açıklama alanlarında sayı, harf, boşluk ve ölçü sembolleri kullanılabilir. */
 return /^\d$/.test(key) || isLetterKey(key) || [".",",","x","X","Ø","-","/",":"," "].includes(key);
@@ -10509,6 +10706,9 @@ if(keypadTarget)
 keypadTarget.classList.remove("keypad-focus");
 
 keypadTarget=null;
+
+/* İş planında yazılırken ertelenen tablo çizimi şimdi uygulanır. */
+if(typeof jobPlanFlushRender==="function")setTimeout(jobPlanFlushRender,0);
 
 }
 
@@ -10624,6 +10824,11 @@ keypadInsert(btn.dataset.key);
 return;
 }
 
+if(btn.dataset.action==="case"){
+toggleKeypadCase();
+return;
+}
+
 if(btn.dataset.action==="backspace"){
 keypadBackspace();
 return;
@@ -10664,6 +10869,21 @@ updateInputModes();
 
 document.addEventListener("keydown",e=>{
 if(e.key==="Escape")closeNumericKeypad();
+});
+
+/* Dinamik olarak oluşturulan alanlar (iş planı tabloları vb.) için devredilmiş dinleyici:
+   sayfada sonradan oluşan her [data-keypad] alanında da klavye açılır. */
+document.addEventListener("focusin",event=>{
+let el=event.target;
+if(el && el.matches && el.matches("[data-keypad]"))openNumericKeypad(el);
+});
+
+document.addEventListener("pointerup",event=>{
+let el=event.target;
+if(el && el.closest){
+let field=el.closest("[data-keypad]");
+if(field)openNumericKeypad(field);
+}
 });
 
 document.querySelectorAll("[data-keypad]").forEach(input=>{
@@ -12430,15 +12650,18 @@ return '<tr>'+
 (f.customer?'<div class="jobplan-sub">'+escapeHTML(f.customer)+'</div>':'')+'</td>'+
 '<td>'+sizeText+'</td>'+
 '<td>'+lengthText+'</td>'+
-'<td><input class="jobplan-num" type="number" min="1" step="1" value="'+(Number(f.tubes)||1)+
-'" onchange="jobPlanImportSetTubes(\''+f.rowId+'\',this.value)"></td>'+
+'<td><input class="jobplan-num" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Boy adedi" value="'+(Number(f.tubes)||1)+
+'" oninput="jobPlanImportSetTubes(\''+f.rowId+'\',this.value)"></td>'+
 '<td>'+jobPlanFormatDuration(f.totalSeconds)+
 '<div class="jobplan-sub">'+jobPlanFormatClock(f.totalSeconds)+' · '+(Number(f.parts)||0)+' parça</div></td>'+
-'<td><input class="jobplan-percent" type="number" step="1" value="'+jobPlanCleanPercent(f.percent)+
-'" onchange="jobPlanImportSetPercent(\''+f.rowId+'\',this.value)" title="Ek süre %. 0 = HTML süresi aynen."></td>'+
+'<td><input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="Ek süre %" value="'+jobPlanCleanPercent(f.percent)+
+'" oninput="jobPlanImportSetPercent(\''+f.rowId+'\',this.value)" title="Ek süre %. 0 = HTML süresi aynen."></td>'+
 '<td>'+stockCell+'</td>'+
 '</tr>';
 }).join("");
+
+/* Ekran klavyesi kapalıysa yeni oluşan kutular sistem klavyesine döner. */
+if(typeof updateInputModes==="function")updateInputModes();
 }
 
 function jobPlanImportFind(rowId){
@@ -12478,15 +12701,15 @@ function jobPlanImportSetPercent(rowId,value){
 let f=jobPlanImportFind(rowId);
 if(!f)return;
 f.percent=jobPlanCleanPercent(value);
-jobPlanRenderImport();
+jobPlanRenderImportSafe();
 }
 
 function jobPlanImportSetTubes(rowId,value){
 let f=jobPlanImportFind(rowId);
 if(!f)return;
-let n=Math.floor(Number(value));
+let n=Math.floor(Number(String(value).replace(",",".")));
 f.tubes=Number.isFinite(n) && n>0?n:1;
-jobPlanRenderImport();
+jobPlanRenderImportSafe();
 }
 
 function jobPlanCancelImport(){
@@ -12694,8 +12917,8 @@ if(!job)return;
 let percent=jobPlanCleanPercent(value);
 job.percent=percent;
 (job.files||[]).forEach(f=>{f.percent=percent;});
-jobPlanRefreshAll();
-jobPlanSaveJobs();
+jobPlanRefreshPlan();
+jobPlanSaveJobsSoon();
 }
 
 /* Dosya kutusu: sadece o HTML'in ek oranını değiştirir. */
@@ -12704,8 +12927,8 @@ let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job&&(job.files||[]).find(f=>f.id===fileId);
 if(!file)return;
 file.percent=jobPlanCleanPercent(value);
-jobPlanRefreshAll();
-jobPlanSaveJobs();
+jobPlanRefreshPlan();
+jobPlanSaveJobsSoon();
 }
 
 function jobPlanToggleExpand(jobId){
@@ -12727,6 +12950,16 @@ await jobPlanSaveJobs();
 
 
 /* ---------- BAŞLAT / DURAKLA / BİTİR ---------- */
+
+/* Aynı milisaniyede iki kayıt yazılırsa Supabase birincil anahtar çakışması olmasın. */
+let jobPlanLastMovementId=0;
+
+function jobPlanMovementId(){
+let id=Date.now();
+if(id<=jobPlanLastMovementId)id=jobPlanLastMovementId+1;
+jobPlanLastMovementId=id;
+return id;
+}
 
 function jobPlanDoneTubes(file){
 let n=Number(file&&file.doneTubes);
@@ -12798,7 +13031,7 @@ if(qty<=0)return 0;
 let size=file.size||{};
 
 let movement={
-id:Date.now(),
+id:jobPlanMovementId(),
 product_id:null,
 type:"Çıkış",
 quantity:qty,
@@ -12865,7 +13098,7 @@ PRODUCTS_TABLE,
 );
 
 let movement={
-id:Date.now(),
+id:jobPlanMovementId(),
 product_id:product.id,
 type:"Çıkış",
 quantity:qty,
@@ -12886,8 +13119,19 @@ if(movementResult && movementResult.length)movements.push(movementResult[0]);
 
 file.deductedTubes=jobPlanDeductedTubes(file)+qty;
 
-/* 6 metre dışı malzeme bitince kart "Stok Yok" olarak kalmaz, silinir. */
-if(product.stock<=0 && !isStandardLength(product.length)){
+/* 6 metre dışı malzeme bitince kart "Stok Yok" olarak kalmaz, silinir.
+   Ancak planda aynı karta bağlı başka bir iş varsa kart korunur. */
+let baskaDosyaVar=jobPlanJobs.some(j=>
+j.status!=="completed" &&
+(j.files||[]).some(f=>
+f!==file &&
+f.status!=="bitti" &&
+!f.customerMaterial &&
+String(f.productId)===String(product.id)
+)
+);
+
+if(product.stock<=0 && !isStandardLength(product.length) && !baskaDosyaVar){
 await supabaseRequest(
 PRODUCTS_TABLE,
 "DELETE",
@@ -12941,6 +13185,72 @@ jobPlanRefreshAll();
 await jobPlanSaveJobs();
 }
 
+/* ---------- KESİLEN BOY PENCERESİ ----------
+   prompt() sistem klavyesini açtığı için dokunmatik ekranda kullanılmıyor.
+   Bu pencere uygulamanın kendi ekran klavyesiyle çalışır. */
+
+let jobPlanPauseResolve=null;
+
+function jobPlanAskTubes(job,file,total,already){
+return new Promise(resolve=>{
+let modal=document.getElementById("jobPlanPauseModal");
+let input=document.getElementById("jobPlanPauseInput");
+let info=document.getElementById("jobPlanPauseInfo");
+let warn=document.getElementById("jobPlanPauseWarn");
+
+if(!modal || !input){
+resolve(prompt("Şu ana kadar kaç boy kesildi?",String(already)));
+return;
+}
+
+jobPlanPauseResolve=resolve;
+
+if(info){
+info.innerHTML=
+'<strong>'+escapeHTML(job.dtNo)+'</strong> · '+escapeHTML(file.fileName)+
+'<div class="jobplan-sub">Toplam '+total+' boy'+
+(already?' · daha önce girilen '+already+' boy':'')+'</div>';
+}
+
+if(warn)warn.textContent="";
+
+input.value=String(already);
+modal.style.display="flex";
+
+setTimeout(()=>{
+try{input.focus({preventScroll:true});}catch(e){}
+if(typeof openNumericKeypad==="function")openNumericKeypad(input);
+},60);
+});
+}
+
+function jobPlanPauseClose(value){
+let modal=document.getElementById("jobPlanPauseModal");
+if(modal)modal.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+let resolve=jobPlanPauseResolve;
+jobPlanPauseResolve=null;
+if(resolve)resolve(value);
+}
+
+function jobPlanPauseCancel(){
+jobPlanPauseClose(null);
+}
+
+function jobPlanPauseConfirm(){
+let input=document.getElementById("jobPlanPauseInput");
+let warn=document.getElementById("jobPlanPauseWarn");
+let raw=String(input?input.value:"").replace(",",".").trim();
+let n=Math.floor(Number(raw));
+
+if(raw==="" || !Number.isFinite(n) || n<0){
+if(warn)warn.textContent="Geçerli bir boy sayısı girin.";
+return;
+}
+
+jobPlanPauseClose(String(n));
+}
+
 /* DURAKLA: kaç boy kesildiği sorulur, o kadarı stoktan düşülür,
    kalan boy ve kalan süre plana yansır. */
 async function jobPlanPauseFile(jobId,fileId){
@@ -12953,14 +13263,7 @@ if(!job || !file)return;
 let total=Math.floor(Number(file.tubes)||0);
 let already=jobPlanDoneTubes(file);
 
-let answer=prompt(
-"⏸ "+job.dtNo+" — "+file.fileName+"\n\n"+
-"Toplam "+total+" boy.\n"+
-(already?"Daha önce girilen: "+already+" boy.\n":"")+
-"\nŞu ana kadar KAÇ BOY kesildi?",
-String(already)
-);
-
+let answer=await jobPlanAskTubes(job,file,total,already);
 if(answer===null)return;
 
 let done=Math.floor(Number(String(answer).replace(",",".")));
@@ -13098,7 +13401,11 @@ jobPlanBusy=false;
 async function jobPlanReopenJob(jobId){
 let job=jobPlanJobs.find(j=>j.id===jobId);
 if(!job)return;
-if(!confirm(job.dtNo+" tekrar aktif plana alınsın mı?\n\nStok hareketleri geri alınmaz."))return;
+if(!confirm(
+job.dtNo+" tekrar aktif plana alınsın mı?\n\n"+
+"Daha önce düşülen stok geri alınmaz ve TEKRAR DÜŞÜLMEZ.\n"+
+"İş yeniden kesilecekse stoğu elle girmeniz gerekir."
+))return;
 
 let maxOrder=jobPlanJobs.reduce((m,j)=>Math.max(m,Number(j.order)||0),0);
 job.status="active";
@@ -13110,9 +13417,8 @@ file.startedAt=null;
 file.finishedAt=null;
 file.pausedAt=null;
 file.doneTubes=0;
-file.deductedTubes=0;
 file.workedMs=0;
-file.stockDeducted=false;
+/* deductedTubes ve stockDeducted KORUNUR; aksi halde tekrar bitirince stok ikinci kez düşerdi. */
 });
 
 jobPlanRefreshAll();
@@ -13122,12 +13428,73 @@ await jobPlanSaveJobs();
 
 /* ---------- EKRAN ---------- */
 
+/* ---------- YAZARKEN TABLOYU KORUMA ----------
+   Ekran klavyesi her tuşta input/change olayı ürettiği için tablo
+   yeniden çizilirse kutu DOM'dan düşer ve yazılan rakam kaybolur.
+   Bu yüzden kullanıcı bir kutudayken çizim ertelenir; kutudan
+   çıkınca veya klavye kapanınca biriken çizim uygulanır. */
+
+let jobPlanRenderPending=false;
+let jobPlanImportPending=false;
+let jobPlanSaveTimer=null;
+let jobPlanFlushTimer=null;
+
+/* Arama kutusu gibi tablonun dışında kalan alanlar çizimi engellemez. */
+function jobPlanKeepFocus(el){
+return !!(el && el.closest && el.closest("[data-jobplan-keep]"));
+}
+
+function jobPlanRenderSafe(){
+if(jobPlanUserBusy()){jobPlanRenderPending=true;jobPlanScheduleFlush();return;}
+jobPlanRenderPending=false;
+jobPlanRender();
+}
+
+function jobPlanRenderImportSafe(){
+if(jobPlanUserBusy()){jobPlanImportPending=true;jobPlanScheduleFlush();return;}
+jobPlanImportPending=false;
+jobPlanRenderImport();
+}
+
+function jobPlanFlushRender(){
+if(jobPlanUserBusy())return;
+if(jobPlanImportPending){jobPlanImportPending=false;jobPlanRenderImport();}
+if(jobPlanRenderPending){jobPlanRenderPending=false;jobPlanRender();}
+}
+
+function jobPlanScheduleFlush(){
+if(jobPlanFlushTimer)clearTimeout(jobPlanFlushTimer);
+jobPlanFlushTimer=setTimeout(()=>{
+jobPlanFlushTimer=null;
+jobPlanFlushRender();
+},1500);
+}
+
+/* Yüzde kutusunda her tuşta buluta yazmamak için kayıt geciktirilir. */
+function jobPlanSaveJobsSoon(){
+if(jobPlanSaveTimer)clearTimeout(jobPlanSaveTimer);
+jobPlanSaveTimer=setTimeout(()=>{
+jobPlanSaveTimer=null;
+jobPlanSaveJobs();
+},900);
+}
+
+/* Sadece süre/termin değişti: stok senkronu ve stok tablosu tazelenmez. */
+function jobPlanRefreshPlan(){
+jobPlanLastCheck=Date.now();
+jobPlanRecalculate();
+jobPlanRefreshShortages();
+jobPlanUpdateBadge();
+jobPlanRenderSummary();
+jobPlanRenderSafe();
+}
+
 function jobPlanRefreshAll(){
 jobPlanLastCheck=Date.now();
 jobPlanRecalculate();
 jobPlanSyncReservations();
 jobPlanRefreshShortages();
-jobPlanRender();
+jobPlanRenderSafe();
 jobPlanUpdateBadge();
 if(typeof showProducts==="function")showProducts();
 }
@@ -13178,15 +13545,66 @@ chips.push('<div class="jobplan-chip ok">Stok yeterli</div>');
 box.innerHTML=chips.join("");
 }
 
+/* ---------- DT ARAMA ---------- */
+
+let jobPlanSearch="";
+
+function jobPlanSetSearch(value){
+jobPlanSearch=String(value||"").trim();
+let clear=document.getElementById("jobPlanSearchClear");
+if(clear)clear.style.display=jobPlanSearch?"inline-block":"none";
+jobPlanRender();
+}
+
+function jobPlanClearSearch(){
+let box=document.getElementById("jobPlanSearchBox");
+if(box)box.value="";
+jobPlanSetSearch("");
+}
+
+function jobPlanMatchesSearch(job){
+if(!jobPlanSearch)return true;
+let needle=normalizeText(jobPlanSearch);
+if(!needle)return true;
+if(normalizeText(job.dtNo||"").includes(needle))return true;
+if(normalizeText(job.customer||"").includes(needle))return true;
+return (job.files||[]).some(f=>
+normalizeText(f.fileName||"").includes(needle) ||
+normalizeText(f.customer||"").includes(needle) ||
+normalizeText((f.size&&f.size.sizeText)||"").includes(needle)
+);
+}
+
+/* ---------- TAMAMLANANLAR AÇILIR / KAPANIR ---------- */
+
+let jobPlanDoneOpen=false;
+
+function jobPlanToggleDone(){
+jobPlanDoneOpen=!jobPlanDoneOpen;
+jobPlanRender();
+}
+
+function jobPlanRenderDoneHead(count){
+let caret=document.getElementById("jobPlanDoneCaret");
+if(caret)caret.textContent=jobPlanDoneOpen?"▼":"►";
+
+let badge=document.getElementById("jobPlanDoneCount");
+if(badge)badge.textContent=count+" kayıt";
+
+let wrap=document.getElementById("jobPlanDoneWrap");
+if(wrap)wrap.style.display=jobPlanDoneOpen?"block":"none";
+}
+
 function jobPlanRender(){
 jobPlanRenderSummary();
 
 let body=document.getElementById("jobPlanBody");
 if(body){
-let active=jobPlanActiveJobs();
+let active=jobPlanActiveJobs().filter(jobPlanMatchesSearch);
 
 if(!active.length){
-body.innerHTML='<tr><td colspan="11" class="jobplan-empty">Henüz plana eklenmiş iş yok.</td></tr>';
+body.innerHTML='<tr><td colspan="11" class="jobplan-empty">'+
+(jobPlanSearch?"Aramaya uyan iş yok.":"Henüz plana eklenmiş iş yok.")+'</td></tr>';
 }
 else{
 body.innerHTML=active.map((job,index)=>{
@@ -13201,8 +13619,8 @@ rows.push(
 '<tr class="jobplan-dt-row '+(jobShortage?"shortage":"")+'" onclick="jobPlanToggleExpand(\''+job.id+'\')">'+
 '<td onclick="event.stopPropagation()">'+
 '<div class="jobplan-order-btns">'+
-'<button type="button" onclick="jobPlanMove(\''+job.id+'\',-1)" '+(index===0?"disabled":"")+' title="Yukarı al">▲</button>'+
-'<button type="button" onclick="jobPlanMove(\''+job.id+'\',1)" '+(index===active.length-1?"disabled":"")+' title="Aşağı al">▼</button>'+
+'<button type="button" onclick="jobPlanMove(\''+job.id+'\',-1)" '+(jobPlanSearch?"":(index===0?"disabled":""))+' title="Yukarı al">▲</button>'+
+'<button type="button" onclick="jobPlanMove(\''+job.id+'\',1)" '+(jobPlanSearch?"":(index===active.length-1?"disabled":""))+' title="Aşağı al">▼</button>'+
 '</div>'+
 '</td>'+
 '<td><span class="jobplan-caret">'+(open?"▼":"►")+'</span>'+
@@ -13214,10 +13632,10 @@ rows.push(
 '<div class="jobplan-sub">'+jobPlanFormatClock(totalSeconds)+
 (Math.abs(totalSeconds-rawSeconds)>0.5?' · ham '+jobPlanFormatClock(rawSeconds):'')+'</div></td>'+
 '<td onclick="event.stopPropagation()">'+
-'<input class="jobplan-percent" type="number" step="1" '+
+'<input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="DT ek süre %" '+
 'value="'+(jobPlanCommonPercent(job)===null?"":jobPlanCommonPercent(job))+'" '+
 'placeholder="karışık" '+
-'onchange="jobPlanSetPercent(\''+job.id+'\',this.value)" '+
+'oninput="jobPlanSetPercent(\''+job.id+'\',this.value)" '+
 'title="Ek süre %. 0 = HTML süresi aynen. Bu DT\'deki tüm dosyalara uygulanır.">'+
 '</td>'+
 '<td class="jobplan-termin">'+jobPlanFormatDateTime(job.planStart)+'</td>'+
@@ -13293,9 +13711,9 @@ file.status==="durakladi"?"paused":"")+'">'+
 (jobPlanDoneTubes(file)>0 && file.status!=="bitti"
 ?'<br>kalan '+jobPlanFormatClock(jobPlanFileRemainingSeconds(job,file))
 :'')+'</div></td>'+
-'<td><input class="jobplan-percent" type="number" step="1" '+
+'<td><input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="Dosya ek süre %" '+
 'value="'+jobPlanFilePercent(job,file)+'" '+
-'onchange="jobPlanSetFilePercent(\''+job.id+'\',\''+file.id+'\',this.value)" '+
+'oninput="jobPlanSetFilePercent(\''+job.id+'\',\''+file.id+'\',this.value)" '+
 'title="Bu HTML için ek süre %. 0 = HTML süresi aynen."></td>'+
 '<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planStart)+'</td>'+
 '<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planEnd)+'</td>'+
@@ -13330,9 +13748,12 @@ return rows.join("");
 
 let doneBody=document.getElementById("jobPlanDoneBody");
 if(doneBody){
-let done=jobPlanDoneJobs();
+let done=jobPlanDoneJobs().filter(jobPlanMatchesSearch);
+jobPlanRenderDoneHead(done.length);
+
 if(!done.length){
-doneBody.innerHTML='<tr><td colspan="6" class="jobplan-empty">Tamamlanmış iş yok.</td></tr>';
+doneBody.innerHTML='<tr><td colspan="6" class="jobplan-empty">'+
+(jobPlanSearch?"Aramaya uyan tamamlanmış iş yok.":"Tamamlanmış iş yok.")+'</td></tr>';
 }
 else{
 doneBody.innerHTML=done.map(job=>{
@@ -13356,6 +13777,9 @@ return '<tr>'+
 }).join("");
 }
 }
+
+/* Yeni oluşan kutular ekran klavyesi tercihine uysun. */
+if(typeof updateInputModes==="function")updateInputModes();
 }
 
 /* ---------- 10 DAKİKALIK KONTROL ----------
@@ -13367,21 +13791,49 @@ const JOB_PLAN_CHECK_MS=10*60*1000;
 let jobPlanCheckTimer=null;
 let jobPlanLastCheck=null;
 
+/* Kullanıcı bir kutuya yazarken tabloyu yeniden çizme; yazdığı kaybolmasın. */
+function jobPlanUserBusy(){
+let modal=document.getElementById("jobPlanModal");
+if(!modal)return false;
+
+/* Ekran klavyesi bir kutuya bağlıysa odak kutuda olmasa bile meşguldür. */
+let target=null;
+try{target=keypadTarget;}catch(e){target=null;}
+if(target && modal.contains(target) && !jobPlanKeepFocus(target))return true;
+
+let el=document.activeElement;
+if(!el)return false;
+if(jobPlanKeepFocus(el))return false;
+let tag=String(el.tagName||"").toLowerCase();
+if(tag!=="input" && tag!=="select" && tag!=="textarea")return false;
+return modal.contains(el);
+}
+
 function jobPlanRunCheck(){
 jobPlanLastCheck=Date.now();
 if(!jobPlanJobs.length)return;
 
 jobPlanRecalculate();
 jobPlanRefreshShortages();
-jobPlanRender();
 jobPlanUpdateBadge();
+
+jobPlanRenderSafe();
 }
 
 function jobPlanStartCheckTimer(){
 if(jobPlanCheckTimer)clearInterval(jobPlanCheckTimer);
 jobPlanLastCheck=Date.now();
 jobPlanCheckTimer=setInterval(jobPlanRunCheck,JOB_PLAN_CHECK_MS);
+
+if(!jobPlanFocusHooked){
+jobPlanFocusHooked=true;
+document.addEventListener("focusout",()=>{
+setTimeout(jobPlanFlushRender,60);
+});
 }
+}
+
+let jobPlanFocusHooked=false;
 
 function openJobPlanModal(){
 if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
@@ -13391,7 +13843,311 @@ document.getElementById("jobPlanModal").style.display="flex";
 }
 
 function closeJobPlanModal(){
-document.getElementById("jobPlanModal").style.display="none";
+let modal=document.getElementById("jobPlanModal");
+if(modal)modal.style.display="none";
+
+let target=null;
+try{target=keypadTarget;}catch(e){target=null;}
+if(target && modal && modal.contains(target) && typeof closeNumericKeypad==="function"){
+closeNumericKeypad();
+}
+
+jobPlanRenderPending=false;
+jobPlanImportPending=false;
+}
+
+/* =====================================================
+   İŞ PLANI EXCEL ÇIKTISI
+   Stok Excel'inden bağımsız, kendi dosyasını üretir.
+===================================================== */
+
+async function exportJobPlan(){
+
+if(typeof ExcelJS==="undefined"){
+alert("Excel modülü yüklenemedi.\n\nİnternet bağlantısını kontrol edip sayfayı yenileyin.");
+return;
+}
+
+let active=jobPlanActiveJobs();
+let done=jobPlanDoneJobs();
+
+if(!active.length && !done.length){
+alert("Aktarılacak iş planı bulunmuyor.");
+return;
+}
+
+try{
+let workbook=new ExcelJS.Workbook();
+workbook.creator="Profil & Boru Stok Takip";
+workbook.created=new Date();
+
+let headFill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0F766E"}};
+let titleFill={type:"pattern",pattern:"solid",fgColor:{argb:"FF172033"}};
+
+let drawTitle=(sheet,text,span)=>{
+sheet.mergeCells("A1:"+span+"1");
+let c=sheet.getCell("A1");
+c.value=text;
+c.font={bold:true,size:15,color:{argb:"FFFFFFFF"}};
+c.fill=titleFill;
+c.alignment={horizontal:"center",vertical:"middle"};
+sheet.getRow(1).height=26;
+};
+
+let drawHeader=(sheet,row,labels)=>{
+labels.forEach((label,i)=>{
+let c=sheet.getCell(row,i+1);
+c.value=label;
+c.font={bold:true,size:11,color:{argb:"FFFFFFFF"}};
+c.fill=headFill;
+c.alignment={horizontal:"center",vertical:"middle",wrapText:true};
+});
+sheet.getRow(row).height=26;
+};
+
+let border={
+top:{style:"thin",color:{argb:"FFCBD5E1"}},
+left:{style:"thin",color:{argb:"FFCBD5E1"}},
+bottom:{style:"thin",color:{argb:"FFCBD5E1"}},
+right:{style:"thin",color:{argb:"FFCBD5E1"}}
+};
+
+/* ---------- 1. SAYFA: AKTİF PLAN ---------- */
+
+let sheet=workbook.addWorksheet("Aktif Plan",{
+views:[{state:"frozen",ySplit:3}]
+});
+
+drawTitle(sheet,"İŞ PLANI · AKTİF · "+new Date().toLocaleString("tr-TR"),"L");
+
+sheet.getCell("A2").value=
+"Vardiya: "+(jobPlanShiftEnabled("gunduz")?"Gündüz "+jobPlanShiftHoursLabel("gunduz"):"")+
+(jobPlanShiftEnabled("gece")?(jobPlanShiftEnabled("gunduz")?" + ":"")+"Gece "+jobPlanShiftHoursLabel("gece"):"");
+sheet.getCell("A2").font={bold:true,color:{argb:"FF475569"}};
+sheet.getRow(2).height=20;
+
+drawHeader(sheet,3,[
+"Sıra","DT","Dosya","Ebat","Kalınlık (mm)","Boy (m)","Adet",
+"Ek %","Süre (sa)","Planlanan Başlangıç","Termin","Durum"
+]);
+
+let row=4;
+let sira=0;
+
+active.forEach(job=>{
+sira++;
+
+let jobSeconds=jobPlanJobSeconds(job);
+
+let head=[
+sira,
+job.dtNo||"",
+(job.files||[]).length+" dosya",
+jobPlanSizeSummary(job),
+"","",
+(job.files||[]).reduce((s,f)=>s+(Number(f.tubes)||0),0),
+jobPlanCommonPercent(job)===null?"karışık":jobPlanCommonPercent(job),
+Number((jobSeconds/3600).toFixed(2)),
+jobPlanFormatDateTime(job.planStart),
+jobPlanFormatDateTime(job.planEnd),
+job.status==="active"?"Devam ediyor":"Bekliyor"
+];
+
+head.forEach((v,i)=>{
+let c=sheet.getCell(row,i+1);
+c.value=v;
+c.font={bold:true};
+c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF1F5F9"}};
+c.border=border;
+c.alignment={vertical:"middle"};
+});
+sheet.getRow(row).height=20;
+row++;
+
+(job.files||[]).forEach(file=>{
+let stock=jobPlanFileStockState(file);
+let seconds=jobPlanFileSeconds(job,file);
+
+let values=[
+"",
+"",
+file.fileName||"",
+file.size?file.size.sizeText:"",
+file.size?Number(file.size.thickness)||"":"",
+jobPlanRawLengthM(file.rawLengthMm),
+Number(file.tubes)||0,
+jobPlanFilePercent(job,file),
+Number((seconds/3600).toFixed(2)),
+jobPlanFormatDateTime(file.planStart),
+jobPlanFormatDateTime(file.planEnd),
+(file.status==="bekliyor"?"Bekliyor":
+file.status==="basladi"?"Başladı":
+file.status==="durakladi"?"Duraklatıldı ("+jobPlanDoneTubes(file)+"/"+(Number(file.tubes)||0)+" boy)":
+"Bitti")+" · "+stock.text
+];
+
+values.forEach((v,i)=>{
+let c=sheet.getCell(row,i+1);
+c.value=v;
+c.border=border;
+c.alignment={vertical:"middle"};
+});
+
+if(stock.code==="yetersiz"){
+sheet.getCell(row,12).font={bold:true,color:{argb:"FF991B1B"}};
+sheet.getCell(row,12).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFEE2E2"}};
+}
+
+sheet.getRow(row).height=19;
+row++;
+});
+});
+
+[10,10,34,18,14,10,9,9,13,20,20,30].forEach((w,i)=>{
+sheet.getColumn(i+1).width=w;
+});
+
+sheet.getColumn(9).numFmt="0.00";
+[1,5,6,7,8,9].forEach(i=>{
+sheet.getColumn(i).alignment={horizontal:"center",vertical:"middle"};
+});
+
+if(row>4){
+sheet.autoFilter={from:"A3",to:"L"+(row-1)};
+}
+
+sheet.pageSetup={
+orientation:"landscape",
+fitToPage:true,
+fitToWidth:1,
+fitToHeight:0,
+paperSize:9,
+margins:{left:0.25,right:0.25,top:0.5,bottom:0.5,header:0.2,footer:0.2}
+};
+
+/* ---------- 2. SAYFA: TAMAMLANANLAR ---------- */
+
+let sheet2=workbook.addWorksheet("Tamamlananlar",{
+views:[{state:"frozen",ySplit:2}]
+});
+
+drawTitle(sheet2,"İŞ PLANI · TAMAMLANANLAR","I");
+
+drawHeader(sheet2,2,[
+"DT","Dosya","Ebat","Adet","Planlanan (sa)","Gerçekleşen (sa)","Fark (sa)","Bitiş","Not"
+]);
+
+let row2=3;
+
+done.forEach(job=>{
+let planned=jobPlanJobSeconds(job);
+let worked=jobPlanJobWorkedMs(job)/1000;
+
+let head=[
+job.dtNo||"",
+(job.files||[]).length+" dosya",
+jobPlanSizeSummary(job),
+(job.files||[]).reduce((s,f)=>s+(Number(f.tubes)||0),0),
+Number((planned/3600).toFixed(2)),
+worked>0?Number((worked/3600).toFixed(2)):null,
+worked>0?Number(((worked-planned)/3600).toFixed(2)):null,
+jobPlanFormatDateTime(job.completedAt),
+""
+];
+
+head.forEach((v,i)=>{
+let c=sheet2.getCell(row2,i+1);
+c.value=v;
+c.font={bold:true};
+c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF1F5F9"}};
+c.border=border;
+c.alignment={vertical:"middle"};
+});
+sheet2.getRow(row2).height=20;
+row2++;
+
+(job.files||[]).forEach(file=>{
+let seconds=jobPlanFileSeconds(job,file);
+let fileWorked=jobPlanWorkedMs(file)/1000;
+
+let values=[
+"",
+file.fileName||"",
+file.size?file.size.sizeText+" x "+file.size.thickness:"",
+Number(file.tubes)||0,
+Number((seconds/3600).toFixed(2)),
+fileWorked>0?Number((fileWorked/3600).toFixed(2)):null,
+fileWorked>0?Number(((fileWorked-seconds)/3600).toFixed(2)):null,
+jobPlanFormatDateTime(file.finishedAt),
+file.customerMaterial?"Müşteri malı · stok düşülmedi":""
+];
+
+values.forEach((v,i)=>{
+let c=sheet2.getCell(row2,i+1);
+c.value=v;
+c.border=border;
+c.alignment={vertical:"middle"};
+});
+
+sheet2.getRow(row2).height=19;
+row2++;
+});
+});
+
+if(!done.length){
+sheet2.getCell("A3").value="Tamamlanmış iş yok.";
+}
+
+[14,34,20,9,14,15,12,20,28].forEach((w,i)=>{
+sheet2.getColumn(i+1).width=w;
+});
+
+[5,6,7].forEach(i=>{
+sheet2.getColumn(i).numFmt="0.00";
+});
+
+[4,5,6,7].forEach(i=>{
+sheet2.getColumn(i).alignment={horizontal:"center",vertical:"middle"};
+});
+
+if(row2>3){
+sheet2.autoFilter={from:"A2",to:"I"+(row2-1)};
+}
+
+sheet2.pageSetup={
+orientation:"landscape",
+fitToPage:true,
+fitToWidth:1,
+fitToHeight:0,
+paperSize:9,
+margins:{left:0.25,right:0.25,top:0.5,bottom:0.5,header:0.2,footer:0.2}
+};
+
+/* ---------- İNDİR ---------- */
+
+let buffer=await workbook.xlsx.writeBuffer();
+
+let blob=new Blob([buffer],{
+type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+});
+
+let url=URL.createObjectURL(blob);
+let link=document.createElement("a");
+let date=new Date().toLocaleDateString("tr-TR").replace(/\./g,"-");
+
+link.href=url;
+link.download="is_plani_"+date+".xlsx";
+
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+
+URL.revokeObjectURL(url);
+}
+catch(error){
+console.error(error);
+alert("İş planı Excel dosyası oluşturulamadı.\n\n"+(error&&error.message||""));
+}
 }
 
 

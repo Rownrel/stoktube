@@ -756,7 +756,7 @@ border:1px solid #334155;
 border-radius:16px;
 padding:12px;
 box-shadow:0 18px 45px #0006;
-z-index:1000;
+z-index:20200;
 display:none;
 user-select:none
 }
@@ -2538,6 +2538,757 @@ border-color:#0f766e;
 outline:0
 }
 
+/* Plan başka bir kullanıcı tarafından güncellendiğinde çıkan şerit */
+.jobplan-notice{
+background:#fef9c3;
+border:1px solid #fde047;
+border-radius:8px;
+padding:9px 13px;
+font-size:13px;
+font-weight:bold;
+color:#854d0e;
+margin-bottom:12px
+}
+
+
+/* =====================================================
+   SİSTEM PANELİ
+===================================================== */
+
+.btn-system{
+background:#4338ca;
+color:white;
+white-space:nowrap
+}
+
+.system-user-chip{
+display:none;
+align-items:center;
+gap:8px;
+background:#1e293b;
+border:1px solid #334155;
+border-radius:999px;
+padding:5px 6px 5px 12px;
+color:#e2e8f0;
+font-size:13px;
+font-weight:bold;
+white-space:nowrap
+}
+
+.system-user-chip.on{display:inline-flex}
+
+.system-user-chip .system-user-role{
+color:#94a3b8;
+font-weight:normal;
+font-size:12px
+}
+
+.system-user-chip button{
+border:0;
+background:#334155;
+color:#e2e8f0;
+border-radius:999px;
+padding:4px 11px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer
+}
+
+.system-user-chip button:hover{background:#475569}
+
+.system-modal-box{
+max-width:960px;
+display:flex;
+flex-direction:column;
+max-height:90vh;
+overflow:hidden;
+padding:18px 22px
+}
+
+.system-scroll{
+flex:1 1 auto;
+min-height:0;
+overflow-y:auto;
+margin:0 -22px;
+padding:0 22px
+}
+
+.system-modal-box .modal-buttons{
+flex:0 0 auto;
+margin:0;
+padding-top:12px;
+border-top:1px solid #e2e8f0
+}
+
+.system-tabs{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin:10px 0 16px;
+border-bottom:2px solid #e2e8f0;
+padding-bottom:0
+}
+
+.system-tabs button{
+border:0;
+background:none;
+padding:10px 16px;
+font-size:14px;
+font-weight:bold;
+color:#64748b;
+cursor:pointer;
+border-bottom:3px solid transparent;
+margin-bottom:-2px
+}
+
+.system-tabs button.active{
+color:#4338ca;
+border-bottom-color:#4338ca
+}
+
+.system-panel{display:none}
+.system-panel.active{display:block}
+
+.system-note{
+background:#eef2ff;
+border:1px solid #c7d2fe;
+border-radius:8px;
+padding:10px 13px;
+font-size:13px;
+color:#3730a3;
+margin-bottom:14px;
+line-height:1.55
+}
+
+.system-warn-box{
+background:#fef2f2;
+border:1px solid #fecaca;
+border-radius:8px;
+padding:10px 13px;
+font-size:13px;
+color:#991b1b;
+margin-bottom:14px;
+line-height:1.55
+}
+
+.system-toolbar{
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+margin-bottom:12px
+}
+
+.system-table{
+width:100%;
+border-collapse:collapse;
+background:white
+}
+
+.system-table th,
+.system-table td{
+border:1px solid #e2e8f0;
+padding:9px 11px;
+font-size:13px;
+text-align:left;
+vertical-align:middle
+}
+
+.system-table th{
+background:#f1f5f9;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.3px;
+color:#475569
+}
+
+.system-table tr.passive td{
+background:#f8fafc;
+color:#94a3b8
+}
+
+.system-role-badge{
+display:inline-block;
+padding:3px 10px;
+border-radius:999px;
+font-size:11px;
+font-weight:bold;
+background:#e0e7ff;
+color:#3730a3
+}
+
+.system-role-badge.yonetici{background:#dcfce7;color:#166534}
+.system-role-badge.planlamaci{background:#dbeafe;color:#1d4ed8}
+.system-role-badge.operator{background:#fef3c7;color:#92400e}
+.system-role-badge.izleyici{background:#e2e8f0;color:#475569}
+
+.system-mini{
+border:0;
+border-radius:6px;
+padding:5px 11px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+color:white
+}
+
+.system-mini.edit{background:#2563eb}
+.system-mini.off{background:#94a3b8}
+.system-mini.on{background:#16a34a}
+.system-mini.del{background:#dc2626}
+
+.system-form{
+background:#f8fafc;
+border:2px solid #c7d2fe;
+border-radius:10px;
+padding:16px;
+margin-bottom:16px;
+display:none
+}
+
+.system-form.open{display:block}
+
+.system-form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:12px
+}
+
+.system-form-actions{
+display:flex;
+gap:8px;
+justify-content:flex-end;
+align-items:center;
+margin-top:14px;
+flex-wrap:wrap
+}
+
+.system-message{
+font-size:13px;
+font-weight:bold;
+flex:1;
+min-width:160px
+}
+
+.system-message.error{color:#b91c1c}
+.system-message.ok{color:#166534}
+
+.system-empty{
+text-align:center;
+color:#94a3b8;
+padding:22px
+}
+
+/* Sistem şifresi sorma penceresi.
+   Giriş ekranı z-index:20000 olduğu için bu pencere onun da üstünde olmalı;
+   aksi halde çıkış yaptıktan sonra sistem şifresi penceresi arkada kalır. */
+.system-ask-modal{z-index:20100}
+
+.system-ask-modal .modal-box{
+max-width:400px
+}
+
+/* Giriş ekranı kullanıcı seçimi */
+.page-login-users{
+display:none;
+flex-direction:column;
+gap:12px;
+width:100%
+}
+
+.page-login-users.active{display:flex}
+
+.page-login-user-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+gap:10px;
+max-height:280px;
+overflow-y:auto
+}
+
+.page-login-user-card{
+background:#1e293b;
+border:2px solid #334155;
+border-radius:12px;
+padding:14px 10px;
+color:#e2e8f0;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+text-align:center;
+line-height:1.4
+}
+
+.page-login-user-card:hover{
+border-color:#6366f1;
+background:#263449
+}
+
+.page-login-user-card .role{
+display:block;
+margin-top:5px;
+font-size:11px;
+font-weight:normal;
+color:#94a3b8
+}
+
+.page-login-user-avatar{
+display:block;
+font-size:22px;
+margin-bottom:4px
+}
+
+.page-login-selected{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+background:#1e293b;
+border:1px solid #334155;
+border-radius:10px;
+padding:10px 14px;
+color:#e2e8f0;
+font-weight:bold;
+font-size:14px
+}
+
+.page-login-selected button{
+border:0;
+background:#334155;
+color:#e2e8f0;
+border-radius:8px;
+padding:6px 12px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer
+}
+
+.page-login-master-link{
+background:none;
+border:0;
+color:#94a3b8;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+text-decoration:underline;
+padding:6px
+}
+
+.page-login-master-link:hover{color:#e2e8f0}
+
+@media(max-width:700px){
+.system-modal-box{padding:14px}
+.system-scroll{margin:0 -14px;padding:0 14px}
+}
+
+/* =====================================================
+   YETKİLER
+===================================================== */
+
+.system-perm-group{
+border:1px solid #e2e8f0;
+border-radius:10px;
+margin-bottom:12px;
+overflow:hidden
+}
+
+.system-perm-group-title{
+background:#f1f5f9;
+padding:9px 13px;
+font-size:13px;
+font-weight:bold;
+color:#334155
+}
+
+.system-perm-row{
+display:flex;
+align-items:center;
+gap:10px;
+padding:9px 13px;
+border-top:1px solid #f1f5f9;
+font-size:13px
+}
+
+.system-perm-row label{
+display:flex;
+align-items:center;
+gap:9px;
+cursor:pointer;
+flex:1;
+margin:0;
+font-weight:normal
+}
+
+.system-perm-row input{
+width:18px;
+height:18px;
+cursor:pointer;
+margin:0;
+flex:0 0 auto
+}
+
+.system-perm-row .hint{
+color:#94a3b8;
+font-size:11px
+}
+
+.system-perm-row.on{background:#f0fdf4}
+.system-perm-row.off{background:#fef2f2}
+
+.system-role-picker{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:14px
+}
+
+.system-role-picker button{
+border:1px solid #cbd5e1;
+background:white;
+border-radius:8px;
+padding:8px 15px;
+font-size:13px;
+font-weight:bold;
+color:#475569;
+cursor:pointer
+}
+
+.system-role-picker button.active{
+background:#4338ca;
+border-color:#4338ca;
+color:white
+}
+
+.system-user-perms{
+margin-top:14px;
+border-top:1px dashed #cbd5e1;
+padding-top:12px
+}
+
+.system-user-perms-title{
+font-size:13px;
+font-weight:bold;
+margin-bottom:8px;
+color:#334155
+}
+
+.system-perm-state{
+border:1px solid #cbd5e1;
+border-radius:6px;
+padding:3px 7px;
+font-size:12px
+}
+
+/* Yetkisiz alanlar */
+[data-perm-hidden="1"]{display:none !important}
+
+body.perm-yok-isplani-sure .jp-c-sure,
+body.perm-yok-isplani-sure .jp-c-yuzde,
+body.perm-yok-isplani-sure .jp-c-bas,
+body.perm-yok-isplani-sure .jp-c-ter{display:none}
+
+body.perm-yok-isplani-duzenle .jp-c-sira{display:none}
+
+body.perm-yok-isplani-stok .jp-c-stok{display:none}
+
+body.perm-yok-isplani-ebat .jp-c-ebat,
+body.perm-yok-isplani-ebat .jp-c-boy{display:none}
+
+/* Sadeleşmiş görünümde Başlat / Durakla / Bitir butonları büyür */
+.jobplan-mini .jp-ikon{
+margin-right:5px;
+font-size:13px
+}
+
+body.jp-buyuk-islem .jobplan-table tr.jobplan-file-row .jobplan-mini{
+font-size:16px;
+padding:14px 20px;
+border-radius:10px;
+margin:3px 4px 3px 0;
+min-width:120px;
+box-shadow:0 2px 0 #0002
+}
+
+body.jp-buyuk-islem .jobplan-table tr.jobplan-file-row .jobplan-mini .jp-ikon{
+font-size:19px;
+margin-right:8px
+}
+
+body.jp-buyuk-islem .jobplan-table tr.jobplan-file-row td{
+padding-top:12px;
+padding-bottom:12px
+}
+
+body.jp-buyuk-islem .jobplan-table th:last-child,
+body.jp-buyuk-islem .jobplan-table tr.jobplan-file-row td:last-child{
+width:auto;
+min-width:290px;
+white-space:nowrap
+}
+
+@media(max-width:700px){
+body.jp-buyuk-islem .jobplan-table tr.jobplan-file-row .jobplan-mini{
+font-size:15px;
+padding:13px 16px;
+min-width:104px
+}
+}
+
+
+/* =====================================================
+   HATA KODLARI
+===================================================== */
+
+.btn-errorcode{
+background:#b45309;
+color:white;
+white-space:nowrap
+}
+
+.errorcode-modal-box{
+max-width:1180px;
+display:flex;
+flex-direction:column;
+max-height:90vh;
+overflow:hidden;
+padding:18px 22px
+}
+
+.errorcode-scroll{
+flex:1 1 auto;
+min-height:0;
+overflow-y:auto;
+margin:0 -22px;
+padding:0 22px
+}
+
+.errorcode-modal-box .modal-buttons{
+flex:0 0 auto;
+margin:0;
+padding-top:12px;
+border-top:1px solid #e2e8f0
+}
+
+.errorcode-head{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:14px;
+flex-wrap:wrap;
+margin-bottom:12px
+}
+
+.errorcode-head-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+align-items:center
+}
+
+.errorcode-search{
+display:flex;
+align-items:center;
+gap:6px;
+background:white;
+border:1px solid #cbd5e1;
+border-radius:8px;
+padding:4px 10px;
+min-width:230px
+}
+
+.errorcode-search input{
+border:0;
+outline:0;
+flex:1;
+min-width:0;
+font-size:13px;
+padding:5px 0;
+background:transparent
+}
+
+.errorcode-search button{
+border:0;
+background:#e2e8f0;
+color:#475569;
+border-radius:999px;
+width:22px;
+height:22px;
+line-height:1;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+display:none;
+padding:0
+}
+
+.errorcode-form{
+background:#fffbeb;
+border:2px solid #fcd34d;
+border-radius:10px;
+padding:16px;
+margin-bottom:16px;
+display:none
+}
+
+.errorcode-form.open{display:block}
+
+.errorcode-form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:12px
+}
+
+.errorcode-form textarea{
+width:100%;
+min-height:96px;
+padding:10px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+font-size:14px;
+font-family:inherit;
+line-height:1.55;
+resize:vertical
+}
+
+.errorcode-form textarea:focus{
+border-color:#b45309;
+outline:0
+}
+
+.errorcode-form-actions{
+display:flex;
+gap:8px;
+justify-content:flex-end;
+align-items:center;
+margin-top:14px;
+flex-wrap:wrap
+}
+
+.errorcode-message{
+font-size:13px;
+font-weight:bold;
+flex:1;
+min-width:160px
+}
+
+.errorcode-message.error{color:#b91c1c}
+.errorcode-message.ok{color:#166534}
+
+.errorcode-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+min-width:860px
+}
+
+.errorcode-table th,
+.errorcode-table td{
+border:1px solid #e2e8f0;
+padding:10px 12px;
+font-size:13px;
+text-align:left;
+vertical-align:top
+}
+
+.errorcode-table th{
+background:#f1f5f9;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.3px;
+color:#475569
+}
+
+.errorcode-code{
+font-size:15px;
+font-weight:bold;
+color:#b45309;
+white-space:nowrap
+}
+
+.errorcode-machine{
+display:inline-block;
+margin-top:4px;
+background:#e2e8f0;
+color:#475569;
+border-radius:999px;
+padding:2px 9px;
+font-size:11px;
+font-weight:bold
+}
+
+.errorcode-text{
+white-space:pre-wrap;
+line-height:1.6
+}
+
+.errorcode-solution{
+white-space:pre-wrap;
+line-height:1.6;
+background:#f0fdf4;
+border-left:3px solid #16a34a;
+padding:8px 10px;
+border-radius:0 6px 6px 0
+}
+
+.errorcode-meta{
+font-size:11px;
+color:#94a3b8;
+white-space:nowrap
+}
+
+.errorcode-mini{
+border:0;
+border-radius:6px;
+padding:6px 12px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+color:white;
+margin-bottom:4px;
+display:block;
+width:100%
+}
+
+.errorcode-mini.edit{background:#2563eb}
+.errorcode-mini.del{background:#dc2626}
+
+.errorcode-empty{
+text-align:center;
+color:#94a3b8;
+padding:26px
+}
+
+.errorcode-count{
+background:#e2e8f0;
+color:#475569;
+border-radius:999px;
+padding:3px 11px;
+font-size:12px;
+font-weight:bold
+}
+
+@media(max-width:700px){
+.errorcode-modal-box{padding:14px}
+.errorcode-scroll{margin:0 -14px;padding:0 14px}
+.errorcode-head-actions{width:100%}
+.errorcode-search{width:100%}
+}
+
+.errorcode-newline{
+border:1px solid #cbd5e1;
+background:white;
+color:#475569;
+border-radius:6px;
+padding:3px 9px;
+font-size:11px;
+font-weight:bold;
+cursor:pointer;
+margin-left:8px;
+vertical-align:middle
+}
+
+.errorcode-newline:hover{background:#e2e8f0}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -2581,6 +3332,29 @@ outline:0
       <div class="page-login-error" id="pageLoginSetupError"></div>
       <button class="btn-green page-login-button" id="pageLoginSetupButton" type="submit">Şifreyi Belirle ve Gir</button>
     </form>
+
+    <div class="page-login-users" id="pageLoginUsersForm">
+      <div class="page-login-user-grid" id="pageLoginUserGrid"></div>
+
+      <div id="pageLoginUserPanel" style="display:none;flex-direction:column;gap:10px">
+        <div class="page-login-selected">
+          <span>👤 <span id="pageLoginUserName"></span></span>
+          <button type="button" onclick="systemBackToUserList()">Değiştir</button>
+        </div>
+        <label for="pageLoginUserPassword">Şifren</label>
+        <input id="pageLoginUserPassword" type="password" inputmode="none"
+        data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
+        autocomplete="off" placeholder="Şifreni yaz">
+        <label class="page-login-remember">
+          <input id="pageLoginUserRemember" type="checkbox" checked>
+          Bu bilgisayarda hatırla
+        </label>
+        <div class="page-login-error" id="pageLoginUserError"></div>
+        <button class="btn-blue page-login-button" id="pageLoginUserButton" type="button" onclick="systemUserLoginSubmit()">Giriş Yap</button>
+      </div>
+
+      <button type="button" class="page-login-master-link" onclick="systemMasterLoginPrompt()">🛡️ Sistem şifresiyle gir</button>
+    </div>
   </div>
 </div>
 
@@ -2595,35 +3369,45 @@ outline:0
 
 <div class="backup-area">
 
-<button class="btn-price" type="button" onclick="openPriceModal()">
+<button class="btn-price" type="button" data-perm="bolum.fiyat" onclick="openPriceModal()">
 💰 Fiyatlar
 </button>
 
-<button class="btn-maintenance" id="maintenanceButton" type="button" onclick="openMaintenanceModal()">
+<button class="btn-maintenance" id="maintenanceButton" type="button" data-perm="bolum.bakim" onclick="openMaintenanceModal()">
 🛠 Bakım
 <span class="maintenance-badge" id="maintenanceBadge" aria-label="Yaklaşan veya geciken bakım sayısı"></span>
 </button>
 
-<button class="btn-jobplan" id="jobPlanButton" type="button" onclick="openJobPlanModal()">
+<button class="btn-jobplan" id="jobPlanButton" type="button" data-perm="bolum.isplani" onclick="openJobPlanModal()">
 📋 İş Planlama
 <span class="jobplan-badge" id="jobPlanBadge" aria-label="Aktif iş sayısı"></span>
 </button>
 
-<button class="btn-consumables" id="consumablesButton" type="button" onclick="openConsumablesModal()">
+<button class="btn-errorcode" id="errorCodeButton" type="button" data-perm="bolum.hatakodu" onclick="openErrorCodeModal()">
+⚠️ Hata Kodları
+</button>
+
+<button class="btn-consumables" id="consumablesButton" type="button" data-perm="bolum.sarf" onclick="openConsumablesModal()">
 🧰 Sarf Malzemeleri
 <span class="consumable-badge" id="consumablesBadge" aria-label="Azalan sarf malzemesi sayısı"></span>
 </button>
 
-<button class="btn-green" onclick="backupData()">
+<button class="btn-green" data-perm="bolum.yedek" onclick="backupData()">
 💾 Yedek Al
 </button>
 
-<button class="btn-orange" onclick="document.getElementById('backupFile').click()">
+<button class="btn-orange" data-perm="bolum.yedek" onclick="document.getElementById('backupFile').click()">
 📂 Yedek Yükle
 </button>
 
-<button class="btn-settings" id="settingsButton" type="button" onclick="openSettingsModal()" title="Ayarlar" aria-label="Ayarlar">
-⚙️
+<div class="system-user-chip" id="systemUserChip">
+<span>👤 <span id="systemUserChipName"></span></span>
+<span class="system-user-role" id="systemUserChipRole"></span>
+<button type="button" onclick="systemLogout()">Çıkış</button>
+</div>
+
+<button class="btn-system" id="systemButton" type="button" onclick="openSystemModal()" title="Sistem: kullanıcılar, şifreler, yetkiler">
+🛡️ Sistem
 </button>
 
 <input
@@ -2746,15 +3530,15 @@ oninput="showProducts()"
 <option value="Dikişsiz">Dikişsiz</option>
 </select>
 
-<button class="btn-blue" onclick="openProductModal()">
+<button class="btn-blue" data-perm="stok.kart" onclick="openProductModal()">
 + Malzeme Ekle
 </button>
 
-<button class="btn-orange" type="button" onclick="openPurchaseImportModal()">
+<button class="btn-orange" type="button" data-perm="stok.alis" onclick="openPurchaseImportModal()">
 📄 Excel'den Ekle
 </button>
 
-<button class="btn-dark" onclick="exportStock()">
+<button class="btn-dark" data-perm="stok.excel" onclick="exportStock()">
 📥 Excel
 </button>
 
@@ -2817,7 +3601,7 @@ oninput="showProducts()"
 <span class="movement-count" id="movementCount"></span>
 </button>
 
-<button type="button" class="movement-clear" onclick="requestMovementClear()" title="Bakım PDF şifresiyle tüm stok hareketlerini siler">
+<button type="button" class="movement-clear" data-perm="stok.hareketsil" onclick="requestMovementClear()" title="Bakım PDF şifresiyle tüm stok hareketlerini siler">
 🗑 Tümünü Sil
 </button>
 
@@ -3658,16 +4442,16 @@ data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya 
 placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <button type="button" id="jobPlanSearchClear" title="Aramayı temizle" onclick="jobPlanClearSearch()">✕</button>
 </div>
-<button type="button" class="btn-orange" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
+<button type="button" class="btn-orange" data-perm="isplani.dosya" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
 <button type="button" class="btn-blue" onclick="jobPlanRefreshAll()">🔄 Planı Yenile</button>
-<button type="button" class="btn-green" onclick="exportJobPlan()">📊 Excel'e Aktar</button>
+<button type="button" class="btn-green" data-perm="isplani.dosya" onclick="exportJobPlan()">📊 Excel'e Aktar</button>
 <input type="file" id="jobPlanFiles" accept=".html,.htm" multiple style="display:none" onchange="jobPlanReadFiles(event)">
 </div>
 </div>
 
 <div class="jobplan-scroll">
 
-<div class="jobplan-settings">
+<div class="jobplan-settings" data-perm="isplani.vardiya">
 
 <div class="jobplan-shift-row" id="jobPlanDayBlock">
 <label class="jobplan-switch jobplan-shift-name">
@@ -3703,9 +4487,11 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 
 </div>
 
-<div class="jobplan-summary" id="jobPlanSummary"></div>
+<div class="jobplan-notice" id="jobPlanNotice" style="display:none"></div>
 
-<div class="jobplan-import-panel" id="jobPlanImportPanel">
+<div class="jobplan-summary" id="jobPlanSummary" data-perm="isplani.ozet"></div>
+
+<div class="jobplan-import-panel" id="jobPlanImportPanel" data-perm="isplani.dosya">
 <div class="jobplan-import-title" id="jobPlanImportTitle">Okunan dosyalar</div>
 <div class="jobplan-table-wrap">
 <table class="jobplan-table" id="jobPlanImportTable">
@@ -3736,15 +4522,15 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <table class="jobplan-table">
 <thead>
 <tr>
-<th style="width:44px">Sıra</th>
+<th style="width:44px" class="jp-c-sira">Sıra</th>
 <th>DT / Dosya</th>
-<th>Ebat</th>
-<th>Boy</th>
-<th>Toplam Süre</th>
-<th style="width:74px" title="Ek süre yüzdesi. 0 = HTML süresi aynen.">Ek %</th>
-<th>Başlangıç</th>
-<th>Termin</th>
-<th>Stok</th>
+<th class="jp-c-ebat">Ebat</th>
+<th class="jp-c-boy">Boy</th>
+<th class="jp-c-sure">Toplam Süre</th>
+<th style="width:74px" class="jp-c-yuzde" title="Ek süre yüzdesi. 0 = HTML süresi aynen.">Ek %</th>
+<th class="jp-c-bas">Başlangıç</th>
+<th class="jp-c-ter">Termin</th>
+<th class="jp-c-stok">Stok</th>
 <th>Durum</th>
 <th style="width:150px">İşlem</th>
 </tr>
@@ -3768,8 +4554,8 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <tr>
 <th>DT</th>
 <th>Dosya</th>
-<th title="HTML'den gelen planlanan süre">Planlanan Süre</th>
-<th title="Başlat ile Bitir arasında geçen gerçek süre">Gerçekleşen Süre</th>
+<th class="jp-c-sure" title="HTML'den gelen planlanan süre">Planlanan Süre</th>
+<th class="jp-c-sure" title="Başlat ile Bitir arasında geçen gerçek süre">Gerçekleşen Süre</th>
 <th>Bitiş</th>
 <th style="width:110px">İşlem</th>
 </tr>
@@ -3816,6 +4602,266 @@ style="width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;font-s
 </div>
 </div>
 
+
+<!-- SİSTEM ŞİFRESİ SORMA -->
+<div class="modal system-ask-modal" id="systemAskModal">
+<div class="modal-box">
+
+<h2 style="margin:0 0 8px" id="systemAskTitle">🛡️ Sistem Şifresi</h2>
+<div id="systemAskInfo" style="font-size:13px;color:#475569;margin-bottom:14px"></div>
+
+<div class="form-group">
+<label id="systemAskLabel">Sistem Şifresi</label>
+<input id="systemAskInput" type="password" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Sistem şifresi"
+autocomplete="off" placeholder="Sistem şifresini yazın">
+</div>
+
+<div class="form-group" id="systemAskRepeatGroup" style="display:none">
+<label>Şifreyi Tekrar Yaz</label>
+<input id="systemAskRepeat" type="password" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Sistem şifresi tekrar"
+autocomplete="off" placeholder="Şifreyi tekrar yazın">
+</div>
+
+<div class="system-message error" id="systemAskError" style="margin-top:6px;min-height:18px"></div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="systemAskCancel()">Vazgeç</button>
+<button type="button" class="btn-blue" id="systemAskConfirm" onclick="systemAskConfirm()">Devam</button>
+</div>
+
+</div>
+</div>
+
+<!-- SİSTEM PANELİ -->
+<div class="modal" id="systemModal">
+<div class="modal-box system-modal-box">
+
+<h2 style="margin:0">🛡️ Sistem</h2>
+<div style="font-size:13px;color:#64748b">Kullanıcılar, şifreler ve yetkiler buradan yönetilir.</div>
+
+<div class="system-tabs">
+<button type="button" id="systemTabUsers" class="active" onclick="systemShowTab('users')">👥 Kullanıcılar</button>
+<button type="button" id="systemTabRoles" onclick="systemShowTab('roles')">🔐 Roller ve İzinler</button>
+<button type="button" id="systemTabPasswords" onclick="systemShowTab('passwords')">🔑 Şifreler</button>
+</div>
+
+<div class="system-scroll">
+
+<!-- KULLANICILAR -->
+<div class="system-panel active" id="systemPanelUsers">
+
+<div class="system-note">
+Kullanıcı girişi açıkken sayfa açılışında kişi listesi çıkar ve herkes kendi şifresiyle girer.
+Kapalıyken eski ortak giriş şifresi kullanılır. Sistem şifresi her zaman ana anahtardır —
+tüm kullanıcılar silinse bile onunla girebilirsin.
+</div>
+
+<div class="system-toolbar">
+<label class="jobplan-switch">
+<input type="checkbox" id="systemLoginEnabled" onchange="systemSetLoginEnabled(this.checked)">
+<span>Kullanıcı girişi aktif</span>
+</label>
+<div style="flex:1"></div>
+<button type="button" class="btn-blue" onclick="systemNewUser()">+ Yeni Kullanıcı</button>
+</div>
+
+<div class="system-form" id="systemUserForm">
+<div style="font-weight:bold;margin-bottom:12px" id="systemUserFormTitle">Yeni Kullanıcı</div>
+
+<div class="system-form-grid">
+<div class="form-group">
+<label>Ad Soyad</label>
+<input id="systemUserName" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı adı"
+placeholder="Örn: Ahmet Yılmaz">
+</div>
+
+<div class="form-group">
+<label>Rol</label>
+<select id="systemUserRole"></select>
+</div>
+
+<div class="form-group">
+<label id="systemUserPasswordLabel">Şifre</label>
+<input id="systemUserPassword" type="password" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
+autocomplete="new-password" placeholder="En az 4 karakter">
+</div>
+
+<div class="form-group">
+<label>Şifre Tekrar</label>
+<input id="systemUserPasswordRepeat" type="password" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi tekrar"
+autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
+</div>
+</div>
+
+<div class="system-user-perms">
+<div class="system-user-perms-title">Kişiye Özel İzinler</div>
+<div id="systemUserPermBox"></div>
+</div>
+
+<div class="system-form-actions">
+<div class="system-message" id="systemUserMessage"></div>
+<button type="button" class="btn-gray" onclick="systemCancelUserForm()">Vazgeç</button>
+<button type="button" class="btn-green" id="systemUserSaveButton" onclick="systemSaveUser()">Kaydet</button>
+</div>
+</div>
+
+<div class="jobplan-table-wrap">
+<table class="system-table">
+<thead>
+<tr>
+<th>Ad Soyad</th>
+<th style="width:150px">Rol</th>
+<th style="width:110px">Durum</th>
+<th style="width:150px">Son Güncelleme</th>
+<th style="width:220px">İşlem</th>
+</tr>
+</thead>
+<tbody id="systemUserBody">
+<tr><td colspan="5" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<!-- ROLLER -->
+<div class="system-panel" id="systemPanelRoles">
+<div class="system-note">
+Rolü seç, açık kalmasını istediğin yerleri işaretle. İşareti kaldırılan yerler
+o roldeki kişilerde <strong>hiç görünmez</strong>. Yönetici her zaman tam yetkilidir.
+Tek bir kişiye farklı yetki vermek istersen Kullanıcılar sekmesinden o kişiyi düzenle.
+</div>
+
+<div class="system-role-picker" id="systemRolePicker"></div>
+
+<div id="systemPermBox"></div>
+
+<div class="system-form-actions">
+<div class="system-message"></div>
+<button type="button" class="btn-gray" onclick="systemResetRolePerms()">Bu Rolü Fabrika Ayarına Döndür</button>
+</div>
+
+</div>
+
+<!-- ŞİFRELER -->
+<div class="system-panel" id="systemPanelPasswords">
+<div class="system-note">
+Sistem şifresi bu pencereyi açar ve ana anahtardır. Giriş şifresi kullanıcı girişi kapalıyken
+sayfayı açmak için, bakım şifresi ise PDF indirme ve toplu silme için kullanılır.
+</div>
+<div id="systemPasswordHost"></div>
+</div>
+
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeSystemModal()">Kapat</button>
+</div>
+
+</div>
+</div>
+
+<!-- HATA KODLARI -->
+<div class="modal" id="errorCodeModal">
+<div class="modal-box errorcode-modal-box">
+
+<div class="errorcode-head">
+<div>
+<h2 style="margin:0 0 4px">⚠️ Hata Kodları</h2>
+<div style="font-size:13px;color:#64748b">
+Makinede çıkan arıza kodları, ne anlama geldiği ve nasıl çözüldüğü burada kayıt altına alınır.
+</div>
+</div>
+<div class="errorcode-head-actions">
+<div class="errorcode-search">
+<span>🔍</span>
+<input id="errorCodeSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Hata kodu arama"
+placeholder="Kod, açıklama veya çözümde ara" oninput="errorCodeSetSearch(this.value)">
+<button type="button" id="errorCodeSearchClear" title="Aramayı temizle" onclick="errorCodeClearSearch()">✕</button>
+</div>
+<span class="errorcode-count" id="errorCodeCount">0 kayıt</span>
+<button type="button" class="btn-blue" data-perm="hatakodu.duzenle" onclick="errorCodeNew()">+ Yeni Hata Kodu</button>
+</div>
+</div>
+
+<div class="errorcode-scroll">
+
+<div class="errorcode-form" id="errorCodeForm">
+<div style="font-weight:bold;margin-bottom:12px" id="errorCodeFormTitle">Yeni Hata Kodu</div>
+
+<div class="errorcode-form-grid">
+<div class="form-group">
+<label>Hata Kodu</label>
+<input id="errorCodeCode" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Hata kodu"
+placeholder="Örn: E-1204">
+</div>
+
+<div class="form-group">
+<label>Makine / Ekipman</label>
+<input id="errorCodeMachine" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Makine veya ekipman"
+placeholder="Örn: TruLaser Tube 3000" list="errorCodeMachineList">
+<datalist id="errorCodeMachineList"></datalist>
+</div>
+</div>
+
+<div class="form-group" style="margin-top:12px">
+<label>Hatanın Detayı
+<button type="button" class="errorcode-newline" onclick="errorCodeNewLine('errorCodeDetail')" title="İmlecin olduğu yere alt satır ekler">↵ Alt satır</button>
+</label>
+<textarea id="errorCodeDetail" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Hata detayı"
+placeholder="Ekranda ne yazıyor, makine ne yapıyor, hangi durumda çıkıyor"></textarea>
+</div>
+
+<div class="form-group" style="margin-top:12px">
+<label>Çözüm
+<button type="button" class="errorcode-newline" onclick="errorCodeNewLine('errorCodeSolution')" title="İmlecin olduğu yere alt satır ekler">↵ Alt satır</button>
+</label>
+<textarea id="errorCodeSolution" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Çözüm"
+placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
+</div>
+
+<div class="errorcode-form-actions">
+<div class="errorcode-message" id="errorCodeMessage"></div>
+<button type="button" class="btn-gray" onclick="errorCodeCancelForm()">Vazgeç</button>
+<button type="button" class="btn-green" id="errorCodeSaveButton" onclick="errorCodeSave()">Kaydet</button>
+</div>
+</div>
+
+<div class="jobplan-table-wrap">
+<table class="errorcode-table">
+<thead>
+<tr>
+<th style="width:150px">Kod</th>
+<th style="width:34%">Hatanın Detayı</th>
+<th>Çözüm</th>
+<th style="width:120px">Kayıt</th>
+<th style="width:110px" data-perm="hatakodu.duzenle">İşlem</th>
+</tr>
+</thead>
+<tbody id="errorCodeBody">
+<tr><td colspan="5" class="errorcode-empty">Henüz hata kodu eklenmemiş.</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="closeErrorCodeModal()">Kapat</button>
+</div>
+
+</div>
+</div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
@@ -9440,7 +10486,7 @@ try{
 let config=await loadMaintenanceDownloadPasswordConfig();
 if(config)return true;
 alert("Önce Ayarlar bölümünden bakım işlemleri için bir şifre belirleyin.");
-await openSettingsModal("maintenance");
+await openSystemPasswords();
 return false;
 }catch(err){
 console.error(err);
@@ -10544,6 +11590,22 @@ closeSettingsModal();
 
 }
 
+let systemModal=document.getElementById("systemModal");
+
+if(event.target===systemModal){
+
+closeSystemModal();
+
+}
+
+let errorCodeModalBox=document.getElementById("errorCodeModal");
+
+if(event.target===errorCodeModalBox){
+
+closeErrorCodeModal();
+
+}
+
 }
 
 
@@ -11223,13 +12285,21 @@ function showPageLoginMode(mode){
 let loading=document.getElementById("pageLoginLoading");
 let login=document.getElementById("pageLoginForm");
 let setup=document.getElementById("pageLoginSetupForm");
+let users=document.getElementById("pageLoginUsersForm");
 let subtitle=document.getElementById("pageLoginSubtitle");
+
 if(loading)loading.style.display="none";
 if(login)login.classList.toggle("active",mode==="login");
 if(setup)setup.classList.toggle("active",mode==="setup");
-if(subtitle)subtitle.textContent=mode==="setup"
-?"İlk kullanım için bakım şifresinden ayrı bir giriş şifresi belirleyin."
-:"Devam etmek için giriş şifresini yazın.";
+if(users)users.classList.toggle("active",mode==="users");
+
+if(subtitle)subtitle.textContent=
+mode==="setup"?"İlk kullanım için bakım şifresinden ayrı bir giriş şifresi belirleyin.":
+mode==="users"?"Kim olduğunu seç ve kendi şifreni yaz.":
+"Devam etmek için giriş şifresini yazın.";
+
+if(mode==="users")return;
+
 setTimeout(()=>document.getElementById(mode==="setup"?"pageLoginNewPassword":"pageLoginPassword")?.focus(),40);
 }
 
@@ -11313,6 +12383,9 @@ let setupForm=document.getElementById("pageLoginSetupForm");
 loginForm?.addEventListener("submit",event=>{event.preventDefault();handlePageLoginSubmit();});
 setupForm?.addEventListener("submit",event=>{event.preventDefault();handlePageLoginSetupSubmit();});
 try{
+/* Kullanıcı girişi açıksa kişi listesi gösterilir. */
+if(await systemTryUserGate())return;
+
 let config=await loadPageLoginPasswordConfig(true);
 if(config && isPageLoginRememberValid(config)){
 unlockPageAfterLogin();
@@ -12025,7 +13098,7 @@ function jobPlanFileStockState(file){
 if(!file)return {code:"yok",text:"—"};
 
 if(file.customerMaterial){
-return {code:"musteri",text:"Müşteri malı"};
+return {code:"musteri",text:"Müşteri Malzemesi"};
 }
 
 if(file.status==="bitti"){
@@ -12239,6 +13312,23 @@ console.error("İş planı okunamadı:",error);
 jobPlanJobs=[];
 }
 
+let rev=await jobPlanReadRev();
+jobPlanRev=rev?Number(rev.rev)||0:0;
+
+jobPlanNormalizeJobs();
+
+jobPlanRecalculate();
+jobPlanSyncReservations();
+jobPlanRefreshShortages();
+jobPlanUpdateBadge();
+jobPlanRenderSettings();
+jobPlanRender();
+jobPlanStartCheckTimer();
+if(typeof showProducts==="function")showProducts();
+}
+
+/* Buluttan gelen plan her seferinde aynı kurallarla düzeltilir. */
+function jobPlanNormalizeJobs(){
 jobPlanJobs.forEach((job,idx)=>{
 if(!Number.isFinite(Number(job.order)))job.order=idx;
 if(!Array.isArray(job.files))job.files=[];
@@ -12263,20 +13353,138 @@ job.files.forEach(file=>{
 if(!Number.isFinite(Number(file.percent)))file.percent=Number(job.percent)||0;
 });
 });
+}
 
-jobPlanRecalculate();
-jobPlanSyncReservations();
-jobPlanRefreshShortages();
-jobPlanUpdateBadge();
-jobPlanRenderSettings();
-jobPlanRender();
-jobPlanStartCheckTimer();
-if(typeof showProducts==="function")showProducts();
+/* ---------- AYNI ANDA DÜZENLEME KORUMASI ----------
+   Plan tek parça JSON olarak yazıldığı için iki bilgisayar aynı anda
+   kaydederse son yazan diğerinin işini siler. Bunu önlemek için ayrı bir
+   sürüm kaydı tutulur: {rev, user, at}. Eski sürüm dosyalar bu anahtarı
+   görmezden geldiği için geriye dönük uyumludur. */
+
+const CLOUD_KEY_JOB_PLAN_REV="job_plan_rev_v1";
+
+let jobPlanRev=0;
+let jobPlanDirty=false;
+
+async function jobPlanReadRev(){
+try{
+let value=await cloudStateGet(CLOUD_KEY_JOB_PLAN_REV);
+if(value && typeof value==="object")return value;
+}catch(error){
+console.error("İş planı sürümü okunamadı:",error);
+}
+return null;
+}
+
+function jobPlanRevText(rev){
+if(!rev)return "";
+let who=rev.user||"başka bir kullanıcı";
+let when="";
+try{
+if(rev.at)when=new Date(rev.at).toLocaleString("tr-TR",{
+day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"
+});
+}catch(e){}
+return who+(when?" · "+when:"");
+}
+
+/* Buluttaki planı alır, ekrandakini onunla değiştirir. */
+async function jobPlanPullFromCloud(rev){
+try{
+let jobs=await cloudStateGet(CLOUD_KEY_JOB_PLAN_JOBS);
+jobPlanJobs=Array.isArray(jobs)?jobs:[];
+jobPlanNormalizeJobs();
+jobPlanRev=rev?Number(rev.rev)||0:jobPlanRev;
+jobPlanDirty=false;
+jobPlanRefreshAll();
+return true;
+}catch(error){
+console.error("Plan buluttan alınamadı:",error);
+alert("❌ Plan buluttan alınamadı.\n\n"+(error?.message||""));
+return false;
+}
+}
+
+function jobPlanShowNotice(text){
+let box=document.getElementById("jobPlanNotice");
+if(!box)return;
+if(!text){box.style.display="none";box.textContent="";return;}
+box.textContent=text;
+box.style.display="block";
+}
+
+/* Sessiz kontrol: pencere açıkken 60 saniyede bir tek satır okunur. */
+let jobPlanWatchTimer=null;
+
+async function jobPlanWatchTick(){
+let modal=document.getElementById("jobPlanModal");
+if(!modal || modal.style.display!=="flex")return;
+
+let rev=await jobPlanReadRev();
+if(!rev)return;
+if(Number(rev.rev)<=jobPlanRev)return;
+
+if(jobPlanDirty || jobPlanBusy){
+/* Kendi değişikliğin varsa kararı sen ver. */
+if(confirm(
+"\u26a0\ufe0f Plan bu sırada değiştirildi.\n\n"+
+"Değiştiren: "+jobPlanRevText(rev)+"\n\n"+
+"TAMAM → Buluttaki planı al (senin bekleyen değişikliğin iptal olur)\n"+
+"İPTAL → Kendi planınla devam et"
+)){
+await jobPlanPullFromCloud(rev);
+jobPlanShowNotice("Plan " + jobPlanRevText(rev) + " tarafından güncellendi.");
+}
+return;
+}
+
+await jobPlanPullFromCloud(rev);
+jobPlanShowNotice("Plan " + jobPlanRevText(rev) + " tarafından güncellendi.");
+}
+
+function jobPlanStartWatch(){
+if(jobPlanWatchTimer)clearInterval(jobPlanWatchTimer);
+jobPlanWatchTimer=setInterval(()=>{jobPlanWatchTick().catch(console.error);},60000);
+}
+
+function jobPlanStopWatch(){
+if(jobPlanWatchTimer)clearInterval(jobPlanWatchTimer);
+jobPlanWatchTimer=null;
 }
 
 async function jobPlanSaveJobs(){
 try{
+let rev=await jobPlanReadRev();
+
+if(rev && Number(rev.rev)>jobPlanRev){
+let al=confirm(
+"\u26a0\ufe0f Plan bu sırada değiştirildi.\n\n"+
+"Değiştiren: "+jobPlanRevText(rev)+"\n\n"+
+"TAMAM → Buluttaki planı al (senin son değişikliğin iptal olur)\n"+
+"İPTAL → Kendi planını yaz (buluttakinin üzerine yazılır)"
+);
+
+if(al){
+await jobPlanPullFromCloud(rev);
+jobPlanShowNotice("Plan " + jobPlanRevText(rev) + " tarafından güncellendi.");
+return;
+}
+
+jobPlanRev=Number(rev.rev)||0;
+}
+
 await cloudStateSet(CLOUD_KEY_JOB_PLAN_JOBS,jobPlanJobs);
+
+jobPlanRev=jobPlanRev+1;
+jobPlanDirty=false;
+
+await cloudStateSet(CLOUD_KEY_JOB_PLAN_REV,{
+rev:jobPlanRev,
+user:jobPlanWho(),
+at:new Date().toISOString()
+});
+
+jobPlanShowNotice("");
 }catch(error){
 console.error("İş planı kaydedilemedi:",error);
 alert("❌ İş planı buluta kaydedilemedi.\n\n"+(error?.message||""));
@@ -12599,7 +13807,7 @@ let customerToggle=
 '<label class="jobplan-customer">'+
 '<input type="checkbox" '+(f.customerMaterial?"checked":"")+
 ' onchange="jobPlanImportSetCustomer(\''+f.rowId+'\',this.checked)">'+
-'<span>🧾 Müşteri malı</span>'+
+'<span>🧾 Müşteri Malzemesi</span>'+
 '</label>';
 
 let stockCell;
@@ -12987,6 +14195,16 @@ if(piece<=0)return;
 file.workedMs=(Number(file.workedMs)||0)+piece;
 }
 
+/* İşi bitiren kişiler (tekrarsız). */
+function jobPlanJobWorkers(job){
+let names=[];
+(job.files||[]).forEach(f=>{
+let who=f.finishedBy||f.startedBy||"";
+if(who && !names.includes(who))names.push(who);
+});
+return names.join(", ");
+}
+
 function jobPlanJobWorkedMs(job){
 return (job.files||[]).reduce((sum,f)=>sum+jobPlanWorkedMs(f),0);
 }
@@ -13103,7 +14321,7 @@ product_id:product.id,
 type:"Çıkış",
 quantity:qty,
 date:new Date().toLocaleString("tr-TR"),
-description:"İş planı: "+job.dtNo+" — "+file.fileName+(label?" ("+label+")":""),
+description:"İş planı: "+job.dtNo+" — "+file.fileName+(label?" ("+label+")":"")+jobPlanWhoSuffix(),
 product_name:product.type,
 shape:product.shape,
 quality:product.quality,
@@ -13149,7 +14367,7 @@ persistUsageSelections();
 return qty;
 }
 
-/* Plan tablosundan müşteri malı işaretini değiştirme.
+/* Plan tablosundan müşteri malzemesi işaretini değiştirme.
    Açılınca ayırma kaldırılır; otomatik açılmış boş kart silinmez.
    Kapatılınca eşleşen stok kartı varsa otomatik bağlanır. */
 async function jobPlanSetCustomerMaterial(jobId,fileId,checked){
@@ -13171,14 +14389,39 @@ jobPlanRefreshAll();
 await jobPlanSaveJobs();
 }
 
+/* Tek tezgah var: aynı anda yalnızca bir dosya "başladı" olabilir. */
+function jobPlanRunningFile(exceptFile){
+for(let job of jobPlanJobs){
+for(let file of (job.files||[])){
+if(file!==exceptFile && file.status==="basladi")return {job:job,file:file};
+}
+}
+return null;
+}
+
+function jobPlanBlockIfRunning(file){
+let running=jobPlanRunningFile(file);
+if(!running)return false;
+alert(
+"\u26a0\ufe0f Zaten devam eden bir iş var.\n\n"+
+running.job.dtNo+" — "+running.file.fileName+"\n\n"+
+"Tezgah tek olduğu için aynı anda yalnızca bir iş çalışabilir.\n"+
+"Önce o işi Durakla veya Bitir."
+);
+return true;
+}
+
 async function jobPlanStartFile(jobId,fileId){
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
+if(file.status==="basladi")return;
+if(jobPlanBlockIfRunning(file))return;
 
 file.status="basladi";
 file.startedAt=Date.now();
 file.pausedAt=null;
+file.startedBy=jobPlanWho();
 if(job.status==="planned")job.status="active";
 
 jobPlanRefreshAll();
@@ -13284,6 +14527,7 @@ jobPlanAddWorked(file);
 file.doneTubes=done;
 file.status="durakladi";
 file.pausedAt=Date.now();
+file.pausedBy=jobPlanWho();
 
 /* Ayırma kaydı kalan boya göre küçülür. */
 jobPlanSyncReservations();
@@ -13317,6 +14561,8 @@ async function jobPlanResumeFile(jobId,fileId){
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
+if(file.status==="basladi")return;
+if(jobPlanBlockIfRunning(file))return;
 
 file.status="basladi";
 file.startedAt=Date.now();
@@ -13368,6 +14614,7 @@ jobPlanRemoveReservation(file);
 
 file.status="bitti";
 file.finishedAt=Date.now();
+file.finishedBy=jobPlanWho();
 file.doneTubes=total;
 file.stockDeducted=jobPlanDeductedTubes(file)>0;
 if(!file.startedAt)file.startedAt=file.finishedAt;
@@ -13472,6 +14719,7 @@ jobPlanFlushRender();
 
 /* Yüzde kutusunda her tuşta buluta yazmamak için kayıt geciktirilir. */
 function jobPlanSaveJobsSoon(){
+jobPlanDirty=true;
 if(jobPlanSaveTimer)clearTimeout(jobPlanSaveTimer);
 jobPlanSaveTimer=setTimeout(()=>{
 jobPlanSaveTimer=null;
@@ -13543,6 +14791,21 @@ chips.push('<div class="jobplan-chip ok">Stok yeterli</div>');
 }
 
 box.innerHTML=chips.join("");
+}
+
+/* Sistem paneli yoksa (eski sürüm) her şey açıktır. */
+function jobPlanAllows(key){
+return typeof systemCan==="function"?systemCan(key):true;
+}
+
+/* Kaydı kimin yaptığı kullanıcı adından okunur. */
+function jobPlanWho(){
+return typeof systemCurrentUserName==="function"?systemCurrentUserName():"";
+}
+
+function jobPlanWhoSuffix(){
+let who=jobPlanWho();
+return who?" · "+who:"";
 }
 
 /* ---------- DT ARAMA ---------- */
@@ -13617,7 +14880,7 @@ let rows=[];
 
 rows.push(
 '<tr class="jobplan-dt-row '+(jobShortage?"shortage":"")+'" onclick="jobPlanToggleExpand(\''+job.id+'\')">'+
-'<td onclick="event.stopPropagation()">'+
+'<td class="jp-c-sira" onclick="event.stopPropagation()">'+
 '<div class="jobplan-order-btns">'+
 '<button type="button" onclick="jobPlanMove(\''+job.id+'\',-1)" '+(jobPlanSearch?"":(index===0?"disabled":""))+' title="Yukarı al">▲</button>'+
 '<button type="button" onclick="jobPlanMove(\''+job.id+'\',1)" '+(jobPlanSearch?"":(index===active.length-1?"disabled":""))+' title="Aşağı al">▼</button>'+
@@ -13626,27 +14889,29 @@ rows.push(
 '<td><span class="jobplan-caret">'+(open?"▼":"►")+'</span>'+
 '<span class="jobplan-dt-name">'+escapeHTML(job.dtNo)+'</span>'+
 '<div class="jobplan-sub">'+(job.files||[]).length+' dosya · yüklendi '+jobPlanFormatDateTime(job.createdAt)+'</div></td>'+
-'<td>'+escapeHTML(jobPlanSizeSummary(job))+'</td>'+
-'<td>'+jobPlanTubeSummary(job)+'</td>'+
-'<td>'+jobPlanFormatDuration(totalSeconds)+
+'<td class="jp-c-ebat">'+escapeHTML(jobPlanSizeSummary(job))+'</td>'+
+'<td class="jp-c-boy">'+jobPlanTubeSummary(job)+'</td>'+
+'<td class="jp-c-sure">'+jobPlanFormatDuration(totalSeconds)+
 '<div class="jobplan-sub">'+jobPlanFormatClock(totalSeconds)+
 (Math.abs(totalSeconds-rawSeconds)>0.5?' · ham '+jobPlanFormatClock(rawSeconds):'')+'</div></td>'+
-'<td onclick="event.stopPropagation()">'+
+'<td class="jp-c-yuzde" onclick="event.stopPropagation()">'+
 '<input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="DT ek süre %" '+
 'value="'+(jobPlanCommonPercent(job)===null?"":jobPlanCommonPercent(job))+'" '+
 'placeholder="karışık" '+
 'oninput="jobPlanSetPercent(\''+job.id+'\',this.value)" '+
 'title="Ek süre %. 0 = HTML süresi aynen. Bu DT\'deki tüm dosyalara uygulanır.">'+
 '</td>'+
-'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.planStart)+'</td>'+
-'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.planEnd)+'</td>'+
-'<td>'+(jobShortage
+'<td class="jobplan-termin jp-c-bas">'+jobPlanFormatDateTime(job.planStart)+'</td>'+
+'<td class="jobplan-termin jp-c-ter">'+jobPlanFormatDateTime(job.planEnd)+'</td>'+
+'<td class="jp-c-stok">'+(jobShortage
 ?'<span class="jobplan-stock-bad">Yetersiz</span>'
 :'<span class="jobplan-stock-ok">Tamam</span>')+'</td>'+
 '<td><span class="jobplan-state '+(job.status==="active"?"basladi":"bekliyor")+'">'+
 (job.status==="active"?"Devam ediyor":"Bekliyor")+'</span></td>'+
 '<td onclick="event.stopPropagation()">'+
-'<button type="button" class="jobplan-mini del" onclick="jobPlanDeleteJob(\''+job.id+'\')">Kaldır</button>'+
+(jobPlanAllows("isplani.duzenle")
+?'<button type="button" class="jobplan-mini del" onclick="jobPlanDeleteJob(\''+job.id+'\')">Kaldır</button>'
+:'')+
 '</td>'+
 '</tr>'
 );
@@ -13662,19 +14927,27 @@ stock.code==="tamam"||stock.code==="dusuldu"?"jobplan-stock-ok":
 
 let ref="'"+job.id+"','"+file.id+"'";
 let actions="";
+let calistirilabilir=jobPlanAllows("isplani.calistir");
 
-if(file.status==="bekliyor"){
-actions='<button type="button" class="jobplan-mini start" onclick="jobPlanStartFile('+ref+')">Başlat</button>';
+if(!calistirilabilir){
+actions=file.status==="bitti"
+?'<span class="jobplan-sub">'+jobPlanFormatDateTime(file.finishedAt)+'</span>'
+:'';
+}
+else if(file.status==="bekliyor"){
+actions='<button type="button" class="jobplan-mini start" onclick="jobPlanStartFile('+ref+')"><span class="jp-ikon">\u25b6</span>Başlat</button>';
 }
 else if(file.status==="basladi"){
-actions='<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')">Durakla</button> '+
-'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')">Bitir</button> '+
-'<button type="button" class="jobplan-mini undo" onclick="jobPlanUndoFile('+ref+')">Geri</button>';
+actions='<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')"><span class="jp-ikon">\u23f8</span>Durakla</button> '+
+'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')"><span class="jp-ikon">\u2714</span>Bitir</button>'+
+(jobPlanAllows("isplani.duzenle")
+?' <button type="button" class="jobplan-mini undo" onclick="jobPlanUndoFile('+ref+')">Geri</button>'
+:'');
 }
 else if(file.status==="durakladi"){
-actions='<button type="button" class="jobplan-mini start" onclick="jobPlanResumeFile('+ref+')">Devam</button> '+
-'<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')">Boy</button> '+
-'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')">Bitir</button>';
+actions='<button type="button" class="jobplan-mini start" onclick="jobPlanResumeFile('+ref+')"><span class="jp-ikon">\u25b6</span>Devam</button> '+
+'<button type="button" class="jobplan-mini pause" onclick="jobPlanPauseFile('+ref+')"><span class="jp-ikon">\u270e</span>Boy</button> '+
+'<button type="button" class="jobplan-mini finish" onclick="jobPlanFinishFile('+ref+')"><span class="jp-ikon">\u2714</span>Bitir</button>';
 }
 else{
 actions='<span class="jobplan-sub">'+jobPlanFormatDateTime(file.finishedAt)+'</span>';
@@ -13697,13 +14970,13 @@ rows.push(
 (file.status==="bitti"?"done":
 file.status==="basladi"?"running":
 file.status==="durakladi"?"paused":"")+'">'+
-'<td></td>'+
+'<td class="jp-c-sira"></td>'+
 '<td style="padding-left:26px">'+escapeHTML(file.fileName)+
 '<div class="jobplan-sub">'+(Number(file.parts)||0)+' parça'+
 (file.tubeProfile?' · '+escapeHTML(file.tubeProfile):'')+'</div></td>'+
-'<td>'+sizeText+'</td>'+
-'<td>'+lengthText+'</td>'+
-'<td>'+jobPlanFormatDuration(seconds)+
+'<td class="jp-c-ebat">'+sizeText+'</td>'+
+'<td class="jp-c-boy">'+lengthText+'</td>'+
+'<td class="jp-c-sure">'+jobPlanFormatDuration(seconds)+
 '<div class="jobplan-sub">'+jobPlanFormatClock(seconds)+
 (jobPlanFilePercent(job,file)!==0
 ?' · ham '+jobPlanFormatClock(file.totalSeconds)
@@ -13711,18 +14984,18 @@ file.status==="durakladi"?"paused":"")+'">'+
 (jobPlanDoneTubes(file)>0 && file.status!=="bitti"
 ?'<br>kalan '+jobPlanFormatClock(jobPlanFileRemainingSeconds(job,file))
 :'')+'</div></td>'+
-'<td><input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="Dosya ek süre %" '+
+'<td class="jp-c-yuzde"><input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="Dosya ek süre %" '+
 'value="'+jobPlanFilePercent(job,file)+'" '+
 'oninput="jobPlanSetFilePercent(\''+job.id+'\',\''+file.id+'\',this.value)" '+
 'title="Bu HTML için ek süre %. 0 = HTML süresi aynen."></td>'+
-'<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planStart)+'</td>'+
-'<td class="jobplan-termin">'+jobPlanFormatDateTime(file.planEnd)+'</td>'+
-'<td class="'+stockClass+'">'+escapeHTML(stock.text)+
+'<td class="jobplan-termin jp-c-bas">'+jobPlanFormatDateTime(file.planStart)+'</td>'+
+'<td class="jobplan-termin jp-c-ter">'+jobPlanFormatDateTime(file.planEnd)+'</td>'+
+'<td class="jp-c-stok '+stockClass+'">'+escapeHTML(stock.text)+
 (file.status!=="bitti"
 ?'<label class="jobplan-customer">'+
 '<input type="checkbox" '+(file.customerMaterial?"checked":"")+
 ' onchange="jobPlanSetCustomerMaterial('+ref+',this.checked)">'+
-'<span>Müşteri malı</span>'+
+'<span>Müşteri Malzemesi</span>'+
 '</label>'
 :'')+
 '</td>'+
@@ -13765,14 +15038,17 @@ return '<tr>'+
 '<td><strong>'+escapeHTML(job.dtNo)+'</strong></td>'+
 '<td>'+(job.files||[]).length+
 '<div class="jobplan-sub">'+(job.files||[]).map(f=>escapeHTML(f.fileName)).join("<br>")+'</div></td>'+
-'<td>'+jobPlanFormatDuration(planned)+
+'<td class="jp-c-sure">'+jobPlanFormatDuration(planned)+
 '<div class="jobplan-sub">'+jobPlanFormatClock(planned)+'</div></td>'+
-'<td>'+jobPlanFormatWorked(worked)+
+'<td class="jp-c-sure">'+jobPlanFormatWorked(worked)+
 (worked>0
 ?'<div class="jobplan-sub">'+(diff>0?"+":"")+jobPlanFormatDuration(Math.abs(diff))+(diff>0?" fazla":" az")+'</div>'
 :'')+'</td>'+
-'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.completedAt)+'</td>'+
-'<td><button type="button" class="jobplan-mini undo" onclick="jobPlanReopenJob(\''+job.id+'\')">Geri Al</button></td>'+
+'<td class="jobplan-termin">'+jobPlanFormatDateTime(job.completedAt)+
+(jobPlanJobWorkers(job)?'<div class="jobplan-sub">'+escapeHTML(jobPlanJobWorkers(job))+'</div>':'')+'</td>'+
+'<td>'+(jobPlanAllows("isplani.duzenle")
+?'<button type="button" class="jobplan-mini undo" onclick="jobPlanReopenJob(\''+job.id+'\')">Geri Al</button>'
+:'')+'</td>'+
 '</tr>';
 }).join("");
 }
@@ -13839,12 +15115,16 @@ function openJobPlanModal(){
 if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
 jobPlanRenderSettings();
 jobPlanRefreshAll();
+jobPlanShowNotice("");
 document.getElementById("jobPlanModal").style.display="flex";
+jobPlanStartWatch();
+jobPlanWatchTick().catch(console.error);
 }
 
 function closeJobPlanModal(){
 let modal=document.getElementById("jobPlanModal");
 if(modal)modal.style.display="none";
+jobPlanStopWatch();
 
 let target=null;
 try{target=keypadTarget;}catch(e){target=null;}
@@ -14031,10 +15311,10 @@ let sheet2=workbook.addWorksheet("Tamamlananlar",{
 views:[{state:"frozen",ySplit:2}]
 });
 
-drawTitle(sheet2,"İŞ PLANI · TAMAMLANANLAR","I");
+drawTitle(sheet2,"İŞ PLANI · TAMAMLANANLAR","J");
 
 drawHeader(sheet2,2,[
-"DT","Dosya","Ebat","Adet","Planlanan (sa)","Gerçekleşen (sa)","Fark (sa)","Bitiş","Not"
+"DT","Dosya","Ebat","Adet","Planlanan (sa)","Gerçekleşen (sa)","Fark (sa)","Bitiş","Yapan","Not"
 ]);
 
 let row2=3;
@@ -14052,6 +15332,7 @@ Number((planned/3600).toFixed(2)),
 worked>0?Number((worked/3600).toFixed(2)):null,
 worked>0?Number(((worked-planned)/3600).toFixed(2)):null,
 jobPlanFormatDateTime(job.completedAt),
+jobPlanJobWorkers(job),
 ""
 ];
 
@@ -14079,7 +15360,8 @@ Number((seconds/3600).toFixed(2)),
 fileWorked>0?Number((fileWorked/3600).toFixed(2)):null,
 fileWorked>0?Number(((fileWorked-seconds)/3600).toFixed(2)):null,
 jobPlanFormatDateTime(file.finishedAt),
-file.customerMaterial?"Müşteri malı · stok düşülmedi":""
+file.finishedBy||file.startedBy||"",
+file.customerMaterial?"Müşteri Malzemesi · stok düşülmedi":""
 ];
 
 values.forEach((v,i)=>{
@@ -14098,7 +15380,7 @@ if(!done.length){
 sheet2.getCell("A3").value="Tamamlanmış iş yok.";
 }
 
-[14,34,20,9,14,15,12,20,28].forEach((w,i)=>{
+[14,34,20,9,14,15,12,20,20,28].forEach((w,i)=>{
 sheet2.getColumn(i+1).width=w;
 });
 
@@ -14111,7 +15393,7 @@ sheet2.getColumn(i).alignment={horizontal:"center",vertical:"middle"};
 });
 
 if(row2>3){
-sheet2.autoFilter={from:"A2",to:"I"+(row2-1)};
+sheet2.autoFilter={from:"A2",to:"J"+(row2-1)};
 }
 
 sheet2.pageSetup={
@@ -14221,6 +15503,1554 @@ async function clearAllMovementsAuthorized(){
 await supabaseRequest(MOVEMENTS_TABLE,"DELETE",null,"?id=gt.0");
 movements=[];
 showMovements();
+}
+
+
+/* =====================================================
+   SİSTEM PANELİ — KULLANICILAR, ŞİFRELER, YETKİLER
+   1. AŞAMA: sistem şifresi, kullanıcılar, kişi seçmeli giriş.
+   İzin tablosu 2. aşamada bu yapının üzerine eklenecek.
+===================================================== */
+
+const CLOUD_KEY_SYSTEM_MASTER="system_master_password_v1";
+const CLOUD_KEY_SYSTEM_USERS="system_users_v1";
+const SYSTEM_REMEMBER_KEY="stokSistemOturum";
+
+let systemMasterConfig=null;
+let systemMasterLoaded=false;
+let systemData=null;
+let systemDataLoaded=false;
+let systemUnlocked=false;
+let currentUser=null;
+let systemEditingUserId=null;
+let systemAskState=null;
+
+/* ---------- VARSAYILAN ROLLER ---------- */
+
+function systemDefaultRoles(){
+return {
+yonetici:{name:"Yönetici",note:"Her şeyi görür ve değiştirir."},
+planlamaci:{name:"Planlamacı",note:"İş planı ve stok yönetimi."},
+operator:{name:"Operatör",note:"İşleri başlatır, bitirir, stok hareketi girer."},
+izleyici:{name:"İzleyici",note:"Sadece görür, işlem yapamaz."}
+};
+}
+
+function systemEmptyData(){
+return {
+version:1,
+users:[],
+roles:systemDefaultRoles(),
+loginEnabled:false,
+updatedAt:new Date().toISOString()
+};
+}
+
+/* ---------- ŞİFRE YARDIMCILARI ---------- */
+
+async function systemMakeCredential(password){
+let salt=new Uint8Array(16);
+crypto.getRandomValues(salt);
+let saltBase64=maintenanceBytesToBase64(salt);
+let iterations=150000;
+let hash=await deriveMaintenancePasswordHash(password,saltBase64,iterations);
+return {salt:saltBase64,hash:hash,iterations:iterations};
+}
+
+async function systemCheckCredential(password,record){
+if(!record || !record.salt || !record.hash)return false;
+let hash=await deriveMaintenancePasswordHash(password,record.salt,record.iterations||150000);
+return hash===record.hash;
+}
+
+/* ---------- BULUT ---------- */
+
+async function loadSystemMaster(force=false){
+if(systemMasterLoaded && !force)return systemMasterConfig;
+let value=await cloudStateGet(CLOUD_KEY_SYSTEM_MASTER);
+systemMasterConfig=(value && typeof value==="object" && value.salt && value.hash)?value:null;
+systemMasterLoaded=true;
+return systemMasterConfig;
+}
+
+async function saveSystemMaster(password){
+let credential=await systemMakeCredential(password);
+credential.version=1;
+credential.updatedAt=new Date().toISOString();
+await cloudStateSet(CLOUD_KEY_SYSTEM_MASTER,credential);
+systemMasterConfig=credential;
+systemMasterLoaded=true;
+return credential;
+}
+
+async function loadSystemData(force=false){
+if(systemDataLoaded && !force)return systemData;
+let value=await cloudStateGet(CLOUD_KEY_SYSTEM_USERS);
+if(value && typeof value==="object" && Array.isArray(value.users)){
+systemData=value;
+if(!systemData.roles)systemData.roles=systemDefaultRoles();
+}else{
+systemData=systemEmptyData();
+}
+systemDataLoaded=true;
+return systemData;
+}
+
+async function saveSystemData(){
+if(!systemData)systemData=systemEmptyData();
+systemData.updatedAt=new Date().toISOString();
+await cloudStateSet(CLOUD_KEY_SYSTEM_USERS,systemData);
+}
+
+/* ---------- KİM YAPTI ----------
+   Cihaz adı yerine kullanıcı adı kullanılır: kaydı kimin yaptığı ve
+   aynı anda kimin düzenlediği buradan takip edilir. */
+
+function systemCurrentUserName(){
+if(currentUser && currentUser.name)return currentUser.name;
+if(systemData && systemData.loginEnabled)return "Bilinmiyor";
+return "";
+}
+
+/* ---------- MESAJ ---------- */
+
+function systemSetMessage(id,text,kind){
+let el=document.getElementById(id);
+if(!el)return;
+el.textContent=text||"";
+el.classList.remove("error","ok");
+if(kind)el.classList.add(kind);
+}
+
+/* ---------- ŞİFRE SORMA PENCERESİ ----------
+   mode: "verify" (mevcut şifre) | "create" (yeni şifre + tekrar) */
+
+function systemAsk(options){
+return new Promise(resolve=>{
+let modal=document.getElementById("systemAskModal");
+if(!modal){resolve(null);return;}
+
+systemAskState={mode:options.mode||"verify",resolve:resolve};
+
+let title=document.getElementById("systemAskTitle");
+let info=document.getElementById("systemAskInfo");
+let label=document.getElementById("systemAskLabel");
+let repeatGroup=document.getElementById("systemAskRepeatGroup");
+let input=document.getElementById("systemAskInput");
+let repeat=document.getElementById("systemAskRepeat");
+let button=document.getElementById("systemAskConfirm");
+
+if(title)title.textContent=options.title||"🛡️ Sistem Şifresi";
+if(info)info.textContent=options.info||"";
+if(label)label.textContent=options.label||"Sistem Şifresi";
+if(repeatGroup)repeatGroup.style.display=systemAskState.mode==="create"?"block":"none";
+if(button)button.textContent=options.button||"Devam";
+
+if(input){input.value="";input.placeholder=options.placeholder||"Şifreyi yazın";}
+if(repeat)repeat.value="";
+systemSetMessage("systemAskError","");
+
+modal.style.display="flex";
+
+setTimeout(()=>{
+try{input.focus({preventScroll:true});}catch(e){}
+if(typeof openNumericKeypad==="function")openNumericKeypad(input);
+},60);
+});
+}
+
+function systemAskClose(value){
+let modal=document.getElementById("systemAskModal");
+if(modal)modal.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+let state=systemAskState;
+systemAskState=null;
+if(state && state.resolve)state.resolve(value);
+}
+
+function systemAskCancel(){
+systemAskClose(null);
+}
+
+function systemAskConfirm(){
+if(!systemAskState)return;
+let input=document.getElementById("systemAskInput");
+let repeat=document.getElementById("systemAskRepeat");
+let value=String(input?input.value:"");
+
+if(!value){
+systemSetMessage("systemAskError","Şifreyi yazın.","error");
+return;
+}
+
+if(systemAskState.mode==="create"){
+if(value.length<4){
+systemSetMessage("systemAskError","Şifre en az 4 karakter olmalı.","error");
+return;
+}
+if(value!==String(repeat?repeat.value:"")){
+systemSetMessage("systemAskError","Yazdığın iki şifre aynı değil.","error");
+return;
+}
+}
+
+systemAskClose(value);
+}
+
+/* ---------- SİSTEM PANELİNİ AÇ ---------- */
+
+async function openSystemModal(){
+let modal=document.getElementById("systemModal");
+if(!modal)return;
+
+if(!systemCanOpenPanel()){
+alert("Bu bölüm yalnızca yöneticiye açıktır.\n\nSistem şifresiyle girmek için önce çıkış yap.");
+return;
+}
+
+try{
+let master=await loadSystemMaster(true);
+
+if(!master){
+let password=await systemAsk({
+mode:"create",
+title:"🛡️ Sistem Şifresi Belirle",
+info:"Bu şifre Sistem penceresini açar ve ana anahtardır. Sadece sende kalsın — "+
+"tüm kullanıcılar silinse bile bu şifreyle girebilirsin.",
+label:"Yeni Sistem Şifresi",
+button:"Şifreyi Belirle",
+placeholder:"En az 4 karakter"
+});
+if(password===null)return;
+
+/* Başka bilgisayar aynı anda belirlemiş olabilir. */
+let existing=await loadSystemMaster(true);
+if(existing){
+alert("Sistem şifresi başka bir bilgisayarda belirlenmiş.\n\nMevcut şifreyle tekrar dene.");
+return;
+}
+
+await saveSystemMaster(password);
+systemUnlocked=true;
+}
+else if(!systemUnlocked){
+let password=await systemAsk({
+mode:"verify",
+title:"🛡️ Sistem Şifresi",
+info:"Sistem penceresini açmak için sistem şifresini yaz.",
+label:"Sistem Şifresi",
+button:"Aç",
+placeholder:"Sistem şifresini yazın"
+});
+if(password===null)return;
+
+let valid=await systemCheckCredential(password,await loadSystemMaster());
+if(!valid){
+alert("❌ Sistem şifresi yanlış.");
+return;
+}
+systemUnlocked=true;
+}
+
+await loadSystemData(true);
+systemShowTab("users");
+systemRenderAll();
+modal.style.display="flex";
+}
+catch(error){
+console.error(error);
+alert("Sistem paneli açılamadı.\n\n"+(error&&error.message||""));
+}
+}
+
+function closeSystemModal(){
+let modal=document.getElementById("systemModal");
+if(modal)modal.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+systemCancelUserForm();
+}
+
+function systemShowTab(name){
+["users","roles","passwords"].forEach(key=>{
+let tab=document.getElementById("systemTab"+key.charAt(0).toUpperCase()+key.slice(1));
+let panel=document.getElementById("systemPanel"+key.charAt(0).toUpperCase()+key.slice(1));
+if(tab)tab.classList.toggle("active",key===name);
+if(panel)panel.classList.toggle("active",key===name);
+});
+
+if(name==="passwords"){
+systemMountPasswordSections();
+systemRefreshPasswordSections();
+}
+}
+
+function systemRenderAll(){
+systemRenderUsers();
+systemRenderRoles();
+let toggle=document.getElementById("systemLoginEnabled");
+if(toggle)toggle.checked=!!(systemData && systemData.loginEnabled);
+}
+
+/* ---------- KULLANICI LİSTESİ ---------- */
+
+function systemRoleName(key){
+let roles=(systemData && systemData.roles)||systemDefaultRoles();
+return (roles[key] && roles[key].name)||key||"—";
+}
+
+function systemRenderUsers(){
+let body=document.getElementById("systemUserBody");
+if(!body)return;
+
+let users=(systemData && systemData.users)||[];
+
+if(!users.length){
+body.innerHTML='<tr><td colspan="5" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>';
+return;
+}
+
+body.innerHTML=users.map(user=>{
+let active=user.active!==false;
+return '<tr class="'+(active?"":"passive")+'">'+
+'<td><strong>'+escapeHTML(user.name||"")+'</strong></td>'+
+'<td><span class="system-role-badge '+escapeHTML(user.role||"")+'">'+
+escapeHTML(systemRoleName(user.role))+'</span></td>'+
+'<td>'+(active?"Aktif":"Pasif")+'</td>'+
+'<td class="jobplan-sub">'+
+(user.updatedAt?new Date(user.updatedAt).toLocaleDateString("tr-TR"):"—")+'</td>'+
+'<td>'+
+'<button type="button" class="system-mini edit" onclick="systemEditUser(\''+user.id+'\')">Düzenle</button> '+
+'<button type="button" class="system-mini '+(active?"off":"on")+'" '+
+'onclick="systemToggleUser(\''+user.id+'\')">'+(active?"Pasife Al":"Aktif Et")+'</button> '+
+'<button type="button" class="system-mini del" onclick="systemDeleteUser(\''+user.id+'\')">Sil</button>'+
+'</td>'+
+'</tr>';
+}).join("");
+}
+
+function systemRenderRoles(){
+let body=document.getElementById("systemRoleBody");
+if(!body)return;
+
+let roles=(systemData && systemData.roles)||systemDefaultRoles();
+let users=(systemData && systemData.users)||[];
+
+body.innerHTML=Object.keys(roles).map(key=>{
+let count=users.filter(u=>u.role===key).length;
+return '<tr>'+
+'<td><span class="system-role-badge '+escapeHTML(key)+'">'+escapeHTML(roles[key].name||key)+'</span></td>'+
+'<td>'+escapeHTML(roles[key].note||"")+'</td>'+
+'<td>'+count+' kişi</td>'+
+'</tr>';
+}).join("");
+}
+
+function systemFillRoleSelect(selected){
+let select=document.getElementById("systemUserRole");
+if(!select)return;
+let roles=(systemData && systemData.roles)||systemDefaultRoles();
+select.innerHTML=Object.keys(roles).map(key=>
+'<option value="'+key+'" '+(key===selected?"selected":"")+'>'+
+escapeHTML(roles[key].name||key)+'</option>'
+).join("");
+}
+
+/* ---------- KULLANICI FORMU ---------- */
+
+function systemOpenUserForm(){
+let form=document.getElementById("systemUserForm");
+if(form)form.classList.add("open");
+}
+
+function systemCancelUserForm(){
+let form=document.getElementById("systemUserForm");
+if(form)form.classList.remove("open");
+systemEditingUserId=null;
+["systemUserName","systemUserPassword","systemUserPasswordRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el)el.value="";
+});
+systemSetMessage("systemUserMessage","");
+}
+
+function systemNewUser(){
+systemEditingUserId=null;
+systemFillRoleSelect("operator");
+systemRenderUserPerms(null);
+
+let title=document.getElementById("systemUserFormTitle");
+if(title)title.textContent="Yeni Kullanıcı";
+
+let label=document.getElementById("systemUserPasswordLabel");
+if(label)label.textContent="Şifre";
+
+let name=document.getElementById("systemUserName");
+if(name)name.value="";
+
+["systemUserPassword","systemUserPasswordRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el){el.value="";el.placeholder="En az 4 karakter";}
+});
+
+systemSetMessage("systemUserMessage","");
+systemOpenUserForm();
+setTimeout(()=>{try{name.focus({preventScroll:true});}catch(e){}},40);
+}
+
+function systemEditUser(id){
+let user=((systemData&&systemData.users)||[]).find(u=>u.id===id);
+if(!user)return;
+
+systemEditingUserId=id;
+systemFillRoleSelect(user.role);
+systemRenderUserPerms(user);
+
+let title=document.getElementById("systemUserFormTitle");
+if(title)title.textContent="Kullanıcı: "+user.name;
+
+let label=document.getElementById("systemUserPasswordLabel");
+if(label)label.textContent="Yeni Şifre (boş bırakırsan değişmez)";
+
+let name=document.getElementById("systemUserName");
+if(name)name.value=user.name||"";
+
+["systemUserPassword","systemUserPasswordRepeat"].forEach(id=>{
+let el=document.getElementById(id);
+if(el){el.value="";el.placeholder="Değiştirmek istemiyorsan boş bırak";}
+});
+
+systemSetMessage("systemUserMessage","");
+systemOpenUserForm();
+}
+
+async function systemSaveUser(){
+let button=document.getElementById("systemUserSaveButton");
+let name=String(document.getElementById("systemUserName")?.value||"").trim();
+let role=String(document.getElementById("systemUserRole")?.value||"operator");
+let password=String(document.getElementById("systemUserPassword")?.value||"");
+let repeat=String(document.getElementById("systemUserPasswordRepeat")?.value||"");
+
+if(name.length<2){
+systemSetMessage("systemUserMessage","Ad Soyad en az 2 karakter olmalı.","error");
+return;
+}
+
+let users=(systemData&&systemData.users)||[];
+let duplicate=users.some(u=>
+u.id!==systemEditingUserId &&
+normalizeText(u.name||"")===normalizeText(name)
+);
+if(duplicate){
+systemSetMessage("systemUserMessage","Bu isimde bir kullanıcı zaten var.","error");
+return;
+}
+
+let editing=systemEditingUserId
+?users.find(u=>u.id===systemEditingUserId)
+:null;
+
+if(!editing || password){
+if(password.length<4){
+systemSetMessage("systemUserMessage","Şifre en az 4 karakter olmalı.","error");
+return;
+}
+if(password!==repeat){
+systemSetMessage("systemUserMessage","Yazdığın iki şifre aynı değil.","error");
+return;
+}
+}
+
+try{
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+
+/* Başka bilgisayar listeyi değiştirmiş olabilir; taze veriyle birleştir. */
+let fresh=await loadSystemData(true);
+let list=fresh.users;
+
+if(editing){
+let target=list.find(u=>u.id===systemEditingUserId);
+if(!target){
+systemSetMessage("systemUserMessage","Kullanıcı başka bir bilgisayarda silinmiş.","error");
+systemRenderAll();
+return;
+}
+target.name=name;
+target.role=role;
+if(password)Object.assign(target,await systemMakeCredential(password));
+target.updatedAt=new Date().toISOString();
+}else{
+let credential=await systemMakeCredential(password);
+list.push({
+id:"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+name:name,
+role:role,
+active:true,
+perms:{},
+salt:credential.salt,
+hash:credential.hash,
+iterations:credential.iterations,
+createdAt:new Date().toISOString(),
+updatedAt:new Date().toISOString()
+});
+}
+
+await saveSystemData();
+systemCancelUserForm();
+systemRenderAll();
+systemApplyPermissions();
+}
+catch(error){
+console.error(error);
+systemSetMessage("systemUserMessage",error&&error.message||"Kaydedilemedi.","error");
+}
+finally{
+if(button){button.disabled=false;button.textContent="Kaydet";}
+}
+}
+
+async function systemToggleUser(id){
+let fresh=await loadSystemData(true);
+let user=fresh.users.find(u=>u.id===id);
+if(!user)return;
+
+let active=user.active!==false;
+
+if(active && systemActiveAdminCount(fresh)<=1 && user.role==="yonetici"){
+if(!confirm("Bu, son aktif yöneticidir.\n\nPasife alırsan sadece sistem şifresiyle girebilirsin.\n\nDevam edilsin mi?"))return;
+}
+
+user.active=!active;
+user.updatedAt=new Date().toISOString();
+await saveSystemData();
+systemRenderAll();
+}
+
+function systemActiveAdminCount(data){
+return ((data&&data.users)||[]).filter(u=>u.active!==false && u.role==="yonetici").length;
+}
+
+async function systemDeleteUser(id){
+let fresh=await loadSystemData(true);
+let user=fresh.users.find(u=>u.id===id);
+if(!user)return;
+
+if(!confirm("🗑 "+user.name+"\n\nBu kullanıcı silinsin mi?"))return;
+
+fresh.users=fresh.users.filter(u=>u.id!==id);
+
+if(!fresh.users.filter(u=>u.active!==false).length && fresh.loginEnabled){
+fresh.loginEnabled=false;
+alert("Aktif kullanıcı kalmadığı için kullanıcı girişi kapatıldı.\n\nSayfa açılışında yine ortak giriş şifresi sorulacak.");
+}
+
+await saveSystemData();
+systemRenderAll();
+}
+
+async function systemSetLoginEnabled(checked){
+let fresh=await loadSystemData(true);
+
+if(checked && !fresh.users.filter(u=>u.active!==false).length){
+alert("Önce en az bir aktif kullanıcı ekle.");
+let toggle=document.getElementById("systemLoginEnabled");
+if(toggle)toggle.checked=false;
+return;
+}
+
+fresh.loginEnabled=!!checked;
+await saveSystemData();
+systemRenderAll();
+systemApplyPermissions();
+
+alert(checked
+?"✅ Kullanıcı girişi açıldı.\n\nSayfayı yenilediğinde kişi listesi çıkacak."
+:"Kullanıcı girişi kapatıldı.\n\nSayfa açılışında ortak giriş şifresi sorulacak.");
+}
+
+/* ---------- ŞİFRELER SEKMESİ ----------
+   Mevcut Ayarlar penceresinin bölümleri buraya taşınır. */
+
+function systemMountPasswordSections(){
+let host=document.getElementById("systemPasswordHost");
+let settings=document.getElementById("settingsModal");
+if(!host || !settings)return;
+if(host.dataset.mounted==="1")return;
+
+settings.querySelectorAll(".settings-section").forEach(section=>{
+host.appendChild(section);
+});
+
+/* Sistem şifresini değiştirme bölümü */
+let extra=document.createElement("div");
+extra.className="settings-section";
+extra.innerHTML=
+'<h3>🛡️ Sistem Şifresi</h3>'+
+'<div class="settings-section-note">Sistem penceresini açan ana şifre. Kaybolursa bu pencereye girilemez.</div>'+
+'<div class="system-form-actions" style="justify-content:flex-start">'+
+'<button type="button" class="btn-blue" onclick="systemChangeMaster()">Sistem Şifresini Değiştir</button>'+
+'</div>';
+host.appendChild(extra);
+
+host.dataset.mounted="1";
+
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+async function systemChangeMaster(){
+try{
+let current=await systemAsk({
+mode:"verify",
+title:"🛡️ Mevcut Sistem Şifresi",
+info:"Değiştirmeden önce mevcut sistem şifresini doğrula.",
+label:"Mevcut Sistem Şifresi",
+button:"Doğrula"
+});
+if(current===null)return;
+
+if(!await systemCheckCredential(current,await loadSystemMaster(true))){
+alert("❌ Mevcut sistem şifresi yanlış.");
+return;
+}
+
+let next=await systemAsk({
+mode:"create",
+title:"🛡️ Yeni Sistem Şifresi",
+info:"Yeni sistem şifresini belirle.",
+label:"Yeni Sistem Şifresi",
+button:"Kaydet",
+placeholder:"En az 4 karakter"
+});
+if(next===null)return;
+
+await saveSystemMaster(next);
+alert("✅ Sistem şifresi değiştirildi.");
+}
+catch(error){
+console.error(error);
+alert("Sistem şifresi değiştirilemedi.\n\n"+(error&&error.message||""));
+}
+}
+
+/* ---------- OTURUM ---------- */
+
+function systemRememberRecord(){
+try{
+let raw=localStorage.getItem(SYSTEM_REMEMBER_KEY);
+if(!raw)return null;
+let value=JSON.parse(raw);
+return value && typeof value==="object"?value:null;
+}catch(e){return null;}
+}
+
+function systemSaveRemember(user){
+try{
+localStorage.setItem(SYSTEM_REMEMBER_KEY,JSON.stringify({
+userId:user.id,
+stamp:String(user.updatedAt||""),
+at:new Date().toISOString()
+}));
+}catch(e){}
+}
+
+function systemClearRemember(){
+try{localStorage.removeItem(SYSTEM_REMEMBER_KEY);}catch(e){}
+}
+
+function systemSetCurrentUser(user){
+currentUser=user;
+systemApplyPermissions();
+let chip=document.getElementById("systemUserChip");
+let nameEl=document.getElementById("systemUserChipName");
+let roleEl=document.getElementById("systemUserChipRole");
+if(!chip)return;
+
+if(!user){
+chip.classList.remove("on");
+return;
+}
+
+chip.classList.add("on");
+if(nameEl)nameEl.textContent=user.name||"";
+if(roleEl)roleEl.textContent=user.master?"Sistem":systemRoleName(user.role);
+}
+
+function systemLogout(){
+if(!confirm("Oturumu kapatıp giriş ekranına dönülsün mü?"))return;
+systemClearRemember();
+clearPageLoginRemember();
+location.reload();
+}
+
+/* ---------- GİRİŞ EKRANI: KİŞİ SEÇ ---------- */
+
+let systemLoginSelectedId=null;
+
+function systemRenderLoginUsers(){
+let grid=document.getElementById("pageLoginUserGrid");
+if(!grid)return;
+
+let users=((systemData&&systemData.users)||[]).filter(u=>u.active!==false);
+
+if(!users.length){
+grid.innerHTML='<div style="color:#94a3b8;font-size:13px;grid-column:1/-1;text-align:center">'+
+'Aktif kullanıcı yok. Sistem şifresiyle gir.</div>';
+return;
+}
+
+grid.innerHTML=users.map(user=>
+'<button type="button" class="page-login-user-card" onclick="systemPickLoginUser(\''+user.id+'\')">'+
+'<span class="page-login-user-avatar">👤</span>'+
+escapeHTML(user.name||"")+
+'<span class="role">'+escapeHTML(systemRoleName(user.role))+'</span>'+
+'</button>'
+).join("");
+}
+
+function systemPickLoginUser(id){
+let user=((systemData&&systemData.users)||[]).find(u=>u.id===id);
+if(!user)return;
+
+systemLoginSelectedId=id;
+
+let grid=document.getElementById("pageLoginUserGrid");
+let panel=document.getElementById("pageLoginUserPanel");
+let nameEl=document.getElementById("pageLoginUserName");
+let input=document.getElementById("pageLoginUserPassword");
+let error=document.getElementById("pageLoginUserError");
+
+if(grid)grid.style.display="none";
+if(panel)panel.style.display="flex";
+if(nameEl)nameEl.textContent=user.name||"";
+if(error)error.textContent="";
+if(input){
+input.value="";
+setTimeout(()=>{
+try{input.focus({preventScroll:true});}catch(e){}
+if(typeof openNumericKeypad==="function")openNumericKeypad(input);
+},60);
+}
+}
+
+function systemBackToUserList(){
+systemLoginSelectedId=null;
+let grid=document.getElementById("pageLoginUserGrid");
+let panel=document.getElementById("pageLoginUserPanel");
+if(grid)grid.style.display="grid";
+if(panel)panel.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+}
+
+async function systemUserLoginSubmit(){
+let input=document.getElementById("pageLoginUserPassword");
+let error=document.getElementById("pageLoginUserError");
+let button=document.getElementById("pageLoginUserButton");
+let password=String(input?input.value:"");
+
+if(error)error.textContent="";
+if(!password){if(error)error.textContent="Şifreni yaz.";return;}
+
+let user=((systemData&&systemData.users)||[]).find(u=>u.id===systemLoginSelectedId);
+if(!user){if(error)error.textContent="Kullanıcı bulunamadı.";return;}
+
+try{
+if(button){button.disabled=true;button.textContent="Kontrol ediliyor...";}
+
+let valid=await systemCheckCredential(password,user);
+
+if(!valid){
+/* Sistem şifresi de kabul edilir — kilitlenmeye karşı. */
+let master=await loadSystemMaster();
+valid=master && await systemCheckCredential(password,master);
+if(valid){
+systemFinishLogin({id:"master",name:"Sistem Yöneticisi",role:"yonetici",master:true},false);
+return;
+}
+if(error)error.textContent="Şifre yanlış.";
+if(input){input.value="";input.focus();}
+return;
+}
+
+let remember=document.getElementById("pageLoginUserRemember")?.checked;
+systemFinishLogin(user,remember);
+}
+catch(err){
+console.error(err);
+if(error)error.textContent=err&&err.message||"Giriş doğrulanamadı.";
+}
+finally{
+if(button){button.disabled=false;button.textContent="Giriş Yap";}
+}
+}
+
+async function systemMasterLoginPrompt(){
+let password=await systemAsk({
+mode:"verify",
+title:"🛡️ Sistem Şifresiyle Giriş",
+info:"Kullanıcı listesini kullanmadan yönetici olarak gir.",
+label:"Sistem Şifresi",
+button:"Gir"
+});
+if(password===null)return;
+
+let master=await loadSystemMaster(true);
+if(!master){
+alert("Sistem şifresi henüz belirlenmemiş.");
+return;
+}
+
+if(!await systemCheckCredential(password,master)){
+alert("❌ Sistem şifresi yanlış.");
+return;
+}
+
+systemUnlocked=true;
+systemFinishLogin({id:"master",name:"Sistem Yöneticisi",role:"yonetici",master:true},false);
+}
+
+function systemFinishLogin(user,remember){
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+systemLoginSelectedId=null;
+if(remember)systemSaveRemember(user);
+else systemClearRemember();
+systemSetCurrentUser(user);
+unlockPageAfterLogin();
+}
+
+/* ---------- GİRİŞ KAPISI YÖNLENDİRME ---------- */
+
+async function systemTryUserGate(){
+let data=await loadSystemData(true);
+if(!data.loginEnabled){
+systemApplyPermissions();
+return false;
+}
+
+let active=data.users.filter(u=>u.active!==false);
+if(!active.length)return false;
+
+let remembered=systemRememberRecord();
+if(remembered){
+let user=active.find(u=>u.id===remembered.userId);
+if(user && String(user.updatedAt||"")===String(remembered.stamp||"")){
+systemSetCurrentUser(user);
+unlockPageAfterLogin();
+return true;
+}
+systemClearRemember();
+}
+
+systemRenderLoginUsers();
+systemBackToUserList();
+showPageLoginMode("users");
+return true;
+}
+
+/* Şifreler sekmesi taşındıktan sonra etiketleri ve durumları tazeler. */
+async function systemRefreshPasswordSections(){
+try{
+settingsSetMessage("settingsLoginMessage","");
+settingsSetMessage("settingsMaintenanceMessage","");
+settingsClearInputs("settingsLogin");
+settingsClearInputs("settingsMaintenance");
+
+let [loginConfig,maintenanceConfig]=await Promise.all([
+loadPageLoginPasswordConfig(true),
+loadMaintenanceDownloadPasswordConfig(true)
+]);
+
+let maintenanceGroup=document.getElementById("settingsMaintenanceCurrentGroup");
+if(maintenanceGroup)maintenanceGroup.style.display=maintenanceConfig?"flex":"none";
+
+let maintenanceButton=document.getElementById("settingsMaintenanceSaveButton");
+if(maintenanceButton)maintenanceButton.textContent=maintenanceConfig?"Bakım Şifresini Değiştir":"Bakım Şifresi Belirle";
+
+let loginButton=document.getElementById("settingsLoginSaveButton");
+if(loginButton)loginButton.textContent=loginConfig?"Giriş Şifresini Değiştir":"Giriş Şifresi Belirle";
+}
+catch(error){
+console.error(error);
+settingsSetMessage("settingsLoginMessage",error&&error.message||"Şifre ayarları yüklenemedi.","error");
+}
+}
+
+/* Bakım penceresinden "şifre belirle" bağlantısı buraya yönlenir. */
+async function openSystemPasswords(){
+await openSystemModal();
+let modal=document.getElementById("systemModal");
+if(modal && modal.style.display==="flex")systemShowTab("passwords");
+}
+
+/* =====================================================
+   YETKİLER
+   Yönetici her şeye sahiptir ve değiştirilemez.
+   Diğer roller Sistem > Roller ve İzinler sekmesinden ayarlanır.
+   Bir kullanıcıya rolünden farklı istisna verilebilir.
+===================================================== */
+
+const SYSTEM_PERM_GROUPS=[
+{
+title:"Bölümler",
+items:[
+{key:"bolum.fiyat",label:"Fiyatlar tablosu",hint:"Üstteki 💰 Fiyatlar butonu"},
+{key:"bolum.bakim",label:"Bakım tablosu",hint:"Üstteki 🛠 Bakım butonu"},
+{key:"bolum.sarf",label:"Sarf malzemeleri",hint:"Üstteki 🧰 butonu"},
+{key:"bolum.hatakodu",label:"Hata kodları",hint:"Üstteki ⚠️ butonu"},
+{key:"bolum.isplani",label:"İş planlama",hint:"Üstteki 📋 butonu"},
+{key:"bolum.yedek",label:"Yedek al / yedek yükle",hint:"Üstteki 💾 ve 📂 butonları"}
+]
+},
+{
+title:"Stok İşlemleri",
+items:[
+{key:"stok.kart",label:"Stok kartı ekle / düzenle / sil"},
+{key:"stok.hareket",label:"Stok giriş - çıkış hareketi"},
+{key:"stok.ayir",label:"Ayır / rezervasyon"},
+{key:"stok.excel",label:"Stok Excel çıktısı"},
+{key:"stok.alis",label:"Alış Excel'i yükle"},
+{key:"stok.hareketsil",label:"Stok hareketlerini toplu sil"}
+]
+},
+{
+title:"İş Planlama İçi",
+items:[
+{key:"isplani.ozet",label:"Üstteki özet şeridi",hint:"Kalan süre, son termin, 10 dk kontrol bilgisi"},
+{key:"isplani.ebat",label:"Ebat ve boy sütunları",hint:"Bu sütunlar gizlenince işlem butonları büyür"},
+{key:"isplani.vardiya",label:"Gece / gündüz vardiya ayarları",hint:"Vardiya, mesai, çalışma günleri kutuları"},
+{key:"isplani.dosya",label:"HTML yükle ve Excel'e aktar",hint:"Plana yeni iş ekleme"},
+{key:"isplani.sure",label:"Süre, ek %, başlangıç ve termin",hint:"Bu sütunlar gizlenir"},
+{key:"isplani.duzenle",label:"Sıra değiştir, kaldır, geri al"},
+{key:"isplani.calistir",label:"Başlat / Durakla / Bitir"},
+{key:"isplani.stok",label:"Stok sütunu ve müşteri malzemesi kutusu"}
+]
+},
+{
+title:"Hata Kodları",
+items:[
+{key:"hatakodu.duzenle",label:"Hata kodu ekle / düzenle / sil",hint:"Kapalıyken sadece okur"}
+]
+}
+];
+
+function systemAllPermKeys(){
+let keys=[];
+SYSTEM_PERM_GROUPS.forEach(group=>group.items.forEach(item=>keys.push(item.key)));
+return keys;
+}
+
+/* Rol varsayılanları — kullanıcı panelden değiştirebilir. */
+function systemDefaultPerms(role){
+let all=systemAllPermKeys();
+let perms={};
+
+if(role==="yonetici"){
+all.forEach(k=>{perms[k]=true;});
+return perms;
+}
+
+if(role==="planlamaci"){
+all.forEach(k=>{perms[k]=true;});
+perms["stok.hareketsil"]=false;
+return perms;
+}
+
+if(role==="operator"){
+all.forEach(k=>{perms[k]=false;});
+["bolum.sarf","bolum.isplani","bolum.hatakodu","stok.kart","stok.hareket","stok.ayir",
+"isplani.calistir","isplani.stok"].forEach(k=>{perms[k]=true;});
+return perms;
+}
+
+/* izleyici: görür ama işlem yapamaz */
+
+/* izleyici ve diğerleri: sadece görüntüleme */
+all.forEach(k=>{perms[k]=false;});
+["bolum.fiyat","bolum.bakim","bolum.sarf","bolum.isplani","bolum.hatakodu",
+"isplani.ozet","isplani.ebat","isplani.sure","isplani.stok"].forEach(k=>{perms[k]=true;});
+return perms;
+}
+
+function systemRolePerms(role){
+let roles=(systemData && systemData.roles)||{};
+let cfg=roles[role];
+if(cfg && cfg.perms && typeof cfg.perms==="object")return cfg.perms;
+return systemDefaultPerms(role);
+}
+
+/* Ana yetki sorusu: bu kullanıcı bunu yapabilir mi? */
+function systemCan(key){
+/* Kullanıcı girişi kapalıysa herkes tam yetkilidir (eski düzen). */
+if(!systemData || !systemData.loginEnabled)return true;
+if(!currentUser)return true;
+if(currentUser.master)return true;
+if(currentUser.role==="yonetici")return true;
+
+/* Kişiye özel istisna rolün önüne geçer. */
+let own=currentUser.perms;
+if(own && Object.prototype.hasOwnProperty.call(own,key))return !!own[key];
+
+let perms=systemRolePerms(currentUser.role);
+return !!perms[key];
+}
+
+/* Sistem penceresini yalnızca yönetici ve sistem şifresi açar. */
+function systemCanOpenPanel(){
+if(!systemData || !systemData.loginEnabled)return true;
+if(!currentUser)return true;
+return !!(currentUser.master || currentUser.role==="yonetici");
+}
+
+function systemApplyPermissions(){
+/* 1) data-perm taşıyan sabit öğeler */
+document.querySelectorAll("[data-perm]").forEach(el=>{
+let allowed=systemCan(el.getAttribute("data-perm"));
+if(allowed)el.removeAttribute("data-perm-hidden");
+else el.setAttribute("data-perm-hidden","1");
+});
+
+/* 2) Tablo sütunları gövde sınıfıyla gizlenir */
+systemAllPermKeys().forEach(key=>{
+document.body.classList.toggle("perm-yok-"+key.replace(/\./g,"-"),!systemCan(key));
+});
+
+/* 3) Sadeleşmiş görünümde işlem butonları büyür (yanlış dokunmayı azaltır) */
+document.body.classList.toggle("jp-buyuk-islem",!systemCan("isplani.duzenle"));
+
+/* 4) Sistem butonu */
+let systemButton=document.getElementById("systemButton");
+if(systemButton)systemButton.style.display=systemCanOpenPanel()?"":"none";
+
+/* 5) İş planı tabloları yeniden çizilsin */
+if(typeof jobPlanRender==="function" && typeof jobPlanJobs!=="undefined"){
+try{jobPlanRender();}catch(e){}
+}
+}
+
+/* ---------- ROLLER VE İZİNLER SEKMESİ ---------- */
+
+let systemSelectedRole="operator";
+
+function systemRenderRoles(){
+let roles=(systemData && systemData.roles)||systemDefaultRoles();
+let users=(systemData && systemData.users)||[];
+
+let picker=document.getElementById("systemRolePicker");
+if(picker){
+picker.innerHTML=Object.keys(roles).map(key=>{
+let count=users.filter(u=>u.role===key).length;
+return '<button type="button" class="'+(key===systemSelectedRole?"active":"")+'" '+
+'onclick="systemSelectRole(\''+key+'\')">'+
+escapeHTML(roles[key].name||key)+' ('+count+')</button>';
+}).join("");
+}
+
+let box=document.getElementById("systemPermBox");
+if(!box)return;
+
+if(systemSelectedRole==="yonetici"){
+box.innerHTML='<div class="system-note" style="margin:0">'+
+'<strong>Yönetici</strong> her yere girip çıkabilir ve her şeyi değiştirebilir. '+
+'Bu rolün yetkileri kapatılamaz.</div>';
+return;
+}
+
+let perms=systemRolePerms(systemSelectedRole);
+
+box.innerHTML=SYSTEM_PERM_GROUPS.map(group=>
+'<div class="system-perm-group">'+
+'<div class="system-perm-group-title">'+escapeHTML(group.title)+'</div>'+
+group.items.map(item=>{
+let on=!!perms[item.key];
+return '<div class="system-perm-row '+(on?"on":"off")+'">'+
+'<label>'+
+'<input type="checkbox" '+(on?"checked":"")+' '+
+'onchange="systemSetRolePerm(\''+systemSelectedRole+'\',\''+item.key+'\',this.checked)">'+
+'<span>'+escapeHTML(item.label)+
+(item.hint?'<span class="hint"> · '+escapeHTML(item.hint)+'</span>':'')+
+'</span>'+
+'</label>'+
+'</div>';
+}).join("")+
+'</div>'
+).join("");
+}
+
+function systemSelectRole(role){
+systemSelectedRole=role;
+systemRenderRoles();
+}
+
+async function systemSetRolePerm(role,key,checked){
+let fresh=await loadSystemData(true);
+if(!fresh.roles[role])fresh.roles[role]=(systemDefaultRoles()[role]||{name:role});
+if(!fresh.roles[role].perms)fresh.roles[role].perms=systemDefaultPerms(role);
+fresh.roles[role].perms[key]=!!checked;
+await saveSystemData();
+systemRenderRoles();
+systemApplyPermissions();
+}
+
+async function systemResetRolePerms(){
+if(!confirm("Bu rolün yetkileri fabrika ayarına döndürülsün mü?"))return;
+let fresh=await loadSystemData(true);
+if(!fresh.roles[systemSelectedRole])fresh.roles[systemSelectedRole]={name:systemSelectedRole};
+fresh.roles[systemSelectedRole].perms=systemDefaultPerms(systemSelectedRole);
+await saveSystemData();
+systemRenderRoles();
+systemApplyPermissions();
+}
+
+/* ---------- KİŞİYE ÖZEL İSTİSNA ---------- */
+
+function systemRenderUserPerms(user){
+let box=document.getElementById("systemUserPermBox");
+if(!box)return;
+
+if(!user){
+box.innerHTML='<div class="hint" style="font-size:12px;color:#94a3b8">'+
+'Kişiye özel istisna kullanıcı kaydedildikten sonra verilebilir.</div>';
+return;
+}
+
+if(user.role==="yonetici"){
+box.innerHTML='<div class="hint" style="font-size:12px;color:#94a3b8">'+
+'Yönetici zaten tüm yetkilere sahip.</div>';
+return;
+}
+
+let rolePerms=systemRolePerms(user.role);
+let own=user.perms||{};
+
+box.innerHTML=SYSTEM_PERM_GROUPS.map(group=>
+'<div class="system-perm-group">'+
+'<div class="system-perm-group-title">'+escapeHTML(group.title)+'</div>'+
+group.items.map(item=>{
+let has=Object.prototype.hasOwnProperty.call(own,item.key);
+let value=has?(own[item.key]?"acik":"kapali"):"rol";
+return '<div class="system-perm-row">'+
+'<span style="flex:1">'+escapeHTML(item.label)+'</span>'+
+'<select class="system-perm-state" '+
+'onchange="systemSetUserPerm(\''+user.id+'\',\''+item.key+'\',this.value)">'+
+'<option value="rol" '+(value==="rol"?"selected":"")+'>Rolden gelsin ('+(rolePerms[item.key]?"açık":"kapalı")+')</option>'+
+'<option value="acik" '+(value==="acik"?"selected":"")+'>Açık</option>'+
+'<option value="kapali" '+(value==="kapali"?"selected":"")+'>Kapalı</option>'+
+'</select>'+
+'</div>';
+}).join("")+
+'</div>'
+).join("");
+}
+
+async function systemSetUserPerm(userId,key,value){
+let fresh=await loadSystemData(true);
+let user=fresh.users.find(u=>u.id===userId);
+if(!user)return;
+if(!user.perms)user.perms={};
+
+if(value==="rol")delete user.perms[key];
+else user.perms[key]=(value==="acik");
+
+user.updatedAt=new Date().toISOString();
+await saveSystemData();
+
+/* Oturumdaki kişi kendisiyse yetkiler anında yenilensin. */
+if(currentUser && currentUser.id===userId){
+currentUser.perms=user.perms;
+currentUser.role=user.role;
+systemApplyPermissions();
+}
+}
+
+
+/* =====================================================
+   HATA KODLARI
+   Makinede çıkan arıza kodları, detayı ve çözümü.
+   Kayıtlar Supabase ortak verisinde tutulur; tüm
+   bilgisayarlar aynı listeyi görür.
+===================================================== */
+
+const CLOUD_KEY_ERROR_CODES="error_codes_v1";
+
+let errorCodes=[];
+let errorCodesLoaded=false;
+let errorCodeEditingId=null;
+let errorCodeSearch="";
+let errorCodeBusy=false;
+
+function errorCodeAllows(key){
+return typeof systemCan==="function"?systemCan(key):true;
+}
+
+function errorCodeWho(){
+return typeof systemCurrentUserName==="function"?systemCurrentUserName():"";
+}
+
+async function loadErrorCodes(force=false){
+if(errorCodesLoaded && !force)return errorCodes;
+try{
+let value=await cloudStateGet(CLOUD_KEY_ERROR_CODES);
+errorCodes=Array.isArray(value)?value:[];
+}catch(error){
+console.error("Hata kodları okunamadı:",error);
+errorCodes=[];
+}
+errorCodesLoaded=true;
+return errorCodes;
+}
+
+async function saveErrorCodes(){
+await cloudStateSet(CLOUD_KEY_ERROR_CODES,errorCodes);
+}
+
+function errorCodeSetMessage(text,kind){
+let el=document.getElementById("errorCodeMessage");
+if(!el)return;
+el.textContent=text||"";
+el.classList.remove("error","ok");
+if(kind)el.classList.add(kind);
+}
+
+/* ---------- PENCERE ---------- */
+
+async function openErrorCodeModal(){
+let modal=document.getElementById("errorCodeModal");
+if(!modal)return;
+
+errorCodeCancelForm();
+errorCodeSearch="";
+let box=document.getElementById("errorCodeSearch");
+if(box)box.value="";
+let clear=document.getElementById("errorCodeSearchClear");
+if(clear)clear.style.display="none";
+
+modal.style.display="flex";
+
+let body=document.getElementById("errorCodeBody");
+if(body && !errorCodesLoaded){
+body.innerHTML='<tr><td colspan="5" class="errorcode-empty">Yükleniyor...</td></tr>';
+}
+
+await loadErrorCodes(true);
+errorCodeFillMachineList();
+renderErrorCodes();
+}
+
+function closeErrorCodeModal(){
+let modal=document.getElementById("errorCodeModal");
+if(modal)modal.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+errorCodeCancelForm();
+}
+
+/* Makine adı kutusuna bakım modülündeki ekipmanlar ve önceki kayıtlar önerilir. */
+function errorCodeFillMachineList(){
+let list=document.getElementById("errorCodeMachineList");
+if(!list)return;
+
+let names=[];
+
+if(typeof maintenanceEquipments!=="undefined" && Array.isArray(maintenanceEquipments)){
+maintenanceEquipments.forEach(item=>{
+let name=typeof item==="string"?item:(item&&item.name)||"";
+if(name && !names.includes(name))names.push(name);
+});
+}
+
+errorCodes.forEach(record=>{
+let name=String(record.machine||"").trim();
+if(name && !names.includes(name))names.push(name);
+});
+
+list.innerHTML=names.map(n=>'<option value="'+escapeHTML(n)+'"></option>').join("");
+}
+
+/* ---------- ARAMA ---------- */
+
+function errorCodeSetSearch(value){
+errorCodeSearch=String(value||"").trim();
+let clear=document.getElementById("errorCodeSearchClear");
+if(clear)clear.style.display=errorCodeSearch?"inline-block":"none";
+renderErrorCodes();
+}
+
+function errorCodeClearSearch(){
+let box=document.getElementById("errorCodeSearch");
+if(box)box.value="";
+errorCodeSetSearch("");
+}
+
+function errorCodeMatches(record){
+if(!errorCodeSearch)return true;
+let needle=normalizeText(errorCodeSearch);
+if(!needle)return true;
+return ["code","machine","detail","solution"].some(field=>
+normalizeText(String(record[field]||"")).includes(needle)
+);
+}
+
+/* ---------- LİSTE ---------- */
+
+function errorCodeSorted(){
+return errorCodes.slice().sort((a,b)=>{
+let ac=String(a.code||"").toLocaleUpperCase("tr-TR");
+let bc=String(b.code||"").toLocaleUpperCase("tr-TR");
+if(ac===bc)return (Number(b.updatedAt)||0)-(Number(a.updatedAt)||0);
+return ac<bc?-1:1;
+});
+}
+
+function errorCodeDate(ms){
+if(!ms || !Number.isFinite(Number(ms)))return "—";
+return new Date(Number(ms)).toLocaleDateString("tr-TR");
+}
+
+function renderErrorCodes(){
+let body=document.getElementById("errorCodeBody");
+if(!body)return;
+
+let list=errorCodeSorted().filter(errorCodeMatches);
+
+let counter=document.getElementById("errorCodeCount");
+if(counter){
+counter.textContent=errorCodeSearch
+?list.length+" / "+errorCodes.length+" kayıt"
+:errorCodes.length+" kayıt";
+}
+
+if(!list.length){
+body.innerHTML='<tr><td colspan="5" class="errorcode-empty">'+
+(errorCodeSearch?"Aramaya uyan hata kodu yok.":"Henüz hata kodu eklenmemiş.")+
+'</td></tr>';
+return;
+}
+
+let duzenlenebilir=errorCodeAllows("hatakodu.duzenle");
+
+body.innerHTML=list.map(record=>
+'<tr>'+
+'<td>'+
+'<div class="errorcode-code">'+escapeHTML(record.code||"—")+'</div>'+
+(record.machine?'<span class="errorcode-machine">'+escapeHTML(record.machine)+'</span>':'')+
+'</td>'+
+'<td><div class="errorcode-text">'+escapeHTML(record.detail||"")+'</div></td>'+
+'<td>'+(record.solution
+?'<div class="errorcode-solution">'+escapeHTML(record.solution)+'</div>'
+:'<span class="errorcode-meta">Çözüm girilmemiş</span>')+'</td>'+
+'<td>'+
+'<div class="errorcode-meta">'+errorCodeDate(record.updatedAt||record.createdAt)+'</div>'+
+(record.updatedBy||record.createdBy
+?'<div class="errorcode-meta">'+escapeHTML(record.updatedBy||record.createdBy)+'</div>'
+:'')+
+'</td>'+
+'<td'+(duzenlenebilir?'':' data-perm-hidden="1"')+'>'+
+(duzenlenebilir
+?'<button type="button" class="errorcode-mini edit" onclick="errorCodeEdit(\''+record.id+'\')">Düzenle</button>'+
+'<button type="button" class="errorcode-mini del" onclick="errorCodeDelete(\''+record.id+'\')">Sil</button>'
+:'')+
+'</td>'+
+'</tr>'
+).join("");
+
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+/* Ekran klavyesinde alt satır tuşu olmadığı için açıklama
+   kutularına imlecin olduğu yerden satır eklenir. */
+function errorCodeNewLine(elementId){
+let el=document.getElementById(elementId);
+if(!el)return;
+
+let value=el.value||"";
+let start=Number.isInteger(el.selectionStart)?el.selectionStart:value.length;
+let end=Number.isInteger(el.selectionEnd)?el.selectionEnd:start;
+
+el.value=value.slice(0,start)+"\n"+value.slice(end);
+
+try{el.setSelectionRange(start+1,start+1);}catch(e){}
+try{el.focus({preventScroll:true});}catch(e){}
+
+if(typeof openNumericKeypad==="function")openNumericKeypad(el);
+}
+
+/* ---------- FORM ---------- */
+
+function errorCodeCancelForm(){
+let form=document.getElementById("errorCodeForm");
+if(form)form.classList.remove("open");
+errorCodeEditingId=null;
+["errorCodeCode","errorCodeMachine","errorCodeDetail","errorCodeSolution"].forEach(id=>{
+let el=document.getElementById(id);
+if(el)el.value="";
+});
+errorCodeSetMessage("");
+}
+
+function errorCodeNew(){
+if(!errorCodeAllows("hatakodu.duzenle")){
+alert("Hata kodu ekleme yetkin yok.");
+return;
+}
+
+errorCodeCancelForm();
+errorCodeEditingId=null;
+
+let title=document.getElementById("errorCodeFormTitle");
+if(title)title.textContent="Yeni Hata Kodu";
+
+let button=document.getElementById("errorCodeSaveButton");
+if(button)button.textContent="Kaydet";
+
+let form=document.getElementById("errorCodeForm");
+if(form)form.classList.add("open");
+
+errorCodeFillMachineList();
+
+setTimeout(()=>{
+let el=document.getElementById("errorCodeCode");
+try{el.focus({preventScroll:true});}catch(e){}
+},40);
+}
+
+function errorCodeEdit(id){
+if(!errorCodeAllows("hatakodu.duzenle"))return;
+
+let record=errorCodes.find(r=>r.id===id);
+if(!record)return;
+
+errorCodeEditingId=id;
+
+let title=document.getElementById("errorCodeFormTitle");
+if(title)title.textContent="Hata Kodu: "+(record.code||"");
+
+let button=document.getElementById("errorCodeSaveButton");
+if(button)button.textContent="Değişikliği Kaydet";
+
+let set=(elementId,value)=>{
+let el=document.getElementById(elementId);
+if(el)el.value=value||"";
+};
+
+set("errorCodeCode",record.code);
+set("errorCodeMachine",record.machine);
+set("errorCodeDetail",record.detail);
+set("errorCodeSolution",record.solution);
+
+errorCodeSetMessage("");
+errorCodeFillMachineList();
+
+let form=document.getElementById("errorCodeForm");
+if(form)form.classList.add("open");
+}
+
+async function errorCodeSave(){
+if(errorCodeBusy)return;
+if(!errorCodeAllows("hatakodu.duzenle"))return;
+
+let button=document.getElementById("errorCodeSaveButton");
+let read=id=>String(document.getElementById(id)?.value||"").trim();
+
+let code=read("errorCodeCode");
+let machine=read("errorCodeMachine");
+let detail=read("errorCodeDetail");
+let solution=read("errorCodeSolution");
+
+if(!code){
+errorCodeSetMessage("Hata kodunu yaz.","error");
+return;
+}
+
+if(!detail && !solution){
+errorCodeSetMessage("En az hatanın detayını veya çözümünü yaz.","error");
+return;
+}
+
+errorCodeBusy=true;
+
+try{
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+
+/* Başka bilgisayar aynı anda eklemiş olabilir; taze listeyle birleştir. */
+await loadErrorCodes(true);
+
+let duplicate=errorCodes.find(r=>
+r.id!==errorCodeEditingId &&
+normalizeText(r.code||"")===normalizeText(code) &&
+normalizeText(r.machine||"")===normalizeText(machine)
+);
+
+if(duplicate && !errorCodeEditingId){
+if(!confirm(
+"Bu kod zaten kayıtlı:\n\n"+
+duplicate.code+(duplicate.machine?" · "+duplicate.machine:"")+"\n\n"+
+"Yeni bir kayıt olarak eklensin mi?"
+)){
+errorCodeSetMessage("Kayıt eklenmedi. Mevcut kaydı düzenleyebilirsin.","error");
+return;
+}
+}
+
+let who=errorCodeWho();
+let now=Date.now();
+
+if(errorCodeEditingId){
+let record=errorCodes.find(r=>r.id===errorCodeEditingId);
+if(!record){
+errorCodeSetMessage("Bu kayıt başka bir bilgisayarda silinmiş.","error");
+renderErrorCodes();
+return;
+}
+record.code=code;
+record.machine=machine;
+record.detail=detail;
+record.solution=solution;
+record.updatedAt=now;
+record.updatedBy=who;
+}else{
+errorCodes.push({
+id:"hk"+now.toString(36)+Math.random().toString(36).slice(2,6),
+code:code,
+machine:machine,
+detail:detail,
+solution:solution,
+createdAt:now,
+createdBy:who,
+updatedAt:now,
+updatedBy:who
+});
+}
+
+await saveErrorCodes();
+errorCodeCancelForm();
+errorCodeFillMachineList();
+renderErrorCodes();
+}
+catch(error){
+console.error(error);
+errorCodeSetMessage(error&&error.message||"Kaydedilemedi.","error");
+}
+finally{
+errorCodeBusy=false;
+if(button){button.disabled=false;button.textContent=errorCodeEditingId?"Değişikliği Kaydet":"Kaydet";}
+}
+}
+
+async function errorCodeDelete(id){
+if(!errorCodeAllows("hatakodu.duzenle"))return;
+
+let record=errorCodes.find(r=>r.id===id);
+if(!record)return;
+
+if(!confirm("🗑 "+(record.code||"")+"\n\nBu hata kodu kaydı silinsin mi?"))return;
+
+try{
+await loadErrorCodes(true);
+errorCodes=errorCodes.filter(r=>r.id!==id);
+await saveErrorCodes();
+if(errorCodeEditingId===id)errorCodeCancelForm();
+renderErrorCodes();
+}catch(error){
+console.error(error);
+alert("❌ Silinemedi.\n\n"+(error&&error.message||""));
+}
 }
 
 

@@ -763,6 +763,38 @@ user-select:none
 
 .numeric-keypad.open{display:block}
 
+.numeric-keypad.dragging{
+opacity:.94
+}
+
+.keypad-head{
+cursor:grab;
+touch-action:none;
+user-select:none
+}
+
+.keypad-grip{
+font-size:18px;
+line-height:1;
+opacity:.7
+}
+
+.keypad-move{
+border:0;
+background:#334155;
+color:#e2e8f0;
+border-radius:8px;
+width:36px;
+height:30px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+padding:0;
+flex:0 0 auto
+}
+
+.keypad-move:hover{background:#475569}
+
 .keypad-head{
 display:flex;
 align-items:center;
@@ -1219,6 +1251,11 @@ gap:8px;
 justify-content:flex-end;
 margin-top:12px
 }
+
+body.perm-yok-bakim-duzenle .bakim-c-pdf,
+body.perm-yok-bakim-duzenle .bakim-c-islem{display:none}
+
+body.perm-yok-bakim-duzenle .maintenance-add-panel{display:none !important}
 
 .maintenance-table-wrap{
 overflow-x:auto;
@@ -3311,7 +3348,7 @@ vertical-align:middle
 
     <form class="page-login-form" id="pageLoginForm" autocomplete="off">
       <label for="pageLoginPassword">Giriş Şifresi</label>
-      <input id="pageLoginPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Giriş şifresi" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
+      <input id="pageLoginPassword" data-enter-action="handlePageLoginSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Giriş şifresi" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
       <label class="page-login-remember">
         <input id="pageLoginRemember" type="checkbox" checked>
         Bu bilgisayarda hatırla
@@ -3324,7 +3361,7 @@ vertical-align:middle
       <label for="pageLoginNewPassword">Yeni Giriş Şifresi</label>
       <input id="pageLoginNewPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
       <label for="pageLoginNewPasswordRepeat">Şifreyi Tekrar Yaz</label>
-      <input id="pageLoginNewPasswordRepeat" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni şifre tekrar" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
+      <input id="pageLoginNewPasswordRepeat" data-enter-action="handlePageLoginSetupSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni şifre tekrar" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
       <label class="page-login-remember">
         <input id="pageLoginSetupRemember" type="checkbox" checked>
         Bu bilgisayarda hatırla
@@ -3342,7 +3379,7 @@ vertical-align:middle
           <button type="button" onclick="systemBackToUserList()">Değiştir</button>
         </div>
         <label for="pageLoginUserPassword">Şifren</label>
-        <input id="pageLoginUserPassword" type="password" inputmode="none"
+        <input id="pageLoginUserPassword" data-enter-action="systemUserLoginSubmit" type="password" inputmode="none"
         data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
         autocomplete="off" placeholder="Şifreni yaz">
         <label class="page-login-remember">
@@ -4190,8 +4227,8 @@ oninput="renderPriceResults()"
 <div style="font-size:13px;color:#64748b">Her makine/ekipman için son bakım tarihinden 6 ay sonra yeni bakım planlanır. Son 1 ay kala uyarı başlar.</div>
 </div>
 <div class="maintenance-head-actions">
-<button type="button" class="btn-dark" onclick="requestMaintenanceDownload('all')">📦 Tüm PDF'leri İndir</button>
-<button type="button" class="btn-blue" onclick="toggleMaintenanceAddPanel(true)">+ Yeni Bakım</button>
+<button type="button" class="btn-dark" data-perm="bakim.duzenle" onclick="requestMaintenanceDownload('all')">📦 Tüm PDF'leri İndir</button>
+<button type="button" class="btn-blue" data-perm="bakim.duzenle" onclick="toggleMaintenanceAddPanel(true)">+ Yeni Bakım</button>
 </div>
 </div>
 
@@ -4257,8 +4294,8 @@ oninput="renderPriceResults()"
 <th>Bakımı Yapan</th>
 <th>Sonraki Bakım</th>
 <th>Durum</th>
-<th>PDF</th>
-<th>İşlem</th>
+<th class="bakim-c-pdf">PDF</th>
+<th class="bakim-c-islem">İşlem</th>
 </tr>
 </thead>
 <tbody id="maintenanceTableBody">
@@ -4284,7 +4321,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
 <div class="form-group">
 <label>İndirme Şifresi</label>
 <div class="maintenance-password-input-wrap">
-<input id="maintenanceDownloadPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="PDF indirme şifresi" type="password" autocomplete="current-password" placeholder="Belirlenmiş şifreyi gir">
+<input id="maintenanceDownloadPassword" data-enter-action="maintenancePasswordSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="PDF indirme şifresi" type="password" autocomplete="current-password" placeholder="Belirlenmiş şifreyi gir">
 <button type="button" class="btn-gray" id="maintenancePasswordToggleButton">Göster</button>
 </div>
 <div class="maintenance-password-error" id="maintenancePasswordError"></div>
@@ -4588,7 +4625,7 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 Şu ana kadar kaç boy kesildi?
 </label>
 
-<input id="jobPlanPauseInput" type="text" inputmode="none"
+<input id="jobPlanPauseInput" data-enter-action="jobPlanPauseConfirm" type="text" inputmode="none"
 data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Kesilen boy sayısı"
 style="width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;font-size:20px;font-weight:bold;text-align:center">
 
@@ -4612,14 +4649,14 @@ style="width:100%;padding:12px;border:2px solid #cbd5e1;border-radius:8px;font-s
 
 <div class="form-group">
 <label id="systemAskLabel">Sistem Şifresi</label>
-<input id="systemAskInput" type="password" inputmode="none"
+<input id="systemAskInput" data-enter-action="systemAskConfirm" type="password" inputmode="none"
 data-keypad="text" data-native-inputmode="text" data-keypad-label="Sistem şifresi"
 autocomplete="off" placeholder="Sistem şifresini yazın">
 </div>
 
 <div class="form-group" id="systemAskRepeatGroup" style="display:none">
 <label>Şifreyi Tekrar Yaz</label>
-<input id="systemAskRepeat" type="password" inputmode="none"
+<input id="systemAskRepeat" data-enter-action="systemAskConfirm" type="password" inputmode="none"
 data-keypad="text" data-native-inputmode="text" data-keypad-label="Sistem şifresi tekrar"
 autocomplete="off" placeholder="Şifreyi tekrar yazın">
 </div>
@@ -4692,7 +4729,7 @@ autocomplete="new-password" placeholder="En az 4 karakter">
 
 <div class="form-group">
 <label>Şifre Tekrar</label>
-<input id="systemUserPasswordRepeat" type="password" inputmode="none"
+<input id="systemUserPasswordRepeat" data-enter-action="systemSaveUser" type="password" inputmode="none"
 data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi tekrar"
 autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
 </div>
@@ -4865,9 +4902,10 @@ placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
-  <div class="keypad-head">
-    <span>⌨️ Klavye</span>
+  <div class="keypad-head" id="keypadHead" title="Basılı tutup sürükleyerek taşıyabilirsin">
+    <span class="keypad-grip">☰</span>
     <span class="keypad-target" id="keypadTargetLabel"></span>
+    <button type="button" class="keypad-move" id="keypadMoveButton" title="Klavyeyi yukarı / aşağı al">↕</button>
   </div>
 
   <div class="keypad-mode-tabs" role="tablist" aria-label="Klavye modu">
@@ -4913,6 +4951,8 @@ placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
       <button type="button" data-key="A">A</button><button type="button" data-key="S">S</button><button type="button" data-key="D">D</button><button type="button" data-key="F">F</button><button type="button" data-key="G">G</button><button type="button" data-key="H">H</button><button type="button" data-key="J">J</button><button type="button" data-key="K">K</button><button type="button" data-key="L">L</button><button type="button" data-key="Ş">Ş</button><button type="button" data-key="İ">İ</button><button type="button" data-key="Ö">Ö</button>
 
       <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" data-key="Ø">Ø</button><button type="button" data-key="-">-</button><button type="button" data-key=".">.</button><button type="button" data-key=",">,</button>
+
+      <button type="button" data-key="!">!</button><button type="button" data-key="?">?</button><button type="button" data-key="(">(</button><button type="button" data-key=")">)</button><button type="button" data-key="&#34;">&#34;</button><button type="button" data-key="'">'</button><button type="button" data-key="%">%</button><button type="button" data-key="&amp;">&amp;</button><button type="button" data-key="+">+</button><button type="button" data-key="=">=</button><button type="button" data-key="_">_</button><button type="button" data-key="#">#</button>
 
       <button type="button" class="keypad-case keypad-wide" id="keypadCaseBtn" data-action="case" title="Küçük / büyük harf">abc</button>
       <button type="button" class="keypad-action keypad-wide" data-key="/">/</button>
@@ -5384,6 +5424,7 @@ discount.value=compactPriceNumber(priceState.discount||0);
 }
 
 function openPriceModal(){
+if(typeof systemGuard==="function" && !systemGuard("bolum.fiyat"))return;
 if(!priceState)loadPriceState();
 
 updatePriceModalInfo();
@@ -6139,6 +6180,7 @@ const reservableTypes=["Profil","Boru","Köşebent","Lama","NPU"];
 section.style.display=(reservableTypes.includes(type) && Number.isFinite(length) && Math.abs(length-6)<0.000001) ? "block" : "none";
 }
 function openReservationModal(productId){
+if(typeof systemGuard==="function" && !systemGuard("stok.ayir"))return;
 let product=products.find(p=>Number(p.id)===Number(productId));
 if(!isStandardReservableProduct(product))return;
 reservationProductId=product.id;
@@ -6157,6 +6199,7 @@ document.getElementById("reservationModal").style.display="none";
 reservationProductId=null;
 }
 function saveReservationModal(){
+if(typeof systemGuard==="function" && !systemGuard("stok.ayir"))return;
 let product=products.find(p=>Number(p.id)===Number(reservationProductId));
 if(!isStandardReservableProduct(product))return;
 let quantity=Number(document.getElementById("reservationQuantity").value);
@@ -6232,6 +6275,7 @@ box.innerHTML=message;
 }
 
 function openPurchaseImportModal(){
+if(typeof systemGuard==="function" && !systemGuard("stok.alis"))return;
 closeNumericKeypad();
 purchaseImportRows=[];
 purchaseImportFileName="";
@@ -7944,6 +7988,7 @@ if(isEditing && reservationSection)reservationSection.style.display="none";
 }
 
 function openProductModal(editId=null){
+if(typeof systemGuard==="function" && !systemGuard("stok.kart"))return;
 
 editingProductId=editId!==null && editId!==undefined ? Number(editId) : null;
 let editingProduct=editingProductId!==null
@@ -8034,6 +8079,7 @@ setProductEditMode(false);
 ===================================================== */
 
 async function addProduct(){
+if(typeof systemGuard==="function" && !systemGuard("stok.kart"))return;
 
 let type =
 document.getElementById("productType").value;
@@ -8411,6 +8457,7 @@ updateProductReservationVisibility();
 ===================================================== */
 
 function openMovementModal(id,type){
+if(typeof systemGuard==="function" && !systemGuard("stok.hareket"))return;
 
 let product =
 products.find(p=>Number(p.id)===Number(id));
@@ -9483,6 +9530,7 @@ return menu;
 
 function openProductActionMenu(id,button,event){
 if(event){event.preventDefault();event.stopPropagation();}
+if(typeof systemCan==="function" && !systemCan("stok.kart"))return;
 let menu=ensureProductActionMenu();
 productActionMenuProductId=Number(id);
 menu.classList.add("open");
@@ -9518,6 +9566,7 @@ window.addEventListener("resize",closeProductActionMenu);
 ===================================================== */
 
 async function deleteProduct(id){
+if(typeof systemGuard==="function" && !systemGuard("stok.kart"))return;
 
 let p =
 products.find(
@@ -9682,6 +9731,7 @@ button.title="Sarf malzemelerini aç (bulut)";
 }
 
 function openConsumablesModal(){
+if(typeof systemGuard==="function" && !systemGuard("bolum.sarf"))return;
 renderConsumables();
 toggleConsumableAddPanel(false);
 document.getElementById("consumablesModal").style.display="flex";
@@ -10213,6 +10263,7 @@ button.title=alerts.length?alerts.length+" bakım yaklaşıyor veya gecikmiş":"
 }
 
 function openMaintenanceModal(){
+if(typeof systemGuard==="function" && !systemGuard("bolum.bakim"))return;
 renderMaintenanceRecords();
 document.getElementById("maintenanceModal").style.display="flex";
 }
@@ -10224,6 +10275,7 @@ if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
 }
 
 function toggleMaintenanceAddPanel(show){
+if(typeof systemGuard==="function" && !systemGuard("bakim.duzenle"))return;
 let panel=document.getElementById("maintenanceAddPanel");
 if(!panel)return;
 panel.style.display=show?"block":"none";
@@ -10349,8 +10401,8 @@ return `
 <td>${escapeHTML(record.performedBy)}</td>
 <td>${isLatest?formatMaintenanceDate(status.due):"—"}</td>
 <td><span class="maintenance-status ${status.kind}">${status.text}</span></td>
-<td>${pdfCell}</td>
-<td><button type="button" class="btn-gray" data-maint-action="delete" data-maint-id="${safeId}">Sil</button></td>
+<td class="bakim-c-pdf">${pdfCell}</td>
+<td class="bakim-c-islem"><button type="button" class="btn-gray" data-maint-action="delete" data-maint-id="${safeId}">Sil</button></td>
 </tr>`;
 }).join("");
 
@@ -10496,6 +10548,7 @@ return false;
 }
 
 async function requestMaintenanceDownload(mode,id=""){
+if(typeof systemGuard==="function" && !systemGuard("bakim.duzenle"))return;
 if(!(await ensureMaintenancePasswordConfigured()))return;
 
 let modal=document.getElementById("maintenancePasswordModal");
@@ -10532,7 +10585,14 @@ modal.style.display="flex";
 setTimeout(()=>input.focus(),30);
 }
 
+/* Bakim sifresi kutusunda Enter, Devam Et butonuna basmakla ayni seydir. */
+function maintenancePasswordSubmit(){
+let button=document.getElementById("maintenancePasswordDownloadButton");
+if(button && !button.disabled)button.click();
+}
+
 async function requestMaintenanceDelete(id){
+if(typeof systemGuard==="function" && !systemGuard("bakim.duzenle"))return;
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record){alert("Bakım kaydı bulunamadı.");return;}
 if(!(await ensureMaintenancePasswordConfigured()))return;
@@ -10777,13 +10837,20 @@ renderMaintenanceRecords();
 ===================================================== */
 
 function backupData(){
+if(typeof systemGuard==="function" && !systemGuard("bolum.yedek"))return;
 
 let backup={
 
-version:6,
+version:7,
 
 createdAt:
 new Date().toISOString(),
+
+errorCodes:
+typeof errorCodes!=="undefined"?errorCodes:[],
+
+systemUsers:
+typeof systemData!=="undefined" && systemData?systemData:null,
 
 jobPlanJobs:
 typeof jobPlanJobs!=="undefined"?jobPlanJobs:[],
@@ -10865,6 +10932,7 @@ alert(
 ===================================================== */
 
 async function restoreData(event){
+if(typeof systemGuard==="function" && !systemGuard("bolum.yedek"))return;
 
 let file =
 event.target.files[0];
@@ -10963,6 +11031,26 @@ jobPlanSettings=jobPlanNormalizeSettings(backup.jobPlanSettings);
 await jobPlanSaveSettings();
 }
 
+/* Hata kodları (yedek sürüm 7 ve sonrası) */
+if(Array.isArray(backup.errorCodes)){
+errorCodes=backup.errorCodes;
+errorCodesLoaded=true;
+await saveErrorCodes();
+}
+
+/* Kullanıcılar, roller ve izinler */
+if(backup.systemUsers && typeof backup.systemUsers==="object" && Array.isArray(backup.systemUsers.users)){
+if(confirm(
+"Yedekte "+backup.systemUsers.users.length+" kullanıcı ve yetki ayarı var.\n\n"+
+"Şu anki kullanıcı listesinin yerine yazılsın mı?\n"+
+"(Hayır dersen kullanıcılar olduğu gibi kalır, diğer veriler yine geri yüklenir.)"
+)){
+systemData=backup.systemUsers;
+systemDataLoaded=true;
+await saveSystemData();
+}
+}
+
 await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
 await loadData();
 
@@ -11041,6 +11129,7 @@ return String(value ?? "")
 
 
 async function exportStock(){
+if(typeof systemGuard==="function" && !systemGuard("stok.excel"))return;
 
 let list=
 currentPage==="Genel"
@@ -11663,8 +11752,10 @@ return /^\d$/.test(key) || key==="." || key===",";
 if(mode==="signed")
 return /^\d$/.test(key) || key==="." || key==="," || key==="-";
 
-/* Arama ve açıklama alanlarında sayı, harf, boşluk ve ölçü sembolleri kullanılabilir. */
-return /^\d$/.test(key) || isLetterKey(key) || [".",",","x","X","Ø","-","/",":"," "].includes(key);
+/* Arama ve açıklama alanlarında sayı, harf, boşluk, ölçü ve noktalama kullanılabilir. */
+return /^\d$/.test(key) || isLetterKey(key) ||
+[".",",","x","X","Ø","-","/",":"," ",
+"!","?","(",")","\"","'","%","&","+","=","_","*","#","@",";","\n"].includes(key);
 
 }
 
@@ -11748,6 +11839,11 @@ setKeypadMode("numeric");
 }
 
 updateKeypadButtons();
+
+/* Klavye yazilan kutunun ustune denk geliyorsa yer degistirir. */
+setTimeout(()=>{
+try{keypadAvoidTarget(input);}catch(e){}
+},0);
 
 }
 
@@ -11866,8 +11962,11 @@ finalizePurchaseItemField(purchaseIndex,purchaseField,value);
 return;
 }
 
+let calisti=keypadRunEnterAction(input);
 closeNumericKeypad();
+if(!calisti){
 try{input.focus({preventScroll:true});}catch{}
+}
 },140);
 
 }
@@ -11910,6 +12009,170 @@ return;
 
 }
 
+/* ---------- KLAVYEYI TASIMA ----------
+   Klavye yazdigin kutunun ustunu kapatirsa tasinabilir ya da
+   otomatik olarak ekranin diger ucuna gecer. */
+
+const KEYPAD_POSITION_KEY="stokKlavyeKonumu";
+
+let keypadDrag=null;
+let keypadManual=false;
+
+function keypadBox(){
+return document.getElementById("numericKeypad");
+}
+
+function keypadApplyPosition(left,top){
+let box=keypadBox();
+if(!box)return;
+let rect=box.getBoundingClientRect();
+let maxLeft=Math.max(4,window.innerWidth-rect.width-4);
+let maxTop=Math.max(4,window.innerHeight-rect.height-4);
+box.style.left=Math.min(Math.max(4,left),maxLeft)+"px";
+box.style.top=Math.min(Math.max(4,top),maxTop)+"px";
+box.style.bottom="auto";
+box.style.transform="none";
+}
+
+function keypadSavePosition(){
+let box=keypadBox();
+if(!box)return;
+try{
+localStorage.setItem(KEYPAD_POSITION_KEY,JSON.stringify({
+left:parseFloat(box.style.left)||0,
+top:parseFloat(box.style.top)||0
+}));
+}catch(e){}
+}
+
+function keypadRestorePosition(){
+try{
+let raw=localStorage.getItem(KEYPAD_POSITION_KEY);
+if(!raw)return false;
+let pos=JSON.parse(raw);
+if(!pos || !Number.isFinite(pos.left) || !Number.isFinite(pos.top))return false;
+keypadManual=true;
+keypadApplyPosition(pos.left,pos.top);
+return true;
+}catch(e){return false;}
+}
+
+function keypadResetPosition(){
+let box=keypadBox();
+if(!box)return;
+keypadManual=false;
+box.style.left="";
+box.style.top="";
+box.style.bottom="";
+box.style.transform="";
+try{localStorage.removeItem(KEYPAD_POSITION_KEY);}catch(e){}
+}
+
+/* Klavye yazilan kutuyu kapatiyorsa ekranin obur ucuna gecer. */
+function keypadAvoidTarget(input){
+let box=keypadBox();
+if(!box || !input || keypadManual)return;
+if(!box.classList.contains("open"))return;
+
+let field=input.getBoundingClientRect();
+let pad=box.getBoundingClientRect();
+
+let cakisiyor=!(field.bottom<pad.top-8 || field.top>pad.bottom+8);
+if(!cakisiyor)return;
+
+if(field.top>window.innerHeight/2){
+box.style.top="10px";
+box.style.bottom="auto";
+}else{
+box.style.top="";
+box.style.bottom="";
+}
+}
+
+function keypadToggleSide(){
+let box=keypadBox();
+if(!box)return;
+keypadManual=false;
+try{localStorage.removeItem(KEYPAD_POSITION_KEY);}catch(e){}
+box.style.left="";
+box.style.transform="";
+if(box.style.top){
+box.style.top="";
+box.style.bottom="";
+}else{
+box.style.top="10px";
+box.style.bottom="auto";
+}
+}
+
+function initKeypadDrag(){
+let box=keypadBox();
+let head=document.getElementById("keypadHead");
+if(!box || !head)return;
+
+let moveButton=document.getElementById("keypadMoveButton");
+if(moveButton){
+moveButton.addEventListener("pointerdown",e=>{e.stopPropagation();});
+moveButton.addEventListener("click",e=>{
+e.preventDefault();
+e.stopPropagation();
+keypadToggleSide();
+});
+}
+
+head.addEventListener("pointerdown",e=>{
+if(e.target.closest("button"))return;
+let rect=box.getBoundingClientRect();
+keypadDrag={dx:e.clientX-rect.left,dy:e.clientY-rect.top,moved:false};
+keypadManual=true;
+box.classList.add("dragging");
+try{head.setPointerCapture(e.pointerId);}catch(err){}
+e.preventDefault();
+});
+
+head.addEventListener("pointermove",e=>{
+if(!keypadDrag)return;
+keypadDrag.moved=true;
+keypadApplyPosition(e.clientX-keypadDrag.dx,e.clientY-keypadDrag.dy);
+e.preventDefault();
+});
+
+let bitir=e=>{
+if(!keypadDrag)return;
+box.classList.remove("dragging");
+if(keypadDrag.moved)keypadSavePosition();
+else keypadManual=false;
+keypadDrag=null;
+try{head.releasePointerCapture(e.pointerId);}catch(err){}
+};
+
+head.addEventListener("pointerup",bitir);
+head.addEventListener("pointercancel",bitir);
+head.addEventListener("dblclick",()=>keypadResetPosition());
+
+window.addEventListener("resize",()=>{
+if(!keypadManual)return;
+let rect=box.getBoundingClientRect();
+keypadApplyPosition(rect.left,rect.top);
+});
+
+keypadRestorePosition();
+}
+
+/* ---------- ENTER ILE ONAY ----------
+   data-enter-action tasiyan kutularda hem fiziksel Enter hem de
+   ekran klavyesindeki Enter ayni islemi calistirir. */
+
+function keypadRunEnterAction(input){
+if(!input || !input.dataset)return false;
+let name=input.dataset.enterAction;
+if(!name)return false;
+let fn=window[name];
+if(typeof fn!=="function")return false;
+setTimeout(()=>{try{fn();}catch(e){console.error(e);}},0);
+return true;
+}
+
 function initNumericKeypad(){
 
 let toggle=document.getElementById("keypadEnabled");
@@ -11932,6 +12195,18 @@ updateInputModes();
 document.addEventListener("keydown",e=>{
 if(e.key==="Escape")closeNumericKeypad();
 });
+
+/* Sifre ve arama kutularinda Enter'a basinca ilgili islem calissin. */
+document.addEventListener("keydown",e=>{
+if(e.key!=="Enter" || e.shiftKey)return;
+let el=e.target;
+if(!el || !el.dataset || !el.dataset.enterAction)return;
+if(String(el.tagName||"").toLowerCase()==="textarea")return;
+e.preventDefault();
+keypadRunEnterAction(el);
+});
+
+initKeypadDrag();
 
 /* Dinamik olarak oluşturulan alanlar (iş planı tabloları vb.) için devredilmiş dinleyici:
    sayfada sonradan oluşan her [data-keypad] alanında da klavye açılır. */
@@ -13503,6 +13778,7 @@ console.error("İş planlama ayarları kaydedilemedi:",error);
 /* ---------- AYAR ARAYÜZÜ ---------- */
 
 function jobPlanSetShiftEnabled(key,checked){
+if(!jobPlanGuard("isplani.vardiya"))return;
 if(key==="gece")jobPlanSettings.nightEnabled=!!checked;
 else jobPlanSettings.dayEnabled=!!checked;
 
@@ -13518,6 +13794,7 @@ jobPlanSaveSettings();
 }
 
 function jobPlanSetOvertime(key,checked){
+if(!jobPlanGuard("isplani.vardiya"))return;
 let cfg=jobPlanSettings[key];
 if(!cfg)return;
 cfg.overtime=!!checked;
@@ -13527,6 +13804,7 @@ jobPlanSaveSettings();
 }
 
 function jobPlanToggleDay(key,day){
+if(!jobPlanGuard("isplani.vardiya"))return;
 let cfg=jobPlanSettings[key];
 if(!cfg)return;
 let d=Number(day);
@@ -13541,6 +13819,7 @@ jobPlanSaveSettings();
 }
 
 function jobPlanSetShortDay(key,day,value){
+if(!jobPlanGuard("isplani.vardiya"))return;
 let cfg=jobPlanSettings[key];
 if(!cfg)return;
 let id=String(Number(day));
@@ -13727,6 +14006,7 @@ info.innerHTML=lines.join("<br>");
 /* ---------- HTML YÜKLEME / ÖNİZLEME ---------- */
 
 async function jobPlanReadFiles(event){
+if(!jobPlanGuard("isplani.dosya"))return;
 let files=Array.from(event.target.files||[]);
 event.target.value="";
 if(!files.length)return;
@@ -13967,6 +14247,7 @@ return saved;
 }
 
 async function jobPlanCommitImport(){
+if(!jobPlanGuard("isplani.dosya"))return;
 let selected=jobPlanImportFiles.filter(f=>f.include);
 if(!selected.length){alert("Plana eklenecek dosya seçilmedi.");return;}
 
@@ -14095,6 +14376,7 @@ return lines;
 /* ---------- SIRALAMA / DÜZENLEME ---------- */
 
 function jobPlanMove(jobId,direction){
+if(!jobPlanGuard("isplani.duzenle"))return;
 let list=jobPlanActiveJobs();
 let index=list.findIndex(j=>j.id===jobId);
 if(index<0)return;
@@ -14120,6 +14402,7 @@ return n;
 
 /* DT kutusu: tüm dosyaları tek seferde aynı ek orana çeker. */
 function jobPlanSetPercent(jobId,value){
+if(!jobPlanGuard("isplani.duzenle"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 if(!job)return;
 let percent=jobPlanCleanPercent(value);
@@ -14131,6 +14414,7 @@ jobPlanSaveJobsSoon();
 
 /* Dosya kutusu: sadece o HTML'in ek oranını değiştirir. */
 function jobPlanSetFilePercent(jobId,fileId,value){
+if(!jobPlanGuard("isplani.duzenle"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job&&(job.files||[]).find(f=>f.id===fileId);
 if(!file)return;
@@ -14145,6 +14429,7 @@ jobPlanRender();
 }
 
 async function jobPlanDeleteJob(jobId){
+if(!jobPlanGuard("isplani.duzenle"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 if(!job)return;
 if(!confirm(job.dtNo+" plandan kaldırılsın mı?\n\nAyrılan stok kayıtları da silinir."))return;
@@ -14371,6 +14656,7 @@ return qty;
    Açılınca ayırma kaldırılır; otomatik açılmış boş kart silinmez.
    Kapatılınca eşleşen stok kartı varsa otomatik bağlanır. */
 async function jobPlanSetCustomerMaterial(jobId,fileId,checked){
+if(!jobPlanGuard("isplani.stok"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
@@ -14412,6 +14698,7 @@ return true;
 }
 
 async function jobPlanStartFile(jobId,fileId){
+if(!jobPlanGuard("isplani.calistir"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
@@ -14497,6 +14784,7 @@ jobPlanPauseClose(String(n));
 /* DURAKLA: kaç boy kesildiği sorulur, o kadarı stoktan düşülür,
    kalan boy ve kalan süre plana yansır. */
 async function jobPlanPauseFile(jobId,fileId){
+if(!jobPlanGuard("isplani.calistir"))return;
 if(jobPlanBusy)return;
 
 let job=jobPlanJobs.find(j=>j.id===jobId);
@@ -14558,6 +14846,7 @@ jobPlanBusy=false;
 }
 
 async function jobPlanResumeFile(jobId,fileId){
+if(!jobPlanGuard("isplani.calistir"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
@@ -14573,6 +14862,7 @@ await jobPlanSaveJobs();
 }
 
 async function jobPlanUndoFile(jobId,fileId){
+if(!jobPlanGuard("isplani.calistir"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!file)return;
@@ -14593,6 +14883,7 @@ await jobPlanSaveJobs();
 }
 
 async function jobPlanFinishFile(jobId,fileId){
+if(!jobPlanGuard("isplani.calistir"))return;
 if(jobPlanBusy)return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
@@ -14646,6 +14937,7 @@ jobPlanBusy=false;
 }
 
 async function jobPlanReopenJob(jobId){
+if(!jobPlanGuard("isplani.duzenle"))return;
 let job=jobPlanJobs.find(j=>j.id===jobId);
 if(!job)return;
 if(!confirm(
@@ -14796,6 +15088,13 @@ box.innerHTML=chips.join("");
 /* Sistem paneli yoksa (eski sürüm) her şey açıktır. */
 function jobPlanAllows(key){
 return typeof systemCan==="function"?systemCan(key):true;
+}
+
+/* Gizlenmiş bir işlem fonksiyon çağrısıyla da yapılamaz. */
+function jobPlanGuard(key){
+if(jobPlanAllows(key))return true;
+if(typeof systemGuard==="function")return systemGuard(key);
+return false;
 }
 
 /* Kaydı kimin yaptığı kullanıcı adından okunur. */
@@ -15112,6 +15411,7 @@ setTimeout(jobPlanFlushRender,60);
 let jobPlanFocusHooked=false;
 
 function openJobPlanModal(){
+if(!jobPlanGuard("bolum.isplani"))return;
 if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
 jobPlanRenderSettings();
 jobPlanRefreshAll();
@@ -15142,6 +15442,7 @@ jobPlanImportPending=false;
 ===================================================== */
 
 async function exportJobPlan(){
+if(!jobPlanGuard("isplani.dosya"))return;
 
 if(typeof ExcelJS==="undefined"){
 alert("Excel modülü yüklenemedi.\n\nİnternet bağlantısını kontrol edip sayfayı yenileyin.");
@@ -15465,6 +15766,7 @@ applyMovementPanel();
 
 /* Toplu silme bakım şifresini sorar; onay bakım şifre modalında verilir. */
 async function requestMovementClear(){
+if(typeof systemGuard==="function" && !systemGuard("stok.hareketsil"))return;
 if(!Array.isArray(movements) || !movements.length){
 alert("Silinecek stok hareketi yok.");
 return;
@@ -16393,6 +16695,7 @@ title:"Bölümler",
 items:[
 {key:"bolum.fiyat",label:"Fiyatlar tablosu",hint:"Üstteki 💰 Fiyatlar butonu"},
 {key:"bolum.bakim",label:"Bakım tablosu",hint:"Üstteki 🛠 Bakım butonu"},
+{key:"bakim.duzenle",label:"Bakım kaydı ekle / sil / PDF indir",hint:"Kapalıyken sadece kayıtları ve durumu görür"},
 {key:"bolum.sarf",label:"Sarf malzemeleri",hint:"Üstteki 🧰 butonu"},
 {key:"bolum.hatakodu",label:"Hata kodları",hint:"Üstteki ⚠️ butonu"},
 {key:"bolum.isplani",label:"İş planlama",hint:"Üstteki 📋 butonu"},
@@ -16497,6 +16800,13 @@ function systemCanOpenPanel(){
 if(!systemData || !systemData.loginEnabled)return true;
 if(!currentUser)return true;
 return !!(currentUser.master || currentUser.role==="yonetici");
+}
+
+/* Butonu gizlemek tek basina yeterli degil: fonksiyon da korunur. */
+function systemGuard(key,mesaj){
+if(systemCan(key))return true;
+alert(mesaj||"⛔ Bu işlem için yetkin yok.\n\nGerekirse yöneticiye söyle, Sistem > Roller ve İzinler'den açabilir.");
+return false;
 }
 
 function systemApplyPermissions(){
@@ -16714,6 +17024,7 @@ if(kind)el.classList.add(kind);
 async function openErrorCodeModal(){
 let modal=document.getElementById("errorCodeModal");
 if(!modal)return;
+if(typeof systemGuard==="function" && !systemGuard("bolum.hatakodu"))return;
 
 errorCodeCancelForm();
 errorCodeSearch="";
@@ -16885,10 +17196,7 @@ errorCodeSetMessage("");
 }
 
 function errorCodeNew(){
-if(!errorCodeAllows("hatakodu.duzenle")){
-alert("Hata kodu ekleme yetkin yok.");
-return;
-}
+if(typeof systemGuard==="function" && !systemGuard("hatakodu.duzenle"))return;
 
 errorCodeCancelForm();
 errorCodeEditingId=null;
@@ -16943,7 +17251,7 @@ if(form)form.classList.add("open");
 
 async function errorCodeSave(){
 if(errorCodeBusy)return;
-if(!errorCodeAllows("hatakodu.duzenle"))return;
+if(typeof systemGuard==="function" && !systemGuard("hatakodu.duzenle"))return;
 
 let button=document.getElementById("errorCodeSaveButton");
 let read=id=>String(document.getElementById(id)?.value||"").trim();
@@ -17034,7 +17342,7 @@ if(button){button.disabled=false;button.textContent=errorCodeEditingId?"Değişi
 }
 
 async function errorCodeDelete(id){
-if(!errorCodeAllows("hatakodu.duzenle"))return;
+if(typeof systemGuard==="function" && !systemGuard("hatakodu.duzenle"))return;
 
 let record=errorCodes.find(r=>r.id===id);
 if(!record)return;

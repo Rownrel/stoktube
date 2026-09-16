@@ -874,9 +874,62 @@ width:calc(100vw - 20px)
 /* =====================================================
    ÇİFT MODLU EKRAN KLAVYESİ
 ===================================================== */
+.symbol-keypad-grid{
+display:grid;
+grid-template-columns:repeat(8,1fr);
+gap:6px
+}
+
+.symbol-keypad-grid button{
+min-height:50px;
+font-size:20px;
+background:#f8fafc;
+color:#0f172a;
+border-radius:8px;
+padding:5px 2px;
+touch-action:manipulation;
+-webkit-tap-highlight-color:transparent;
+user-select:none
+}
+
+.symbol-keypad-grid button:active{
+transform:scale(.97);
+background:#e2e8f0
+}
+
+.symbol-keypad-grid button:disabled{
+opacity:.28;
+cursor:not-allowed
+}
+
+.symbol-keypad-grid .keypad-action{
+background:#cbd5e1;
+font-size:16px
+}
+
+.symbol-keypad-grid .keypad-space{
+grid-column:span 4;
+font-size:14px
+}
+
+.symbol-keypad-grid .keypad-enter{
+background:#16a34a;
+color:white;
+font-weight:bold;
+font-size:14px;
+grid-column:span 2
+}
+
+@media(max-width:600px){
+.symbol-keypad-grid{grid-template-columns:repeat(4,1fr)}
+.symbol-keypad-grid button{min-height:48px;font-size:19px}
+.symbol-keypad-grid .keypad-space{grid-column:span 2}
+.symbol-keypad-grid .keypad-enter{grid-column:span 2}
+}
+
 .keypad-mode-tabs{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:1fr 1fr 1fr;
 gap:8px;
 margin-bottom:10px
 }
@@ -908,8 +961,8 @@ gap:6px
 }
 
 .alpha-keypad-grid button{
-min-height:48px;
-font-size:17px;
+min-height:58px;
+font-size:21px;
 background:#f8fafc;
 color:#0f172a;
 border-radius:8px;
@@ -942,8 +995,8 @@ font-size:14px
 }
 
 .alpha-keypad-grid .keypad-space{
-grid-column:span 4;
-font-size:14px
+grid-column:span 8;
+font-size:15px
 }
 
 .alpha-keypad-grid .keypad-case{
@@ -968,7 +1021,7 @@ font-weight:bold
 grid-template-columns:repeat(6,1fr);
 gap:6px
 }
-.alpha-keypad-grid button{min-height:46px;font-size:16px}
+.alpha-keypad-grid button{min-height:56px;font-size:20px}
 .alpha-keypad-grid .keypad-space{grid-column:span 4}
 .alpha-keypad-grid .keypad-wide{grid-column:span 2}
 }
@@ -4910,7 +4963,8 @@ placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
 
   <div class="keypad-mode-tabs" role="tablist" aria-label="Klavye modu">
     <button type="button" id="keypadModeNumeric" class="active" data-mode-switch="numeric" role="tab" aria-selected="true">123 · Sayılar</button>
-    <button type="button" id="keypadModeAlpha" data-mode-switch="alpha" role="tab" aria-selected="false">ABC · Harf + Sayı</button>
+    <button type="button" id="keypadModeAlpha" data-mode-switch="alpha" role="tab" aria-selected="false">ABC · Harf</button>
+    <button type="button" id="keypadModeSymbol" data-mode-switch="symbol" role="tab" aria-selected="false">!?# · Semboller</button>
   </div>
 
   <div class="keypad-panel active" id="numericKeypadPanel" data-keypad-panel="numeric">
@@ -4942,22 +4996,30 @@ placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
     </div>
   </div>
 
+  <div class="keypad-panel" id="symbolKeypadPanel" data-keypad-panel="symbol">
+    <div class="symbol-keypad-grid">
+      <button type="button" data-key=".">.</button><button type="button" data-key=",">,</button><button type="button" data-key=":">:</button><button type="button" data-key=";">;</button><button type="button" data-key="!">!</button><button type="button" data-key="?">?</button><button type="button" data-key="-">-</button><button type="button" data-key="_">_</button>
+
+      <button type="button" data-key="(">(</button><button type="button" data-key=")">)</button><button type="button" data-key="[">[</button><button type="button" data-key="]">]</button><button type="button" data-key="{">{</button><button type="button" data-key="}">}</button><button type="button" data-key="/">/</button><button type="button" data-key="\">\</button>
+
+      <button type="button" data-key="&#34;">&#34;</button><button type="button" data-key="&#39;">&#39;</button><button type="button" data-key="+">+</button><button type="button" data-key="=">=</button><button type="button" data-key="*">*</button><button type="button" data-key="%">%</button><button type="button" data-key="&amp;">&amp;</button><button type="button" data-key="#">#</button>
+
+      <button type="button" data-key="@">@</button><button type="button" data-key="~">~</button><button type="button" data-key="^">^</button><button type="button" data-key="&lt;">&lt;</button><button type="button" data-key="&gt;">&gt;</button><button type="button" data-key="|">|</button><button type="button" data-key="Ø">Ø</button><button type="button" data-key="₺">₺</button>
+
+      <button type="button" class="keypad-action" data-action="backspace">⌫</button><button type="button" class="keypad-action" data-action="clear">⧉</button><button type="button" class="keypad-space" data-key=" ">Boşluk</button><button type="button" class="keypad-enter keypad-wide" data-action="enter">Enter</button>
+    </div>
+  </div>
+
   <div class="keypad-panel" id="alphaKeypadPanel" data-keypad-panel="alpha">
     <div class="alpha-keypad-grid">
-      <button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button><button type="button" data-key="4">4</button><button type="button" data-key="5">5</button><button type="button" data-key="6">6</button><button type="button" data-key="7">7</button><button type="button" data-key="8">8</button><button type="button" data-key="9">9</button><button type="button" data-key="0">0</button><button type="button" class="keypad-action" data-action="backspace">⌫</button><button type="button" class="keypad-action" data-action="clear">⌧</button>
-
       <button type="button" data-key="Q">Q</button><button type="button" data-key="W">W</button><button type="button" data-key="E">E</button><button type="button" data-key="R">R</button><button type="button" data-key="T">T</button><button type="button" data-key="Y">Y</button><button type="button" data-key="U">U</button><button type="button" data-key="I">I</button><button type="button" data-key="O">O</button><button type="button" data-key="P">P</button><button type="button" data-key="Ğ">Ğ</button><button type="button" data-key="Ü">Ü</button>
 
       <button type="button" data-key="A">A</button><button type="button" data-key="S">S</button><button type="button" data-key="D">D</button><button type="button" data-key="F">F</button><button type="button" data-key="G">G</button><button type="button" data-key="H">H</button><button type="button" data-key="J">J</button><button type="button" data-key="K">K</button><button type="button" data-key="L">L</button><button type="button" data-key="Ş">Ş</button><button type="button" data-key="İ">İ</button><button type="button" data-key="Ö">Ö</button>
 
-      <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" data-key="Ø">Ø</button><button type="button" data-key="-">-</button><button type="button" data-key=".">.</button><button type="button" data-key=",">,</button>
-
-      <button type="button" data-key="!">!</button><button type="button" data-key="?">?</button><button type="button" data-key="(">(</button><button type="button" data-key=")">)</button><button type="button" data-key="&#34;">&#34;</button><button type="button" data-key="'">'</button><button type="button" data-key="%">%</button><button type="button" data-key="&amp;">&amp;</button><button type="button" data-key="+">+</button><button type="button" data-key="=">=</button><button type="button" data-key="_">_</button><button type="button" data-key="#">#</button>
+      <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" class="keypad-action keypad-wide" data-action="backspace">⌫</button><button type="button" class="keypad-action keypad-wide" data-action="clear">⧉</button>
 
       <button type="button" class="keypad-case keypad-wide" id="keypadCaseBtn" data-action="case" title="Küçük / büyük harf">abc</button>
-      <button type="button" class="keypad-action keypad-wide" data-key="/">/</button>
       <button type="button" class="keypad-space" data-key=" ">Boşluk</button>
-      <button type="button" class="keypad-action keypad-wide" data-key=":">:</button>
       <button type="button" class="keypad-enter keypad-wide" data-action="enter">Enter</button>
     </div>
   </div>
@@ -11755,25 +11817,31 @@ return /^\d$/.test(key) || key==="." || key==="," || key==="-";
 /* Arama ve açıklama alanlarında sayı, harf, boşluk, ölçü ve noktalama kullanılabilir. */
 return /^\d$/.test(key) || isLetterKey(key) ||
 [".",",","x","X","Ø","-","/",":"," ",
-"!","?","(",")","\"","'","%","&","+","=","_","*","#","@",";","\n"].includes(key);
+"!","?","(",")","[","]","{","}","\"","'","%","&","+","=","_","*","#","@",";",
+"~","^","<",">","|","\\","₺","€","$","\n"].includes(key);
 
 }
 
+const KEYPAD_MODES=[
+{mode:"numeric",button:"keypadModeNumeric",panel:"numericKeypadPanel"},
+{mode:"alpha",button:"keypadModeAlpha",panel:"alphaKeypadPanel"},
+{mode:"symbol",button:"keypadModeSymbol",panel:"symbolKeypadPanel"}
+];
+
 function setKeypadMode(mode){
-if(mode!=="numeric" && mode!=="alpha")return;
+if(!KEYPAD_MODES.some(m=>m.mode===mode))return;
 keypadMode=mode;
 
-let numericBtn=document.getElementById("keypadModeNumeric");
-let alphaBtn=document.getElementById("keypadModeAlpha");
-let numericPanel=document.getElementById("numericKeypadPanel");
-let alphaPanel=document.getElementById("alphaKeypadPanel");
-
-numericBtn.classList.toggle("active",mode==="numeric");
-alphaBtn.classList.toggle("active",mode==="alpha");
-numericBtn.setAttribute("aria-selected",mode==="numeric"?"true":"false");
-alphaBtn.setAttribute("aria-selected",mode==="alpha"?"true":"false");
-numericPanel.classList.toggle("active",mode==="numeric");
-alphaPanel.classList.toggle("active",mode==="alpha");
+KEYPAD_MODES.forEach(item=>{
+let button=document.getElementById(item.button);
+let panel=document.getElementById(item.panel);
+let secili=item.mode===mode;
+if(button){
+button.classList.toggle("active",secili);
+button.setAttribute("aria-selected",secili?"true":"false");
+}
+if(panel)panel.classList.toggle("active",secili);
+});
 
 updateKeypadButtons();
 }
@@ -11791,7 +11859,14 @@ let alphaBtn=document.getElementById("keypadModeAlpha");
 if(alphaBtn){
 alphaBtn.title=(inputMode==="integer" || inputMode==="decimal")
 ?"Bu alanda harf tuşları pasif olacaktır."
-:"Harf ve sayı klavyesi";
+:"Sadece harfler. Rakam için 123, noktalama için !?# sekmesine geç.";
+}
+
+let symbolBtn=document.getElementById("keypadModeSymbol");
+if(symbolBtn){
+symbolBtn.title=(inputMode==="integer" || inputMode==="decimal")
+?"Bu alanda sembol tuşları pasif olacaktır."
+:"Noktalama ve işaretler";
 }
 
 }

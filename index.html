@@ -2640,6 +2640,29 @@ color:#854d0e;
 margin-bottom:12px
 }
 
+/* İçe aktarmada tam boy / parça boy kutuları */
+.jobplan-boy-line{
+display:flex;
+align-items:center;
+gap:5px;
+margin-bottom:4px;
+font-size:11px;
+color:#64748b;
+white-space:nowrap
+}
+
+.jobplan-boy-line span{
+font-weight:bold
+}
+
+.jobplan-boy-line .jobplan-num{
+width:58px
+}
+
+#jobPlanScrapLimit{
+width:62px
+}
+
 
 /* =====================================================
    SİSTEM PANELİ
@@ -4571,6 +4594,18 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <span>⏱ Mesai</span>
 </label>
 <div class="jobplan-days" id="jobPlanNightDays"></div>
+</div>
+
+<div class="jobplan-shift-row">
+<span class="jobplan-shift-name">🧩 Parça profil</span>
+<label class="jobplan-switch" title="Kesimden artan bu uzunluğun altındaysa parça kartı açılmaz, hurdaya yazılır.">
+<span>Hurda sınırı</span>
+<input id="jobPlanScrapLimit" class="jobplan-num" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Hurda sınırı (m)"
+onchange="jobPlanSetScrapLimit(this.value)">
+<span>m</span>
+</label>
+<span class="jobplan-sub">Artan bu değerin üstündeyse yeni parça stok kartı açılır.</span>
 </div>
 
 <div class="jobplan-hours" id="jobPlanHoursInfo"></div>
@@ -12787,6 +12822,9 @@ return {
 dayEnabled:true,
 nightEnabled:false,
 
+/* Kesimden artan bu uzunluğun altındaysa hurdadır, parça kartı açılmaz. */
+scrapLimitM:1.5,
+
 gunduz:{
 start:"08:00",
 end:"18:00",
@@ -13340,6 +13378,9 @@ if(job.status==="completed")return;
 (job.files||[]).forEach(file=>{
 if(file.status==="bitti")return;
 
+/* Kısmi boy (parça profil) ayrı bir kartta ayrılır. */
+if(jobPlanSyncPartialReservation(job,file,claimed))changed=true;
+
 /* Müşteri malzemesi stok kartına hiç bağlanmaz. */
 if(file.customerMaterial){
 if(file.reservationId)jobPlanRemoveReservation(file);
@@ -13499,6 +13540,7 @@ persistStandardReservations();
 }
 
 function jobPlanRemoveReservation(file){
+if(typeof jobPlanRemovePartialReservation==="function")jobPlanRemovePartialReservation(file);
 if(!file || !file.reservationId || !file.productId)return;
 let pid=String(file.productId);
 let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
@@ -13701,6 +13743,15 @@ job.percentMode="ek";
 if(!Number.isFinite(Number(job.percent)))job.percent=0;
 job.files.forEach(file=>{
 if(!Number.isFinite(Number(file.percent)))file.percent=Number(job.percent)||0;
+
+/* Parça profil alanları eski kayıtlarda yok. */
+if(!Number.isFinite(Number(file.partialM)))file.partialM=0;
+if(!Number.isFinite(Number(file.fullTubes))){
+file.fullTubes=Math.max(0,Math.floor(Number(file.tubes)||0)-(Number(file.partialM)>0?1:0));
+}
+if(typeof file.partialProductId!=="string")file.partialProductId="";
+if(typeof file.partialReservationId!=="string")file.partialReservationId="";
+if(typeof file.partialDeducted!=="boolean")file.partialDeducted=false;
 });
 });
 }
@@ -14102,6 +14153,9 @@ data.duplicate=existing.has(String(file.name).toLowerCase());
 data.candidates=jobPlanProductCandidates(data.size,data.rawLengthMm);
 data.productId=data.candidates.length?String(data.candidates[0].id):"";
 /* Yeni kart açılırken kullanılacak varsayılanlar */
+data.fullTubes=Math.floor(Number(data.tubes)||0);
+data.partialM=0;
+data.partialProductId="";
 data.newQuality="ST37";
 data.newFinish="Standart";
 data.newPipeSeam="Dikişli";
@@ -14154,9 +14208,10 @@ let sizeText=f.size
 ((f.tubeProfiles||[]).length>1?'<div class="jobplan-warn">Dosyada '+f.tubeProfiles.length+' farklı profil var</div>':''))
 :'<span class="jobplan-warn">Ebat çözülemedi</span>';
 
-let lengthText=Number.isFinite(f.rawLengthMm)
+let lengthText=(Number.isFinite(f.rawLengthMm)
 ?jobPlanRawLengthM(f.rawLengthMm)+" m"
-:'<span class="jobplan-warn">? (6 m varsayılacak)</span>';
+:'<span class="jobplan-warn">? (6 m varsayılacak)</span>')+
+(jobPlanAllocationInfo(f)?'<div class="jobplan-sub">'+escapeHTML(jobPlanAllocationInfo(f))+'</div>':'');
 
 let customerToggle=
 '<label class="jobplan-customer">'+
@@ -14213,8 +14268,15 @@ return '<tr>'+
 (f.customer?'<div class="jobplan-sub">'+escapeHTML(f.customer)+'</div>':'')+'</td>'+
 '<td>'+sizeText+'</td>'+
 '<td>'+lengthText+'</td>'+
-'<td><input class="jobplan-num" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Boy adedi" value="'+(Number(f.tubes)||1)+
-'" oninput="jobPlanImportSetTubes(\''+f.rowId+'\',this.value)"></td>'+
+'<td>'+
+'<div class="jobplan-boy-line"><span>Tam</span>'+
+'<input class="jobplan-num" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Tam boy adedi" value="'+jobPlanFullTubes(f)+
+'" oninput="jobPlanImportSetFullTubes(\''+f.rowId+'\',this.value)"></div>'+
+'<div class="jobplan-boy-line"><span>Parça</span>'+
+'<input class="jobplan-num" type="text" inputmode="none" data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Kısmi boy (m)" placeholder="—" value="'+(jobPlanPartialM(f)||"")+
+'" oninput="jobPlanImportSetPartial(\''+f.rowId+'\',this.value)"><span>m</span></div>'+
+(jobPlanHasPartial(f)?'<div class="jobplan-sub">toplam '+(Number(f.tubes)||0)+' boy</div>':'')+
+'</td>'+
 '<td>'+jobPlanFormatDuration(f.totalSeconds)+
 '<div class="jobplan-sub">'+jobPlanFormatClock(f.totalSeconds)+' · '+(Number(f.parts)||0)+' parça</div></td>'+
 '<td><input class="jobplan-percent" type="text" inputmode="none" data-keypad="signed" data-native-inputmode="decimal" data-keypad-label="Ek süre %" value="'+jobPlanCleanPercent(f.percent)+
@@ -14388,6 +14450,11 @@ percent:jobPlanCleanPercent(data.percent),
 totalSeconds:Number(data.totalSeconds)||0,
 parts:Number(data.parts)||0,
 tubes:Number(data.tubes)||1,
+fullTubes:jobPlanFullTubes(data),
+partialM:jobPlanPartialM(data),
+partialProductId:data.partialProductId?String(data.partialProductId):"",
+partialReservationId:"",
+partialDeducted:false,
 rawLengthMm:Number.isFinite(data.rawLengthMm)?data.rawLengthMm:null,
 allocatedM:Number.isFinite(data.allocatedM)?data.allocatedM:null,
 productId:data.customerMaterial?"":(data.productId?String(data.productId):""),
@@ -14402,6 +14469,7 @@ uploadedAt:now
 
 job.files.push(file);
 jobPlanAddReservation(job,file);
+jobPlanPickRemnant(file);
 jobPlanExpanded[job.id]=true;
 });
 
@@ -14584,7 +14652,7 @@ return Number.isFinite(n) && n>0?Math.floor(n):0;
 function jobPlanRemainingTubes(job,file){
 if(!file)return 0;
 if(file.status==="bitti")return 0;
-let total=Math.floor(Number(file.tubes)||0);
+let total=jobPlanFullTubes(file);
 let done=jobPlanDoneTubes(file);
 return Math.max(0,total-done);
 }
@@ -14593,7 +14661,7 @@ return Math.max(0,total-done);
 function jobPlanFileRemainingSeconds(job,file){
 if(!file || file.status==="bitti")return 0;
 let full=jobPlanFileSeconds(job,file);
-let total=Math.floor(Number(file.tubes)||0);
+let total=jobPlanFullTubes(file);
 if(total<=0)return full;
 let remaining=jobPlanRemainingTubes(job,file);
 return full*remaining/total;
@@ -14866,7 +14934,7 @@ let job=jobPlanJobs.find(j=>j.id===jobId);
 let file=job?.files?.find(f=>f.id===fileId);
 if(!job || !file)return;
 
-let total=Math.floor(Number(file.tubes)||0);
+let total=jobPlanFullTubes(file);
 let already=jobPlanDoneTubes(file);
 
 let answer=await jobPlanAskTubes(job,file,total,already);
@@ -14967,12 +15035,16 @@ if(!job || !file)return;
 jobPlanBusy=true;
 
 try{
-let total=Math.floor(Number(file.tubes)||0);
+/* Kısmi boy ayrı düşülür; buradaki sayım sadece TAM boylardır. */
+let total=jobPlanFullTubes(file);
 let rest=total-jobPlanDeductedTubes(file);
 
 if(rest>0 && (file.productId || file.customerMaterial)){
 await jobPlanDeductTubes(job,file,rest,jobPlanDeductedTubes(file)>0?"kalan":"");
 }
+
+/* Kısmi boy (örn. 76. boyun 2 metresi) parça profilden düşer. */
+await jobPlanDeductPartial(job,file);
 
 if(file.status==="basladi")jobPlanAddWorked(file);
 
@@ -15332,7 +15404,10 @@ let sizeText=file.size
 :'<span class="jobplan-warn">?</span>';
 
 let doneTubes=jobPlanDoneTubes(file);
-let lengthText=jobPlanRawLengthM(file.rawLengthMm)+" m × "+(Number(file.tubes)||1)+
+let lengthText=jobPlanRawLengthM(file.rawLengthMm)+" m × "+jobPlanFullTubes(file)+
+(jobPlanHasPartial(file)
+?'<div class="jobplan-sub">+ 1 parça '+jobPlanPartialM(file)+' m</div>'
+:'')+
 (doneTubes>0 && file.status!=="bitti"
 ?'<div class="jobplan-sub">kalan '+jobPlanRemainingTubes(job,file)+' boy</div>'
 :'');
@@ -15365,6 +15440,7 @@ file.status==="durakladi"?"paused":"")+'">'+
 '<td class="jobplan-termin jp-c-bas">'+jobPlanFormatDateTime(file.planStart)+'</td>'+
 '<td class="jobplan-termin jp-c-ter">'+jobPlanFormatDateTime(file.planEnd)+'</td>'+
 '<td class="jp-c-stok '+stockClass+'">'+escapeHTML(stock.text)+
+(jobPlanPartialText(file)?'<div class="jobplan-sub">'+escapeHTML(jobPlanPartialText(file))+'</div>':'')+
 (file.status!=="bitti"
 ?'<label class="jobplan-customer">'+
 '<input type="checkbox" '+(file.customerMaterial?"checked":"")+
@@ -17434,6 +17510,500 @@ renderErrorCodes();
 console.error(error);
 alert("❌ Silinemedi.\n\n"+(error&&error.message||""));
 }
+}
+
+
+/* =====================================================
+   PARÇA PROFİL (KALAN BOY)
+   Bir HTML tam boyların yanında kısmi bir boy da kullanabilir
+   (örn. 75 boy tam, 76. boyun sadece 2 metresi).
+   Kısmi kullanım depodaki parça profilden karşılanır.
+
+   HTML bu bilgiyi VERMEZ: "Allocated total length" parçaların
+   toplam uzunluğudur, son boyda ne kadar kullanıldığını söylemez.
+   Bu yüzden tam boy / parça boy elle girilir.
+===================================================== */
+
+/* Parça uzunlukları bu adıma yuvarlanır (aşağı): 5 cm. */
+const JOB_PLAN_REMNANT_STEP=0.05;
+
+/* Bu uzunluğun altındaki artık hurdadır, kart açılmaz. */
+const JOB_PLAN_SCRAP_DEFAULT=1.5;
+
+function jobPlanScrapLimit(){
+let n=Number(jobPlanSettings && jobPlanSettings.scrapLimitM);
+return Number.isFinite(n) && n>0?n:JOB_PLAN_SCRAP_DEFAULT;
+}
+
+function jobPlanSetScrapLimit(value){
+if(!jobPlanGuard("isplani.vardiya"))return;
+let n=Number(String(value||"").replace(",","."));
+if(!Number.isFinite(n) || n<0)n=JOB_PLAN_SCRAP_DEFAULT;
+if(n>6)n=6;
+jobPlanSettings.scrapLimitM=Number(n.toFixed(2));
+jobPlanRenderSettings();
+jobPlanSaveSettings();
+}
+
+/* Aşağı yuvarlama: olmayan malzeme var gösterilmez. */
+function jobPlanRoundRemnant(meters){
+let n=Number(meters);
+if(!Number.isFinite(n) || n<=0)return 0;
+return Number((Math.floor(n/JOB_PLAN_REMNANT_STEP)*JOB_PLAN_REMNANT_STEP).toFixed(2));
+}
+
+/* ---------- DOSYA ALANLARI ---------- */
+
+/* Tam boy adedi. Eski kayıtlarda alan yoksa HTML'deki boy adedidir. */
+function jobPlanFullTubes(file){
+let n=Number(file&&file.fullTubes);
+if(Number.isFinite(n) && n>=0)return Math.floor(n);
+return Math.floor(Number(file&&file.tubes)||0);
+}
+
+/* Kısmi boyda kullanılan metre. 0 = kısmi boy yok. */
+function jobPlanPartialM(file){
+let n=Number(file&&file.partialM);
+return Number.isFinite(n) && n>0?Number(n.toFixed(2)):0;
+}
+
+function jobPlanHasPartial(file){
+return jobPlanPartialM(file)>0;
+}
+
+/* tubes = tam boy + (kısmi varsa 1) */
+function jobPlanSyncTubeCount(file){
+file.tubes=jobPlanFullTubes(file)+(jobPlanHasPartial(file)?1:0);
+return file.tubes;
+}
+
+/* ---------- PARÇA KARTI ARAMA ---------- */
+
+/* Aynı profilin parça kartları: ebat, kalınlık, kalite, yüzey ve dikiş aynı,
+   boy ham boydan farklı. Yeten en küçük parça seçilir. */
+function jobPlanRemnantCandidates(file,neededM){
+if(!file || !file.size)return [];
+
+let need=Number(neededM)||0;
+if(need<=0)return [];
+
+let rawM=jobPlanRawLengthM(file.rawLengthMm);
+let wantSize=normalizeText(file.size.sizeText);
+let wantThickness=Number(file.size.thickness);
+
+/* Tam boy kartı varsa kalite/yüzey/dikiş onunla eşleşsin. */
+let base=products.find(p=>String(p.id)===String(file.productId))||null;
+
+return products.filter(p=>{
+if(base && String(p.id)===String(base.id))return false;
+if(normalizeText(p.size)!==wantSize)return false;
+
+let t=parseFloat(String(p.thickness||"").replace(",","."));
+if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
+
+let len=parseLength(p.length);
+if(!Number.isFinite(len))return false;
+if(Math.abs(len-rawM)<0.005)return false;   /* tam boy kartı parça değildir */
+if(len+0.0001<need)return false;            /* yetmiyor */
+if(Number(p.stock||0)<1)return false;
+
+if(base){
+if(normalizeQuality(p.quality)!==normalizeQuality(base.quality))return false;
+if(getProductFinish(p)!==getProductFinish(base))return false;
+if(p.type==="Boru" && getProductPipeSeam(p)!==getProductPipeSeam(base))return false;
+}
+
+return true;
+})
+.sort((a,b)=>parseLength(a.length)-parseLength(b.length));
+}
+
+/* Dosyaya uygun parça kartını seçer ve kaydeder. */
+function jobPlanPickRemnant(file){
+if(!file || file.customerMaterial)return null;
+
+let need=jobPlanPartialM(file);
+if(need<=0){
+file.partialProductId="";
+return null;
+}
+
+/* Elle seçilmiş kart hâlâ uygunsa korunur. */
+if(file.partialProductId){
+let secili=products.find(p=>String(p.id)===String(file.partialProductId));
+if(secili && parseLength(secili.length)+0.0001>=need && Number(secili.stock||0)>=1){
+return secili;
+}
+}
+
+let liste=jobPlanRemnantCandidates(file,need);
+file.partialProductId=liste.length?String(liste[0].id):"";
+return liste.length?liste[0]:null;
+}
+
+/* Kısmi boyun nereden kesileceği — ekranda gösterilir. */
+function jobPlanPartialSource(file){
+let need=jobPlanPartialM(file);
+if(need<=0)return null;
+
+if(file.customerMaterial){
+return {kind:"musteri",text:need+" m müşteri malzemesi"};
+}
+
+let remnant=file.partialProductId
+?products.find(p=>String(p.id)===String(file.partialProductId))
+:null;
+
+if(remnant && parseLength(remnant.length)+0.0001>=need && Number(remnant.stock||0)>=1){
+return {
+kind:"parca",
+product:remnant,
+text:need+" m → "+formatLength(remnant.length)+" parçadan"
+};
+}
+
+let rawM=jobPlanRawLengthM(file.rawLengthMm);
+let kalan=jobPlanRoundRemnant(rawM-need);
+
+return {
+kind:"tamboy",
+product:products.find(p=>String(p.id)===String(file.productId))||null,
+text:need+" m → tam boydan (artan "+kalan+" m)"
+};
+}
+
+/* ---------- PARÇA KARTI OLUŞTURMA ---------- */
+
+/* Artan malzemeyi stoğa ekler. Aynı uzunlukta kart varsa adedi artar. */
+async function jobPlanAddRemnantStock(base,lengthM,job,file){
+let len=jobPlanRoundRemnant(lengthM);
+if(len<=0)return null;
+if(!base)return null;
+
+let mevcut=products.find(p=>
+p.type===base.type &&
+normalizeText(p.size)===normalizeText(base.size) &&
+Math.abs(parseFloat(String(p.thickness||"").replace(",","."))-
+parseFloat(String(base.thickness||"").replace(",",".")))<0.01 &&
+normalizeQuality(p.quality)===normalizeQuality(base.quality) &&
+getProductFinish(p)===getProductFinish(base) &&
+(p.type!=="Boru" || getProductPipeSeam(p)===getProductPipeSeam(base)) &&
+Math.abs(parseLength(p.length)-len)<0.005
+);
+
+if(mevcut){
+let yeni=Number(mevcut.stock||0)+1;
+await supabaseRequest(
+PRODUCTS_TABLE,"PATCH",{stock:yeni},
+"?id=eq."+encodeURIComponent(mevcut.id)
+);
+mevcut.stock=yeni;
+await jobPlanRemnantMovement(mevcut,"Giriş",job,file,len);
+return mevcut;
+}
+
+let product={
+id:Date.now()+Math.floor(Math.random()*1000),
+type:base.type,
+shape:base.shape,
+quality:base.quality,
+size:base.size,
+thickness:base.thickness,
+length:len,
+stock:1,
+critical:0,
+description:base.description||""
+};
+
+let result=await supabaseRequest(PRODUCTS_TABLE,"POST",product);
+if(!result || !result.length)return null;
+
+let saved=result[0];
+saved.quality=normalizeQuality(saved.quality);
+saved.size=formatSize(saved.size);
+saved.thickness=formatThickness(saved.thickness);
+saved.length=parseLength(saved.length)||len;
+saved.stock=Number(saved.stock)||1;
+saved.critical=Number(saved.critical)||0;
+products.push(saved);
+
+await jobPlanRemnantMovement(saved,"Giriş",job,file,len);
+return saved;
+}
+
+async function jobPlanRemnantMovement(product,type,job,file,lengthM,not){
+let movement={
+id:jobPlanMovementId(),
+product_id:product?product.id:null,
+type:type,
+quantity:1,
+date:new Date().toLocaleString("tr-TR"),
+description:(not||("İş planı: "+job.dtNo+" — "+file.fileName+
+(type==="Giriş"?" (artan "+lengthM+" m parça)":" (kısmi "+lengthM+" m)")))+
+jobPlanWhoSuffix(),
+product_name:product?product.type:"",
+shape:product?product.shape:"",
+quality:product?product.quality:"",
+size:product?product.size:"",
+thickness:product?product.thickness:"",
+length:product?product.length:lengthM
+};
+
+try{
+let result=await supabaseRequest(MOVEMENTS_TABLE,"POST",movement);
+if(result && result.length)movements.push(result[0]);
+}catch(error){
+console.warn("Parça hareket kaydı yazılamadı:",error);
+}
+}
+
+/* ---------- KISMİ BOYU DÜŞ ---------- */
+
+/* İş bitince kısmi boyu kaynağından düşer, artanı stoğa geri koyar.
+   Dönüş: düşüldüyse true. */
+async function jobPlanDeductPartial(job,file){
+let need=jobPlanPartialM(file);
+if(need<=0)return false;
+if(file.partialDeducted)return false;
+
+/* Müşteri malzemesinde stok kartına dokunulmaz. */
+if(file.customerMaterial){
+await jobPlanCustomerMovement(job,file,1,"kısmi "+need+" m");
+file.partialDeducted=true;
+return true;
+}
+
+jobPlanPickRemnant(file);
+let kaynak=file.partialProductId
+?products.find(p=>String(p.id)===String(file.partialProductId))
+:null;
+
+let tamBoydan=false;
+
+if(!kaynak || Number(kaynak.stock||0)<1){
+kaynak=products.find(p=>String(p.id)===String(file.productId))||null;
+tamBoydan=true;
+}
+
+if(!kaynak){
+if(!confirm(
+"Kısmi boy için stok kartı bulunamadı.\n\n"+
+need+" m malzeme stoktan düşülemeyecek.\n\nDevam edilsin mi?"
+))throw new Error("iptal");
+return false;
+}
+
+let kaynakBoy=parseLength(kaynak.length);
+
+if(Number(kaynak.stock||0)<1){
+if(!confirm(
+"⚠️ Kısmi boy için stok yetersiz.\n\n"+
+jobPlanProductLabel(kaynak)+"\n"+
+"Gereken: 1 boy ("+need+" m kullanılacak)\n\n"+
+"Stok düşülmeden devam edilsin mi?"
+))throw new Error("iptal");
+file.partialDeducted=true;
+return false;
+}
+
+if(kaynakBoy+0.0001<need){
+if(!confirm(
+"⚠️ Seçilen malzeme kısmi boya yetmiyor.\n\n"+
+formatLength(kaynak.length)+" < "+need+" m\n\n"+
+"Yine de 1 boy düşülsün mü?"
+))throw new Error("iptal");
+}
+
+/* 1 boy düş */
+let yeniStok=Number(kaynak.stock)-1;
+await supabaseRequest(
+PRODUCTS_TABLE,"PATCH",{stock:yeniStok},
+"?id=eq."+encodeURIComponent(kaynak.id)
+);
+kaynak.stock=yeniStok;
+
+await jobPlanRemnantMovement(kaynak,"Çıkış",job,file,need,
+"İş planı: "+job.dtNo+" — "+file.fileName+" (kısmi "+need+" m"+
+(tamBoydan?", tam boydan":", parçadan")+")");
+
+file.partialDeducted=true;
+
+/* Artan malzeme */
+let artan=jobPlanRoundRemnant(kaynakBoy-need);
+
+if(artan>=jobPlanScrapLimit()){
+await jobPlanAddRemnantStock(kaynak,artan,job,file);
+}
+else if(artan>0){
+await jobPlanRemnantMovement(kaynak,"Çıkış",job,file,artan,
+"İş planı: "+job.dtNo+" — "+file.fileName+" · "+artan+" m hurda");
+}
+
+/* Parça kartı bitip tam boy kartı değilse kart silinir. */
+if(kaynak.stock<=0 && !tamBoydan){
+try{
+await supabaseRequest(PRODUCTS_TABLE,"DELETE","",
+"?id=eq."+encodeURIComponent(kaynak.id));
+products=products.filter(p=>String(p.id)!==String(kaynak.id));
+}catch(error){
+console.warn("Boşalan parça kartı silinemedi:",error);
+}
+}
+
+return true;
+}
+
+/* ---------- İÇE AKTARMA KUTULARI ---------- */
+
+function jobPlanImportSetFullTubes(rowId,value){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+let n=Math.floor(Number(String(value).replace(",",".")));
+f.fullTubes=Number.isFinite(n) && n>=0?n:0;
+jobPlanSyncTubeCount(f);
+jobPlanRenderImportSafe();
+}
+
+function jobPlanImportSetPartial(rowId,value){
+let f=jobPlanImportFind(rowId);
+if(!f)return;
+
+let n=Number(String(value).replace(",","."));
+let onceki=jobPlanHasPartial(f);
+
+f.partialM=Number.isFinite(n) && n>0?Number(n.toFixed(2)):0;
+
+/* Parça ilk kez girildiğinde tam boy bir eksilir, silinince geri gelir. */
+let simdi=jobPlanHasPartial(f);
+if(simdi && !onceki)f.fullTubes=Math.max(0,jobPlanFullTubes(f)-1);
+if(!simdi && onceki)f.fullTubes=jobPlanFullTubes(f)+1;
+
+jobPlanSyncTubeCount(f);
+jobPlanPickRemnant(f);
+jobPlanRenderImportSafe();
+}
+
+/* Plan tablosundan kısmi boyu değiştirme */
+function jobPlanSetPartial(jobId,fileId,value){
+if(!jobPlanGuard("isplani.duzenle"))return;
+
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job&&(job.files||[]).find(f=>f.id===fileId);
+if(!file)return;
+
+let n=Number(String(value).replace(",","."));
+let onceki=jobPlanHasPartial(file);
+
+file.partialM=Number.isFinite(n) && n>0?Number(n.toFixed(2)):0;
+
+let simdi=jobPlanHasPartial(file);
+if(simdi && !onceki)file.fullTubes=Math.max(0,jobPlanFullTubes(file)-1);
+if(!simdi && onceki)file.fullTubes=jobPlanFullTubes(file)+1;
+
+jobPlanSyncTubeCount(file);
+jobPlanPickRemnant(file);
+jobPlanRefreshAll();
+jobPlanSaveJobsSoon();
+}
+
+/* HTML'den okunan tutarlılık bilgisi: alınan ham malzeme, parça toplamı, verim */
+function jobPlanAllocationInfo(file){
+let tubes=Math.floor(Number(file&&file.tubes)||0);
+let rawM=jobPlanRawLengthM(file&&file.rawLengthMm);
+let alloc=Number(file&&file.allocatedM);
+
+if(!tubes || !Number.isFinite(alloc) || alloc<=0)return "";
+
+let alinan=tubes*rawM;
+let verim=alinan>0?Math.round(alloc/alinan*100):0;
+
+return tubes+" × "+rawM+" m = "+Number(alinan.toFixed(1))+" m · parça "+
+Number(alloc.toFixed(1))+" m · verim %"+verim;
+}
+
+/* Plan tablosunda kısmi boyun kaynağını gösteren kısa metin */
+function jobPlanPartialText(file){
+if(!file)return "";
+if(file.status==="bitti"){
+return jobPlanHasPartial(file)
+?(file.partialDeducted?"kısmi "+jobPlanPartialM(file)+" m düşüldü":"kısmi "+jobPlanPartialM(file)+" m düşülmedi")
+:"";
+}
+let kaynak=jobPlanPartialSource(file);
+return kaynak?kaynak.text:"";
+}
+
+/* ---------- KISMİ BOY AYIRMA ---------- */
+
+function jobPlanRemovePartialReservation(file){
+if(!file || !file.partialReservationId || !file.partialProductId)return false;
+let pid=String(file.partialProductId);
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+standardReservations[pid]=list.filter(r=>String(r.id)!==String(file.partialReservationId));
+if(!standardReservations[pid].length)delete standardReservations[pid];
+file.partialReservationId="";
+return true;
+}
+
+/* Kısmi boy için parça kartında 1 boyluk ayırma tutar.
+   Ana ayırma döngüsüyle aynı mantık, ayrı kart üzerinde çalışır. */
+function jobPlanSyncPartialReservation(job,file,claimed){
+let changed=false;
+
+let gerekli=
+file.status!=="bitti" &&
+!file.customerMaterial &&
+!file.partialDeducted &&
+jobPlanHasPartial(file);
+
+if(gerekli)jobPlanPickRemnant(file);
+
+/* Parça kartı yoksa (tam boydan kesilecek) ayırma yapılmaz;
+   ana karttaki tam boy ayırması zaten var. */
+if(!gerekli || !file.partialProductId){
+if(file.partialReservationId && jobPlanRemovePartialReservation(file))changed=true;
+return changed;
+}
+
+let pid=String(file.partialProductId);
+let product=products.find(p=>String(p.id)===pid);
+if(!product)return changed;
+
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+if(!claimed[pid])claimed[pid]=new Set();
+
+let note=jobPlanReservationNote(job);
+
+let existing=file.partialReservationId
+?list.find(r=>String(r.id)===String(file.partialReservationId))
+:null;
+
+if(!existing){
+existing=list.find(r=>
+String(r.note)===note && !claimed[pid].has(String(r.id))
+);
+if(existing){
+file.partialReservationId=existing.id;
+changed=true;
+}
+}
+
+if(!existing){
+existing=createReservation(1,note);
+existing.source="jobplan";
+list.push(existing);
+standardReservations[pid]=list;
+file.partialReservationId=existing.id;
+changed=true;
+}
+else if(Number(existing.quantity)!==1 || String(existing.note)!==note){
+existing.quantity=1;
+existing.note=note;
+changed=true;
+}
+
+claimed[pid].add(String(existing.id));
+return changed;
 }
 
 

@@ -3586,6 +3586,11 @@ vertical-align:middle
 
 .errorcode-newline:hover{background:#e2e8f0}
 
+
+/* Ayirma yetkileri: yetki yoksa tuslar gorunmez */
+body.perm-yok-stok-ayirkaldir .reservation-remove{display:none !important}
+body.perm-yok-stok-ayir .reservation-add-small{display:none !important}
+body.perm-yok-stok-ayir .reservation-chip{cursor:default}
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -3759,7 +3764,7 @@ onchange="restoreData(event)"
 Genel Stok
 </h2>
 
-<div class="cards">
+<div class="cards" data-perm="stok.ozet">
 
 <div class="card">
 <div class="card-title">Malzeme Çeşidi</div>
@@ -3888,7 +3893,7 @@ oninput="showProducts()"
 
 </div>
 
-<div class="table-box">
+<div class="table-box" data-perm="stok.hareketgor">
 
 <div class="movement-head">
 
@@ -6556,6 +6561,8 @@ showProducts();
 }
 function removeStandardReservation(productId,reservationId,ask=true,event=null){
 if(event){event.preventDefault();event.stopPropagation();}
+/* ask=true: kullanicinin x tusuna basmasi. ask=false: cikis hareketinin kendi akisi. */
+if(ask && typeof systemGuard==="function" && !systemGuard("stok.ayirkaldir"))return;
 let list=getStandardReservations(productId);
 let item=list.find(r=>String(r.id)===String(reservationId));
 if(!item)return;
@@ -17130,9 +17137,12 @@ items:[
 {
 title:"Stok İşlemleri",
 items:[
+{key:"stok.ozet",label:"Genel stok özeti kutuları",hint:"Malzeme çeşidi, toplam adet / metre / kg, stokta olmayan"},
 {key:"stok.kart",label:"Stok kartı ekle / düzenle / sil"},
+{key:"stok.hareketgor",label:"Son stok hareketleri listesi",hint:"Alttaki 📋 Son Stok Hareketleri tablosu"},
 {key:"stok.hareket",label:"Stok giriş - çıkış hareketi"},
-{key:"stok.ayir",label:"Ayır / rezervasyon"},
+{key:"stok.ayir",label:"Ayır / rezervasyon",hint:"Stok kartındaki + Ayır butonu"},
+{key:"stok.ayirkaldir",label:"Ayrılanı kaldır",hint:"Ayırma etiketindeki × tuşu"},
 {key:"stok.excel",label:"Stok Excel çıktısı"},
 {key:"stok.alis",label:"Alış Excel'i yükle"},
 {key:"stok.hareketsil",label:"Stok hareketlerini toplu sil"}
@@ -17192,8 +17202,8 @@ return perms;
 
 /* izleyici ve diğerleri: sadece görüntüleme */
 all.forEach(k=>{perms[k]=false;});
-["bolum.fiyat","bolum.bakim","bolum.sarf","bolum.isplani","bolum.hatakodu",
-"isplani.ozet","isplani.ebat","isplani.sure","isplani.stok"].forEach(k=>{perms[k]=true;});
+["bolum.fiyat","bolum.bakim","bolum.sarf","bolum.isplani","bolum.hatakodu","stok.ozet",
+"stok.hareketgor","isplani.ozet","isplani.ebat","isplani.sure","isplani.stok"].forEach(k=>{perms[k]=true;});
 return perms;
 }
 

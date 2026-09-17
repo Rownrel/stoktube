@@ -3591,6 +3591,269 @@ vertical-align:middle
 body.perm-yok-stok-ayirkaldir .reservation-remove{display:none !important}
 body.perm-yok-stok-ayir .reservation-add-small{display:none !important}
 body.perm-yok-stok-ayir .reservation-chip{cursor:default}
+
+/* ================= İZLEYİCİ SADE EKRANI ================= */
+
+body.viewer-on{overflow:hidden}
+body.viewer-on #systemUserChip{display:none !important}
+
+.viewer-shell{
+display:none;
+position:fixed;left:0;right:0;top:0;bottom:0;z-index:15000;
+background:#f8fafc;overflow:auto;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+color:#0f172a;-webkit-font-smoothing:antialiased
+}
+body.viewer-on .viewer-shell{display:block}
+body.page-locked .viewer-shell{display:none !important}
+
+.viewer-page{display:none}
+.viewer-page.on{display:block}
+
+/* ---------- ÜST BANT ---------- */
+.vw-top{
+background:#0f172a;color:#fff;padding:13px 24px;
+display:flex;align-items:center;gap:13px;flex-wrap:wrap
+}
+.vw-logo{
+width:36px;height:36px;border-radius:9px;background:#0f766e;color:#fff;flex:0 0 auto;
+display:flex;align-items:center;justify-content:center;
+font-weight:900;font-size:18px;letter-spacing:-.04em
+}
+.vw-brand{flex:1;min-width:0}
+.vw-brand b{
+display:block;font-weight:800;letter-spacing:.14em;font-size:12.5px;
+text-transform:uppercase;color:#fff
+}
+.vw-brand span{display:block;font-size:10.5px;letter-spacing:.06em;color:#94a3b8}
+.vw-user{
+display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 13px 5px 5px
+}
+.vw-av{
+width:26px;height:26px;border-radius:50%;background:#0f766e;color:#fff;
+display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800
+}
+.vw-uname{font-size:12.5px;font-weight:700;line-height:1.2}
+.vw-urole{font-size:10px;color:#94a3b8;letter-spacing:.05em;text-transform:uppercase}
+.vw-exit{
+background:transparent;border:1px solid rgba(255,255,255,.2);color:#cbd5e1;
+border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;
+cursor:pointer;font-family:inherit
+}
+.vw-exit:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* ---------- ANA SAYFA ---------- */
+.vw-home{padding:52px 24px 58px;text-align:center}
+.vw-home h1{font-size:25px;font-weight:800;margin:0 0 6px;letter-spacing:-.02em}
+.vw-home .vw-hint{font-size:14px;color:#64748b;margin:0 0 34px}
+.vw-cards{
+display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;
+max-width:740px;margin:0 auto
+}
+.vw-card{
+background:#fff;border:1px solid #e2e8f0;border-radius:16px;
+padding:32px 25px 26px;text-align:left;cursor:pointer;
+box-shadow:0 1px 2px rgba(15,23,42,.05);
+transition:box-shadow .18s,transform .18s;font-family:inherit;color:inherit
+}
+.vw-card:hover{box-shadow:0 14px 34px rgba(15,23,42,.13);transform:translateY(-3px)}
+.vw-card .vw-ico{
+width:56px;height:56px;border-radius:14px;
+display:flex;align-items:center;justify-content:center;margin-bottom:18px
+}
+.vw-card.stok .vw-ico{background:#eff6ff;color:#1d4ed8}
+.vw-card.plan .vw-ico{background:#ecfdf5;color:#0f766e}
+.vw-card h3{margin:0 0 6px;font-size:19px;font-weight:800}
+.vw-card p{margin:0 0 18px;font-size:13px;color:#64748b;line-height:1.6}
+.vw-tags{
+display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid #f1f5f9;
+padding-top:15px;margin-bottom:16px
+}
+.vw-tag{
+background:#f1f5f9;color:#475569;border-radius:6px;
+padding:4px 10px;font-size:11px;font-weight:700
+}
+.vw-go{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:#0f766e}
+.vw-card.stok .vw-go{color:#1d4ed8}
+
+/* ---------- SAYFA BAŞLIĞI ŞERİDİ ---------- */
+.vw-sub{
+background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 24px;
+display:flex;align-items:center;gap:16px;flex-wrap:wrap
+}
+.vw-back{
+display:inline-flex;align-items:center;gap:7px;background:#f1f5f9;
+border:1px solid #e2e8f0;border-radius:9px;padding:9px 14px;
+font-size:12.5px;font-weight:700;color:#475569;cursor:pointer;font-family:inherit
+}
+.vw-back:hover{background:#e2e8f0}
+.vw-sub-title{display:flex;align-items:center;gap:11px}
+.vw-sub-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.vw-sub-ico.blue{background:#eff6ff;color:#1d4ed8}
+.vw-sub-ico.green{background:#ecfdf5;color:#0f766e}
+.vw-sub-title h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.015em}
+.vw-sub-title p{margin:1px 0 0;font-size:11.5px;color:#94a3b8}
+.vw-ro{
+margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:#fef9c3;
+border:1px solid #fde047;color:#854d0e;border-radius:999px;padding:6px 14px;
+font-size:11.5px;font-weight:800
+}
+
+.vw-body{padding:22px 24px 34px}
+
+/* ---------- ARAMA + FİLTRE ---------- */
+.vw-tools{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.vw-search{
+flex:1;min-width:230px;display:flex;align-items:center;gap:9px;background:#fff;
+border:1px solid #e2e8f0;border-radius:10px;padding:8px 14px
+}
+.vw-search svg{color:#94a3b8;flex:0 0 auto}
+.vw-search input{
+border:0;outline:0;flex:1;min-width:0;font-size:14px;font-family:inherit;
+color:#0f172a;background:transparent;padding:4px 0
+}
+.vw-search input::placeholder{color:#94a3b8}
+.vw-chips{display:flex;gap:7px;flex-wrap:wrap}
+.vw-chip{
+background:#fff;border:1px solid #e2e8f0;border-radius:999px;padding:8px 15px;
+font-size:12.5px;font-weight:700;color:#475569;cursor:pointer;font-family:inherit
+}
+.vw-chip.on{background:#0f172a;color:#fff;border-color:#0f172a}
+
+/* ---------- TABLO ---------- */
+.vw-tbl{background:#fff;border:1px solid #e2e8f0;border-radius:13px;overflow:hidden}
+.vw-tbl table{width:100%;border-collapse:collapse}
+.vw-tbl thead th{
+background:#f8fafc;border-bottom:1px solid #e2e8f0;text-align:left;
+padding:12px 16px;font-size:10.5px;font-weight:800;color:#94a3b8;
+text-transform:uppercase;letter-spacing:.08em;white-space:nowrap
+}
+.vw-tbl th.num,.vw-tbl td.num{text-align:right}
+.vw-tbl tbody td{
+padding:14px 16px;border-bottom:1px solid #f1f5f9;font-size:13.5px;vertical-align:middle
+}
+.vw-tbl tbody tr:last-child td{border-bottom:0}
+.vw-tbl tbody tr:hover{background:#f8fafc}
+.vw-name{font-weight:700;font-size:14px}
+.vw-sub2{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.vw-big{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.vw-muted{color:#94a3b8}
+.vw-empty{text-align:center;padding:44px 20px;color:#94a3b8;font-size:14px}
+
+.vw-pill{
+display:inline-block;border-radius:999px;padding:5px 12px;
+font-size:11.5px;font-weight:800;white-space:nowrap
+}
+.vw-pill.ok{background:#dcfce7;color:#166534}
+.vw-pill.wait{background:#f1f5f9;color:#475569}
+.vw-pill.bad{background:#fee2e2;color:#991b1b}
+.vw-pill.run{background:#dbeafe;color:#1e40af}
+.vw-pill.pause{background:#ffedd5;color:#9a3412}
+
+.vw-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:1px;background:#94a3b8}
+.vw-dot.t-profil{background:#3b82f6}
+.vw-dot.t-boru{background:#14b8a6}
+.vw-dot.t-kosebent{background:#a855f7}
+.vw-dot.t-lama{background:#f59e0b}
+.vw-dot.t-npu{background:#64748b}
+
+.vw-stat{
+width:34px;height:34px;border-radius:50%;flex:0 0 auto;
+display:flex;align-items:center;justify-content:center
+}
+.vw-stat.var{background:#dcfce7;color:#15803d}
+.vw-stat.yok{background:#fee2e2;color:#b91c1c}
+.vw-yokrow{background:#fefafa}
+
+/* ---------- STANDART DIŞI BOY: KESİKLİ ETİKET ---------- */
+.vw-boy{white-space:nowrap}
+.vw-boy-v{font-weight:600}
+.vw-ozel .vw-boy-v{font-weight:800;color:#0f172a}
+.vw-boy-tag{
+display:inline-block;margin-left:8px;border:1px dashed #94a3b8;color:#475569;
+border-radius:5px;padding:2px 7px;font-size:10px;font-weight:800;
+letter-spacing:.09em;text-transform:uppercase;vertical-align:1px
+}
+
+/* ---------- ŞU AN TEZGÂHTA ---------- */
+.vw-now{
+background:#0f172a;color:#fff;border-radius:13px;padding:20px 22px;margin-bottom:20px;
+display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+background-image:radial-gradient(600px 200px at 0% 0%,rgba(15,118,110,.4),transparent 70%)
+}
+.vw-live{
+display:inline-flex;align-items:center;gap:8px;background:rgba(20,184,166,.18);
+border:1px solid rgba(45,212,191,.4);color:#5eead4;border-radius:999px;
+padding:5px 13px;font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase
+}
+.vw-live i{width:7px;height:7px;border-radius:50%;background:#2dd4bf;display:inline-block}
+.vw-now-main{flex:1;min-width:190px}
+.vw-now-dt{font-size:19px;font-weight:800;letter-spacing:-.015em;margin:9px 0 3px}
+.vw-now-file{font-size:12.5px;color:#94a3b8}
+.vw-now-stat{text-align:right;min-width:88px}
+.vw-now-stat .k{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.vw-now-stat .v{font-size:21px;font-weight:800;margin-top:3px;letter-spacing:-.02em}
+
+/* ---------- İLERLEME ---------- */
+.vw-bar{height:7px;background:#f1f5f9;border-radius:99px;overflow:hidden;min-width:104px}
+.vw-bar i{display:block;height:100%;border-radius:99px;background:#cbd5e1}
+.vw-bar i.g{background:#14b8a6}
+.vw-bar i.b{background:#3b82f6}
+.vw-bar-t{font-size:11.5px;color:#94a3b8;margin-top:5px;font-weight:600}
+
+.vw-foot{
+border-top:1px solid #e2e8f0;background:#fff;padding:12px 24px;
+display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+font-size:11.5px;color:#94a3b8
+}
+
+@media(max-width:760px){
+.vw-cards{grid-template-columns:1fr}
+.vw-top,.vw-sub,.vw-body,.vw-foot{padding-left:16px;padding-right:16px}
+.vw-home{padding:34px 16px 40px}
+.vw-tbl thead th,.vw-tbl tbody td{padding-left:11px;padding-right:11px}
+}
+
+/* ---------- DT GRUBU (AÇILIR / KAPANIR) ---------- */
+.vw-tbl tbody tr.vw-dt{cursor:pointer}
+.vw-tbl tbody tr.vw-dt td{border-bottom:1px solid #e2e8f0}
+.vw-caret{
+display:inline-block;width:15px;color:#94a3b8;font-size:11px;
+margin-right:5px;vertical-align:1px
+}
+.vw-tbl tbody tr.vw-dosya td{
+background:#fbfdfe;border-bottom:1px solid #f1f5f9;padding-top:11px;padding-bottom:11px
+}
+.vw-tbl tbody tr.vw-dosya td:first-child{
+box-shadow:inset 3px 0 0 #e2e8f0;background:#fbfdfe
+}
+.vw-dosya-ad{font-size:13px;font-weight:600;color:#334155;padding-left:20px}
+
+/* ---------- ALT ŞERİT SAYFANIN DİBİNE SABİT ---------- */
+body.viewer-on .viewer-shell{display:flex;flex-direction:column}
+.vw-top{flex:0 0 auto}
+.viewer-page{flex:1 1 auto;min-height:0}
+.viewer-page.on{display:flex;flex-direction:column}
+.vw-sub{flex:0 0 auto}
+.vw-home,.vw-body{flex:1 1 auto}
+.vw-foot{
+flex:0 0 auto;
+position:sticky;bottom:0;z-index:3;
+box-shadow:0 -1px 0 #e2e8f0
+}
+
+/* DT satırı: yanında hiçbir şey yok, tıklama alanı geniş */
+.vw-tbl tbody tr.vw-dt td{padding-top:15px;padding-bottom:15px}
+.vw-tbl tbody tr.vw-dt .vw-name{font-size:15px;letter-spacing:-.01em}
+
+/* Süzgeç düğmelerindeki sayı */
+.vw-chip-n{
+display:inline-block;margin-left:7px;background:#f1f5f9;color:#64748b;
+border-radius:999px;padding:1px 7px;font-size:11px;font-weight:800
+}
+.vw-chip.on .vw-chip-n{background:rgba(255,255,255,.18);color:#e2e8f0}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -4115,6 +4378,19 @@ data-keypad-label="Boy"
 value="6"
 placeholder="Örn: 5,4"
 >
+
+</div>
+
+<div class="form-group" id="productLengthKindGroup" style="display:none">
+
+<label title="6 m dışındaki boylar için. İşaretlenmezse kesimden artan parça sayılır.">
+Boy Cinsi
+</label>
+
+<select id="productLengthKind">
+<option value="parca">Parça (kesimden artan)</option>
+<option value="ozel">Özel tam boy (fabrikadan böyle geliyor)</option>
+</select>
 
 </div>
 
@@ -5230,6 +5506,176 @@ placeholder="Adım adım ne yapıldı, hata nasıl giderildi"></textarea>
 </div>
 
 </div>
+</div>
+
+
+<!-- ================= İZLEYİCİ SADE EKRANI ================= -->
+<div class="viewer-shell" id="viewerShell">
+
+<div class="vw-top">
+<div class="vw-logo">D</div>
+<div class="vw-brand">
+<b>Doğrar Metal</b>
+<span>Stok &amp; İş Takip Sistemi</span>
+</div>
+<div class="vw-user">
+<div class="vw-av" id="viewerAvatar">—</div>
+<div>
+<div class="vw-uname" id="viewerName">—</div>
+<div class="vw-urole" id="viewerRole">İzleyici</div>
+</div>
+</div>
+<button type="button" class="vw-exit" onclick="viewerLogout()">Çıkış</button>
+</div>
+
+<!-- ---------- ANA SAYFA ---------- -->
+<div class="viewer-page on" id="viewerHomePage">
+<div class="vw-home">
+<h1 id="viewerHello">Hoş geldiniz</h1>
+<p class="vw-hint">Görüntülemek istediğiniz bölümü seçin</p>
+
+<div class="vw-cards">
+
+<button type="button" class="vw-card stok" onclick="viewerGo('stok')">
+<div class="vw-ico">
+<svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/>
+</svg>
+</div>
+<h3>Stok Durumu</h3>
+<p>Aradığınız malzemenin stokta olup olmadığına ve ne kadarının kullanılabilir olduğuna bakın.</p>
+<div class="vw-tags" id="viewerStockTags"></div>
+<div class="vw-go">Stok ekranını aç
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+</div>
+</button>
+
+<button type="button" class="vw-card plan" onclick="viewerGo('plan')">
+<div class="vw-ico">
+<svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18"/><path d="M8 2.5v4"/><path d="M16 2.5v4"/><path d="M7.5 13.5h4"/><path d="M7.5 17h7"/>
+</svg>
+</div>
+<h3>İş Planı</h3>
+<p>Sıradaki işleri, terminleri ve tezgâhın anlık durumunu takip edin.</p>
+<div class="vw-tags" id="viewerPlanTags"></div>
+<div class="vw-go">İş planını aç
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+</div>
+</button>
+
+</div>
+</div>
+<div class="vw-foot"><span>Doğrar Metal Sanayi</span><span id="viewerHomeClock"></span></div>
+</div>
+
+<!-- ---------- STOK ---------- -->
+<div class="viewer-page" id="viewerStockPage">
+
+<div class="vw-sub">
+<button type="button" class="vw-back" onclick="viewerGo('home')">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Ana Sayfa
+</button>
+<div class="vw-sub-title">
+<div class="vw-sub-ico blue">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4"/><path d="M12 11v10"/></svg>
+</div>
+<div><h2>Stok Durumu</h2><p id="viewerStockStamp">—</p></div>
+</div>
+<div class="vw-ro">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>
+Görüntüleme modu
+</div>
+</div>
+
+<div class="vw-body">
+
+<div class="vw-tools">
+<div class="vw-search">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="viewerStockSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Malzeme ara"
+placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(this.value)">
+</div>
+<div class="vw-chips" id="viewerStockChips"></div>
+</div>
+
+<div class="vw-tbl">
+<table>
+<thead>
+<tr>
+<th style="width:52px"></th>
+<th>Malzeme</th>
+<th>Boy</th>
+<th class="num">Stok</th>
+<th class="num">Ayrılan</th>
+<th class="num">Kullanılabilir</th>
+<th style="width:150px">Durum</th>
+</tr>
+</thead>
+<tbody id="viewerStockBody"></tbody>
+</table>
+</div>
+
+</div>
+<div class="vw-foot"><span id="viewerStockCount">—</span><span id="viewerStockClock"></span></div>
+</div>
+
+<!-- ---------- İŞ PLANI ---------- -->
+<div class="viewer-page" id="viewerPlanPage">
+
+<div class="vw-sub">
+<button type="button" class="vw-back" onclick="viewerGo('home')">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Ana Sayfa
+</button>
+<div class="vw-sub-title">
+<div class="vw-sub-ico green">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18"/><path d="M8 2.5v4"/><path d="M16 2.5v4"/><path d="M7.5 13.5h4"/><path d="M7.5 17h7"/></svg>
+</div>
+<div><h2>İş Planı</h2><p id="viewerPlanStamp">—</p></div>
+</div>
+<div class="vw-ro">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>
+Görüntüleme modu
+</div>
+</div>
+
+<div class="vw-body">
+
+<div id="viewerNowBox"></div>
+
+<div class="vw-tools">
+<div class="vw-search">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="viewerPlanSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya ara"
+placeholder="DT veya dosya adı ara…" oninput="viewerSetPlanSearch(this.value)">
+</div>
+<div class="vw-chips" id="viewerPlanChips"></div>
+</div>
+
+<div class="vw-tbl">
+<table>
+<thead>
+<tr id="viewerPlanHead">
+<th style="width:46px">Sıra</th>
+<th>DT / Dosya</th>
+<th>Malzeme</th>
+<th>İlerleme</th>
+<th>Termin</th>
+<th style="width:130px">Durum</th>
+</tr>
+</thead>
+<tbody id="viewerPlanBody"></tbody>
+</table>
+</div>
+
+</div>
+<div class="vw-foot"><span id="viewerPlanCount">—</span><span id="viewerPlanClock"></span></div>
+</div>
+
 </div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
@@ -6512,7 +6958,16 @@ box.innerHTML=pendingProductReservations.map(r=>
 '<div class="reservation-chip"><div class="reservation-chip-main">'+escapeHTML(reservationDisplayText(r))+'</div><button type="button" class="reservation-remove" onclick="removePendingProductReservation(\''+r.id+'\')" title="Bu ayırmayı kaldır">×</button></div>'
 ).join("");
 }
+function updateProductLengthKindVisibility(){
+let group=document.getElementById("productLengthKindGroup");
+if(!group)return;
+let length=parseLength(document.getElementById("productLength").value);
+let ozelBoy=Number.isFinite(length) && length>0 && Math.abs(length-6)>=0.005;
+group.style.display=ozelBoy?"flex":"none";
+}
+
 function updateProductReservationVisibility(){
+updateProductLengthKindVisibility();
 let section=document.getElementById("productReservationSection");
 if(!section)return;
 let type=document.getElementById("productType").value;
@@ -7916,6 +8371,45 @@ return "[YÜZEY:Boyalı]"+(clean?" "+clean:"");
 return clean;
 }
 
+/* =====================================================
+   BOY CINSI — TAM BOY / OZEL BOY / PARCA
+   6 m standart tam boydur. 6 m disindaki bir kart
+   isaretlenmedigi surece PARCA (kesimden artan) sayilir.
+   Supabase'e yeni kolon eklemeden description icinde saklanir.
+===================================================== */
+
+function stripLengthKindMarker(description){
+return String(description || "")
+.replace(/\[BOY:[^\]]+\]\s*/gi,"")
+.trim();
+}
+
+function encodeLengthKindDescription(description,length,kind){
+let clean=stripLengthKindMarker(description);
+let metre=parseLength(length);
+
+/* 6 m her zaman standart tam boydur, isaret tasimaz. */
+if(Number.isFinite(metre) && Math.abs(metre-6)<0.005)return clean;
+
+if(String(kind)==="ozel")return "[BOY:ÖZEL]"+(clean?" "+clean:"");
+return clean;
+}
+
+/* "standart" (6 m) · "ozel" (ozel tam boy) · "parca" (artan) */
+function getProductLengthKind(product){
+if(!product)return "standart";
+
+let metre=parseLength(product.length);
+if(Number.isFinite(metre) && Math.abs(metre-6)<0.005)return "standart";
+
+return /\[BOY:ÖZEL\]/i.test(String(product.description||""))?"ozel":"parca";
+}
+
+function productLengthKindLabel(product){
+let kind=getProductLengthKind(product);
+return kind==="ozel"?"özel boy":(kind==="parca"?"parça":"");
+}
+
 function getProductFinish(product){
 if(!product)return "Standart";
 
@@ -8311,6 +8805,7 @@ function getEditableDescription(product){
 let text=String(product?.description||"");
 text=stripFinishMarker(text);
 text=stripPipeSeamMarker(text);
+text=stripLengthKindMarker(text);
 return text.trim();
 }
 
@@ -8391,6 +8886,9 @@ setSelectValueFlexible(document.getElementById("productSize"),editingProduct.siz
 
 document.getElementById("productThickness").value=String(editingProduct.thickness||"").replace(/\s*mm$/i,"");
 document.getElementById("productLength").value=String(parseLength(editingProduct.length)).replace(".",",");
+let kindSelect=document.getElementById("productLengthKind");
+if(kindSelect)kindSelect.value=getProductLengthKind(editingProduct)==="ozel"?"ozel":"parca";
+updateProductLengthKindVisibility();
 document.getElementById("productStock").value=String(Number(editingProduct.stock)||0);
 document.getElementById("productDescription").value=getEditableDescription(editingProduct);
 
@@ -8472,6 +8970,10 @@ document.getElementById("productDescription")
 
 description=encodeFinishDescription(description,finish);
 description=encodePipeSeamDescription(description,type,pipeSeam);
+description=encodeLengthKindDescription(
+description,length,
+(document.getElementById("productLengthKind")||{}).value || "parca"
+);
 
 let pendingReservedTotal=pendingProductReservations.reduce((sum,r)=>sum+(Number(r.quantity)||0),0);
 if(isStandardLength(length) && pendingReservedTotal>stock){
@@ -8786,6 +9288,9 @@ if(pipeSeam)pipeSeam.value="Dikişli";
 document.getElementById("productSizeManual").value="";
 document.getElementById("productThickness").value="";
 document.getElementById("productLength").value="6";
+let lengthKind=document.getElementById("productLengthKind");
+if(lengthKind)lengthKind.value="parca";
+updateProductLengthKindVisibility();
 document.getElementById("productStock").value="0";
 document.getElementById("productDescription").value="";
 pendingProductReservations=[];
@@ -13905,41 +14410,62 @@ return {ms:Date.now(),running:false};
 function jobPlanRecalculate(){
 let anchor=jobPlanAnchor();
 let cursor=anchor.ms;
+let jobs=jobPlanActiveJobs();
 
-jobPlanActiveJobs().forEach(job=>{
-let jobStart=null;
-let jobEnd=null;
-
+/* 1) Biten dosyalar gerçek saatleriyle sabittir; kuyruğu kendi bitişine taşır. */
+jobs.forEach(job=>{
 (job.files||[]).forEach(file=>{
-/* Biten dosya gerçek saatleriyle durur ve kuyruğu kendi bitiş anına taşır. */
-if(file.status==="bitti"){
+if(file.status!=="bitti")return;
 file.planStart=file.startedAt||null;
 file.planEnd=file.finishedAt||null;
 let finished=Number(file.finishedAt);
 if(Number.isFinite(finished) && finished>cursor)cursor=finished;
-if(jobStart===null && file.startedAt)jobStart=file.startedAt;
-if(Number.isFinite(finished))jobEnd=finished;
-return;
-}
-
-/* Başlamış dosya kendi gerçek başlangıcından işler. */
-let from=cursor;
-if(file.status==="basladi"){
-let started=Number(file.startedAt);
-if(Number.isFinite(started))from=started;
-}
-
-let seconds=jobPlanFileRemainingSeconds(job,file);
-let result=jobPlanAddWorkSeconds(from,seconds);
-
-file.planStart=result.start;
-file.planEnd=result.end;
-
-if(result.end)cursor=result.end;
-if(jobStart===null && result.start)jobStart=result.start;
-if(result.end)jobEnd=result.end;
+});
 });
 
+/* 2) Tezgâhta çalışan dosya kuyruğun BAŞIDIR — sırası kaçıncı olursa olsun.
+      Tek makine var; bekleyen hiçbir iş çalışan işin önüne geçemez.
+      Bu olmazsa 3. sıradaki iş çalışırken 1. ve 2. işin termini bugün çıkar. */
+let calisan=null;
+jobs.forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(calisan)return;
+if(file.status==="basladi")calisan={job:job,file:file};
+});
+});
+
+if(calisan){
+let started=Number(calisan.file.startedAt);
+let from=Number.isFinite(started)?started:cursor;
+let result=jobPlanAddWorkSeconds(from,jobPlanFileRemainingSeconds(calisan.job,calisan.file));
+calisan.file.planStart=result.start;
+calisan.file.planEnd=result.end;
+if(result.end && result.end>cursor)cursor=result.end;
+}
+
+/* 3) Kalan dosyalar sırayla kuyruğa girer. */
+jobs.forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(file.status==="bitti")return;
+if(calisan && file===calisan.file)return;
+
+let result=jobPlanAddWorkSeconds(cursor,jobPlanFileRemainingSeconds(job,file));
+file.planStart=result.start;
+file.planEnd=result.end;
+if(result.end)cursor=result.end;
+});
+});
+
+/* 4) DT'nin başlangıcı en erken, termini en geç dosyasıdır. */
+jobs.forEach(job=>{
+let jobStart=null;
+let jobEnd=null;
+(job.files||[]).forEach(file=>{
+let s=Number(file.planStart);
+let e=Number(file.planEnd);
+if(Number.isFinite(s) && s>0 && (jobStart===null || s<jobStart))jobStart=s;
+if(Number.isFinite(e) && e>0 && (jobEnd===null || e>jobEnd))jobEnd=e;
+});
 job.planStart=jobStart;
 job.planEnd=jobEnd;
 });
@@ -17264,7 +17790,12 @@ document.body.classList.toggle("jp-buyuk-islem",!systemCan("isplani.duzenle"));
 let systemButton=document.getElementById("systemButton");
 if(systemButton)systemButton.style.display=systemCanOpenPanel()?"":"none";
 
-/* 5) İş planı tabloları yeniden çizilsin */
+/* 5) İzleyici sade ekranı */
+if(typeof viewerApply==="function"){
+try{viewerApply();}catch(e){console.warn("İzleyici ekranı:",e);}
+}
+
+/* 6) İş planı tabloları yeniden çizilsin */
 if(typeof jobPlanRender==="function" && typeof jobPlanJobs!=="undefined"){
 try{jobPlanRender();}catch(e){}
 }
@@ -17300,7 +17831,23 @@ return;
 
 let perms=systemRolePerms(systemSelectedRole);
 
-box.innerHTML=SYSTEM_PERM_GROUPS.map(group=>
+let sade=typeof viewerRoleSimple==="function"?viewerRoleSimple(systemSelectedRole):false;
+
+let sadeKutu=
+'<div class="system-perm-group">'+
+'<div class="system-perm-group-title">Ekran Düzeni</div>'+
+'<div class="system-perm-row '+(sade?"on":"off")+'">'+
+'<label>'+
+'<input type="checkbox" '+(sade?"checked":"")+' '+
+'onchange="systemSetRoleSimple(\''+systemSelectedRole+'\',this.checked)">'+
+'<span>Sade izleyici ekranı'+
+'<span class="hint"> · Giriş yapınca Stok / İş Planı seçimi çıkar, tablolar salt okunur olur</span>'+
+'</span>'+
+'</label>'+
+'</div>'+
+'</div>';
+
+box.innerHTML=sadeKutu+SYSTEM_PERM_GROUPS.map(group=>
 '<div class="system-perm-group">'+
 '<div class="system-perm-group-title">'+escapeHTML(group.title)+'</div>'+
 group.items.map(item=>{
@@ -17329,6 +17876,15 @@ let fresh=await loadSystemData(true);
 if(!fresh.roles[role])fresh.roles[role]=(systemDefaultRoles()[role]||{name:role});
 if(!fresh.roles[role].perms)fresh.roles[role].perms=systemDefaultPerms(role);
 fresh.roles[role].perms[key]=!!checked;
+await saveSystemData();
+systemRenderRoles();
+systemApplyPermissions();
+}
+
+async function systemSetRoleSimple(role,checked){
+let fresh=await loadSystemData(true);
+if(!fresh.roles[role])fresh.roles[role]=(systemDefaultRoles()[role]||{name:role});
+fresh.roles[role].sadeEkran=!!checked;
 await saveSystemData();
 systemRenderRoles();
 systemApplyPermissions();
@@ -18655,6 +19211,764 @@ changed=true;
 claimed[pid].add(String(existing.id));
 return changed;
 }
+
+
+
+/* ================= İZLEYİCİ SADE EKRANI =================
+
+   Rolüne "sade ekran" işareti konmuş kullanıcı giriş yaptığında
+   uygulamanın üstünü tamamen kapatan, salt okunur bir kabuk açılır.
+   Hiçbir işlem butonu yoktur; veriler mevcut dizilerden okunur.        */
+
+let viewerPage="home";
+let viewerStockSearch="";
+let viewerStockType="";
+let viewerPlanSearch="";
+let viewerPlanTab="hepsi";
+let viewerPlanOpen={};
+
+/* Rolün sade ekran kullanıp kullanmadığı. Varsayılan: sadece izleyici. */
+function viewerRoleSimple(role){
+let key=String(role||"");
+let roles=(systemData && systemData.roles)||{};
+let row=roles[key];
+if(row && row.sadeEkran!==undefined)return row.sadeEkran===true;
+return key==="izleyici";
+}
+
+function viewerActive(){
+if(!systemData || !systemData.loginEnabled)return false;
+if(!currentUser)return false;
+if(currentUser.master)return false;
+return viewerRoleSimple(currentUser.role);
+}
+
+function viewerLogout(){
+if(typeof systemLogout==="function")systemLogout();
+}
+
+function viewerGo(page){
+viewerPage=page==="stok"||page==="plan"?page:"home";
+["home","stok","plan"].forEach(p=>{
+let el=document.getElementById(
+p==="home"?"viewerHomePage":p==="stok"?"viewerStockPage":"viewerPlanPage");
+if(el)el.classList.toggle("on",p===viewerPage);
+});
+let shell=document.getElementById("viewerShell");
+if(shell)shell.scrollTop=0;
+viewerRender();
+}
+
+function viewerSetStockSearch(value){
+viewerStockSearch=String(value||"");
+viewerRenderStock();
+}
+
+function viewerSetStockType(type){
+viewerStockType=String(type||"");
+viewerRenderStock();
+}
+
+function viewerSetPlanSearch(value){
+viewerPlanSearch=String(value||"");
+viewerRenderPlan();
+}
+
+const VIEWER_PLAN_FILTRE=[
+{key:"hepsi",ad:"Tümü"},
+{key:"bekliyor",ad:"Bekliyor"},
+{key:"devam",ad:"Devam Ediyor"},
+{key:"bitti",ad:"Tamamlandı"}
+];
+
+function viewerSetPlanTab(tab){
+viewerPlanTab=VIEWER_PLAN_FILTRE.some(f=>f.key===tab)?tab:"hepsi";
+viewerRenderPlan();
+}
+
+/* DT'nin bütün olarak durumu: hepsi bitmişse tamamlandı,
+   bir dosyaya bile başlanmışsa devam ediyor, yoksa bekliyor. */
+function viewerDtDurumKodu(job){
+if(!job)return "bekliyor";
+if(job.status==="completed")return "bitti";
+
+let files=job.files||[];
+if(!files.length)return "bekliyor";
+if(files.every(f=>f.status==="bitti"))return "bitti";
+
+let basladi=files.some(f=>
+f.status==="basladi" || f.status==="durakladi" || f.status==="bitti" ||
+(typeof jobPlanDoneTubes==="function" && jobPlanDoneTubes(f)>0)
+);
+
+return basladi?"devam":"bekliyor";
+}
+
+function viewerDtDurumAdi(kod){
+return kod==="bitti"?"Tamamlandı":(kod==="devam"?"Devam Ediyor":"Bekliyor");
+}
+
+function viewerDtDurumSinifi(kod){
+return kod==="bitti"?"ok":(kod==="devam"?"run":"wait");
+}
+
+/* ---------- YARDIMCILAR ---------- */
+
+function viewerBaseHarf(text){
+let s=String(text||"").trim();
+if(!s)return "—";
+let parts=s.split(/\s+/).filter(Boolean);
+let ilk=parts[0]?parts[0][0]:"";
+let son=parts.length>1?parts[parts.length-1][0]:"";
+return (ilk+son).toLocaleUpperCase("tr-TR");
+}
+
+function viewerClock(){
+let now=new Date();
+let gunler=["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+let aylar=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+"Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+return gunler[now.getDay()]+", "+now.getDate()+" "+aylar[now.getMonth()]+" "+
+now.getFullYear()+" · "+
+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+}
+
+function viewerSaat(){
+let now=new Date();
+return String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+}
+
+function viewerTipSinifi(type){
+let t=String(type||"").toLocaleLowerCase("tr-TR");
+if(t.indexOf("profil")>-1)return "t-profil";
+if(t.indexOf("boru")>-1)return "t-boru";
+if(t.indexOf("köşebent")>-1||t.indexOf("kosebent")>-1)return "t-kosebent";
+if(t.indexOf("lama")>-1)return "t-lama";
+if(t.indexOf("npu")>-1)return "t-npu";
+return "";
+}
+
+/* 6 m dışındaki her boy standart dışıdır. */
+function viewerBoyHucresi(product){
+let metin=formatLength(product.length)||"—";
+let etiket=typeof productLengthKindLabel==="function"
+?productLengthKindLabel(product)
+:(Math.abs((parseLength(product.length)||0)-6)>=0.005?"özel boy":"");
+
+return '<td class="vw-boy'+(etiket?" vw-ozel":"")+'">'+
+'<span class="vw-boy-v">'+escapeHTML(metin)+'</span>'+
+(etiket?'<span class="vw-boy-tag">'+escapeHTML(etiket)+'</span>':'')+
+'</td>';
+}
+
+/* Uygulamanın sayfa sekmeleriyle aynı sıra — stokta olmasa da görünür. */
+const VIEWER_TIPLER=["Profil","Boru","Köşebent","Lama","NPU"];
+
+const VIEWER_TIK='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" '+
+'stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5 9-10"/></svg>';
+const VIEWER_CARPI='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '+
+'stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
+
+/* ---------- STOK ---------- */
+
+/* Arama için sadeleştirme: Türkçe harfler sadeleşir ("dikişsiz" = "dikissiz"),
+   virgül nokta olur ("1,5" = "1.5"), boşluklar tek boşluğa iner.
+   Uygulamanın normalizeText'i boşlukları tamamen sildiği için burada ayrı tutulur. */
+function viewerNorm(text){
+return String(text||"")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ş/g,"s")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c")
+.replace(/â/g,"a").replace(/î/g,"i").replace(/û/g,"u")
+.replace(/×/g,"x")
+.replace(/,/g,".")
+.replace(/\s+/g," ")
+.trim();
+}
+
+/* Fiyat ekranındaki arama ile aynı mantık: her anahtar boşluksuzdur,
+   böylece "20x20 1,5" da "20x201,5" de "20x20x1.5" de aynı kartı bulur. */
+function viewerTemizSayi(value){
+let n=parseFloat(String(value==null?"":value).replace(",","."));
+return Number.isFinite(n)?viewerNorm(String(n)):"";
+}
+
+function viewerStockKeys(p){
+let tip=viewerNorm(p.type);
+let ebat=viewerNorm(p.size);
+let kal=viewerTemizSayi(p.thickness);
+let boy=viewerTemizSayi(parseLength(p.length));
+
+let keys=[
+tip,ebat,kal,boy,boy+"m",
+ebat+kal, ebat+"x"+kal,
+tip+ebat, tip+ebat+kal, tip+ebat+"x"+kal,
+viewerNorm(p.quality),
+viewerNorm(p.shape)
+];
+
+if(typeof getProductFinish==="function")keys.push(viewerNorm(getProductFinish(p)));
+if(p.type==="Boru" && typeof getProductPipeSeam==="function"){
+keys.push(viewerNorm(getProductPipeSeam(p)));
+keys.push("o"+ebat, "o"+ebat+"x"+kal);
+}
+if(typeof productLengthKindLabel==="function")keys.push(viewerNorm(productLengthKindLabel(p)));
+
+let aciklama=typeof getEditableDescription==="function"
+?getEditableDescription(p):String(p.description||"");
+if(aciklama)keys.push(viewerNorm(aciklama));
+
+/* Hepsi bir arada — açıklama içindeki kelimeler de yakalansın. */
+keys.push(keys.join(""));
+
+return keys.filter(Boolean);
+}
+
+/* Arama kutusundaki kelimeler. Boşluk varsa her kelime ayrı aranır,
+   boşluksuz yazılmışsa tek parça aranır. */
+function viewerKelimeler(query){
+return String(query||"").trim()
+.split(/\s+/)
+.map(viewerNorm)
+.map(k=>k.replace(/\s+/g,""))
+.filter(Boolean);
+}
+
+function viewerUyuyor(keys,kelimeler){
+return kelimeler.every(k=>keys.some(key=>key.indexOf(k)>-1));
+}
+
+function viewerStockRows(){
+let list=Array.isArray(products)?products.slice():[];
+
+if(viewerStockType){
+list=list.filter(p=>String(p.type||"")===viewerStockType);
+}
+
+let kelimeler=viewerKelimeler(viewerStockSearch);
+if(kelimeler.length){
+list=list.filter(p=>viewerUyuyor(viewerStockKeys(p),kelimeler));
+}
+
+return list.sort((a,b)=>
+String(a.type||"").localeCompare(String(b.type||""),"tr")||
+normalizeText(a.size).localeCompare(normalizeText(b.size),"tr")||
+(parseFloat(String(a.thickness||"").replace(",","."))||0)-
+(parseFloat(String(b.thickness||"").replace(",","."))||0)||
+(parseLength(a.length)||0)-(parseLength(b.length)||0)
+);
+}
+
+function viewerRenderStockChips(){
+let box=document.getElementById("viewerStockChips");
+if(!box)return;
+
+let tipler=VIEWER_TIPLER.slice();
+(Array.isArray(products)?products:[]).forEach(p=>{
+let t=String(p.type||"").trim();
+if(t && tipler.indexOf(t)===-1)tipler.push(t);
+});
+
+box.innerHTML=
+'<button type="button" class="vw-chip'+(viewerStockType?"":" on")+'" '+
+'onclick="viewerSetStockType(\'\')">Tümü</button>'+
+tipler.map(t=>
+'<button type="button" class="vw-chip'+(viewerStockType===t?" on":"")+'" '+
+'onclick="viewerSetStockType(\''+escapeHTML(t).replace(/'/g,"\\'")+'\')">'+
+escapeHTML(t)+'</button>'
+).join("");
+}
+
+function viewerRenderStock(){
+viewerRenderStockChips();
+
+let body=document.getElementById("viewerStockBody");
+if(!body)return;
+
+let list=viewerStockRows();
+
+if(!list.length){
+body.innerHTML='<tr><td colspan="7" class="vw-empty">'+
+(viewerStockSearch||viewerStockType
+?"Aramaya uyan malzeme yok."
+:"Henüz stok kartı eklenmemiş.")+'</td></tr>';
+}
+else{
+body.innerHTML=list.map(p=>{
+let stok=Number(p.stock)||0;
+let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(p.id))||0:0;
+let serbest=Math.max(0,stok-ayrilan);
+
+let durum=stok<=0
+?{sinif:"bad",metin:"Stokta yok"}
+:(serbest<=0?{sinif:"wait",metin:"Tamamı ayrılmış"}:{sinif:"ok",metin:"Kullanılabilir"});
+
+let ikon=stok>0?"var":"yok";
+
+return '<tr'+(stok<=0?' class="vw-yokrow"':'')+'>'+
+'<td><div class="vw-stat '+ikon+'">'+(stok>0?VIEWER_TIK:VIEWER_CARPI)+'</div></td>'+
+'<td><div class="vw-name"><i class="vw-dot '+viewerTipSinifi(p.type)+'"></i>'+
+escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div>'+
+'<div class="vw-sub2">'+escapeHTML(
+[formatThickness(p.thickness),p.quality,
+(typeof getProductFinish==="function"&&getProductFinish(p)==="Boyalı")?"Boyalı":"",
+(p.type==="Boru"&&typeof getProductPipeSeam==="function")?getProductPipeSeam(p):""]
+.filter(Boolean).join(" · "))+'</div></td>'+
+viewerBoyHucresi(p)+
+'<td class="num"><span class="vw-big"'+(stok<=0?' style="color:#b91c1c"':'')+'>'+stok+'</span></td>'+
+'<td class="num vw-muted">'+(ayrilan>0?ayrilan:"—")+'</td>'+
+'<td class="num"><span class="vw-big"'+
+(serbest<=0?(stok<=0?' style="color:#b91c1c"':' style="color:#b45309"'):'')+'>'+serbest+'</span></td>'+
+'<td><span class="vw-pill '+durum.sinif+'">'+durum.metin+'</span></td>'+
+'</tr>';
+}).join("");
+}
+
+let count=document.getElementById("viewerStockCount");
+if(count){
+let toplam=(Array.isArray(products)?products:[]).length;
+count.textContent=list.length===toplam
+?list.length+" malzeme"
+:list.length+" malzeme gösteriliyor ("+toplam+" kayıt içinde)";
+}
+
+let stamp=document.getElementById("viewerStockStamp");
+if(stamp)stamp.textContent="Son güncelleme "+viewerSaat();
+
+let clock=document.getElementById("viewerStockClock");
+if(clock)clock.textContent=viewerClock();
+}
+
+/* ---------- İŞ PLANI ---------- */
+
+function viewerPlanReady(){
+return typeof jobPlanJobs!=="undefined" && Array.isArray(jobPlanJobs);
+}
+
+function viewerTumIsler(){
+if(!viewerPlanReady())return [];
+let aktif=typeof jobPlanActiveJobs==="function"?jobPlanActiveJobs():[];
+let biten=typeof jobPlanDoneJobs==="function"?jobPlanDoneJobs():[];
+return aktif.concat(biten);
+}
+
+/* Süzgeç düğmelerindeki sayılar */
+function viewerPlanSayilar(){
+let sayi={hepsi:0,bekliyor:0,devam:0,bitti:0};
+viewerTumIsler().forEach(job=>{
+sayi.hepsi++;
+sayi[viewerDtDurumKodu(job)]++;
+});
+return sayi;
+}
+
+function viewerPlanJobs(){
+if(!viewerPlanReady())return [];
+
+let jobs=viewerTumIsler();
+if(viewerPlanTab!=="hepsi"){
+jobs=jobs.filter(job=>viewerDtDurumKodu(job)===viewerPlanTab);
+}
+
+let kelimeler=viewerKelimeler(viewerPlanSearch);
+
+return jobs.map(job=>{
+let files=(job.files||[]).slice();
+
+if(kelimeler.length){
+let dtKeys=[viewerNorm(job.dtNo).replace(/\s+/g,"")];
+if(!viewerUyuyor(dtKeys,kelimeler)){
+files=files.filter(file=>viewerUyuyor(
+dtKeys.concat([viewerNorm(file.fileName).replace(/\s+/g,"")]),kelimeler));
+}
+}
+
+return {job:job,files:files};
+}).filter(g=>g.files.length);
+}
+
+/* DT satırı açık mı? Arama varken hepsi açık gelir. */
+function viewerPlanAcik(jobId){
+if(viewerKelimeler(viewerPlanSearch).length)return true;
+return viewerPlanOpen[String(jobId)]===true;
+}
+
+function viewerPlanToggle(jobId){
+let key=String(jobId);
+viewerPlanOpen[key]=!viewerPlanOpen[key];
+viewerRenderPlan();
+}
+
+function viewerTerminMetni(ts){
+let n=Number(ts);
+if(!Number.isFinite(n) || n<=0)return {ana:"—",alt:""};
+
+let d=new Date(n);
+let aylar=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+let ana=d.getDate()+" "+aylar[d.getMonth()];
+
+let bugun=new Date();
+bugun.setHours(0,0,0,0);
+let hedef=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+let fark=Math.round((hedef-bugun)/86400000);
+
+let alt=fark<0?Math.abs(fark)+" gün gecikti"
+:fark===0?String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")
+:fark===1?"yarın":fark+" gün";
+
+return {ana:fark===0?"Bugün":ana,alt:alt};
+}
+
+function viewerDurumRozeti(file){
+if(file.status==="bitti")return '<span class="vw-pill ok">Tamamlandı</span>';
+if(file.status==="basladi")return '<span class="vw-pill run">Çalışıyor</span>';
+if(file.status==="durakladi")return '<span class="vw-pill pause">Duraklatıldı</span>';
+
+if(typeof jobPlanFileStockState==="function"){
+try{
+if(jobPlanFileStockState(file).code==="yetersiz")
+return '<span class="vw-pill bad">Stok yetersiz</span>';
+}catch(e){}
+}
+return '<span class="vw-pill wait">Bekliyor</span>';
+}
+
+function viewerMalzemeMetni(file){
+let ebat=file.size
+?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+:"—";
+
+let alt="";
+if(typeof jobPlanFullTubes==="function" && typeof jobPlanRawLengthM==="function"){
+let tam=jobPlanFullTubes(file);
+alt=tam+" boy × "+jobPlanRawLengthM(file.rawLengthMm)+" m";
+if(typeof jobPlanHasPartial==="function" && jobPlanHasPartial(file)){
+alt+=" + "+String(jobPlanPartialM(file)).replace(".",",")+" m parça";
+}
+}
+if(file.customerMaterial)alt+=(alt?" · ":"")+"Müşteri Malzemesi";
+
+return '<div>'+ebat+'</div>'+(alt?'<div class="vw-sub2">'+escapeHTML(alt)+'</div>':'');
+}
+
+/* Kısmi boy da işin parçasıdır: 4 tam boy + 4 m parça biten bir dosyada
+   "4 / 4 boy" yazmak yanıltıyordu; parça ayrıca yazılıyor. */
+function viewerIsAdedi(file){
+let tam=typeof jobPlanFullTubes==="function"?jobPlanFullTubes(file):(Number(file.tubes)||0);
+let parca=typeof jobPlanHasPartial==="function" && jobPlanHasPartial(file);
+let yapilanTam=typeof jobPlanDoneTubes==="function"?jobPlanDoneTubes(file):0;
+
+if(file.status==="bitti")yapilanTam=tam;
+
+return {
+tam:tam,
+parcaVar:!!parca,
+parcaM:parca && typeof jobPlanPartialM==="function"?jobPlanPartialM(file):0,
+toplam:tam+(parca?1:0),
+yapilanTam:yapilanTam,
+yapilan:file.status==="bitti"?tam+(parca?1:0):yapilanTam
+};
+}
+
+function viewerIlerleme(file){
+let a=viewerIsAdedi(file);
+let yuzde=a.toplam>0?Math.min(100,Math.round(a.yapilan*100/a.toplam)):0;
+let renk=file.status==="basladi"?"g":(a.yapilan>0?"b":"");
+
+let metin=a.yapilanTam+" / "+a.tam+" boy";
+if(a.parcaVar){
+metin+=" + "+String(a.parcaM).replace(".",",")+" m parça";
+if(file.status==="bitti")metin+=" ✓";
+}
+if(yuzde>0)metin+=" · %"+yuzde;
+
+return '<div class="vw-bar"><i class="'+renk+'" style="width:'+yuzde+'%"></i></div>'+
+'<div class="vw-bar-t">'+escapeHTML(metin)+'</div>';
+}
+
+function viewerRenderNow(){
+let box=document.getElementById("viewerNowBox");
+if(!box)return;
+
+if(!viewerPlanReady()){box.innerHTML="";return;}
+
+let calisan=null;
+(jobPlanActiveJobs?jobPlanActiveJobs():[]).forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(file.status==="basladi" && !calisan)calisan={job:job,file:file};
+});
+});
+
+if(!calisan){box.innerHTML="";return;}
+
+let file=calisan.file;
+let a=viewerIsAdedi(file);
+let tam=a.tam;
+let yapilan=a.yapilanTam;
+
+let kalanSn=0;
+if(typeof jobPlanFileRemainingSeconds==="function"){
+try{kalanSn=jobPlanFileRemainingSeconds(calisan.job,file)||0;}catch(e){}
+}
+let kalan=typeof jobPlanFormatDuration==="function"&&kalanSn>0
+?jobPlanFormatDuration(kalanSn):"—";
+
+let bitis=typeof jobPlanFormatDateTime==="function"&&file.planEnd
+?viewerTerminMetni(file.planEnd):null;
+let bitisMetni=file.planEnd
+?String(new Date(file.planEnd).getHours()).padStart(2,"0")+":"+
+String(new Date(file.planEnd).getMinutes()).padStart(2,"0")
+:"—";
+
+box.innerHTML=
+'<div class="vw-now">'+
+'<div class="vw-now-main">'+
+'<div class="vw-live"><i></i>Şu an tezgâhta</div>'+
+'<div class="vw-now-dt">'+escapeHTML(String(calisan.job.dtNo||""))+'</div>'+
+'<div class="vw-now-file">'+escapeHTML(String(file.fileName||""))+
+(file.size?' · '+escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness)):'')+
+'</div>'+
+'</div>'+
+'<div class="vw-now-stat"><div class="k">İlerleme</div><div class="v">'+yapilan+" / "+tam+'</div></div>'+
+'<div class="vw-now-stat"><div class="k">Kalan süre</div><div class="v">'+escapeHTML(kalan)+'</div></div>'+
+'<div class="vw-now-stat"><div class="k">Bitiş tahmini</div><div class="v">'+bitisMetni+'</div></div>'+
+'</div>';
+}
+
+function viewerDtDurumu(grup){
+let kod=viewerDtDurumKodu(grup.job);
+return '<span class="vw-pill '+viewerDtDurumSinifi(kod)+'">'+viewerDtDurumAdi(kod)+'</span>';
+}
+
+function viewerStokSorunu(file){
+if(!file || file.status==="bitti")return false;
+if(typeof jobPlanFileStockState!=="function")return false;
+try{return jobPlanFileStockState(file).code==="yetersiz";}catch(e){return false;}
+}
+
+function viewerDtIlerleme(grup){
+let toplam=0,yapilan=0;
+grup.files.forEach(file=>{
+let a=viewerIsAdedi(file);
+toplam+=a.toplam;yapilan+=a.yapilan;
+});
+
+let yuzde=toplam>0?Math.min(100,Math.round(yapilan*100/toplam)):0;
+let renk=grup.files.some(f=>f.status==="basladi")?"g":(yapilan>0?"b":"");
+
+return '<div class="vw-bar"><i class="'+renk+'" style="width:'+yuzde+'%"></i></div>'+
+'<div class="vw-bar-t">'+yapilan+" / "+toplam+" boy"+(yuzde>0?" · %"+yuzde:"")+'</div>';
+}
+
+function viewerDtEbat(grup){
+let ebatlar=[];
+grup.files.forEach(file=>{
+if(!file.size)return;
+let t=file.size.sizeText+" · "+formatThickness(file.size.thickness);
+if(ebatlar.indexOf(t)===-1)ebatlar.push(t);
+});
+if(!ebatlar.length)return "—";
+if(ebatlar.length===1)return escapeHTML(ebatlar[0]);
+return escapeHTML(ebatlar[0])+'<div class="vw-sub2">+'+(ebatlar.length-1)+' ebat daha</div>';
+}
+
+function viewerRenderPlanChips(){
+let box=document.getElementById("viewerPlanChips");
+if(!box)return;
+let sayi=viewerPlanSayilar();
+box.innerHTML=VIEWER_PLAN_FILTRE.map(f=>
+'<button type="button" class="vw-chip'+(viewerPlanTab===f.key?" on":"")+'" '+
+'onclick="viewerSetPlanTab(\''+f.key+'\')">'+f.ad+
+'<span class="vw-chip-n">'+(sayi[f.key]||0)+'</span></button>'
+).join("");
+}
+
+function viewerRenderPlan(){
+viewerRenderNow();
+viewerRenderPlanChips();
+
+let body=document.getElementById("viewerPlanBody");
+if(!body)return;
+
+let gruplar=viewerPlanJobs();
+
+if(!gruplar.length){
+body.innerHTML='<tr><td colspan="6" class="vw-empty">'+
+(viewerPlanSearch?"Aramaya uyan iş yok.":
+viewerPlanTab==="bitti"?"Tamamlanmış iş yok.":
+viewerPlanTab==="devam"?"Devam eden iş yok.":
+viewerPlanTab==="bekliyor"?"Bekleyen iş yok.":"Planda iş yok.")+'</td></tr>';
+}
+else{
+let html=[];
+
+gruplar.forEach((grup,index)=>{
+let job=grup.job;
+let acik=viewerPlanAcik(job.id);
+let termin=viewerTerminMetni(job.planEnd);
+let calisiyor=grup.files.some(f=>f.status==="basladi");
+let sorun=grup.files.some(f=>viewerStokSorunu(f));
+
+/* DT satırı yalnızca numarayı taşır; ayrıntılar açılınca dosyalarda görünür. */
+html.push(
+'<tr class="vw-dt'+(acik?" acik":"")+'" onclick="viewerPlanToggle(\''+job.id+'\')"'+
+(calisiyor?' style="background:#f0fdfa"':(sorun?' style="background:#fef2f2"':''))+'>'+
+'<td style="font-weight:800;color:#94a3b8">'+(index+1)+'</td>'+
+'<td colspan="4"><div class="vw-name"><span class="vw-caret">'+(acik?"▼":"►")+'</span>'+
+escapeHTML(String(job.dtNo||""))+'</div></td>'+
+'<td>'+viewerDtDurumu(grup)+'</td>'+
+'</tr>'
+);
+
+if(!acik)return;
+
+grup.files.forEach(file=>{
+let fTermin=viewerTerminMetni(file.planEnd);
+html.push(
+'<tr class="vw-dosya"'+(file.status==="basladi"?' style="background:#f0fdfa"':
+(viewerStokSorunu(file)?' style="background:#fef2f2"':''))+'>'+
+'<td></td>'+
+'<td><div class="vw-dosya-ad">'+escapeHTML(String(file.fileName||""))+'</div></td>'+
+'<td>'+viewerMalzemeMetni(file)+'</td>'+
+'<td>'+viewerIlerleme(file)+'</td>'+
+'<td>'+escapeHTML(fTermin.ana)+
+(fTermin.alt?'<div class="vw-sub2">'+escapeHTML(fTermin.alt)+'</div>':'')+'</td>'+
+'<td>'+viewerDurumRozeti(file)+'</td>'+
+'</tr>'
+);
+});
+});
+
+body.innerHTML=html.join("");
+}
+
+let count=document.getElementById("viewerPlanCount");
+if(count){
+let dosya=gruplar.reduce((s,g)=>s+g.files.length,0);
+count.textContent=gruplar.length+" DT · "+dosya+" dosya";
+}
+
+let stamp=document.getElementById("viewerPlanStamp");
+if(stamp){
+let aktif=viewerPlanReady()&&typeof jobPlanActiveJobs==="function"?jobPlanActiveJobs().length:0;
+stamp.textContent=aktif+" aktif DT · son güncelleme "+viewerSaat();
+}
+
+let clock=document.getElementById("viewerPlanClock");
+if(clock)clock.textContent=viewerClock();
+}
+
+/* ---------- ANA SAYFA ---------- */
+
+function viewerRenderHome(){
+let hello=document.getElementById("viewerHello");
+if(hello){
+let ad=currentUser&&currentUser.name?String(currentUser.name).split(/\s+/)[0]:"";
+hello.textContent=ad?"Hoş geldiniz, "+ad:"Hoş geldiniz";
+}
+
+let tags=document.getElementById("viewerStockTags");
+if(tags){
+let tipler=[];
+(Array.isArray(products)?products:[]).forEach(p=>{
+let t=String(p.type||"").trim();
+if(t && tipler.indexOf(t)===-1)tipler.push(t);
+});
+if(!tipler.length)tipler=["Profil","Boru","Köşebent","Lama","NPU"];
+tags.innerHTML=tipler.slice(0,6).map(t=>'<span class="vw-tag">'+escapeHTML(t)+'</span>').join("");
+}
+
+let ptags=document.getElementById("viewerPlanTags");
+if(ptags){
+let aktif=viewerPlanReady()&&typeof jobPlanActiveJobs==="function"?jobPlanActiveJobs().length:0;
+ptags.innerHTML=
+'<span class="vw-tag">'+aktif+' aktif iş</span>'+
+'<span class="vw-tag">Termin takibi</span>'+
+'<span class="vw-tag">Tamamlananlar</span>';
+}
+
+let clock=document.getElementById("viewerHomeClock");
+if(clock)clock.textContent=viewerClock();
+}
+
+/* ---------- ORTAK ---------- */
+
+function viewerRenderUser(){
+let name=currentUser&&currentUser.name?String(currentUser.name):"";
+let el=document.getElementById("viewerName");
+if(el)el.textContent=name||"—";
+
+let av=document.getElementById("viewerAvatar");
+if(av)av.textContent=viewerBaseHarf(name);
+
+let role=document.getElementById("viewerRole");
+if(role){
+role.textContent=typeof systemRoleName==="function"&&currentUser
+?systemRoleName(currentUser.role):"İzleyici";
+}
+}
+
+function viewerRender(){
+if(!viewerActive())return;
+viewerRenderUser();
+if(viewerPage==="stok")viewerRenderStock();
+else if(viewerPage==="plan")viewerRenderPlan();
+else viewerRenderHome();
+}
+
+/* İzin uygulanınca / kullanıcı değişince çağrılır. */
+function viewerApply(){
+let acik=viewerActive();
+document.body.classList.toggle("viewer-on",acik);
+if(!acik)return;
+if(viewerPage!=="stok" && viewerPage!=="plan")viewerPage="home";
+viewerGo(viewerPage);
+}
+
+/* Veri geldikçe ekran kendini tazelesin. */
+function viewerRefresh(){
+if(!viewerActive())return;
+viewerRender();
+}
+
+if(typeof showProducts==="function"){
+let viewerOldShowProducts=showProducts;
+showProducts=function(){
+let r=viewerOldShowProducts.apply(this,arguments);
+try{viewerRefresh();}catch(e){}
+return r;
+};
+}
+
+if(typeof jobPlanRender==="function"){
+let viewerOldJobPlanRender=jobPlanRender;
+jobPlanRender=function(){
+let r=viewerOldJobPlanRender.apply(this,arguments);
+try{viewerRefresh();}catch(e){}
+return r;
+};
+}
+
+/* Sade ekran açıkken hiçbir pencere açılamaz — kabuk sadece görselde değil,
+   fonksiyon seviyesinde de kapatır. */
+["openJobPlanModal","openConsumablesModal","openErrorCodesModal","openErrorCodeModal",
+"openMaintenanceModal","openMaintenancePasswordSetupModal","openSystemModal",
+"openSettingsModal","openProductModal","openMovementModal","openReservationModal",
+"openPriceModal","openPurchaseImportModal","backupData","exportStock","exportJobPlan",
+"requestMovementClear","openBackupRestoreModal"].forEach(function(viewerAd){
+try{
+let viewerEski=window[viewerAd];
+if(typeof viewerEski!=="function")return;
+window[viewerAd]=function(){
+if(typeof viewerActive==="function" && viewerActive())return;
+return viewerEski.apply(this,arguments);
+};
+}catch(e){}
+});
 
 
 /* =====================================================

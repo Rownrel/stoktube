@@ -3854,6 +3854,400 @@ border-radius:999px;padding:1px 7px;font-size:11px;font-weight:800
 }
 .vw-chip.on .vw-chip-n{background:rgba(255,255,255,.18);color:#e2e8f0}
 
+
+/* ================= OPERATÖR TEZGÂH EKRANI ================= */
+
+body.op-on{overflow:hidden}
+body.op-on #systemUserChip{display:none !important}
+
+.op-shell{
+display:none;
+position:fixed;left:0;right:0;top:0;bottom:0;z-index:15000;
+background:#f1f5f9;overflow:hidden;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+color:#0f172a;-webkit-font-smoothing:antialiased;
+flex-direction:column
+}
+body.op-on .op-shell{display:flex}
+body.page-locked .op-shell{display:none !important}
+
+/* ---------- ÜST BANT ---------- */
+.ope-top{background:#0f172a;color:#fff;padding:11px 20px;display:flex;align-items:center;gap:13px;flex:0 0 auto;flex-wrap:wrap}
+.ope-logo{
+width:34px;height:34px;border-radius:9px;background:#0f766e;color:#fff;flex:0 0 auto;
+display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;letter-spacing:-.04em
+}
+.ope-brand{flex:1;min-width:0}
+.ope-brand b{display:block;font-weight:800;letter-spacing:.14em;font-size:12px;text-transform:uppercase}
+.ope-brand span{display:block;font-size:10px;letter-spacing:.06em;color:#94a3b8}
+.ope-state{
+display:inline-flex;align-items:center;gap:8px;background:rgba(20,184,166,.16);
+border:1px solid rgba(45,212,191,.35);color:#5eead4;border-radius:999px;
+padding:6px 14px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase
+}
+.ope-state i{width:7px;height:7px;border-radius:50%;background:#2dd4bf;display:inline-block}
+.ope-state.bos{background:rgba(148,163,184,.14);border-color:rgba(148,163,184,.3);color:#cbd5e1}
+.ope-state.bos i{background:#94a3b8}
+.ope-clock{font-size:15px;font-weight:800;color:#e2e8f0}
+.ope-user{
+display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 13px 5px 5px
+}
+.ope-av{width:26px;height:26px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.ope-uname{font-size:12.5px;font-weight:700;line-height:1.2}
+.ope-urole{font-size:10px;color:#94a3b8;letter-spacing:.05em;text-transform:uppercase}
+.ope-exit{background:transparent;border:1px solid rgba(255,255,255,.2);color:#cbd5e1;border-radius:8px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.ope-exit:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* ---------- İKON ŞERİDİ ---------- */
+.ope-dock{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 18px;display:flex;gap:10px;flex:0 0 auto}
+.ope-dbtn{
+flex:1;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;
+height:58px;padding:0 14px;display:flex;align-items:center;gap:12px;
+font-family:inherit;font-size:14px;font-weight:700;color:#334155;cursor:pointer
+}
+.ope-dbtn:hover{background:#f1f5f9;border-color:#cbd5e1}
+.ope-dbtn:active{transform:translateY(1px)}
+.ope-dbtn .di{width:36px;height:36px;border-radius:10px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.ope-dbtn.sarf .di{background:#eff6ff;color:#1d4ed8}
+.ope-dbtn.hata .di{background:#fef2f2;color:#b91c1c}
+.ope-dbtn.stok .di{background:#ecfdf5;color:#0f766e}
+.ope-dbtn.bakim .di{background:#f5f3ff;color:#6d28d9}
+
+/* ---------- SAYFALAR ---------- */
+.ope-page{display:none;flex:1;min-height:0;flex-direction:column}
+.ope-page.on{display:flex}
+
+/* ---------- İKİ SÜTUN ---------- */
+.ope-main{flex:1;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:15px;padding:15px 18px;min-height:0}
+.ope-col{display:flex;flex-direction:column;min-height:0}
+.ope-ctitle{display:flex;align-items:center;gap:9px;margin:0 0 9px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.11em}
+
+/* ---------- ÇALIŞAN İŞ ---------- */
+.ope-job{background:#fff;border:1px solid #e2e8f0;border-radius:15px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.ope-job.calisiyor{border-color:#5eead4;box-shadow:0 4px 18px rgba(13,148,136,.14)}
+.ope-job.bos{border-style:dashed;border-color:#cbd5e1;background:#f8fafc;justify-content:center}
+.ope-jhead{display:flex;align-items:flex-start;gap:14px;padding:16px 19px;border-bottom:1px solid #f1f5f9}
+.ope-live{
+display:inline-flex;align-items:center;gap:8px;background:#ecfdf5;border:1px solid #a7f3d0;
+color:#0f766e;border-radius:999px;padding:4px 12px;font-size:10px;font-weight:800;
+letter-spacing:.09em;text-transform:uppercase
+}
+.ope-live i{width:7px;height:7px;border-radius:50%;background:#14b8a6;display:inline-block}
+.ope-live.durdu{background:#ffedd5;border-color:#fdba74;color:#9a3412}
+.ope-live.durdu i{background:#ea580c}
+.ope-jdt{font-size:29px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:9px}
+.ope-jfile{font-size:13px;color:#64748b;margin-top:5px;word-break:break-all}
+.ope-jright{margin-left:auto;text-align:right}
+.ope-jmat{font-size:17px;font-weight:800;letter-spacing:-.015em}
+.ope-jsub{font-size:12px;color:#64748b;margin-top:3px}
+.ope-jstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#f1f5f9}
+.ope-jstat{background:#fff;padding:14px 18px}
+.ope-jstat .k{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.ope-jstat .v{font-size:26px;font-weight:800;margin-top:4px;letter-spacing:-.03em;line-height:1.1}
+.ope-jstat .v small{font-size:13px;color:#94a3b8;font-weight:700;margin-left:3px}
+.ope-jstat .s{font-size:11px;color:#94a3b8;margin-top:3px}
+.ope-jstat.accent .v{color:#0f766e}
+.ope-jprog{padding:16px 19px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.ope-bar{height:14px;background:#f1f5f9;border-radius:99px;overflow:hidden}
+.ope-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#14b8a6,#0f766e)}
+.ope-bart{display:flex;justify-content:space-between;margin-top:9px;font-size:13px;font-weight:700;color:#475569;gap:10px}
+.ope-bart span:last-child{color:#0f766e;white-space:nowrap}
+.ope-jact{display:flex;gap:11px;padding:0 19px 19px}
+.ope-big{
+flex:1;display:flex;align-items:center;justify-content:center;gap:11px;
+height:74px;border:0;border-radius:14px;font-family:inherit;
+font-size:20px;font-weight:800;cursor:pointer;color:#fff;box-shadow:0 3px 0 rgba(15,23,42,.18)
+}
+.ope-big:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(15,23,42,.18)}
+.ope-big.start{background:#1d4ed8}
+.ope-big.pause{background:#ea580c}
+.ope-big.finish{background:#15803d}
+.ope-bos{padding:30px 22px;text-align:center}
+.ope-bico{width:68px;height:68px;border-radius:19px;background:#e2e8f0;color:#94a3b8;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.ope-bos h3{margin:0 0 6px;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ope-bos p{margin:0 0 22px;font-size:13.5px;color:#64748b}
+.ope-bnext{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 17px;display:flex;align-items:center;gap:14px;text-align:left;margin-bottom:18px}
+.ope-bnext .n{width:36px;height:36px;border-radius:10px;background:#eff6ff;color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:0 0 auto}
+.ope-bnext .t{flex:1;min-width:0}
+.ope-bnext .t b{display:block;font-size:16px;font-weight:800;letter-spacing:-.01em}
+.ope-bnext .t span{display:block;font-size:12px;color:#94a3b8;margin-top:2px;word-break:break-all}
+
+/* ---------- KUYRUK ---------- */
+.ope-queue{background:#fff;border:1px solid #e2e8f0;border-radius:15px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.ope-qhead{padding:11px 15px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:9px}
+.ope-qhead .ht{font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.11em}
+.ope-seg{margin-left:auto;display:flex;background:#f1f5f9;border-radius:9px;padding:3px;gap:3px}
+.ope-seg button{
+border:0;background:transparent;color:#64748b;border-radius:7px;padding:6px 13px;
+font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px
+}
+.ope-seg button.on{background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.12)}
+.ope-seg .n{background:#e2e8f0;color:#64748b;border-radius:999px;padding:1px 6px;font-size:10.5px}
+.ope-seg button.on .n{background:#0f172a;color:#fff}
+.ope-search{display:flex;align-items:center;gap:9px;padding:9px 15px;border-bottom:1px solid #f1f5f9}
+.ope-search svg{color:#94a3b8;flex:0 0 auto}
+.ope-search input{border:0;outline:0;flex:1;min-width:0;font-size:14px;font-family:inherit;color:#0f172a;background:transparent;padding:4px 0}
+.ope-search input::placeholder{color:#94a3b8}
+.ope-qlist{flex:1;overflow:auto}
+
+.ope-qdt{padding:12px 15px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px;cursor:pointer}
+.ope-qdt:hover{background:#f8fafc}
+.ope-qdt .no{width:30px;height:30px;border-radius:8px;background:#f1f5f9;color:#64748b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:0 0 auto}
+.ope-qdt .info{flex:1;min-width:0}
+.ope-qdt .dt{font-size:15.5px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
+.ope-qdt .caret{color:#94a3b8;font-size:10px;width:12px;display:inline-block}
+.ope-qdt .cnt{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.ope-qdt.calisiyor{background:#f0fdfa}
+.ope-qdt.warn{background:#fef2f2}
+
+.ope-qfile{padding:10px 15px 10px 42px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px;background:#fbfdfe}
+.ope-qfile .fi{flex:1;min-width:0}
+.ope-qfile .fn{font-size:13px;font-weight:700;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ope-qfile .fm{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.ope-qfile.calisiyor{background:#f0fdfa}
+.ope-qtime{font-size:11.5px;color:#94a3b8;text-align:right;white-space:nowrap}
+.ope-qtime b{display:block;color:#475569;font-size:12.5px}
+
+.ope-pill{display:inline-block;border-radius:999px;padding:4px 11px;font-size:11px;font-weight:800;white-space:nowrap}
+.ope-pill.run{background:#dbeafe;color:#1e40af}
+.ope-pill.wait{background:#f1f5f9;color:#475569}
+.ope-pill.pause{background:#ffedd5;color:#9a3412}
+.ope-pill.bad{background:#fee2e2;color:#991b1b}
+.ope-pill.ok{background:#dcfce7;color:#166534}
+
+.ope-qbtn{
+border:0;border-radius:10px;background:#1d4ed8;color:#fff;font-family:inherit;
+height:44px;padding:0 18px;font-size:13.5px;font-weight:800;cursor:pointer;flex:0 0 auto;
+display:flex;align-items:center;gap:7px;box-shadow:0 2px 0 rgba(15,23,42,.18)
+}
+.ope-qbtn:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(15,23,42,.18)}
+.ope-qbtn.disabled{background:#e2e8f0;color:#94a3b8;box-shadow:none;cursor:default}
+.ope-qbtn.devam{background:#ea580c}
+.ope-empty{padding:40px 20px;text-align:center;color:#94a3b8;font-size:13.5px}
+
+/* ---------- ALT SAYFA BAŞLIĞI ---------- */
+.ope-sub{background:#fff;border-bottom:1px solid #e2e8f0;padding:11px 18px;display:flex;align-items:center;gap:14px;flex:0 0 auto;flex-wrap:wrap}
+.ope-back{
+display:inline-flex;align-items:center;gap:8px;background:#f1f5f9;border:1px solid #e2e8f0;
+border-radius:10px;height:46px;padding:0 16px;font-size:13.5px;font-weight:700;color:#475569;cursor:pointer;font-family:inherit
+}
+.ope-back:hover{background:#e2e8f0}
+.ope-st{display:flex;align-items:center;gap:11px}
+.ope-si{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ope-si.sarf{background:#eff6ff;color:#1d4ed8}
+.ope-si.hata{background:#fef2f2;color:#b91c1c}
+.ope-si.stok{background:#ecfdf5;color:#0f766e}
+.ope-si.bakim{background:#f5f3ff;color:#6d28d9}
+.ope-st h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.015em}
+.ope-st p{margin:1px 0 0;font-size:11.5px;color:#94a3b8}
+.ope-sright{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ope-chip{background:#f1f5f9;color:#475569;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:800}
+.ope-chip.warn{background:#fef3c7;color:#92400e}
+.ope-add{
+border:0;border-radius:10px;background:#1d4ed8;color:#fff;font-family:inherit;height:46px;padding:0 20px;
+font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 2px 0 rgba(15,23,42,.18)
+}
+.ope-body{flex:1;padding:14px 18px;min-height:0;display:flex;flex-direction:column}
+.ope-bsearch{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:0 15px;height:52px;margin-bottom:12px;flex:0 0 auto}
+.ope-bsearch svg{color:#94a3b8;flex:0 0 auto}
+.ope-bsearch input{border:0;outline:0;flex:1;min-width:0;font-size:14px;font-family:inherit;color:#0f172a;background:transparent}
+.ope-bsearch input::placeholder{color:#94a3b8}
+.ope-list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px}
+
+/* ---------- SARF ---------- */
+.ope-sarf{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:13px 17px;display:flex;align-items:center;gap:16px}
+.ope-sarf.low{border-color:#fde047;background:#fffbeb}
+.ope-sarf.out{border-color:#fecaca;background:#fef2f2}
+.ope-sico{width:42px;height:42px;border-radius:11px;background:#f1f5f9;color:#64748b;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ope-sarf.low .ope-sico{background:#fef3c7;color:#b45309}
+.ope-sarf.out .ope-sico{background:#fee2e2;color:#b91c1c}
+.ope-sinfo{flex:1;min-width:0}
+.ope-sname{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.ope-sunit{font-size:11.5px;color:#94a3b8;margin-top:2px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.ope-sqty{text-align:right;min-width:112px}
+.ope-sqty .v{font-size:27px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ope-sqty .u{font-size:11.5px;color:#94a3b8;margin-top:3px;font-weight:700}
+.ope-sarf.out .ope-sqty .v{color:#b91c1c}
+.ope-sarf.low .ope-sqty .v{color:#b45309}
+.ope-sact{display:flex;gap:9px;flex:0 0 auto}
+.ope-qty{
+border:0;border-radius:11px;font-family:inherit;height:56px;width:76px;cursor:pointer;color:#fff;
+display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 rgba(15,23,42,.18)
+}
+.ope-qty:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(15,23,42,.18)}
+.ope-qty.gir{background:#15803d}
+.ope-qty.cik{background:#b91c1c}
+
+/* ---------- HATA KODU ---------- */
+.ope-split{flex:1;display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:12px;min-height:0}
+.ope-pane{background:#fff;border:1px solid #e2e8f0;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+.ope-phead{padding:11px 15px;border-bottom:1px solid #f1f5f9;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.11em;display:flex;align-items:center;gap:9px}
+.ope-plist{flex:1;overflow:auto}
+.ope-eitem{padding:13px 15px;border-bottom:1px solid #f1f5f9;cursor:pointer;display:flex;align-items:center;gap:12px}
+.ope-eitem:hover{background:#f8fafc}
+.ope-eitem.on{background:#eff6ff;box-shadow:inset 3px 0 0 #1d4ed8}
+.ope-ecode{font-size:15px;font-weight:800;letter-spacing:-.01em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.ope-esub{font-size:11.5px;color:#94a3b8;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ope-ebadge{width:34px;height:34px;border-radius:10px;background:#fef2f2;color:#b91c1c;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ope-edetail{flex:1;overflow:auto;padding:20px 22px}
+.ope-etitle{display:flex;align-items:flex-start;gap:14px;padding-bottom:16px;border-bottom:1px solid #f1f5f9;margin-bottom:18px}
+.ope-ebig{font-size:30px;font-weight:800;letter-spacing:-.02em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.ope-emac{font-size:13px;color:#64748b;margin-top:4px}
+.ope-emeta{margin-left:auto;text-align:right;font-size:11.5px;color:#94a3b8;line-height:1.7}
+.ope-emeta b{display:block;color:#475569;font-size:12.5px}
+.ope-eblock{margin-bottom:18px}
+.ope-eblock .bt{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.11em;margin-bottom:9px}
+.ope-eblock .bi{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.ope-eblock.d .bi{background:#fef2f2;color:#b91c1c}
+.ope-eblock.c .bi{background:#ecfdf5;color:#15803d}
+.ope-ebox{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:15px 17px;font-size:14.5px;line-height:1.75;color:#334155;white-space:pre-line}
+.ope-eblock.c .ope-ebox{background:#f0fdf4;border-color:#bbf7d0}
+
+/* ---------- STOK HAREKETİ ---------- */
+.ope-mvsplit{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:12px;min-height:0}
+.ope-mwrap{flex:1;overflow:auto}
+.ope-mtbl{width:100%;border-collapse:collapse}
+.ope-mtbl thead th{
+position:sticky;top:0;z-index:2;background:#f8fafc;border-bottom:1px solid #e2e8f0;
+text-align:left;padding:10px 14px;font-size:9.5px;font-weight:800;color:#94a3b8;
+text-transform:uppercase;letter-spacing:.09em;white-space:nowrap
+}
+.ope-mtbl thead th.num{text-align:right}
+.ope-mtbl tbody td{padding:11px 14px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+.ope-mtbl tbody tr{cursor:pointer}
+.ope-mtbl tbody tr:hover{background:#f8fafc}
+.ope-mtbl tbody tr.on{background:#ecfdf5;box-shadow:inset 3px 0 0 #0f766e}
+.ope-mname{font-size:14.5px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.ope-msub{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.ope-mdot{width:9px;height:9px;border-radius:50%;background:#94a3b8;flex:0 0 auto}
+.ope-mdot.t-profil{background:#3b82f6}
+.ope-mdot.t-boru{background:#14b8a6}
+.ope-mdot.t-kosebent{background:#a855f7}
+.ope-mdot.t-lama{background:#f59e0b}
+.ope-mdot.t-npu{background:#64748b}
+.ope-mtag{border:1px dashed #94a3b8;color:#475569;border-radius:5px;padding:1px 6px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.ope-mrez{display:flex;flex-direction:column;gap:4px}
+.ope-mrez span{
+display:inline-flex;align-items:center;gap:6px;background:#fff7ed;color:#9a3412;
+border:1px solid #fed7aa;border-radius:7px;padding:3px 9px;font-size:11.5px;font-weight:700;
+white-space:nowrap;align-self:flex-start
+}
+.ope-mrez .more{background:transparent;border:0;color:#94a3b8;font-size:11px;padding:0 3px}
+.ope-mnone{color:#cbd5e1;font-size:13px}
+.ope-mnum{text-align:right;font-size:17px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.ope-mnum small{display:block;font-size:10px;color:#94a3b8;font-weight:700;margin-top:1px}
+.ope-mnum.kul{color:#0f766e}
+.ope-mnum.sifir{color:#b91c1c}
+.ope-mnum.tuk{color:#b45309}
+
+.ope-mform{padding:18px 20px;overflow:auto;flex:1}
+.ope-msel{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.ope-msel .n{font-size:17px;font-weight:800;letter-spacing:-.015em}
+.ope-msel .s{font-size:12.5px;color:#64748b;margin-top:3px}
+.ope-msel .q{display:flex;gap:18px;margin-top:11px;padding-top:11px;border-top:1px solid #e2e8f0}
+.ope-msel .q div{flex:1}
+.ope-msel .q .k{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.ope-msel .q .v{font-size:19px;font-weight:800;margin-top:2px;letter-spacing:-.02em}
+.ope-rez{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.ope-rhead{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#9a3412;text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px}
+.ope-radd{
+margin-left:auto;border:0;border-radius:8px;background:#ea580c;color:#fff;font-family:inherit;
+height:34px;padding:0 13px;font-size:12.5px;font-weight:800;cursor:pointer;
+display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0
+}
+.ope-ritem{background:#fff;border:1px solid #fed7aa;border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ope-ritem:last-child{margin-bottom:0}
+.ope-ritem .q{font-size:15px;font-weight:800;color:#9a3412;white-space:nowrap}
+.ope-ritem .d{flex:1;min-width:0;font-size:13px;font-weight:700;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ope-ritem .x{width:34px;height:34px;border-radius:8px;background:#fee2e2;color:#b91c1c;border:0;font-size:16px;font-weight:800;cursor:pointer;flex:0 0 auto}
+.ope-rempty{font-size:12.5px;color:#9a3412;padding:4px 2px}
+.ope-mtoggle{display:flex;gap:10px;margin-bottom:14px}
+.ope-mtoggle button{
+flex:1;height:62px;border:2px solid #e2e8f0;background:#fff;border-radius:12px;font-family:inherit;
+font-size:16px;font-weight:800;color:#64748b;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px
+}
+.ope-mtoggle button.on.gir{background:#15803d;border-color:#15803d;color:#fff}
+.ope-mtoggle button.on.cik{background:#b91c1c;border-color:#b91c1c;color:#fff}
+.ope-fg{margin-bottom:14px}
+.ope-fg label{display:block;font-size:11.5px;font-weight:800;color:#475569;margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em}
+.ope-fld{width:100%;height:54px;border:2px solid #cbd5e1;border-radius:11px;background:#fff;padding:0 15px;font-size:16px;color:#0f172a;font-weight:600;font-family:inherit}
+.ope-fld:focus{border-color:#0f766e;outline:0}
+.ope-fld.num{font-size:24px;font-weight:800;text-align:center}
+.ope-msave{
+width:100%;height:66px;border:0;border-radius:13px;background:#15803d;color:#fff;font-family:inherit;
+font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+box-shadow:0 3px 0 rgba(15,23,42,.18)
+}
+.ope-msave:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(15,23,42,.18)}
+.ope-msave.cik{background:#b91c1c}
+.ope-mempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;gap:14px;padding:30px}
+.ope-mempty .i{width:66px;height:66px;border-radius:18px;background:#f1f5f9;display:flex;align-items:center;justify-content:center}
+.ope-mempty p{margin:0;font-size:14px;text-align:center;line-height:1.6}
+
+/* ---------- BAKIM ---------- */
+.ope-alert{background:#fffbeb;border:1px solid #fde047;border-radius:12px;padding:13px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;flex:0 0 auto}
+.ope-alert .ai{width:34px;height:34px;border-radius:10px;background:#fef3c7;color:#b45309;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ope-alert .at{font-size:13px;font-weight:800;color:#92400e;margin-bottom:5px}
+.ope-alert .al{font-size:12.5px;color:#a16207;line-height:1.7}
+.ope-alert .al b{color:#92400e}
+.ope-bk{background:#fff;border:1px solid #e2e8f0;border-radius:13px;padding:13px 17px;display:flex;align-items:center;gap:16px}
+.ope-bk.warn{border-color:#fde047;background:#fffbeb}
+.ope-bk.over{border-color:#fecaca;background:#fef2f2}
+.ope-bk.gecmis{opacity:.6}
+.ope-bkico{width:42px;height:42px;border-radius:11px;background:#f5f3ff;color:#6d28d9;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ope-bk.warn .ope-bkico{background:#fef3c7;color:#b45309}
+.ope-bk.over .ope-bkico{background:#fee2e2;color:#b91c1c}
+.ope-bk.gecmis .ope-bkico{background:#f1f5f9;color:#94a3b8}
+.ope-bkinfo{flex:1;min-width:0}
+.ope-bkname{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.ope-bksub{font-size:12px;color:#94a3b8;margin-top:3px}
+.ope-bkdate{text-align:right;min-width:104px}
+.ope-bkdate .k{font-size:9.5px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.ope-bkdate .v{font-size:15px;font-weight:800;margin-top:2px;letter-spacing:-.01em}
+.ope-bkdate .v.gecti{color:#b91c1c}
+.ope-bkdate .v.yakin{color:#b45309}
+.ope-pill.gecti{background:#fee2e2;color:#991b1b}
+.ope-pill.yakin{background:#fef3c7;color:#92400e}
+.ope-pill.gecmis{background:#f1f5f9;color:#94a3b8}
+.ope-note{margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:12.5px;color:#64748b;display:flex;align-items:center;gap:9px;flex:0 0 auto}
+
+/* ---------- PENCERELER ---------- */
+.ope-sheet{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:15500;align-items:center;justify-content:center;padding:20px}
+.ope-sheet.on{display:flex}
+.ope-sbox{background:#fff;border-radius:16px;width:560px;max-width:100%;max-height:100%;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:auto}
+.ope-sbox.genis{width:680px}
+.ope-shead{padding:16px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px}
+.ope-shead .si{width:40px;height:40px;border-radius:11px;background:#dcfce7;color:#15803d;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ope-shead.cik .si{background:#fee2e2;color:#b91c1c}
+.ope-shead.ayir .si{background:#fff7ed;color:#ea580c}
+.ope-shead.mavi .si{background:#eff6ff;color:#1d4ed8}
+.ope-shead h3{margin:0;font-size:18px;font-weight:800}
+.ope-shead p{margin:2px 0 0;font-size:12.5px;color:#64748b}
+.ope-sbody{padding:18px 20px}
+.ope-sgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ope-sfoot{padding:14px 20px;display:flex;gap:11px;border-top:1px solid #f1f5f9}
+.ope-sfoot button{flex:1;border:0;border-radius:12px;height:58px;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.ope-sfoot .vazgec{background:#f1f5f9;color:#475569}
+.ope-sfoot .kaydet{background:#15803d;color:#fff;box-shadow:0 2px 0 rgba(15,23,42,.18)}
+.ope-sfoot .kaydet.cik{background:#b91c1c}
+.ope-sfoot .kaydet.ayir{background:#ea580c}
+.ope-sfoot .kaydet.mavi{background:#1d4ed8}
+.ope-swarn{margin-top:10px;font-size:12.5px;font-weight:700;color:#b91c1c;min-height:16px}
+.ope-shint{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:12.5px;color:#64748b;display:flex;align-items:center;gap:9px;margin-top:4px}
+.ope-chiprow{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.ope-dtchip{
+border:1px solid #e2e8f0;background:#f8fafc;color:#475569;border-radius:8px;
+padding:7px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit
+}
+.ope-dtchip:hover{background:#e2e8f0}
+
+@media(max-width:900px){
+.ope-main,.ope-mvsplit,.ope-split{grid-template-columns:1fr}
+.ope-dock{flex-wrap:wrap}
+.ope-dbtn{min-width:calc(50% - 5px)}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -5676,6 +6070,308 @@ placeholder="DT veya dosya adı ara…" oninput="viewerSetPlanSearch(this.value)
 <div class="vw-foot"><span id="viewerPlanCount">—</span><span id="viewerPlanClock"></span></div>
 </div>
 
+</div>
+
+
+<!-- ================= OPERATÖR TEZGÂH EKRANI ================= -->
+<div class="op-shell" id="opShell">
+
+<div class="ope-top">
+<div class="ope-logo">D</div>
+<div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
+<div class="ope-state" id="opState"><i></i>Boşta</div>
+<div class="ope-clock" id="opClock">—</div>
+<div class="ope-user">
+<div class="ope-av" id="opAvatar">—</div>
+<div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
+</div>
+<button type="button" class="ope-exit" onclick="opLogout()">Çıkış</button>
+</div>
+
+<div class="ope-dock">
+<button type="button" class="ope-dbtn sarf" data-perm="bolum.sarf" onclick="opGo('sarf')">
+<div class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5"/></svg></div>
+Sarf Malzeme
+</button>
+<button type="button" class="ope-dbtn hata" data-perm="bolum.hatakodu" onclick="opGo('hata')">
+<div class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><path d="M10.3 3.9L2.4 18a1.9 1.9 0 001.7 2.9h15.8a1.9 1.9 0 001.7-2.9L13.7 3.9a1.9 1.9 0 00-3.4 0z"/></svg></div>
+Hata Kodu
+</button>
+<button type="button" class="ope-dbtn stok" data-perm="stok.hareket" onclick="opGo('stok')">
+<div class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h10"/><path d="M17.5 15v5"/><path d="M15 17.5h5"/></svg></div>
+Stok Hareketi
+</button>
+<button type="button" class="ope-dbtn bakim" data-perm="bolum.bakim" onclick="opGo('bakim')">
+<div class="di"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 00-6 6L3 18v3h3l5.7-5.7a4.5 4.5 0 006-6l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg></div>
+Bakım
+</button>
+</div>
+
+<!-- ---------- TEZGÂH ---------- -->
+<div class="ope-page on" id="opPageTezgah">
+<div class="ope-main">
+
+<div class="ope-col">
+<div class="ope-ctitle">Tezgâhta</div>
+<div id="opJobBox"></div>
+</div>
+
+<div class="ope-col">
+<div class="ope-ctitle">İş Listesi</div>
+<div class="ope-queue">
+<div class="ope-qhead">
+<span class="ht" id="opQueueTitle">Sıradaki İşler</span>
+<div class="ope-seg" id="opQueueSeg"></div>
+</div>
+<div class="ope-search">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="opQueueSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya ara"
+placeholder="DT veya dosya adı ara…" oninput="opSetQueueSearch(this.value)">
+</div>
+<div class="ope-qlist" id="opQueueList"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ---------- SARF MALZEME ---------- -->
+<div class="ope-page" id="opPageSarf">
+<div class="ope-sub">
+<button type="button" class="ope-back" onclick="opGo('tezgah')">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Tezgâh
+</button>
+<div class="ope-st">
+<div class="ope-si sarf"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5"/></svg></div>
+<div><h2>Sarf Malzeme</h2><p>Kesme spreyi, disk, nozul ve diğer sarflar</p></div>
+</div>
+<div class="ope-sright" id="opSarfChips"></div>
+</div>
+<div class="ope-body">
+<div class="ope-bsearch">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="opSarfSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Sarf malzemesi ara"
+placeholder="Sarf malzemesi ara…" oninput="opSetSarfSearch(this.value)">
+</div>
+<div class="ope-list" id="opSarfList"></div>
+</div>
+</div>
+
+<!-- ---------- HATA KODU ---------- -->
+<div class="ope-page" id="opPageHata">
+<div class="ope-sub">
+<button type="button" class="ope-back" onclick="opGo('tezgah')">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Tezgâh
+</button>
+<div class="ope-st">
+<div class="ope-si hata"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><path d="M10.3 3.9L2.4 18a1.9 1.9 0 001.7 2.9h15.8a1.9 1.9 0 001.7-2.9L13.7 3.9a1.9 1.9 0 00-3.4 0z"/></svg></div>
+<div><h2>Hata Kodları</h2><p>Makinede çıkan arızalar ve çözümleri</p></div>
+</div>
+<div class="ope-sright" id="opHataChips"></div>
+</div>
+<div class="ope-body">
+<div class="ope-bsearch">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="opHataSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Hata kodu ara"
+placeholder="Kod, açıklama veya çözümde ara…" oninput="opSetHataSearch(this.value)">
+</div>
+<div class="ope-split">
+<div class="ope-pane">
+<div class="ope-phead">Kayıtlar</div>
+<div class="ope-plist" id="opHataList"></div>
+</div>
+<div class="ope-pane">
+<div class="ope-edetail" id="opHataDetail"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ---------- STOK HAREKETİ ---------- -->
+<div class="ope-page" id="opPageStok">
+<div class="ope-sub">
+<button type="button" class="ope-back" onclick="opGo('tezgah')">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Tezgâh
+</button>
+<div class="ope-st">
+<div class="ope-si stok"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h10"/><path d="M17.5 15v5"/><path d="M15 17.5h5"/></svg></div>
+<div><h2>Stok Hareketi</h2><p>Depoya giren ve çıkan malzemeyi kaydet</p></div>
+</div>
+<div class="ope-sright" id="opStokChips"></div>
+</div>
+<div class="ope-body">
+<div class="ope-mvsplit">
+
+<div class="ope-pane">
+<div class="ope-phead">Malzeme Seç</div>
+<div class="ope-search" style="padding:10px 14px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="opStokSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Malzeme ara"
+placeholder="Ebat, kalite veya kalınlık ara…" oninput="opSetStokSearch(this.value)">
+</div>
+<div class="ope-mwrap">
+<table class="ope-mtbl">
+<thead>
+<tr>
+<th>Malzeme</th>
+<th style="width:214px">Ayrılan</th>
+<th class="num" style="width:82px">Toplam</th>
+<th class="num" style="width:108px">Kullanılabilir</th>
+</tr>
+</thead>
+<tbody id="opStokBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="ope-pane" id="opStokForm"></div>
+
+</div>
+</div>
+</div>
+
+<!-- ---------- BAKIM ---------- -->
+<div class="ope-page" id="opPageBakim">
+<div class="ope-sub">
+<button type="button" class="ope-back" onclick="opGo('tezgah')">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+Tezgâh
+</button>
+<div class="ope-st">
+<div class="ope-si bakim"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 00-6 6L3 18v3h3l5.7-5.7a4.5 4.5 0 006-6l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg></div>
+<div><h2>Bakım Takibi</h2><p>Son bakımdan 6 ay sonra yenisi planlanır</p></div>
+</div>
+<div class="ope-sright" id="opBakimChips"></div>
+</div>
+<div class="ope-body">
+<div id="opBakimAlert"></div>
+<div class="ope-bsearch">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+<input id="opBakimSearch" type="text" inputmode="none"
+data-keypad="search" data-native-inputmode="text" data-keypad-label="Bakım ara"
+placeholder="Makine veya firma ara…" oninput="opSetBakimSearch(this.value)">
+</div>
+<div class="ope-list" id="opBakimList" style="gap:9px"></div>
+<div class="ope-note" id="opBakimNote"></div>
+</div>
+</div>
+
+</div>
+
+<!-- SARF MİKTAR PENCERESİ -->
+<div class="ope-sheet" id="opSarfSheet">
+<div class="ope-sbox">
+<div class="ope-shead" id="opSarfHead">
+<div class="si" id="opSarfIcon"></div>
+<div><h3 id="opSarfTitle">Sarf Malzemesi</h3><p id="opSarfInfo"></p></div>
+</div>
+<div class="ope-sbody">
+<div class="ope-fg" style="margin-bottom:0">
+<label>Miktar</label>
+<input id="opSarfQty" class="ope-fld num" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Sarf miktarı">
+</div>
+<div class="ope-swarn" id="opSarfWarn"></div>
+</div>
+<div class="ope-sfoot">
+<button type="button" class="vazgec" onclick="opSarfClose()">Vazgeç</button>
+<button type="button" class="kaydet" id="opSarfSave" onclick="opSarfConfirm()">Kaydet</button>
+</div>
+</div>
+</div>
+
+<!-- AYIRMA PENCERESİ -->
+<div class="ope-sheet" id="opRezSheet">
+<div class="ope-sbox" style="width:520px">
+<div class="ope-shead ayir">
+<div class="si"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></div>
+<div><h3>Malzeme Ayır</h3><p id="opRezInfo"></p></div>
+</div>
+<div class="ope-sbody">
+<div class="ope-fg">
+<label>Ayrılacak boy sayısı</label>
+<input id="opRezQty" class="ope-fld num" type="text" inputmode="none"
+data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Ayrılacak boy">
+</div>
+<div class="ope-fg" style="margin-bottom:0">
+<label>Hangi iş için</label>
+<input id="opRezNote" class="ope-fld" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="İş / DT numarası"
+placeholder="Örn: DT034601 veya firma adı">
+<div class="ope-chiprow" id="opRezChips"></div>
+</div>
+<div class="ope-swarn" id="opRezWarn"></div>
+</div>
+<div class="ope-sfoot">
+<button type="button" class="vazgec" onclick="opRezClose()">Vazgeç</button>
+<button type="button" class="kaydet ayir" onclick="opRezConfirm()">Ayır</button>
+</div>
+</div>
+</div>
+
+<!-- YENİ STOK KARTI PENCERESİ -->
+<div class="ope-sheet" id="opKartSheet">
+<div class="ope-sbox genis">
+<div class="ope-shead mavi">
+<div class="si"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+<div><h3>Yeni Stok Kartı</h3><p>Stokta olmayan bir malzemeyi ilk kez ekle</p></div>
+</div>
+<div class="ope-sbody">
+<div class="ope-sgrid">
+<div class="ope-fg">
+<label>Cinsi</label>
+<select id="opKartType" class="ope-fld" onchange="opKartTypeChanged()">
+<option>Profil</option><option>Boru</option><option>Köşebent</option><option>Lama</option><option>NPU</option>
+</select>
+</div>
+<div class="ope-fg">
+<label>Kalite</label>
+<input id="opKartQuality" class="ope-fld" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Kalite" value="ST37">
+</div>
+<div class="ope-fg">
+<label id="opKartSizeLabel">Ebat</label>
+<input id="opKartSize" class="ope-fld" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Ebat" placeholder="Örn: 40x40">
+</div>
+<div class="ope-fg">
+<label>Kalınlık</label>
+<input id="opKartThickness" class="ope-fld" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Kalınlık" placeholder="Örn: 3">
+</div>
+<div class="ope-fg">
+<label>Boy (metre)</label>
+<input id="opKartLength" class="ope-fld" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Boy" value="6"
+oninput="opKartLengthChanged()">
+</div>
+<div class="ope-fg">
+<label>Başlangıç stoku</label>
+<input id="opKartStock" class="ope-fld num" type="text" inputmode="none"
+data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlangıç stoku" value="0">
+</div>
+</div>
+<div class="ope-fg" id="opKartKindGroup" style="display:none">
+<label>Boy Cinsi</label>
+<select id="opKartKind" class="ope-fld">
+<option value="parca">Parça (kesimden artan)</option>
+<option value="ozel">Özel tam boy (fabrikadan böyle geliyor)</option>
+</select>
+</div>
+<div class="ope-swarn" id="opKartWarn"></div>
+</div>
+<div class="ope-sfoot">
+<button type="button" class="vazgec" onclick="opKartClose()">Vazgeç</button>
+<button type="button" class="kaydet mavi" onclick="opKartConfirm()">Kartı Oluştur</button>
+</div>
+</div>
 </div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
@@ -15334,6 +16030,37 @@ jobPlanRefreshAll();
 jobPlanSaveJobs();
 }
 
+/* Başlatılan iş kuyruğun başına alınır.
+   Tezgâh tek olduğu için çalışan iş her zaman 1. sıradadır; terminler de
+   buna göre kurulur. 3. sıradaki DT başlatılırsa 1. sıraya gelir,
+   DT'nin 2. dosyası başlatılırsa o DT'nin içinde başa geçer. */
+function jobPlanBringToFront(job,file){
+if(!job)return false;
+let changed=false;
+
+/* Dosya kendi DT'sinin içinde başa geçer. */
+if(file && Array.isArray(job.files)){
+let index=job.files.indexOf(file);
+if(index>0){
+job.files.splice(index,1);
+job.files.unshift(file);
+changed=true;
+}
+}
+
+/* DT sıralamanın başına geçer. */
+let active=jobPlanActiveJobs();
+if(active.length && active[0]!==job){
+let sira=1;
+job.order=0;
+active.forEach(j=>{if(j!==job)j.order=sira++;});
+job.order=0;
+changed=true;
+}
+
+return changed;
+}
+
 function jobPlanCleanPercent(value){
 let n=Number(String(value===undefined||value===null?"":value).replace(",","."));
 if(!Number.isFinite(n))return 0;
@@ -15661,6 +16388,9 @@ file.pausedAt=null;
 file.startedBy=jobPlanWho();
 if(job.status==="planned")job.status="active";
 
+/* Çalışan iş kuyruğun başına alınır, terminler ona göre kurulur. */
+jobPlanBringToFront(job,file);
+
 jobPlanRefreshAll();
 await jobPlanSaveJobs();
 }
@@ -15806,6 +16536,9 @@ if(jobPlanBlockIfRunning(file))return;
 file.status="basladi";
 file.startedAt=Date.now();
 file.pausedAt=null;
+
+/* Devam edilen iş de kuyruğun başına alınır. */
+jobPlanBringToFront(job,file);
 
 jobPlanRefreshAll();
 await jobPlanSaveJobs();
@@ -17795,6 +18528,11 @@ if(typeof viewerApply==="function"){
 try{viewerApply();}catch(e){console.warn("İzleyici ekranı:",e);}
 }
 
+/* 5b) Operatör tezgâh ekranı */
+if(typeof opApply==="function"){
+try{opApply();}catch(e){console.warn("Tezgâh ekranı:",e);}
+}
+
 /* 6) İş planı tabloları yeniden çizilsin */
 if(typeof jobPlanRender==="function" && typeof jobPlanJobs!=="undefined"){
 try{jobPlanRender();}catch(e){}
@@ -17833,6 +18571,8 @@ let perms=systemRolePerms(systemSelectedRole);
 
 let sade=typeof viewerRoleSimple==="function"?viewerRoleSimple(systemSelectedRole):false;
 
+let tezgah=typeof opRoleTezgah==="function"?opRoleTezgah(systemSelectedRole):false;
+
 let sadeKutu=
 '<div class="system-perm-group">'+
 '<div class="system-perm-group-title">Ekran Düzeni</div>'+
@@ -17842,6 +18582,15 @@ let sadeKutu=
 'onchange="systemSetRoleSimple(\''+systemSelectedRole+'\',this.checked)">'+
 '<span>Sade izleyici ekranı'+
 '<span class="hint"> · Giriş yapınca Stok / İş Planı seçimi çıkar, tablolar salt okunur olur</span>'+
+'</span>'+
+'</label>'+
+'</div>'+
+'<div class="system-perm-row '+(tezgah?"on":"off")+'">'+
+'<label>'+
+'<input type="checkbox" '+(tezgah?"checked":"")+' '+
+'onchange="systemSetRoleTezgah(\''+systemSelectedRole+'\',this.checked)">'+
+'<span>Operatör tezgâh ekranı'+
+'<span class="hint"> · Dokunmatik tablete göre; solda çalışan iş, sağda kuyruk</span>'+
 '</span>'+
 '</label>'+
 '</div>'+
@@ -17876,6 +18625,15 @@ let fresh=await loadSystemData(true);
 if(!fresh.roles[role])fresh.roles[role]=(systemDefaultRoles()[role]||{name:role});
 if(!fresh.roles[role].perms)fresh.roles[role].perms=systemDefaultPerms(role);
 fresh.roles[role].perms[key]=!!checked;
+await saveSystemData();
+systemRenderRoles();
+systemApplyPermissions();
+}
+
+async function systemSetRoleTezgah(role,checked){
+let fresh=await loadSystemData(true);
+if(!fresh.roles[role])fresh.roles[role]=(systemDefaultRoles()[role]||{name:role});
+fresh.roles[role].tezgahEkrani=!!checked;
 await saveSystemData();
 systemRenderRoles();
 systemApplyPermissions();
@@ -19966,6 +20724,1327 @@ if(typeof viewerEski!=="function")return;
 window[viewerAd]=function(){
 if(typeof viewerActive==="function" && viewerActive())return;
 return viewerEski.apply(this,arguments);
+};
+}catch(e){}
+});
+
+
+
+/* ================= OPERATÖR TEZGÂH EKRANI =================
+
+   Rolüne "tezgâh ekranı" işareti konmuş kullanıcı giriş yaptığında
+   uygulamanın üstünü kapatan, dokunmatik tablete göre kurulmuş kabuk açılır.
+   Veriler ve kayıt işlemleri uygulamanın kendi fonksiyonlarını kullanır.    */
+
+let opPage="tezgah";
+let opQueueSearch="";
+let opQueueTab="sirada";
+let opQueueOpen={};
+let opSarfSearch="";
+let opHataSearch="";
+let opHataSelected="";
+let opStokSearch="";
+let opStokSelected="";
+let opStokTip="Giriş";
+let opSarfId="";
+let opSarfTip="Giriş";
+let opTicker=null;
+
+/* Rolün tezgâh ekranı kullanıp kullanmadığı. Varsayılan: sadece operatör. */
+function opRoleTezgah(role){
+let key=String(role||"");
+let roles=(systemData && systemData.roles)||{};
+let row=roles[key];
+if(row && row.tezgahEkrani!==undefined)return row.tezgahEkrani===true;
+return key==="operator";
+}
+
+function opActive(){
+if(!systemData || !systemData.loginEnabled)return false;
+if(!currentUser)return false;
+if(currentUser.master)return false;
+if(typeof viewerRoleSimple==="function" && viewerRoleSimple(currentUser.role))return false;
+return opRoleTezgah(currentUser.role);
+}
+
+function opLogout(){
+if(typeof systemLogout==="function")systemLogout();
+}
+
+function opCan(key){
+return typeof systemCan==="function"?systemCan(key):true;
+}
+
+function opGo(page){
+let sayfalar=["tezgah","sarf","hata","stok","bakim"];
+opPage=sayfalar.indexOf(page)>-1?page:"tezgah";
+sayfalar.forEach(p=>{
+let el=document.getElementById("opPage"+p.charAt(0).toLocaleUpperCase("tr-TR")+p.slice(1));
+if(el)el.classList.toggle("on",p===opPage);
+});
+opRender();
+opVeriYukle();
+}
+
+/* Bazı bölümlerin verisi ilk açılışta yüklenir. */
+function opVeriYukle(){
+if(opPage==="hata" && typeof loadErrorCodes==="function"){
+Promise.resolve(loadErrorCodes()).then(()=>{if(opPage==="hata")opRenderHata();}).catch(()=>{});
+}
+if(opPage==="bakim"){
+if(typeof loadMaintenanceRecords==="function"){
+Promise.resolve(loadMaintenanceRecords()).then(()=>{if(opPage==="bakim")opRenderBakim();}).catch(()=>{});
+}
+}
+if(opPage==="sarf" && typeof loadConsumables==="function"){
+Promise.resolve(loadConsumables()).then(()=>{if(opPage==="sarf")opRenderSarf();}).catch(()=>{});
+}
+}
+
+/* ---------- YARDIMCILAR ---------- */
+
+function opNorm(text){
+if(typeof viewerNorm==="function")return viewerNorm(text);
+return String(text||"").toLocaleLowerCase("tr-TR").trim();
+}
+
+function opKelimeler(query){
+if(typeof viewerKelimeler==="function")return viewerKelimeler(query);
+return String(query||"").trim().split(/\s+/).filter(Boolean);
+}
+
+function opUyuyor(keys,kelimeler){
+return kelimeler.every(k=>keys.some(key=>String(key).indexOf(k)>-1));
+}
+
+function opBasHarf(text){
+let s=String(text||"").trim();
+if(!s)return "—";
+let parts=s.split(/\s+/).filter(Boolean);
+return ((parts[0]?parts[0][0]:"")+(parts.length>1?parts[parts.length-1][0]:"")).toLocaleUpperCase("tr-TR");
+}
+
+function opSaat(){
+let n=new Date();
+return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");
+}
+
+function opSure(saniye){
+let t=Math.max(0,Math.floor(Number(saniye)||0));
+let h=Math.floor(t/3600), m=Math.floor((t%3600)/60), s=t%60;
+return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function opSayi(value){
+return String(Number(Number(value||0).toFixed(2))).replace(".",",");
+}
+
+function opTarih(ts){
+let n=Number(ts);
+if(!Number.isFinite(n)||n<=0)return "—";
+let d=new Date(n);
+let aylar=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+return d.getDate()+" "+aylar[d.getMonth()];
+}
+
+function opTipSinifi(type){
+let t=String(type||"").toLocaleLowerCase("tr-TR");
+if(t.indexOf("profil")>-1)return "t-profil";
+if(t.indexOf("boru")>-1)return "t-boru";
+if(t.indexOf("köşebent")>-1||t.indexOf("kosebent")>-1)return "t-kosebent";
+if(t.indexOf("lama")>-1)return "t-lama";
+if(t.indexOf("npu")>-1)return "t-npu";
+return "";
+}
+
+const OP_PLAY='<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+const OP_PAUSE='<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+const OP_CHECK='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5 9-10"/></svg>';
+const OP_PLAY_SM='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>';
+
+/* ---------- TEZGÂH: ÇALIŞAN İŞ ---------- */
+
+function opPlanHazir(){
+return typeof jobPlanJobs!=="undefined" && Array.isArray(jobPlanJobs);
+}
+
+function opCalisanIs(){
+if(!opPlanHazir()||typeof jobPlanActiveJobs!=="function")return null;
+let bulunan=null;
+jobPlanActiveJobs().forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(bulunan)return;
+if(file.status==="basladi"||file.status==="durakladi")bulunan={job:job,file:file};
+});
+});
+return bulunan;
+}
+
+function opSiradakiIs(){
+if(!opPlanHazir()||typeof jobPlanActiveJobs!=="function")return null;
+let bulunan=null;
+jobPlanActiveJobs().forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(bulunan)return;
+if(file.status!=="bitti")bulunan={job:job,file:file};
+});
+});
+return bulunan;
+}
+
+function opAdet(file){
+if(typeof viewerIsAdedi==="function")return viewerIsAdedi(file);
+let tam=typeof jobPlanFullTubes==="function"?jobPlanFullTubes(file):(Number(file.tubes)||0);
+let yapilan=typeof jobPlanDoneTubes==="function"?jobPlanDoneTubes(file):0;
+return {tam:tam,parcaVar:false,parcaM:0,toplam:tam,yapilanTam:yapilan,yapilan:yapilan};
+}
+
+function opMalzemeMetni(file){
+if(!file)return "—";
+return file.size
+?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+:"ebat okunamadı";
+}
+
+function opRenderJob(){
+let box=document.getElementById("opJobBox");
+if(!box)return;
+
+let aktif=opCalisanIs();
+let durum=document.getElementById("opState");
+
+if(!aktif){
+let sira=opSiradakiIs();
+if(durum){durum.className="ope-state bos";durum.innerHTML='<i></i>Boşta';}
+
+box.innerHTML=
+'<div class="ope-job bos">'+
+'<div class="ope-bos">'+
+'<div class="ope-bico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></div>'+
+'<h3>Tezgâh boşta</h3>'+
+'<p>'+(sira?"Sıradaki işi başlatmak için düğmeye basın":"Planda bekleyen iş yok")+'</p>'+
+(sira
+?'<div class="ope-bnext"><div class="n">1</div><div class="t">'+
+'<b>'+escapeHTML(String(sira.job.dtNo||""))+'</b>'+
+'<span>'+escapeHTML(String(sira.file.fileName||""))+' · '+opMalzemeMetni(sira.file)+'</span>'+
+'</div></div>'+
+(opCan("isplani.calistir")
+?'<button type="button" class="ope-big start" style="width:100%" '+
+'onclick="opStart(\''+sira.job.id+'\',\''+sira.file.id+'\')">'+OP_PLAY+' BAŞLAT</button>'
+:'')
+:'')+
+'</div></div>';
+return;
+}
+
+let file=aktif.file;
+let a=opAdet(file);
+let calisiyor=file.status==="basladi";
+
+if(durum){
+durum.className="ope-state"+(calisiyor?"":" bos");
+durum.innerHTML='<i></i>'+(calisiyor?"Çalışıyor":"Duraklatıldı");
+}
+
+let yuzde=a.toplam>0?Math.min(100,Math.round(a.yapilan*100/a.toplam)):0;
+
+let gecenMs=typeof jobPlanWorkedMs==="function"?jobPlanWorkedMs(file):0;
+if(calisiyor && Number(file.startedAt)){
+let n=Number(file.startedAt);
+gecenMs=(Number(file.workedMs)||0)+(Date.now()-n);
+}
+let kalanSn=0;
+if(typeof jobPlanFileRemainingSeconds==="function"){
+try{kalanSn=jobPlanFileRemainingSeconds(aktif.job,file)||0;}catch(e){}
+}
+
+let bitis=Number(file.planEnd)
+?String(new Date(file.planEnd).getHours()).padStart(2,"0")+":"+
+String(new Date(file.planEnd).getMinutes()).padStart(2,"0")
+:"—";
+
+let ilerlemeMetni=a.yapilanTam+" / "+a.tam+" boy"+
+(a.parcaVar?" + "+opSayi(a.parcaM)+" m parça":"");
+
+box.innerHTML=
+'<div class="ope-job calisiyor">'+
+
+'<div class="ope-jhead">'+
+'<div style="min-width:0">'+
+'<div class="ope-live'+(calisiyor?"":" durdu")+'"><i></i>'+(calisiyor?"Tezgâhta":"Duraklatıldı")+'</div>'+
+'<div class="ope-jdt">'+escapeHTML(String(aktif.job.dtNo||""))+'</div>'+
+'<div class="ope-jfile">'+escapeHTML(String(file.fileName||""))+'</div>'+
+'</div>'+
+'<div class="ope-jright">'+
+'<div class="ope-jmat">'+opMalzemeMetni(file)+'</div>'+
+'<div class="ope-jsub">'+a.tam+' boy × '+
+(typeof jobPlanRawLengthM==="function"?jobPlanRawLengthM(file.rawLengthMm):6)+' m'+
+(file.customerMaterial?" · Müşteri Malzemesi":"")+'</div>'+
+'</div>'+
+'</div>'+
+
+'<div class="ope-jstats">'+
+'<div class="ope-jstat accent"><div class="k">Kesilen</div>'+
+'<div class="v">'+a.yapilanTam+'<small>/ '+a.tam+'</small></div>'+
+'<div class="s">'+Math.max(0,a.tam-a.yapilanTam)+' boy kaldı</div></div>'+
+'<div class="ope-jstat"><div class="k">Geçen</div>'+
+'<div class="v" id="opGecen">'+opSure(gecenMs/1000)+'</div>'+
+'<div class="s">başlangıç '+
+(Number(file.startedAt)?String(new Date(file.startedAt).getHours()).padStart(2,"0")+":"+
+String(new Date(file.startedAt).getMinutes()).padStart(2,"0"):"—")+'</div></div>'+
+'<div class="ope-jstat"><div class="k">Kalan</div>'+
+'<div class="v">'+(kalanSn>0?opSure(kalanSn):"—")+'</div>'+
+'<div class="s">bitiş '+bitis+'</div></div>'+
+'</div>'+
+
+'<div class="ope-jprog">'+
+'<div class="ope-bar"><i style="width:'+yuzde+'%"></i></div>'+
+'<div class="ope-bart"><span>'+escapeHTML(ilerlemeMetni)+'</span><span>%'+yuzde+'</span></div>'+
+'</div>'+
+
+(opCan("isplani.calistir")
+?'<div class="ope-jact">'+
+(calisiyor
+?'<button type="button" class="ope-big pause" onclick="opPause(\''+aktif.job.id+'\',\''+file.id+'\')">'+
+OP_PAUSE+' DURAKLA</button>'
+:'<button type="button" class="ope-big start" onclick="opResume(\''+aktif.job.id+'\',\''+file.id+'\')">'+
+OP_PLAY+' DEVAM</button>')+
+'<button type="button" class="ope-big finish" onclick="opFinish(\''+aktif.job.id+'\',\''+file.id+'\')">'+
+OP_CHECK+' BİTİR</button>'+
+'</div>'
+:'')+
+
+'</div>';
+}
+
+async function opStart(jobId,fileId){
+if(typeof jobPlanStartFile==="function")await jobPlanStartFile(jobId,fileId);
+opRender();
+}
+async function opPause(jobId,fileId){
+if(typeof jobPlanPauseFile==="function")await jobPlanPauseFile(jobId,fileId);
+opRender();
+}
+async function opResume(jobId,fileId){
+if(typeof jobPlanResumeFile==="function")await jobPlanResumeFile(jobId,fileId);
+opRender();
+}
+async function opFinish(jobId,fileId){
+if(typeof jobPlanFinishFile==="function")await jobPlanFinishFile(jobId,fileId);
+opRender();
+}
+
+/* ---------- TEZGÂH: KUYRUK ---------- */
+
+function opSetQueueSearch(value){
+opQueueSearch=String(value||"");
+opRenderQueue();
+}
+
+function opSetQueueTab(tab){
+opQueueTab=tab==="biten"?"biten":"sirada";
+opRenderQueue();
+}
+
+function opQueueToggle(jobId){
+let key=String(jobId);
+opQueueOpen[key]=!opQueueOpen[key];
+opRenderQueue();
+}
+
+function opQueueAcik(jobId){
+if(opKelimeler(opQueueSearch).length)return true;
+return opQueueOpen[String(jobId)]===true;
+}
+
+function opQueueGruplar(){
+if(!opPlanHazir())return [];
+
+let jobs=opQueueTab==="biten"
+?(typeof jobPlanDoneJobs==="function"?jobPlanDoneJobs():[])
+:(typeof jobPlanActiveJobs==="function"?jobPlanActiveJobs():[]);
+
+let kelimeler=opKelimeler(opQueueSearch);
+
+return jobs.map(job=>{
+let files=(job.files||[]).slice();
+if(kelimeler.length){
+let dtKeys=[opNorm(job.dtNo).replace(/\s+/g,"")];
+if(!opUyuyor(dtKeys,kelimeler)){
+files=files.filter(f=>opUyuyor(dtKeys.concat([opNorm(f.fileName).replace(/\s+/g,"")]),kelimeler));
+}
+}
+return {job:job,files:files};
+}).filter(g=>g.files.length);
+}
+
+function opStokSorunu(file){
+if(!file||file.status==="bitti")return false;
+if(typeof jobPlanFileStockState!=="function")return false;
+try{return jobPlanFileStockState(file).code==="yetersiz";}catch(e){return false;}
+}
+
+function opDtDurum(job){
+if(typeof viewerDtDurumKodu==="function")return viewerDtDurumKodu(job);
+return "bekliyor";
+}
+
+function opDtRozet(job){
+let kod=opDtDurum(job);
+let ad=kod==="bitti"?"Tamamlandı":(kod==="devam"?"Devam Ediyor":"Bekliyor");
+let sinif=kod==="bitti"?"ok":(kod==="devam"?"run":"wait");
+return '<span class="ope-pill '+sinif+'">'+ad+'</span>';
+}
+
+function opRenderQueueSeg(){
+let box=document.getElementById("opQueueSeg");
+if(!box)return;
+let aktif=opPlanHazir()&&typeof jobPlanActiveJobs==="function"?jobPlanActiveJobs().length:0;
+let biten=opPlanHazir()&&typeof jobPlanDoneJobs==="function"?jobPlanDoneJobs().length:0;
+
+box.innerHTML=
+'<button type="button" class="'+(opQueueTab==="sirada"?"on":"")+'" onclick="opSetQueueTab(\'sirada\')">'+
+'Sırada <span class="n">'+aktif+'</span></button>'+
+'<button type="button" class="'+(opQueueTab==="biten"?"on":"")+'" onclick="opSetQueueTab(\'biten\')">'+
+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5 9-10"/></svg>'+
+'Biten <span class="n">'+biten+'</span></button>';
+
+let baslik=document.getElementById("opQueueTitle");
+if(baslik)baslik.textContent=opQueueTab==="biten"?"Tamamlanan İşler":"Sıradaki İşler";
+}
+
+function opRenderQueue(){
+opRenderQueueSeg();
+
+let list=document.getElementById("opQueueList");
+if(!list)return;
+
+let gruplar=opQueueGruplar();
+if(!gruplar.length){
+list.innerHTML='<div class="ope-empty">'+
+(opQueueSearch?"Aramaya uyan iş yok.":
+opQueueTab==="biten"?"Tamamlanmış iş yok.":"Planda iş yok.")+'</div>';
+return;
+}
+
+let calisanVar=!!opCalisanIs();
+let html=[];
+
+gruplar.forEach((grup,index)=>{
+let job=grup.job;
+let acik=opQueueAcik(job.id);
+let calisiyor=grup.files.some(f=>f.status==="basladi");
+let sorun=grup.files.some(f=>opStokSorunu(f));
+
+html.push(
+'<div class="ope-qdt'+(calisiyor?" calisiyor":(sorun?" warn":""))+'" '+
+'onclick="opQueueToggle(\''+job.id+'\')">'+
+'<div class="no">'+(opQueueTab==="biten"?"✓":(index+1))+'</div>'+
+'<div class="info">'+
+'<div class="dt"><span class="caret">'+(acik?"▼":"►")+'</span>'+
+escapeHTML(String(job.dtNo||""))+'</div>'+
+'<div class="cnt">'+grup.files.length+' dosya</div>'+
+'</div>'+
+opDtRozet(job)+
+'</div>'
+);
+
+if(!acik)return;
+
+grup.files.forEach(file=>{
+let a=opAdet(file);
+let bitti=file.status==="bitti";
+let basladi=file.status==="basladi";
+let durakladi=file.status==="durakladi";
+
+let sag="";
+if(bitti){
+sag='<div class="ope-qtime"><b>'+
+(Number(file.finishedAt)
+?String(new Date(file.finishedAt).getHours()).padStart(2,"0")+":"+
+String(new Date(file.finishedAt).getMinutes()).padStart(2,"0")
+:"—")+'</b>'+
+(typeof jobPlanFormatDuration==="function"&&typeof jobPlanWorkedMs==="function"
+?jobPlanFormatDuration(jobPlanWorkedMs(file)/1000):"")+'</div>';
+}
+else if(basladi){
+sag='<span class="ope-pill run">Tezgâhta</span>';
+}
+else if(!opCan("isplani.calistir")){
+sag='<span class="ope-pill '+(durakladi?"pause":"wait")+'">'+(durakladi?"Duraklatıldı":"Bekliyor")+'</span>';
+}
+else{
+sag='<button type="button" class="ope-qbtn'+(durakladi?" devam":"")+(calisanVar?" disabled":"")+'" '+
+(calisanVar?'':'onclick="'+(durakladi?"opResume":"opStart")+'(\''+job.id+'\',\''+file.id+'\')"')+'>'+
+OP_PLAY_SM+(durakladi?"Devam":"Başlat")+'</button>';
+}
+
+html.push(
+'<div class="ope-qfile'+(basladi?" calisiyor":"")+'"'+
+(opStokSorunu(file)?' style="background:#fef2f2"':'')+'>'+
+'<div class="fi">'+
+'<div class="fn">'+escapeHTML(String(file.fileName||""))+'</div>'+
+'<div class="fm">'+opMalzemeMetni(file)+' · '+a.yapilanTam+' / '+a.tam+' boy'+
+(a.parcaVar?" + "+opSayi(a.parcaM)+" m parça":"")+
+(opStokSorunu(file)?' · <b style="color:#b91c1c">stok yetersiz</b>':'')+'</div>'+
+'</div>'+
+sag+
+'</div>'
+);
+});
+});
+
+list.innerHTML=html.join("");
+}
+
+/* ---------- SARF MALZEME ---------- */
+
+function opSetSarfSearch(value){
+opSarfSearch=String(value||"");
+opRenderSarf();
+}
+
+function opRenderSarf(){
+let list=document.getElementById("opSarfList");
+if(!list)return;
+
+let hepsi=typeof consumables!=="undefined"&&Array.isArray(consumables)?consumables:[];
+let kelimeler=opKelimeler(opSarfSearch);
+let veri=kelimeler.length
+?hepsi.filter(x=>opUyuyor([opNorm(x.name).replace(/\s+/g,""),opNorm(x.unit)],kelimeler))
+:hepsi.slice();
+
+veri.sort((a,b)=>{
+let aq=Number(a.quantity)||0, bq=Number(b.quantity)||0;
+let al=aq<=1?0:1, bl=bq<=1?0:1;
+if(al!==bl)return al-bl;
+return String(a.name).localeCompare(String(b.name),"tr");
+});
+
+let chips=document.getElementById("opSarfChips");
+if(chips){
+let az=hepsi.filter(x=>(Number(x.quantity)||0)<=1).length;
+chips.innerHTML='<span class="ope-chip">'+hepsi.length+' malzeme</span>'+
+(az?'<span class="ope-chip warn">'+az+' azaldı</span>':'');
+}
+
+if(!veri.length){
+list.innerHTML='<div class="ope-empty">'+
+(opSarfSearch?"Aramaya uyan sarf malzemesi yok.":"Henüz sarf malzemesi eklenmemiş.")+'</div>';
+return;
+}
+
+list.innerHTML=veri.map(item=>{
+let q=Math.max(0,Number(item.quantity)||0);
+let sinif=q<=0?"out":(q<=1?"low":"");
+let rozet=q<=0?'<span class="ope-pill bad">Tükendi</span>'
+:(q<=1?'<span class="ope-pill yakin">Azaldı</span>':'<span class="ope-pill ok">Yeterli</span>');
+let miktar=typeof formatConsumableQuantity==="function"?formatConsumableQuantity(q):String(q);
+let id=String(item.id).replace(/'/g,"\\'");
+
+return '<div class="ope-sarf '+sinif+'">'+
+'<div class="ope-sico">'+
+(q<=0
+?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><circle cx="12" cy="12" r="9"/></svg>'
+:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path d="M3 8l9 5 9-5"/></svg>')+
+'</div>'+
+'<div class="ope-sinfo"><div class="ope-sname">'+escapeHTML(item.name)+'</div>'+
+'<div class="ope-sunit">'+escapeHTML(item.unit)+'</div></div>'+
+'<div class="ope-sqty"><div class="v">'+escapeHTML(miktar)+'</div>'+
+'<div class="u">'+escapeHTML(item.unit)+'</div></div>'+
+rozet+
+'<div class="ope-sact">'+
+'<button type="button" class="ope-qty gir" onclick="opSarfOpen(\''+id+'\',\'Giriş\')" title="Giriş">'+
+'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>'+
+'<button type="button" class="ope-qty cik" onclick="opSarfOpen(\''+id+'\',\'Çıkış\')" title="Çıkış">'+
+'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>'+
+'</div>'+
+'</div>';
+}).join("");
+}
+
+function opSarfOpen(id,tip){
+let item=(typeof consumables!=="undefined"?consumables:[]).find(x=>String(x.id)===String(id));
+if(!item)return;
+
+opSarfId=item.id;
+opSarfTip=tip;
+
+let giris=tip==="Giriş";
+let head=document.getElementById("opSarfHead");
+if(head)head.className="ope-shead"+(giris?"":" cik");
+
+let ico=document.getElementById("opSarfIcon");
+if(ico)ico.innerHTML=giris
+?'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>'
+:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>';
+
+let baslik=document.getElementById("opSarfTitle");
+if(baslik)baslik.textContent=giris?"Sarf Malzemesi Girişi":"Sarf Malzemesi Çıkışı";
+
+let bilgi=document.getElementById("opSarfInfo");
+if(bilgi){
+let miktar=typeof formatConsumableQuantity==="function"?formatConsumableQuantity(item.quantity):item.quantity;
+bilgi.textContent=item.name+" · mevcut "+miktar+" "+item.unit;
+}
+
+let kaydet=document.getElementById("opSarfSave");
+if(kaydet){
+kaydet.className="kaydet"+(giris?"":" cik");
+kaydet.textContent=giris?"Stok Ekle":"Stok Çıkar";
+}
+
+let input=document.getElementById("opSarfQty");
+if(input){
+input.value="";
+let tamSayi=["Adet","Paket","Kutu","Rulo"].indexOf(item.unit)>-1;
+input.dataset.keypad=tamSayi?"integer":"decimal";
+input.dataset.keypadLabel=item.name+" miktarı";
+}
+
+let uyari=document.getElementById("opSarfWarn");
+if(uyari)uyari.textContent="";
+
+document.getElementById("opSarfSheet").classList.add("on");
+setTimeout(()=>{
+if(typeof openNumericKeypad==="function" && input)openNumericKeypad(input);
+},60);
+}
+
+function opSarfClose(){
+document.getElementById("opSarfSheet").classList.remove("on");
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+}
+
+async function opSarfConfirm(){
+let input=document.getElementById("opSarfQty");
+let uyari=document.getElementById("opSarfWarn");
+let ham=String(input?input.value:"").replace(",",".").trim();
+let n=Number(ham);
+
+if(ham===""||!Number.isFinite(n)||n<=0){
+if(uyari)uyari.textContent="Geçerli bir miktar girin.";
+return;
+}
+
+/* Uygulamanın kendi kaydetme akışını kullan. */
+currentConsumableId=opSarfId;
+currentConsumableMovementType=opSarfTip;
+let alan=document.getElementById("consumableMovementQuantity");
+if(alan)alan.value=String(n).replace(".",",");
+
+opSarfClose();
+if(typeof saveConsumableMovement==="function")await saveConsumableMovement();
+opRenderSarf();
+}
+
+/* ---------- HATA KODLARI ---------- */
+
+function opSetHataSearch(value){
+opHataSearch=String(value||"");
+opRenderHata();
+}
+
+function opHataSec(id){
+opHataSelected=String(id);
+opRenderHata();
+}
+
+function opHataKayitlari(){
+let hepsi=typeof errorCodes!=="undefined"&&Array.isArray(errorCodes)?errorCodes:[];
+let kelimeler=opKelimeler(opHataSearch);
+if(!kelimeler.length)return hepsi.slice();
+return hepsi.filter(r=>opUyuyor([
+opNorm(r.code).replace(/\s+/g,""),
+opNorm(r.machine).replace(/\s+/g,""),
+opNorm(r.detail).replace(/\s+/g,""),
+opNorm(r.solution).replace(/\s+/g,"")
+],kelimeler));
+}
+
+function opRenderHata(){
+let list=document.getElementById("opHataList");
+let detay=document.getElementById("opHataDetail");
+if(!list||!detay)return;
+
+let veri=opHataKayitlari();
+
+let chips=document.getElementById("opHataChips");
+if(chips){
+let toplam=typeof errorCodes!=="undefined"&&Array.isArray(errorCodes)?errorCodes.length:0;
+chips.innerHTML='<span class="ope-chip">'+toplam+' kayıt</span>';
+}
+
+if(!veri.length){
+list.innerHTML='<div class="ope-empty">'+
+(opHataSearch?"Aramaya uyan kayıt yok.":"Henüz hata kodu eklenmemiş.")+'</div>';
+detay.innerHTML='<div class="ope-mempty"><div class="i">'+
+'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><circle cx="12" cy="12" r="9"/></svg>'+
+'</div><p>Kayıt yok</p></div>';
+return;
+}
+
+if(!veri.some(r=>String(r.id)===opHataSelected))opHataSelected=String(veri[0].id);
+
+list.innerHTML=veri.map(r=>
+'<div class="ope-eitem'+(String(r.id)===opHataSelected?" on":"")+'" '+
+'onclick="opHataSec(\''+String(r.id).replace(/'/g,"\\'")+'\')">'+
+'<div class="ope-ebadge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg></div>'+
+'<div style="min-width:0;flex:1">'+
+'<div class="ope-ecode">'+escapeHTML(String(r.code||"—"))+'</div>'+
+'<div class="ope-esub">'+escapeHTML(String(r.detail||r.machine||"").split("\n")[0])+'</div>'+
+'</div>'+
+'</div>'
+).join("");
+
+let kayit=veri.find(r=>String(r.id)===opHataSelected)||veri[0];
+
+detay.innerHTML=
+'<div class="ope-etitle">'+
+'<div style="min-width:0">'+
+'<div class="ope-ebig">'+escapeHTML(String(kayit.code||"—"))+'</div>'+
+'<div class="ope-emac">'+escapeHTML(String(kayit.machine||"—"))+'</div>'+
+'</div>'+
+'<div class="ope-emeta"><b>'+escapeHTML(String(kayit.updatedBy||kayit.createdBy||"—"))+'</b>'+
+escapeHTML(String(kayit.updatedAt||kayit.createdAt||"").slice(0,10))+'</div>'+
+'</div>'+
+
+'<div class="ope-eblock d">'+
+'<div class="bt"><div class="bi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg></div>Hatanın Detayı</div>'+
+'<div class="ope-ebox">'+escapeHTML(String(kayit.detail||"—"))+'</div>'+
+'</div>'+
+
+'<div class="ope-eblock c">'+
+'<div class="bt"><div class="bi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5 9-10"/></svg></div>Çözüm</div>'+
+'<div class="ope-ebox">'+escapeHTML(String(kayit.solution||"—"))+'</div>'+
+'</div>';
+}
+
+/* ---------- STOK HAREKETİ ---------- */
+
+function opSetStokSearch(value){
+opStokSearch=String(value||"");
+opRenderStok();
+}
+
+function opStokSec(id){
+opStokSelected=String(id);
+opRenderStokForm();
+opRenderStokTablo();
+}
+
+function opStokTipSec(tip){
+opStokTip=tip==="Çıkış"?"Çıkış":"Giriş";
+opRenderStokForm();
+}
+
+function opStokListe(){
+let hepsi=Array.isArray(products)?products.slice():[];
+let kelimeler=opKelimeler(opStokSearch);
+if(kelimeler.length && typeof viewerStockKeys==="function"){
+hepsi=hepsi.filter(p=>opUyuyor(viewerStockKeys(p),kelimeler));
+}
+return hepsi.sort((a,b)=>
+String(a.type||"").localeCompare(String(b.type||""),"tr")||
+opNorm(a.size).localeCompare(opNorm(b.size),"tr")||
+(parseLength(a.length)||0)-(parseLength(b.length)||0)
+);
+}
+
+function opRezListesi(product){
+if(!product||typeof getStandardReservations!=="function")return [];
+return getStandardReservations(product.id)||[];
+}
+
+function opRenderStokTablo(){
+let body=document.getElementById("opStokBody");
+if(!body)return;
+
+let veri=opStokListe();
+
+let chips=document.getElementById("opStokChips");
+if(chips){
+let toplamRez=0;
+(Array.isArray(products)?products:[]).forEach(p=>{
+toplamRez+=typeof getReservedQuantity==="function"?Number(getReservedQuantity(p.id))||0:0;
+});
+chips.innerHTML='<span class="ope-chip">'+(Array.isArray(products)?products.length:0)+' malzeme</span>'+
+(toplamRez?'<span class="ope-chip warn">'+toplamRez+' boy ayrılı</span>':'')+
+(opCan("stok.kart")
+?'<button type="button" class="ope-add" onclick="opKartOpen()">'+
+'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>'+
+'Yeni Stok Kartı</button>'
+:'');
+}
+
+if(!veri.length){
+body.innerHTML='<tr><td colspan="4" class="ope-empty">'+
+(opStokSearch?"Aramaya uyan malzeme yok.":"Henüz stok kartı eklenmemiş.")+'</td></tr>';
+return;
+}
+
+body.innerHTML=veri.map(p=>{
+let stok=Number(p.stock)||0;
+let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(p.id))||0:0;
+let serbest=Math.max(0,stok-ayrilan);
+let rez=opRezListesi(p);
+
+let etiket=typeof productLengthKindLabel==="function"?productLengthKindLabel(p):"";
+
+let rezHtml=rez.length
+?'<div class="ope-mrez">'+
+rez.slice(0,2).map(r=>'<span><b>'+Number(r.quantity)+' boy</b> '+escapeHTML(String(r.note||""))+'</span>').join("")+
+(rez.length>2?'<span class="more">+'+(rez.length-2)+' iş daha</span>':'')+
+'</div>'
+:'<span class="ope-mnone">—</span>';
+
+return '<tr class="'+(String(p.id)===opStokSelected?"on":"")+'" '+
+'onclick="opStokSec(\''+String(p.id).replace(/'/g,"\\'")+'\')">'+
+'<td><div class="ope-mname"><i class="ope-mdot '+opTipSinifi(p.type)+'"></i>'+
+escapeHTML(String(p.type||"")+" "+String(p.size||""))+
+(etiket?' <span class="ope-mtag">'+escapeHTML(etiket)+'</span>':'')+'</div>'+
+'<div class="ope-msub">'+escapeHTML([formatThickness(p.thickness),p.quality,formatLength(p.length)]
+.filter(Boolean).join(" · "))+'</div></td>'+
+'<td>'+rezHtml+'</td>'+
+'<td class="ope-mnum'+(stok<=0?" sifir":"")+'">'+stok+'<small>boy</small></td>'+
+'<td class="ope-mnum '+(serbest<=0?(stok<=0?"sifir":"tuk"):"kul")+'">'+serbest+'<small>boy</small></td>'+
+'</tr>';
+}).join("");
+}
+
+function opRenderStokForm(){
+let box=document.getElementById("opStokForm");
+if(!box)return;
+
+let product=products.find(p=>String(p.id)===opStokSelected);
+if(!product){
+box.innerHTML='<div class="ope-mempty"><div class="i">'+
+'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h10"/></svg>'+
+'</div><p>Soldaki listeden bir malzeme seçin</p></div>';
+return;
+}
+
+let stok=Number(product.stock)||0;
+let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(product.id))||0:0;
+let serbest=Math.max(0,stok-ayrilan);
+let rez=opRezListesi(product);
+let giris=opStokTip==="Giriş";
+
+let rezHtml=rez.length
+?rez.map(r=>
+'<div class="ope-ritem"><div class="q">'+Number(r.quantity)+' boy</div>'+
+'<div class="d">'+escapeHTML(String(r.note||""))+'</div>'+
+(opCan("stok.ayirkaldir")
+?'<button type="button" class="x" onclick="opRezSil(\''+String(r.id).replace(/'/g,"\\'")+'\')">×</button>'
+:'')+
+'</div>'
+).join("")
+:'<div class="ope-rempty">Bu malzemede ayrılmış iş yok.</div>';
+
+box.innerHTML=
+'<div class="ope-mform">'+
+
+'<div class="ope-msel">'+
+'<div class="n">'+escapeHTML(String(product.type||"")+" "+String(product.size||""))+'</div>'+
+'<div class="s">'+escapeHTML([formatThickness(product.thickness),product.quality,formatLength(product.length)]
+.filter(Boolean).join(" · "))+'</div>'+
+'<div class="q">'+
+'<div><div class="k">Stok</div><div class="v">'+stok+'</div></div>'+
+'<div><div class="k">Ayrılan</div><div class="v" style="color:#9a3412">'+ayrilan+'</div></div>'+
+'<div><div class="k">Kullanılabilir</div><div class="v" style="color:#0f766e">'+serbest+'</div></div>'+
+'</div>'+
+'</div>'+
+
+(typeof isStandardReservableProduct==="function" && isStandardReservableProduct(product)
+?'<div class="ope-rez">'+
+'<div class="ope-rhead">'+
+'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>'+
+'Ayrılan İşler'+
+(opCan("stok.ayir")
+?'<button type="button" class="ope-radd" onclick="opRezOpen()">'+
+'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Ayır</button>'
+:'')+
+'</div>'+rezHtml+'</div>'
+:'')+
+
+'<div class="ope-mtoggle">'+
+'<button type="button" class="gir'+(giris?" on":"")+'" onclick="opStokTipSec(\'Giriş\')">'+
+'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>GİRİŞ</button>'+
+'<button type="button" class="cik'+(giris?"":" on")+'" onclick="opStokTipSec(\'Çıkış\')">'+
+'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>ÇIKIŞ</button>'+
+'</div>'+
+
+(!giris && rez.length
+?'<div class="ope-fg"><label>Ayrılan İş (isteğe bağlı)</label>'+
+'<select id="opStokRez" class="ope-fld" onchange="opStokRezSecildi()">'+
+'<option value="">Ayrılan iş seçmeden çıkış</option>'+
+rez.map(r=>'<option value="'+escapeHTML(String(r.id))+'">'+
+Number(r.quantity)+' boy — '+escapeHTML(String(r.note||""))+'</option>').join("")+
+'</select></div>'
+:'')+
+
+'<div class="ope-fg"><label>Miktar (boy)</label>'+
+'<input id="opStokQty" class="ope-fld num" type="text" inputmode="none" '+
+'data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Stok miktarı"></div>'+
+
+'<div class="ope-fg"><label>Açıklama</label>'+
+'<input id="opStokDesc" class="ope-fld" type="text" inputmode="none" '+
+'data-keypad="text" data-native-inputmode="text" data-keypad-label="Açıklama" '+
+'placeholder="Örn: irsaliye no, firma"></div>'+
+
+'<div class="ope-swarn" id="opStokWarn"></div>'+
+
+'<button type="button" class="ope-msave'+(giris?"":" cik")+'" onclick="opStokKaydet()">'+
+OP_CHECK+'<span>'+(giris?"GİRİŞİ KAYDET":"ÇIKIŞI KAYDET")+'</span></button>'+
+
+'</div>';
+}
+
+function opStokRezSecildi(){
+let select=document.getElementById("opStokRez");
+let product=products.find(p=>String(p.id)===opStokSelected);
+if(!select||!select.value||!product)return;
+let item=opRezListesi(product).find(r=>String(r.id)===String(select.value));
+if(!item)return;
+let qty=document.getElementById("opStokQty");
+if(qty)qty.value=String(item.quantity);
+let desc=document.getElementById("opStokDesc");
+if(desc && !desc.value.trim())desc.value=String(item.note||"");
+}
+
+async function opStokKaydet(){
+if(!opCan("stok.hareket"))return;
+
+let product=products.find(p=>String(p.id)===opStokSelected);
+let uyari=document.getElementById("opStokWarn");
+if(!product){if(uyari)uyari.textContent="Malzeme seçin.";return;}
+
+let ham=String((document.getElementById("opStokQty")||{}).value||"").trim();
+let n=Math.floor(Number(ham.replace(",",".")));
+if(ham===""||!Number.isFinite(n)||n<=0){
+if(uyari)uyari.textContent="Geçerli bir miktar girin.";
+return;
+}
+if(uyari)uyari.textContent="";
+
+/* Uygulamanın kendi kaydetme akışı kullanılır. */
+currentProductId=product.id;
+currentMovementType=opStokTip;
+
+let miktar=document.getElementById("movementQuantity");
+if(miktar)miktar.value=String(n);
+
+let aciklama=document.getElementById("movementDescription");
+if(aciklama)aciklama.value=String((document.getElementById("opStokDesc")||{}).value||"").trim();
+
+if(typeof populateMovementReservation==="function")populateMovementReservation(product,opStokTip);
+let select=document.getElementById("movementReservationSelect");
+let secili=document.getElementById("opStokRez");
+if(select)select.value=(opStokTip==="Çıkış" && secili)?String(secili.value||""):"";
+
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+if(typeof saveMovement==="function")await saveMovement();
+
+opRenderStok();
+}
+
+/* ---------- AYIRMA ---------- */
+
+function opRezOpen(){
+if(!opCan("stok.ayir"))return;
+let product=products.find(p=>String(p.id)===opStokSelected);
+if(!product)return;
+
+let stok=Number(product.stock)||0;
+let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(product.id))||0:0;
+
+let bilgi=document.getElementById("opRezInfo");
+if(bilgi){
+bilgi.textContent=String(product.type||"")+" "+String(product.size||"")+
+" · kullanılabilir "+Math.max(0,stok-ayrilan)+" boy";
+}
+
+let qty=document.getElementById("opRezQty");
+if(qty)qty.value="";
+let note=document.getElementById("opRezNote");
+if(note)note.value="";
+let uyari=document.getElementById("opRezWarn");
+if(uyari)uyari.textContent="";
+
+/* Plandaki DT'ler hızlı seçim olarak gelir; elle de yazılabilir. */
+let chips=document.getElementById("opRezChips");
+if(chips){
+let dtler=[];
+if(opPlanHazir()&&typeof jobPlanActiveJobs==="function"){
+jobPlanActiveJobs().forEach(j=>{
+let dt=String(j.dtNo||"").trim();
+if(dt && dtler.indexOf(dt)===-1)dtler.push(dt);
+});
+}
+chips.innerHTML=dtler.slice(0,6).map(dt=>
+'<button type="button" class="ope-dtchip" onclick="opRezChip(\''+dt.replace(/'/g,"\\'")+'\')">'+
+escapeHTML(dt)+'</button>').join("");
+}
+
+document.getElementById("opRezSheet").classList.add("on");
+setTimeout(()=>{
+if(typeof openNumericKeypad==="function" && qty)openNumericKeypad(qty);
+},60);
+}
+
+function opRezChip(dt){
+let note=document.getElementById("opRezNote");
+if(note)note.value=dt;
+}
+
+function opRezClose(){
+document.getElementById("opRezSheet").classList.remove("on");
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+}
+
+function opRezConfirm(){
+if(!opCan("stok.ayir"))return;
+let product=products.find(p=>String(p.id)===opStokSelected);
+let uyari=document.getElementById("opRezWarn");
+if(!product)return;
+
+let n=Math.floor(Number(String((document.getElementById("opRezQty")||{}).value||"").replace(",",".")));
+let not=String((document.getElementById("opRezNote")||{}).value||"").trim();
+
+if(!Number.isFinite(n)||n<=0){
+if(uyari)uyari.textContent="Ayrılacak boy sayısını girin.";
+return;
+}
+if(!not){
+if(uyari)uyari.textContent="Hangi iş için ayrıldığını yazın.";
+return;
+}
+
+let stok=Number(product.stock)||0;
+let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(product.id))||0:0;
+if(ayrilan+n>stok){
+if(uyari)uyari.textContent="Bu kadar ayıramazsınız. Kullanılabilir: "+Math.max(0,stok-ayrilan)+" boy.";
+return;
+}
+
+let key=String(product.id);
+if(!Array.isArray(standardReservations[key]))standardReservations[key]=[];
+standardReservations[key].push(createReservation(n,not));
+if(typeof persistStandardReservations==="function")persistStandardReservations();
+
+opRezClose();
+if(typeof showProducts==="function")showProducts();
+opRenderStok();
+}
+
+function opRezSil(rezId){
+if(!opCan("stok.ayirkaldir"))return;
+let product=products.find(p=>String(p.id)===opStokSelected);
+if(!product)return;
+if(typeof removeStandardReservation==="function"){
+removeStandardReservation(product.id,rezId,true,null);
+}
+opRenderStok();
+}
+
+/* ---------- YENİ STOK KARTI ---------- */
+
+function opKartOpen(){
+if(!opCan("stok.kart"))return;
+["opKartSize","opKartThickness","opKartWarn"].forEach(id=>{
+let el=document.getElementById(id);
+if(el)("value" in el)?el.value="":el.textContent="";
+});
+let q=document.getElementById("opKartQuality"); if(q)q.value="ST37";
+let l=document.getElementById("opKartLength"); if(l)l.value="6";
+let s=document.getElementById("opKartStock"); if(s)s.value="0";
+let k=document.getElementById("opKartKind"); if(k)k.value="parca";
+opKartTypeChanged();
+opKartLengthChanged();
+document.getElementById("opKartSheet").classList.add("on");
+}
+
+function opKartClose(){
+document.getElementById("opKartSheet").classList.remove("on");
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+}
+
+function opKartTypeChanged(){
+let tip=String((document.getElementById("opKartType")||{}).value||"");
+let label=document.getElementById("opKartSizeLabel");
+if(label)label.textContent=tip==="Boru"?"Çap":"Ebat";
+let size=document.getElementById("opKartSize");
+if(size)size.placeholder=tip==="Boru"?"Örn: 42.4":"Örn: 40x40";
+}
+
+function opKartLengthChanged(){
+let group=document.getElementById("opKartKindGroup");
+if(!group)return;
+let boy=parseLength((document.getElementById("opKartLength")||{}).value);
+group.style.display=(Number.isFinite(boy)&&boy>0&&Math.abs(boy-6)>=0.005)?"":"none";
+}
+
+async function opKartConfirm(){
+if(!opCan("stok.kart"))return;
+let uyari=document.getElementById("opKartWarn");
+let al=id=>String((document.getElementById(id)||{}).value||"").trim();
+
+let tip=al("opKartType");
+let ebat=al("opKartSize");
+let kalinlik=al("opKartThickness");
+let boy=parseLength(al("opKartLength"));
+
+if(!ebat||(tip!=="NPU"&&!kalinlik)||!Number.isFinite(boy)||boy<=0){
+if(uyari)uyari.textContent="Ebat, kalınlık ve boy bilgilerini kontrol edin.";
+return;
+}
+if(uyari)uyari.textContent="";
+
+/* Uygulamanın kendi kart kaydetme akışı kullanılır.
+   Ebat ve kalite açılır liste olabilir; listede yoksa seçenek eklenir. */
+let ayarla=(id,deger)=>{
+let el=document.getElementById(id);
+if(!el)return;
+if(el.tagName==="SELECT"){
+let varMi=[...el.options].some(o=>String(o.value)===String(deger));
+if(!varMi){
+let opt=document.createElement("option");
+opt.value=String(deger);
+opt.textContent=String(deger);
+el.appendChild(opt);
+}
+}
+el.value=deger;
+};
+
+if(typeof editingProduct!=="undefined")editingProduct=null;
+if(typeof pendingProductReservations!=="undefined")pendingProductReservations=[];
+
+let typeSelect=document.getElementById("productType");
+if(typeSelect){
+typeSelect.value=tip;
+if(typeof typeChanged==="function")typeChanged();
+}
+
+ayarla("productQuality",al("opKartQuality")||"ST37");
+if(["Köşebent","Lama","NPU"].indexOf(tip)>-1)ayarla("productSizeManual",ebat);
+else ayarla("productSize",ebat);
+ayarla("productThickness",kalinlik);
+ayarla("productLength",String(boy).replace(".",","));
+ayarla("productStock",al("opKartStock")||"0");
+ayarla("productDescription","");
+ayarla("productLengthKind",al("opKartKind")||"parca");
+
+let finish=document.getElementById("productFinish");
+if(finish)finish.value="Standart";
+let seam=document.getElementById("productPipeSeam");
+if(seam)seam.value="Dikişli";
+
+opKartClose();
+if(typeof addProduct==="function")await addProduct();
+opRenderStok();
+}
+
+function opRenderStok(){
+opRenderStokTablo();
+opRenderStokForm();
+}
+
+/* ---------- BAKIM ---------- */
+
+function opSetBakimSearch(value){
+opBakimSearch=String(value||"");
+opRenderBakim();
+}
+let opBakimSearch="";
+
+function opRenderBakim(){
+let list=document.getElementById("opBakimList");
+if(!list)return;
+
+let kayitlar=typeof maintenanceRecords!=="undefined"&&Array.isArray(maintenanceRecords)
+?maintenanceRecords.slice():[];
+
+let latest=typeof getLatestMaintenanceMap==="function"?getLatestMaintenanceMap():{};
+let alerts=typeof getMaintenanceAlerts==="function"?getMaintenanceAlerts():[];
+
+let chips=document.getElementById("opBakimChips");
+if(chips){
+chips.innerHTML='<span class="ope-chip">'+Object.keys(latest).length+' ekipman</span>'+
+'<span class="ope-chip">'+kayitlar.length+' bakım kaydı</span>'+
+(alerts.length?'<span class="ope-chip warn">'+alerts.length+' bakım bekliyor</span>':'');
+}
+
+let alertBox=document.getElementById("opBakimAlert");
+if(alertBox){
+alertBox.innerHTML=alerts.length
+?'<div class="ope-alert"><div class="ai">'+
+'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 16.5v.01"/><path d="M10.3 3.9L2.4 18a1.9 1.9 0 001.7 2.9h15.8a1.9 1.9 0 001.7-2.9L13.7 3.9a1.9 1.9 0 00-3.4 0z"/></svg>'+
+'</div><div><div class="at">Bakım Uyarıları</div><div class="al">'+
+alerts.sort((a,b)=>a.status.due-b.status.due).map(x=>
+'<b>'+escapeHTML(x.record.equipment)+'</b> — '+
+(x.status.kind==="overdue"?"bakım tarihi geçti":"bakıma 1 aydan az kaldı")+
+' · sonraki bakım <b>'+
+(typeof formatMaintenanceDate==="function"?escapeHTML(formatMaintenanceDate(x.status.due)):"")+'</b>'
+).join("<br>")+
+'</div></div></div>'
+:"";
+}
+
+let kelimeler=opKelimeler(opBakimSearch);
+if(kelimeler.length){
+kayitlar=kayitlar.filter(r=>opUyuyor([
+opNorm(r.equipment).replace(/\s+/g,""),
+opNorm(r.performedBy).replace(/\s+/g,"")
+],kelimeler));
+}
+
+kayitlar.sort((a,b)=>{
+let ad=typeof maintenanceDateFromISO==="function"?(maintenanceDateFromISO(a.date)?.getTime()||0):0;
+let bd=typeof maintenanceDateFromISO==="function"?(maintenanceDateFromISO(b.date)?.getTime()||0):0;
+if(ad!==bd)return bd-ad;
+return String(a.equipment).localeCompare(String(b.equipment),"tr");
+});
+
+let note=document.getElementById("opBakimNote");
+if(note){
+note.innerHTML=opCan("bakim.duzenle")
+?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.01"/></svg>'+
+'Bakım kaydı eklemek ve PDF indirmek için bilgisayardaki tam ekranı kullanın.'
+:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>'+
+'Görüntüleme modu — bakım kaydı ekleme, silme ve PDF indirme yönetici yetkisindedir.';
+}
+
+if(!kayitlar.length){
+list.innerHTML='<div class="ope-empty">'+
+(opBakimSearch?"Aramaya uyan bakım kaydı yok.":"Henüz bakım kaydı yok.")+'</div>';
+return;
+}
+
+list.innerHTML=kayitlar.map(record=>{
+let key=typeof getMaintenanceEquipmentKey==="function"?getMaintenanceEquipmentKey(record.equipment):record.equipment;
+let sonMu=latest[key]&&String(latest[key].id)===String(record.id);
+let durum=sonMu&&typeof getMaintenanceStatus==="function"
+?getMaintenanceStatus(record)
+:{kind:"history",text:"Geçmiş kayıt",due:null};
+
+let sinif=durum.kind==="warning"?"warn":(durum.kind==="overdue"?"over":(sonMu?"":"gecmis"));
+let rozet=durum.kind==="warning"?"yakin":(durum.kind==="overdue"?"gecti":(sonMu?"ok":"gecmis"));
+let metin=durum.kind==="warning"?"Yaklaşıyor":(durum.kind==="overdue"?"Tarihi geçti":(sonMu?"Zamanı var":"Geçmiş kayıt"));
+
+return '<div class="ope-bk '+sinif+'">'+
+'<div class="ope-bkico">'+
+'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 00-6 6L3 18v3h3l5.7-5.7a4.5 4.5 0 006-6l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>'+
+'</div>'+
+'<div class="ope-bkinfo">'+
+'<div class="ope-bkname">'+escapeHTML(String(record.equipment||""))+'</div>'+
+'<div class="ope-bksub">'+(sonMu?"Son bakım":"Bakım")+': '+
+(typeof formatMaintenanceDate==="function"?escapeHTML(formatMaintenanceDate(record.date)):"")+
+' · '+escapeHTML(String(record.performedBy||""))+'</div>'+
+'</div>'+
+'<div class="ope-bkdate"><div class="k">Sonraki</div>'+
+'<div class="v '+(durum.kind==="overdue"?"gecti":(durum.kind==="warning"?"yakin":""))+'">'+
+(sonMu&&typeof formatMaintenanceDate==="function"?escapeHTML(formatMaintenanceDate(durum.due)):"—")+
+'</div></div>'+
+'<span class="ope-pill '+rozet+'">'+metin+'</span>'+
+'</div>';
+}).join("");
+}
+
+/* ---------- ORTAK ---------- */
+
+function opRenderUser(){
+let ad=currentUser&&currentUser.name?String(currentUser.name):"";
+let el=document.getElementById("opName");
+if(el)el.textContent=ad||"—";
+let av=document.getElementById("opAvatar");
+if(av)av.textContent=opBasHarf(ad);
+let rol=document.getElementById("opRole");
+if(rol)rol.textContent=typeof systemRoleName==="function"&&currentUser
+?systemRoleName(currentUser.role):"Operatör";
+let saat=document.getElementById("opClock");
+if(saat)saat.textContent=opSaat();
+}
+
+function opRender(){
+if(!opActive())return;
+opRenderUser();
+if(opPage==="sarf")opRenderSarf();
+else if(opPage==="hata")opRenderHata();
+else if(opPage==="stok")opRenderStok();
+else if(opPage==="bakim")opRenderBakim();
+else{opRenderJob();opRenderQueue();}
+}
+
+function opTick(){
+if(!opActive())return;
+let saat=document.getElementById("opClock");
+if(saat)saat.textContent=opSaat();
+
+if(opPage!=="tezgah")return;
+let aktif=opCalisanIs();
+if(!aktif||aktif.file.status!=="basladi")return;
+
+let el=document.getElementById("opGecen");
+if(!el)return;
+let gecen=(Number(aktif.file.workedMs)||0)+(Date.now()-(Number(aktif.file.startedAt)||Date.now()));
+el.textContent=opSure(gecen/1000);
+}
+
+function opApply(){
+let acik=opActive();
+document.body.classList.toggle("op-on",acik);
+
+if(opTicker){clearInterval(opTicker);opTicker=null;}
+if(!acik)return;
+
+opGo(opPage);
+opTicker=setInterval(opTick,1000);
+}
+
+function opRefresh(){
+if(!opActive())return;
+opRender();
+}
+
+if(typeof showProducts==="function"){
+let opOldShowProducts=showProducts;
+showProducts=function(){
+let r=opOldShowProducts.apply(this,arguments);
+try{if(opActive()&&(opPage==="stok"))opRenderStok();}catch(e){}
+return r;
+};
+}
+
+if(typeof jobPlanRender==="function"){
+let opOldJobPlanRender=jobPlanRender;
+jobPlanRender=function(){
+let r=opOldJobPlanRender.apply(this,arguments);
+try{if(opActive()&&opPage==="tezgah"){opRenderJob();opRenderQueue();}}catch(e){}
+return r;
+};
+}
+
+if(typeof renderConsumables==="function"){
+let opOldRenderConsumables=renderConsumables;
+renderConsumables=function(){
+let r=opOldRenderConsumables.apply(this,arguments);
+try{if(opActive()&&opPage==="sarf")opRenderSarf();}catch(e){}
+return r;
+};
+}
+
+/* Sade ekran açıkken uygulamanın kendi pencereleri açılamaz. */
+["openJobPlanModal","openConsumablesModal","openErrorCodeModal","openMaintenanceModal",
+"openMaintenancePasswordSetupModal","openSystemModal","openSettingsModal","openPriceModal",
+"openPurchaseImportModal","backupData","exportStock","exportJobPlan","requestMovementClear",
+"openBackupRestoreModal"].forEach(function(opAd){
+try{
+let opEski=window[opAd];
+if(typeof opEski!=="function")return;
+window[opAd]=function(){
+if(typeof opActive==="function" && opActive())return;
+return opEski.apply(this,arguments);
 };
 }catch(e){}
 });

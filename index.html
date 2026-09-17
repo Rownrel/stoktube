@@ -4248,6 +4248,26 @@ padding:7px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inh
 .ope-dbtn{min-width:calc(50% - 5px)}
 }
 
+/* Kabuk açıkken uygulamanın kendi pencereleri kabuğun üstünde açılır.
+   Giriş kapısı (20000), şifre penceresi (20100) ve ekran klavyesi (20200)
+   bunların da üstünde kalır. */
+body.op-on .modal,
+body.viewer-on .modal{z-index:15800}
+body.op-on .system-ask-modal,
+body.viewer-on .system-ask-modal{z-index:20100}
+
+.ope-duzenle{
+width:100%;height:48px;margin-bottom:14px;border:2px solid #e2e8f0;background:#fff;
+border-radius:11px;font-family:inherit;font-size:14px;font-weight:800;color:#475569;
+cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px
+}
+.ope-duzenle:hover{background:#f8fafc;border-color:#cbd5e1}
+
+/* Operatör "Yeni Kayıt" ile açtığında hata kodu penceresinde
+   yalnızca form kalır; eski kayıt tablosu ve arama şeridi gizlenir. */
+body.op-on #errorCodeModal .errorcode-head-actions,
+body.op-on #errorCodeModal .jobplan-table-wrap{display:none !important}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6345,6 +6365,20 @@ data-keypad="text" data-native-inputmode="text" data-keypad-label="Ebat" placeho
 <label>Kalınlık</label>
 <input id="opKartThickness" class="ope-fld" type="text" inputmode="none"
 data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Kalınlık" placeholder="Örn: 3">
+</div>
+<div class="ope-fg">
+<label>Yüzey</label>
+<select id="opKartFinish" class="ope-fld">
+<option value="Standart">Boyasız (standart)</option>
+<option value="Boyalı">Boyalı</option>
+</select>
+</div>
+<div class="ope-fg" id="opKartSeamGroup" style="display:none">
+<label>Boru Yapısı</label>
+<select id="opKartSeam" class="ope-fld">
+<option value="Dikişli">Dikişli</option>
+<option value="Dikişsiz">Dikişsiz</option>
+</select>
 </div>
 <div class="ope-fg">
 <label>Boy (metre)</label>
@@ -20868,13 +20902,31 @@ function opPlanHazir(){
 return typeof jobPlanJobs!=="undefined" && Array.isArray(jobPlanJobs);
 }
 
-function opCalisanIs(){
+/* Tezgâhta gerçekten çalışan dosya (sadece "basladi"). */
+function opAktifCalisan(){
 if(!opPlanHazir()||typeof jobPlanActiveJobs!=="function")return null;
 let bulunan=null;
 jobPlanActiveJobs().forEach(job=>{
 (job.files||[]).forEach(file=>{
 if(bulunan)return;
-if(file.status==="basladi"||file.status==="durakladi")bulunan={job:job,file:file};
+if(file.status==="basladi")bulunan={job:job,file:file};
+});
+});
+return bulunan;
+}
+
+/* Soldaki kartta gösterilecek iş: çalışan varsa o, yoksa duraklatılmış olan.
+   Duraklatılmış iş tezgâhı meşgul ETMEZ; kuyruktan başka iş başlatılabilir. */
+function opCalisanIs(){
+let calisan=opAktifCalisan();
+if(calisan)return calisan;
+
+if(!opPlanHazir()||typeof jobPlanActiveJobs!=="function")return null;
+let bulunan=null;
+jobPlanActiveJobs().forEach(job=>{
+(job.files||[]).forEach(file=>{
+if(bulunan)return;
+if(file.status==="durakladi")bulunan={job:job,file:file};
 });
 });
 return bulunan;
@@ -21127,7 +21179,7 @@ opQueueTab==="biten"?"Tamamlanmış iş yok.":"Planda iş yok.")+'</div>';
 return;
 }
 
-let calisanVar=!!opCalisanIs();
+let calisanVar=!!opAktifCalisan();
 let html=[];
 
 gruplar.forEach((grup,index)=>{
@@ -21225,7 +21277,10 @@ let chips=document.getElementById("opSarfChips");
 if(chips){
 let az=hepsi.filter(x=>(Number(x.quantity)||0)<=1).length;
 chips.innerHTML='<span class="ope-chip">'+hepsi.length+' malzeme</span>'+
-(az?'<span class="ope-chip warn">'+az+' azaldı</span>':'');
+(az?'<span class="ope-chip warn">'+az+' azaldı</span>':'')+
+'<button type="button" class="ope-add" onclick="opSarfYeni()">'+
+'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>'+
+'Yeni</button>';
 }
 
 if(!veri.length){
@@ -21372,7 +21427,12 @@ let veri=opHataKayitlari();
 let chips=document.getElementById("opHataChips");
 if(chips){
 let toplam=typeof errorCodes!=="undefined"&&Array.isArray(errorCodes)?errorCodes.length:0;
-chips.innerHTML='<span class="ope-chip">'+toplam+' kayıt</span>';
+chips.innerHTML='<span class="ope-chip">'+toplam+' kayıt</span>'+
+(opCan("hatakodu.duzenle")
+?'<button type="button" class="ope-add" onclick="opHataYeni()">'+
+'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>'+
+'Yeni Kayıt</button>'
+:'');
 }
 
 if(!veri.length){
@@ -21554,6 +21614,12 @@ box.innerHTML=
 '<div><div class="k">Kullanılabilir</div><div class="v" style="color:#0f766e">'+serbest+'</div></div>'+
 '</div>'+
 '</div>'+
+
+(opCan("stok.kart")
+?'<button type="button" class="ope-duzenle" onclick="opKartDuzenle()">'+
+'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>'+
+'Kartı Düzenle</button>'
+:'')+
 
 (typeof isStandardReservableProduct==="function" && isStandardReservableProduct(product)
 ?'<div class="ope-rez">'+
@@ -21759,6 +21825,8 @@ let q=document.getElementById("opKartQuality"); if(q)q.value="ST37";
 let l=document.getElementById("opKartLength"); if(l)l.value="6";
 let s=document.getElementById("opKartStock"); if(s)s.value="0";
 let k=document.getElementById("opKartKind"); if(k)k.value="parca";
+let fin=document.getElementById("opKartFinish"); if(fin)fin.value="Standart";
+let seam=document.getElementById("opKartSeam"); if(seam)seam.value="Dikişli";
 opKartTypeChanged();
 opKartLengthChanged();
 document.getElementById("opKartSheet").classList.add("on");
@@ -21775,6 +21843,10 @@ let label=document.getElementById("opKartSizeLabel");
 if(label)label.textContent=tip==="Boru"?"Çap":"Ebat";
 let size=document.getElementById("opKartSize");
 if(size)size.placeholder=tip==="Boru"?"Örn: 42.4":"Örn: 40x40";
+
+/* Dikişli / dikişsiz yalnızca boruda sorulur. */
+let seam=document.getElementById("opKartSeamGroup");
+if(seam)seam.style.display=tip==="Boru"?"":"none";
 }
 
 function opKartLengthChanged(){
@@ -21835,14 +21907,39 @@ ayarla("productStock",al("opKartStock")||"0");
 ayarla("productDescription","");
 ayarla("productLengthKind",al("opKartKind")||"parca");
 
-let finish=document.getElementById("productFinish");
-if(finish)finish.value="Standart";
-let seam=document.getElementById("productPipeSeam");
-if(seam)seam.value="Dikişli";
+ayarla("productFinish",al("opKartFinish")||"Standart");
+ayarla("productPipeSeam",al("opKartSeam")||"Dikişli");
 
 opKartClose();
 if(typeof addProduct==="function")await addProduct();
 opRenderStok();
+}
+
+/* Stok kartını uygulamanın kendi penceresinde düzenler. */
+function opKartDuzenle(){
+if(!opCan("stok.kart"))return;
+let product=products.find(p=>String(p.id)===opStokSelected);
+if(!product)return;
+if(typeof openProductModal==="function")openProductModal(product.id);
+}
+
+/* Yeni sarf malzemesi: uygulamanın kendi penceresi kullanılır. */
+function opSarfYeni(){
+if(typeof openConsumablesModal!=="function")return;
+openConsumablesModal();
+setTimeout(()=>{
+if(typeof toggleConsumableAddPanel==="function")toggleConsumableAddPanel(true);
+},120);
+}
+
+/* Yeni hata kodu: uygulamanın kendi formu kullanılır. */
+function opHataYeni(){
+if(!opCan("hatakodu.duzenle"))return;
+if(typeof openErrorCodeModal!=="function")return;
+openErrorCodeModal();
+setTimeout(()=>{
+if(typeof errorCodeNew==="function")errorCodeNew();
+},120);
 }
 
 function opRenderStok(){
@@ -22034,10 +22131,12 @@ return r;
 };
 }
 
-/* Sade ekran açıkken uygulamanın kendi pencereleri açılamaz. */
-["openJobPlanModal","openConsumablesModal","openErrorCodeModal","openMaintenanceModal",
-"openMaintenancePasswordSetupModal","openSystemModal","openSettingsModal","openPriceModal",
-"openPurchaseImportModal","backupData","exportStock","exportJobPlan","requestMovementClear",
+/* Tezgâh ekranı açıkken yalnızca operatörün işi olmayan pencereler kapatılır.
+   Stok kartı, stok hareketi, sarf ekleme ve hata kodu formu gibi pencereler
+   kabuğun üstünde açılır — eski düzende yapılabilen her şey burada da yapılabilsin. */
+["openJobPlanModal","openSystemModal","openSettingsModal","openPriceModal",
+"openPurchaseImportModal","openMaintenancePasswordSetupModal",
+"backupData","exportStock","exportJobPlan","requestMovementClear",
 "openBackupRestoreModal"].forEach(function(opAd){
 try{
 let opEski=window[opAd];

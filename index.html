@@ -5531,6 +5531,117 @@ body.op-on #opPageStok .ope-msub.stock-meta-line{
   .planner-stock-list-pane .stock-meta-tag{font-size:9px;padding:2px 5px;letter-spacing:0}
 }
 
+
+/* =====================================================
+   EKRAN KLAVYESİ — YEREL TERCİH / KURUMSAL GÖRÜNÜM
+   Stok, plan, yetki ve bulut işlemlerinden bağımsızdır.
+===================================================== */
+.ope-keypad-toggle{
+  display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;
+  min-height:40px;padding:7px 11px;border:1px solid #526176;
+  border-radius:9px;background:#1e2d43;color:#e2e8f0;
+  font:600 12px Arial,sans-serif;cursor:pointer;user-select:none;
+  touch-action:manipulation;white-space:nowrap
+}
+.ope-keypad-toggle input{
+  appearance:auto;width:18px;height:18px;margin:0;padding:0;
+  accent-color:#0d9488;cursor:pointer;flex:0 0 auto
+}
+.ope-keypad-toggle.is-enabled{background:#123c42;border-color:#36978f;color:#ecfdf5}
+.ope-keypad-toggle:focus-within{outline:2px solid #5eead4;outline-offset:3px}
+.ope-keypad-toggle svg{flex:0 0 auto}
+#numericKeypad{
+  --key-height:50px;--key-gap:7px;
+  width:min(374px,calc(100vw - 16px));max-width:calc(100vw - 16px);
+  max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);
+  padding:0 12px 12px;bottom:10px;background:#f4f7fa;
+  border:1px solid #c4cfdc;border-radius:14px;
+  box-shadow:0 16px 42px #10203938,0 3px 9px #1020391a;
+  color:#14253b;font-family:Arial,sans-serif;overflow:auto;
+  overscroll-behavior:contain;isolation:isolate
+}
+#numericKeypad[data-mode="alpha"]{width:min(734px,calc(100vw - 16px))}
+#numericKeypad[data-mode="symbol"]{width:min(572px,calc(100vw - 16px))}
+#numericKeypad .keypad-head{
+  position:sticky;top:0;z-index:2;display:flex;align-items:center;
+  gap:9px;min-height:60px;margin:0 -12px 10px;padding:9px 12px;
+  border-radius:12px 12px 0 0;background:#172b43;color:#f8fafc;
+  cursor:grab;touch-action:none
+}
+#numericKeypad .keypad-head:active{cursor:grabbing}
+#numericKeypad .keypad-brand-icon{
+  display:flex;align-items:center;justify-content:center;width:33px;height:33px;
+  background:#ffffff12;border:1px solid #ffffff24;border-radius:8px;flex:0 0 auto
+}
+#numericKeypad .keypad-heading{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+#numericKeypad .keypad-heading strong{font-size:13px;font-weight:700;letter-spacing:.1px}
+#numericKeypad .keypad-target{max-width:none;font-size:11px;color:#bbcbdc;line-height:1.25;font-weight:400}
+#numericKeypad .keypad-move,#numericKeypad .keypad-close{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  min-height:40px;height:40px;padding:0 10px;border:1px solid #668097;
+  border-radius:8px;background:#28425a;color:#fff;font-size:12px;
+  font-weight:700;cursor:pointer;touch-action:manipulation
+}
+#numericKeypad .keypad-move{width:36px;min-width:36px;padding:0;font-size:20px}
+#numericKeypad .keypad-close{min-width:64px;background:#fff;color:#172b43;border-color:#fff}
+#numericKeypad .keypad-mode-tabs{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:0 0 10px;
+  padding:4px;border:1px solid #dce3eb;border-radius:9px;background:#e9eef4
+}
+#numericKeypad .keypad-mode-tabs button{
+  min-height:37px;padding:5px 4px;font-size:12px;font-weight:700;
+  border:1px solid transparent;border-radius:6px;background:transparent;
+  color:#54677d;touch-action:manipulation;white-space:nowrap
+}
+#numericKeypad .keypad-mode-tabs button.active{
+  border-color:#cbd5e1;background:#fff;color:#172b43;box-shadow:0 1px 3px #14253b14
+}
+#numericKeypad .keypad-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--key-gap)}
+#numericKeypad .alpha-keypad-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--key-gap)}
+#numericKeypad .symbol-keypad-grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:var(--key-gap)}
+#numericKeypad .keypad-panel button{
+  min-height:var(--key-height);min-width:0;padding:5px 2px;
+  background:#fff;color:#14253b;border:1px solid #cbd5e1;border-bottom:2px solid #b5c3d3;
+  border-radius:8px;font-size:21px;font-weight:600;
+  box-shadow:0 1px 2px #14253b09;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;user-select:none
+}
+#numericKeypad .keypad-panel .keypad-action,#numericKeypad .keypad-panel .keypad-case,
+#numericKeypad .keypad-panel .keypad-space{
+  background:#e9eef4;color:#33495f;border-color:#c4d0dc;font-size:13px
+}
+#numericKeypad .keypad-panel .keypad-enter,#numericKeypad .keypad-panel .keypad-done{
+  background:#176b70 !important;color:#fff !important;border-color:#105358;font-size:13px;font-weight:700
+}
+#numericKeypad .alpha-keypad-grid .keypad-space{grid-column:span 8}
+#numericKeypad .symbol-keypad-grid .keypad-space{grid-column:span 4}
+#numericKeypad .keypad-panel .keypad-wide,#numericKeypad .symbol-keypad-grid .keypad-enter{grid-column:span 2}
+#numericKeypad button:hover{opacity:1;filter:brightness(.97)}
+#numericKeypad .keypad-panel button:active{transform:translateY(1px);box-shadow:none;filter:brightness(.93)}
+#numericKeypad .keypad-panel button:disabled{opacity:.35;cursor:not-allowed;transform:none;filter:none}
+#numericKeypad button:focus-visible{outline:3px solid #24919a;outline-offset:1px}
+@media(max-height:720px){
+  #numericKeypad{--key-height:42px;--key-gap:6px;bottom:6px}
+  #numericKeypad .keypad-head{min-height:54px;padding-top:6px;padding-bottom:6px;margin-bottom:8px}
+  #numericKeypad .keypad-mode-tabs{margin-bottom:8px}
+  #numericKeypad .keypad-mode-tabs button{min-height:33px}
+}
+@media(max-width:1100px) and (max-height:800px){
+  .ope-keypad-toggle{min-height:40px;padding:6px 9px;gap:6px}
+  #numericKeypad[data-mode="alpha"]{width:min(668px,calc(100vw - 16px))}
+}
+@media(max-width:580px){
+  #numericKeypad{--key-height:40px;--key-gap:5px}
+  #numericKeypad .alpha-keypad-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  #numericKeypad .symbol-keypad-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #numericKeypad .alpha-keypad-grid .keypad-space{grid-column:span 2}
+  #numericKeypad .symbol-keypad-grid .keypad-space{grid-column:span 2}
+  #numericKeypad .keypad-heading strong{font-size:12px}
+  #numericKeypad .keypad-target{font-size:10px}
+  #numericKeypad .keypad-brand-icon{display:none}
+  #numericKeypad .keypad-head{gap:7px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -5794,7 +5905,7 @@ oninput="showProducts()"
 </button>
 
 <label class="keypad-toggle" for="keypadEnabled">
-<input type="checkbox" id="keypadEnabled" checked>
+<input type="checkbox" id="keypadEnabled" data-keypad-toggle aria-controls="numericKeypad">
 <span>🔢 Klavye</span>
 </label>
 
@@ -7494,6 +7605,10 @@ placeholder="DT veya dosya adı ara…" oninput="viewerSetPlanSearch(this.value)
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
 </div>
+<label class="ope-keypad-toggle" for="opKeypadEnabled" title="Ekran klavyesini bu tarayıcıda aç / kapat">
+<input type="checkbox" id="opKeypadEnabled" data-keypad-toggle aria-controls="numericKeypad">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 15h10"/></svg><span>Klavye</span>
+</label>
 <button type="button" class="ope-exit" onclick="opLogout()">Çıkış</button>
 </div>
 
@@ -7798,11 +7913,12 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 </div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
-<div class="numeric-keypad" id="numericKeypad" aria-hidden="true">
-  <div class="keypad-head" id="keypadHead" title="Basılı tutup sürükleyerek taşıyabilirsin">
-    <span class="keypad-grip">☰</span>
-    <span class="keypad-target" id="keypadTargetLabel"></span>
-    <button type="button" class="keypad-move" id="keypadMoveButton" title="Klavyeyi yukarı / aşağı al">↕</button>
+<div class="numeric-keypad" id="numericKeypad" data-mode="numeric" aria-hidden="true" role="region" aria-label="Ekran klavyesi">
+  <div class="keypad-head" id="keypadHead" title="Başlıktan tutup klavyeyi taşıyabilirsiniz">
+    <span class="keypad-brand-icon" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 15h10"/></svg></span>
+    <div class="keypad-heading"><strong>Ekran Klavyesi</strong><span class="keypad-target" id="keypadTargetLabel"></span></div>
+    <button type="button" class="keypad-move" id="keypadMoveButton" data-action="move" title="Klavyeyi yukarı / aşağı taşı" aria-label="Klavyeyi yukarı / aşağı taşı">↕</button>
+    <button type="button" class="keypad-close" id="keypadCloseButton" data-action="close" title="Yalnızca ekran klavyesini kapat">Kapat</button>
   </div>
 
   <div class="keypad-mode-tabs" role="tablist" aria-label="Klavye modu">
@@ -7816,12 +7932,12 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
       <button type="button" data-key="7">7</button>
       <button type="button" data-key="8">8</button>
       <button type="button" data-key="9">9</button>
-      <button type="button" class="keypad-action" data-action="backspace">⌫</button>
+      <button type="button" class="keypad-action" data-action="backspace" aria-label="Son karakteri sil" title="Son karakteri sil">⌫</button>
 
       <button type="button" data-key="4">4</button>
       <button type="button" data-key="5">5</button>
       <button type="button" data-key="6">6</button>
-      <button type="button" class="keypad-action" data-action="clear" title="Temizle">⌧</button>
+      <button type="button" class="keypad-action" data-action="clear" title="Alanı temizle">Temizle</button>
 
       <button type="button" data-key="1">1</button>
       <button type="button" data-key="2">2</button>
@@ -7836,7 +7952,7 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
       <button type="button" data-key="-">-</button>
       <button type="button" data-key="/">/</button>
       <button type="button" data-key=":">:</button>
-      <button type="button" class="keypad-done numeric-enter" data-action="enter" title="Onayla">Enter</button>
+      <button type="button" class="keypad-done numeric-enter" data-action="enter" title="Girişi onayla">Enter</button>
     </div>
   </div>
 
@@ -7850,7 +7966,7 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 
       <button type="button" data-key="@">@</button><button type="button" data-key="~">~</button><button type="button" data-key="^">^</button><button type="button" data-key="&lt;">&lt;</button><button type="button" data-key="&gt;">&gt;</button><button type="button" data-key="|">|</button><button type="button" data-key="Ø">Ø</button><button type="button" data-key="₺">₺</button>
 
-      <button type="button" class="keypad-action" data-action="backspace">⌫</button><button type="button" class="keypad-action" data-action="clear">⧉</button><button type="button" class="keypad-space" data-key=" ">Boşluk</button><button type="button" class="keypad-enter keypad-wide" data-action="enter">Enter</button>
+      <button type="button" class="keypad-action" data-action="backspace" aria-label="Son karakteri sil" title="Son karakteri sil">⌫</button><button type="button" class="keypad-action" data-action="clear" title="Alanı temizle">Temizle</button><button type="button" class="keypad-space" data-key=" ">Boşluk</button><button type="button" class="keypad-enter keypad-wide" data-action="enter">Enter</button>
     </div>
   </div>
 
@@ -7860,7 +7976,7 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 
       <button type="button" data-key="A">A</button><button type="button" data-key="S">S</button><button type="button" data-key="D">D</button><button type="button" data-key="F">F</button><button type="button" data-key="G">G</button><button type="button" data-key="H">H</button><button type="button" data-key="J">J</button><button type="button" data-key="K">K</button><button type="button" data-key="L">L</button><button type="button" data-key="Ş">Ş</button><button type="button" data-key="İ">İ</button><button type="button" data-key="Ö">Ö</button>
 
-      <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" class="keypad-action keypad-wide" data-action="backspace">⌫</button><button type="button" class="keypad-action keypad-wide" data-action="clear">⧉</button>
+      <button type="button" data-key="Z">Z</button><button type="button" data-key="X">X</button><button type="button" data-key="C">C</button><button type="button" data-key="V">V</button><button type="button" data-key="B">B</button><button type="button" data-key="N">N</button><button type="button" data-key="M">M</button><button type="button" data-key="Ç">Ç</button><button type="button" class="keypad-action keypad-wide" data-action="backspace" aria-label="Son karakteri sil" title="Son karakteri sil">⌫</button><button type="button" class="keypad-action keypad-wide" data-action="clear" title="Alanı temizle">Temizle</button>
 
       <button type="button" class="keypad-case keypad-wide" id="keypadCaseBtn" data-action="case" title="Küçük / büyük harf">abc</button>
       <button type="button" class="keypad-space" data-key=" ">Boşluk</button>
@@ -9911,8 +10027,8 @@ data-purchase-index="${index}"
 data-purchase-field="size"
 value="${escapeHTML(String(item.rawSize||item.size||""))}"
 placeholder="Örn: 40x40 / Ø76"
-onfocus="openNumericKeypad(this)"
-onpointerup="openNumericKeypad(this)"
+
+
 oninput="updatePurchaseItemDraft(${index},'size',this.value)"
 onblur="finalizePurchaseItemField(${index},'size',this.value)"
 onkeydown="if(event.key==='Enter'){event.preventDefault();finalizePurchaseItemField(${index},'size',this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
@@ -9932,8 +10048,8 @@ data-purchase-index="${index}"
 data-purchase-field="thickness"
 value="${escapeHTML(String(item.rawThickness??"").replace(/\s*mm$/i,""))}"
 placeholder="mm"
-onfocus="openNumericKeypad(this)"
-onpointerup="openNumericKeypad(this)"
+
+
 oninput="updatePurchaseItemDraft(${index},'thickness',this.value)"
 onblur="finalizePurchaseItemField(${index},'thickness',this.value)"
 onkeydown="if(event.key==='Enter'){event.preventDefault();finalizePurchaseItemField(${index},'thickness',this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
@@ -9953,8 +10069,8 @@ data-native-inputmode="numeric"
 data-keypad-label="Gelen boy adedi"
 value="${Number.isFinite(Number(item.quantity))?escapeHTML(String(item.quantity)):""}"
 placeholder="Adet"
-onfocus="openNumericKeypad(this)"
-onpointerup="openNumericKeypad(this)"
+
+
 onchange="changePurchaseItemQuantity(${index},this.value)"
 onkeydown="if(event.key==='Enter'){event.preventDefault();changePurchaseItemQuantity(${index},this.value);if(typeof closeNumericKeypad==='function')closeNumericKeypad();}"
 aria-label="Gelen boy adedi"
@@ -12154,8 +12270,8 @@ false
    'placeholder="İş / proje no" '+
    'value="'+escapeHTML(getUsageNote(p.id))+'" '+
    'oninput="setUsageNote('+p.id+',this)" '+
-   'onfocus="openNumericKeypad(this)" '+
-   'onpointerup="openNumericKeypad(this)" '+
+   ' '+
+   ' '+
    'onkeydown="if(event.key===\'Enter\'){event.preventDefault();finishUsageNoteEdit('+p.id+',this);}" '+
    'aria-label="Ayrıldığı iş veya proje kodu">'
    :
@@ -14708,11 +14824,73 @@ closeErrorCodeModal();
 let keypadTarget=null;
 let keypadMode="numeric";
 let keypadEnterTimer=null;
-const KEYPAD_PREF_KEY="stokNumericKeypadEnabled";
+/* v2 intentionally ignores the old, automatically enabled preference.
+   Only an explicit choice in this browser sets it to 1. Never sync to Supabase/backup. */
+const KEYPAD_PREF_KEY="stokKeyboardDevicePreferenceV2";
+let keypadEnabledOnDevice=false;
+let keypadAutoOpenBlocked=true;
+let keypadCloseTimer=null;
+let keypadOpenTimer=null;
+let keypadClickGuardUntil=0;
+let keypadTabIntentUntil=0;
+let keypadInitDone=false;
 
 function isNumericKeypadEnabled(){
-let toggle=document.getElementById("keypadEnabled");
-return !!(toggle && toggle.checked);
+return keypadEnabledOnDevice;
+}
+
+function syncKeypadPreferenceControls(){
+document.querySelectorAll("[data-keypad-toggle]").forEach(toggle=>{
+toggle.checked=keypadEnabledOnDevice;
+let label=toggle.closest("label");
+if(label)label.classList.toggle("is-enabled",keypadEnabledOnDevice);
+});
+}
+
+function setDeviceKeypadPreference(enabled,persist=true){
+keypadEnabledOnDevice=enabled===true;
+keypadAutoOpenBlocked=true;
+if(keypadOpenTimer){clearTimeout(keypadOpenTimer);keypadOpenTimer=null;}
+if(persist){try{localStorage.setItem(KEYPAD_PREF_KEY,enabled?"1":"0");}catch(error){
+console.warn("Klavye tercihi bu tarayıcıda kalıcı saklanamadı:",error);
+}}
+syncKeypadPreferenceControls();
+updateInputModes();
+}
+
+function keypadValidTarget(input){
+return !!(input && input.isConnected && input.matches &&
+input.matches("input[data-keypad],textarea[data-keypad]") &&
+!input.disabled && !input.readOnly && input.getClientRects().length);
+}
+
+function dismissNumericKeypad(){
+let input=keypadTarget;
+closeNumericKeypad();
+/* Keep physical typing possible, without focus opening the virtual keyboard again. */
+if(keypadValidTarget(input)){
+try{input.focus({preventScroll:true});}catch(error){}
+}
+}
+
+function requestKeypadClose(){
+keypadAutoOpenBlocked=true;
+if(keypadCloseTimer)clearTimeout(keypadCloseTimer);
+/* Let the same touch finish while its button still exists; swallow its trailing click. */
+keypadClickGuardUntil=Date.now()+650;
+keypadCloseTimer=setTimeout(()=>{
+keypadCloseTimer=null;
+dismissNumericKeypad();
+},160);
+}
+
+function keypadFitInViewport(){
+let box=keypadBox();
+if(!box || !box.classList.contains("open"))return;
+let rect=box.getBoundingClientRect();
+if(rect.left<4 || rect.top<4 || rect.right>window.innerWidth-4 || rect.bottom>window.innerHeight-4){
+keypadApplyPosition(rect.left,rect.top);
+}
 }
 
 function isLetterKey(key){
@@ -14771,6 +14949,8 @@ const KEYPAD_MODES=[
 function setKeypadMode(mode){
 if(!KEYPAD_MODES.some(m=>m.mode===mode))return;
 keypadMode=mode;
+let box=document.getElementById("numericKeypad");
+if(box)box.dataset.mode=mode;
 
 KEYPAD_MODES.forEach(item=>{
 let button=document.getElementById(item.button);
@@ -14784,6 +14964,7 @@ if(panel)panel.classList.toggle("active",secili);
 });
 
 updateKeypadButtons();
+requestAnimationFrame(keypadFitInViewport);
 }
 
 function updateKeypadButtons(){
@@ -14812,77 +14993,59 @@ symbolBtn.title=(inputMode==="integer" || inputMode==="decimal")
 }
 
 function updateInputModes(){
-
 let enabled=isNumericKeypadEnabled();
-
-document.querySelectorAll("[data-keypad]").forEach(input=>{
-if(enabled){
-input.setAttribute("inputmode","none");
-}else{
-let nativeMode=input.dataset.nativeInputmode || "text";
-input.setAttribute("inputmode",nativeMode);
-}
+syncKeypadPreferenceControls();
+document.querySelectorAll("input[data-keypad],textarea[data-keypad]").forEach(input=>{
+input.setAttribute("inputmode",enabled?"none":(input.dataset.nativeInputmode || "text"));
 });
-
-if(!enabled)closeNumericKeypad();
-
+if(!enabled && (keypadTarget || document.getElementById("numericKeypad")?.classList.contains("open"))){
+closeNumericKeypad();
+}
 }
 
-function openNumericKeypad(input){
-
-if(!input || !isNumericKeypadEnabled())return;
-
-if(keypadTarget && keypadTarget!==input)
-keypadTarget.classList.remove("keypad-focus");
-
-keypadTarget=input;
-input.classList.add("keypad-focus");
-
+function openNumericKeypad(input,userInitiated=false){
+if(!isNumericKeypadEnabled() || !keypadValidTarget(input))return;
+if(keypadAutoOpenBlocked && !userInitiated)return;
+if(userInitiated)keypadAutoOpenBlocked=false;
 let box=document.getElementById("numericKeypad");
 let label=document.getElementById("keypadTargetLabel");
-
-label.textContent=input.dataset.keypadLabel || "Giriş";
+if(!box)return;
+/* Programmatic refocus while typing must not reset ABC / symbols to another mode. */
+if(keypadTarget===input && box.classList.contains("open"))return;
+if(keypadCloseTimer){clearTimeout(keypadCloseTimer);keypadCloseTimer=null;}
+if(keypadEnterTimer){clearTimeout(keypadEnterTimer);keypadEnterTimer=null;}
+if(keypadTarget)keypadTarget.classList.remove("keypad-focus");
+keypadTarget=input;
+input.setAttribute("inputmode","none");
+input.classList.add("keypad-focus");
+if(label)label.textContent=input.dataset.keypadLabel || "Giriş";
 box.classList.add("open");
 box.setAttribute("aria-hidden","false");
-
-/* Metin/araya alanlarında harfli, sadece sayı isteyen alanlarda sayısal modla başla. */
 let inputMode=input.dataset.keypad || "search";
-if(inputMode==="search" || inputMode==="text"){
-setKeypadMode("alpha");
-}else{
-setKeypadMode("numeric");
-}
-
-updateKeypadButtons();
-
-/* Klavye yazilan kutunun ustune denk geliyorsa yer degistirir. */
-setTimeout(()=>{
-try{keypadAvoidTarget(input);}catch(e){}
-},0);
-
+setKeypadMode(inputMode==="search" || inputMode==="text"?"alpha":"numeric");
+requestAnimationFrame(()=>{
+if(keypadTarget!==input || !box.classList.contains("open"))return;
+keypadFitInViewport();
+keypadAvoidTarget(input);
+keypadFitInViewport();
+});
 }
 
 function closeNumericKeypad(){
-
-if(keypadEnterTimer){
-clearTimeout(keypadEnterTimer);
-keypadEnterTimer=null;
-}
-
+if(keypadOpenTimer){clearTimeout(keypadOpenTimer);keypadOpenTimer=null;}
+if(keypadEnterTimer){clearTimeout(keypadEnterTimer);keypadEnterTimer=null;}
+if(keypadCloseTimer){clearTimeout(keypadCloseTimer);keypadCloseTimer=null;}
 let box=document.getElementById("numericKeypad");
+let wasOpen=!!keypadTarget || !!box?.classList.contains("open");
+keypadAutoOpenBlocked=true;
 if(box){
 box.classList.remove("open");
 box.setAttribute("aria-hidden","true");
 }
-
-if(keypadTarget)
-keypadTarget.classList.remove("keypad-focus");
-
+if(keypadTarget)keypadTarget.classList.remove("keypad-focus");
 keypadTarget=null;
-
-/* İş planında yazılırken ertelenen tablo çizimi şimdi uygulanır. */
-if(typeof jobPlanFlushRender==="function")setTimeout(jobPlanFlushRender,0);
-
+/* No render loop when disabled: flush only if a keyboard actually closed. */
+if(wasOpen && typeof jobPlanFlushRender==="function")setTimeout(jobPlanFlushRender,0);
 }
 
 function triggerInputChange(input){
@@ -14892,59 +15055,61 @@ input.dispatchEvent(new Event("change",{bubbles:true}));
 
 function keypadInsert(text){
 
-if(!keypadTarget)return;
+if(!keypadTarget || !isNumericKeypadEnabled())return;
+const input=keypadTarget;
 
-let inputMode=keypadTarget.dataset.keypad || "search";
+let inputMode=input.dataset.keypad || "search";
 if(!keypadAllowed(text,inputMode))return;
 
-let value=keypadTarget.value || "";
-let start=Number.isInteger(keypadTarget.selectionStart)
-?keypadTarget.selectionStart
+let value=input.value || "";
+let start=Number.isInteger(input.selectionStart)
+?input.selectionStart
 :value.length;
-let end=Number.isInteger(keypadTarget.selectionEnd)
-?keypadTarget.selectionEnd
+let end=Number.isInteger(input.selectionEnd)
+?input.selectionEnd
 :start;
 
 /* Sayısal klavyedeki çarpı ölçü formatında x olarak kullanılır. */
 if(text==="×")text="x";
 
-keypadTarget.value=value.slice(0,start)+text+value.slice(end);
+input.value=value.slice(0,start)+text+value.slice(end);
 
 let next=start+text.length;
 try{
-keypadTarget.setSelectionRange(next,next);
+input.setSelectionRange(next,next);
 }catch{}
 
-triggerInputChange(keypadTarget);
-keypadTarget.focus({preventScroll:true});
+triggerInputChange(input);
+if(input.isConnected && keypadTarget===input)input.focus({preventScroll:true});
 
 }
 
 function keypadBackspace(){
 
-if(!keypadTarget)return;
+if(!keypadTarget || !isNumericKeypadEnabled())return;
+const input=keypadTarget;
 
-let value=keypadTarget.value || "";
-let start=Number.isInteger(keypadTarget.selectionStart)
-?keypadTarget.selectionStart
+let value=input.value || "";
+let start=Number.isInteger(input.selectionStart)
+?input.selectionStart
 :value.length;
-let end=Number.isInteger(keypadTarget.selectionEnd)
-?keypadTarget.selectionEnd
+let end=Number.isInteger(input.selectionEnd)
+?input.selectionEnd
 :start;
 
 if(start!==end){
-keypadTarget.value=value.slice(0,start)+value.slice(end);
+input.value=value.slice(0,start)+value.slice(end);
 }else if(start>0){
-keypadTarget.value=value.slice(0,start-1)+value.slice(end);
+input.value=value.slice(0,start-1)+value.slice(end);
 start--;
 }
 
 try{
-keypadTarget.setSelectionRange(start,start);
+input.setSelectionRange(start,start);
 }catch{}
 
-triggerInputChange(keypadTarget);
-keypadTarget.focus({preventScroll:true});
+triggerInputChange(input);
+if(input.isConnected && keypadTarget===input)input.focus({preventScroll:true});
 
 }
 
@@ -14952,7 +15117,10 @@ function keypadEnter(){
 
 if(!keypadTarget)return;
 
+if(keypadEnterTimer)return;
 let input=keypadTarget;
+keypadAutoOpenBlocked=true;
+keypadClickGuardUntil=Date.now()+650;
 triggerInputChange(input);
 
 /*
@@ -14990,6 +15158,15 @@ function handleKeypadButton(btn){
 
 if(!btn || btn.disabled)return;
 
+if(btn.dataset.action==="close"){
+requestKeypadClose();
+return;
+}
+if(btn.dataset.action==="move"){
+keypadToggleSide();
+return;
+}
+
 if(btn.dataset.modeSwitch){
 setKeypadMode(btn.dataset.modeSwitch);
 return;
@@ -15011,9 +15188,10 @@ return;
 }
 
 if(btn.dataset.action==="clear" && keypadTarget){
-keypadTarget.value="";
-triggerInputChange(keypadTarget);
-keypadTarget.focus({preventScroll:true});
+let input=keypadTarget;
+input.value="";
+triggerInputChange(input);
+if(input.isConnected && keypadTarget===input)input.focus({preventScroll:true});
 return;
 }
 
@@ -15086,22 +15264,25 @@ try{localStorage.removeItem(KEYPAD_POSITION_KEY);}catch(e){}
 /* Klavye yazilan kutuyu kapatiyorsa ekranin obur ucuna gecer. */
 function keypadAvoidTarget(input){
 let box=keypadBox();
-if(!box || !input || keypadManual)return;
-if(!box.classList.contains("open"))return;
-
+if(!box || !keypadValidTarget(input) || keypadManual || !box.classList.contains("open"))return;
 let field=input.getBoundingClientRect();
 let pad=box.getBoundingClientRect();
-
-let cakisiyor=!(field.bottom<pad.top-8 || field.top>pad.bottom+8);
-if(!cakisiyor)return;
-
-if(field.top>window.innerHeight/2){
-box.style.top="10px";
-box.style.bottom="auto";
-}else{
-box.style.top="";
-box.style.bottom="";
-}
+let margin=8,gap=12;
+let maxX=window.innerWidth-pad.width-margin;
+let maxY=window.innerHeight-pad.height-margin;
+let clamp=(value,max)=>Math.max(margin,Math.min(value,max));
+let overlap=(x,y)=>!(x+pad.width<field.left-gap || x>field.right+gap ||
+y+pad.height<field.top-gap || y>field.bottom+gap);
+if(!overlap(pad.left,pad.top))return;
+/* Prefer above/below; on a short terminal put the number pad beside the field. */
+let candidates=[
+[clamp(pad.left,maxX),field.bottom+gap+1],
+[clamp(pad.left,maxX),field.top-pad.height-gap-1],
+[field.left-pad.width-gap-1,clamp(pad.top,maxY)],
+[field.right+gap+1,clamp(pad.top,maxY)]
+];
+let next=candidates.find(([x,y])=>x>=margin && y>=margin && x<=maxX && y<=maxY && !overlap(x,y));
+if(next)keypadApplyPosition(next[0],next[1]);
 }
 
 function keypadToggleSide(){
@@ -15118,22 +15299,13 @@ box.style.bottom="";
 box.style.top="10px";
 box.style.bottom="auto";
 }
+requestAnimationFrame(keypadFitInViewport);
 }
 
 function initKeypadDrag(){
 let box=keypadBox();
 let head=document.getElementById("keypadHead");
 if(!box || !head)return;
-
-let moveButton=document.getElementById("keypadMoveButton");
-if(moveButton){
-moveButton.addEventListener("pointerdown",e=>{e.stopPropagation();});
-moveButton.addEventListener("click",e=>{
-e.preventDefault();
-e.stopPropagation();
-keypadToggleSide();
-});
-}
 
 head.addEventListener("pointerdown",e=>{
 if(e.target.closest("button"))return;
@@ -15165,11 +15337,7 @@ head.addEventListener("pointerup",bitir);
 head.addEventListener("pointercancel",bitir);
 head.addEventListener("dblclick",()=>keypadResetPosition());
 
-window.addEventListener("resize",()=>{
-if(!keypadManual)return;
-let rect=box.getBoundingClientRect();
-keypadApplyPosition(rect.left,rect.top);
-});
+window.addEventListener("resize",keypadFitInViewport);
 
 keypadRestorePosition();
 }
@@ -15189,95 +15357,130 @@ return true;
 }
 
 function initNumericKeypad(){
+if(keypadInitDone)return;
+keypadInitDone=true;
+let saved=false;
+try{saved=localStorage.getItem(KEYPAD_PREF_KEY)==="1";}catch(error){}
+setDeviceKeypadPreference(saved,false);
 
-let toggle=document.getElementById("keypadEnabled");
-
-/* Daha önceki tercih varsa geri yükle; ilk kullanımda açık */
-try{
-let saved=localStorage.getItem(KEYPAD_PREF_KEY);
-if(saved!==null)toggle.checked=saved==="1";
-}catch{}
-
-updateInputModes();
-
-toggle.addEventListener("change",()=>{
-try{
-localStorage.setItem(KEYPAD_PREF_KEY,toggle.checked?"1":"0");
-}catch{}
-updateInputModes();
+document.querySelectorAll("[data-keypad-toggle]").forEach(toggle=>{
+toggle.addEventListener("change",()=>setDeviceKeypadPreference(toggle.checked));
+});
+/* Same-origin tabs on this browser share a device preference; no server storage. */
+window.addEventListener("storage",event=>{
+if(event.key===KEYPAD_PREF_KEY || event.key===null){
+setDeviceKeypadPreference(event.newValue==="1",false);
+}
 });
 
-document.addEventListener("keydown",e=>{
-if(e.key==="Escape")closeNumericKeypad();
-});
+let box=document.getElementById("numericKeypad");
+if(!box)return;
+let pointerPress=null;
+let lastPointerAction=0;
+let fieldPress=null;
 
-/* Sifre ve arama kutularinda Enter'a basinca ilgili islem calissin. */
-document.addEventListener("keydown",e=>{
-if(e.key!=="Enter" || e.shiftKey)return;
-let el=e.target;
-if(!el || !el.dataset || !el.dataset.enterAction)return;
-if(String(el.tagName||"").toLowerCase()==="textarea")return;
-e.preventDefault();
-keypadRunEnterAction(el);
+/* Escape only closes the keyboard, never the underlying dialog on the same press. */
+document.addEventListener("keydown",event=>{
+if(event.key==="Escape" && box.classList.contains("open")){
+event.preventDefault();event.stopImmediatePropagation();
+dismissNumericKeypad();return;
+}
+if(event.key==="Tab")keypadTabIntentUntil=Date.now()+700;
+},true);
+
+/* Keep existing physical Enter actions for login / confirmation fields. */
+document.addEventListener("keydown",event=>{
+if(event.defaultPrevented || event.key!=="Enter" || event.shiftKey)return;
+let input=event.target;
+if(!input?.dataset?.enterAction || input.tagName==="TEXTAREA")return;
+event.preventDefault();
+keypadRunEnterAction(input);
 });
 
 initKeypadDrag();
 
-/* Dinamik olarak oluşturulan alanlar (iş planı tabloları vb.) için devredilmiş dinleyici:
-   sayfada sonradan oluşan her [data-keypad] alanında da klavye açılır. */
-document.addEventListener("focusin",event=>{
-let el=event.target;
-if(el && el.matches && el.matches("[data-keypad]"))openNumericKeypad(el);
-});
+/* Open only on a deliberate tap/click or Tab focus. Programmatic focus, such as a
+   periodic table refresh, must not resurrect a dismissed keyboard. */
+document.addEventListener("pointerdown",event=>{
+if(event.isPrimary===false || event.button!==0)return;
+if(!box.contains(event.target)){
+if(keypadOpenTimer){clearTimeout(keypadOpenTimer);keypadOpenTimer=null;}
+keypadClickGuardUntil=0;
+let field=event.target.closest?.("input[data-keypad],textarea[data-keypad]");
+fieldPress=field?{field:field,id:event.pointerId,x:event.clientX,y:event.clientY}:null;
+if(field)field.setAttribute("inputmode",isNumericKeypadEnabled()?"none":(field.dataset.nativeInputmode||"text"));
+}
+},true);
 
 document.addEventListener("pointerup",event=>{
-let el=event.target;
-if(el && el.closest){
-let field=el.closest("[data-keypad]");
-if(field)openNumericKeypad(field);
+if(event.isPrimary===false || event.button!==0)return;
+let press=fieldPress;fieldPress=null;
+let field=event.target.closest?.("input[data-keypad],textarea[data-keypad]");
+if(field && press && press.field===field && press.id===event.pointerId &&
+Math.hypot(event.clientX-press.x,event.clientY-press.y)<14 && isNumericKeypadEnabled()){
+/* The following click must hit the input, not a key appearing under the finger.
+   Normally click opens it; this delay is a fallback for devices omitting click. */
+keypadOpenTimer=setTimeout(()=>{
+keypadOpenTimer=null;
+openNumericKeypad(field,true);
+},100);
+}
+});
+document.addEventListener("pointercancel",()=>{fieldPress=null;});
+
+document.addEventListener("focusin",event=>{
+let input=event.target;
+if(!input?.matches?.("input[data-keypad],textarea[data-keypad]"))return;
+if(Date.now()<keypadTabIntentUntil){
+keypadTabIntentUntil=0;
+openNumericKeypad(input,true);
 }
 });
 
-document.querySelectorAll("[data-keypad]").forEach(input=>{
-input.addEventListener("focus",()=>openNumericKeypad(input));
-input.addEventListener("pointerup",()=>openNumericKeypad(input));
+/* Stop the browser's delayed compatibility click from falling through a moved/closed
+   keyboard. Do not block programmatic download links or application button clicks.
+   A genuine new pointerdown outside clears this guard immediately. */
+document.addEventListener("click",event=>{
+if(event.isTrusted && Date.now()<keypadClickGuardUntil && !box.contains(event.target)){
+event.preventDefault();event.stopImmediatePropagation();return;
+}
+let field=event.target.closest?.("input[data-keypad],textarea[data-keypad]");
+if(field){
+if(keypadOpenTimer){clearTimeout(keypadOpenTimer);keypadOpenTimer=null;}
+openNumericKeypad(field,true);
+}
+},true);
+
+box.addEventListener("pointerdown",event=>{
+if(event.isPrimary===false || event.button!==0)return;
+event.preventDefault();event.stopPropagation();
+let button=event.target.closest("button");
+pointerPress=button && !button.disabled
+?{button:button,id:event.pointerId,x:event.clientX,y:event.clientY}:null;
 });
-
-let box=document.getElementById("numericKeypad");
-
-/*
-Dokunmatik ekranda click üretimine güvenmiyoruz.
-Pointer Events hem parmak, hem kalem, hem mouse ile çalışır.
-stopPropagation ile dokunuşun arkadaki modal/sayfaya geçmesi engellenir.
-*/
-box.addEventListener("pointerdown",e=>{
-let btn=e.target.closest("button");
-if(!btn)return;
-e.preventDefault();
-e.stopPropagation();
+box.addEventListener("pointerup",event=>{
+if(event.isPrimary===false || event.button!==0)return;
+event.preventDefault();event.stopPropagation();
+let press=pointerPress;pointerPress=null;
+let button=event.target.closest("button");
+if(!press || press.button!==button || press.id!==event.pointerId ||
+Math.hypot(event.clientX-press.x,event.clientY-press.y)>=14)return;
+lastPointerAction=Date.now();
+keypadClickGuardUntil=Date.now()+650;
+handleKeypadButton(button);
 });
-
-box.addEventListener("pointerup",e=>{
-let btn=e.target.closest("button");
-if(!btn)return;
-e.preventDefault();
-e.stopPropagation();
-handleKeypadButton(btn);
+box.addEventListener("pointercancel",event=>{
+pointerPress=null;event.stopPropagation();
 });
-
-box.addEventListener("pointercancel",e=>{
-e.stopPropagation();
+/* Keyboard activation / assistive technology; pointer-generated click is ignored once. */
+box.addEventListener("click",event=>{
+event.preventDefault();event.stopPropagation();
+/* A pointer click is handled at pointerup. It may also be a delayed click from
+   the field that opened this panel, so never treat it as a new key press. */
+if(event.detail!==0 || Date.now()-lastPointerAction<700){lastPointerAction=0;return;}
+let button=event.target.closest("button");
+if(button)handleKeypadButton(button);
 });
-
-/* Fiziksel klavyeyle Enter/Space kullanımında erişilebilirlik desteği */
-box.addEventListener("click",e=>{
-e.stopPropagation();
-if(e.detail!==0)return;
-let btn=e.target.closest("button");
-if(!btn)return;
-handleKeypadButton(btn);
-});
-
 }
 
 /* =====================================================

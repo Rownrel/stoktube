@@ -4268,6 +4268,263 @@ cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px
 body.op-on #errorCodeModal .errorcode-head-actions,
 body.op-on #errorCodeModal .jobplan-table-wrap{display:none !important}
 
+
+
+/* =====================================================
+   OPERATÖR TERMİNALİ — 25 x 14 cm / DÜŞÜK VIEWPORT UYUMU
+   Fiziksel ölçüden bağımsız olarak küçük 16:9 terminal viewportlarında
+   devreye girer. Yalnızca Operatör kabuğunu etkiler; ana yönetim ekranı
+   ve geniş bilgisayarlardaki görünüm değişmez.
+===================================================== */
+@media (max-width:1366px) and (max-height:800px){
+
+  body.op-on .op-shell{
+    font-size:13px;
+  }
+
+  /* Üst bant ve hızlı bölüm düğmeleri daha az dikey alan kullansın. */
+  body.op-on .ope-top{
+    padding:7px 12px;
+    gap:8px;
+  }
+  body.op-on .ope-logo{width:30px;height:30px;border-radius:8px;font-size:15px}
+  body.op-on .ope-brand b{font-size:11px}
+  body.op-on .ope-brand span{font-size:9px}
+  body.op-on .ope-state{padding:5px 10px;font-size:9.5px}
+  body.op-on .ope-clock{font-size:13px}
+  body.op-on .ope-user{padding:4px 9px 4px 4px;gap:6px}
+  body.op-on .ope-av{width:23px;height:23px;font-size:10px}
+  body.op-on .ope-uname{font-size:11.5px}
+  body.op-on .ope-urole{font-size:9px}
+  body.op-on .ope-exit{padding:6px 10px;font-size:11px}
+
+  body.op-on .ope-dock{
+    padding:6px 10px;
+    gap:7px;
+  }
+  body.op-on .ope-dbtn{
+    height:46px;
+    padding:0 10px;
+    gap:8px;
+    border-radius:9px;
+    font-size:12px;
+  }
+  body.op-on .ope-dbtn .di{width:30px;height:30px;border-radius:8px}
+
+  /* Alt sayfa başlığı */
+  body.op-on .ope-sub{
+    padding:7px 10px;
+    gap:10px;
+  }
+  body.op-on .ope-back{height:38px;padding:0 11px;font-size:11.5px}
+  body.op-on .ope-si{width:31px;height:31px;border-radius:8px}
+  body.op-on .ope-st h2{font-size:15px}
+  body.op-on .ope-st p{font-size:10px}
+  body.op-on .ope-sright{gap:6px}
+  body.op-on .ope-chip{padding:5px 10px;font-size:10.5px}
+  body.op-on .ope-add{height:38px;padding:0 13px;font-size:12px;border-radius:8px}
+
+  /* Genel operator içeriği */
+  body.op-on .ope-body{padding:8px 10px}
+  body.op-on .ope-bsearch{height:42px;margin-bottom:8px;padding:0 11px;border-radius:9px}
+  body.op-on .ope-bsearch input{font-size:13px}
+  body.op-on .ope-list{gap:7px}
+
+  /* -----------------------------------------------------
+     STOK HAREKETİ
+     Sol listedeki tablo artık yatay kaydırma istemez.
+     ----------------------------------------------------- */
+  body.op-on #opPageStok .ope-mvsplit{
+    grid-template-columns:minmax(0,1.12fr) minmax(330px,.88fr);
+    gap:8px;
+    min-width:0;
+  }
+  body.op-on #opPageStok .ope-pane,
+  body.op-on #opPageStok .ope-mwrap,
+  body.op-on #opPageStok #opStokForm{
+    min-width:0;
+  }
+  body.op-on #opPageStok .ope-mwrap{
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  body.op-on #opPageStok .ope-mtbl{
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+  }
+  body.op-on #opPageStok .ope-mtbl th,
+  body.op-on #opPageStok .ope-mtbl td{
+    padding:8px 8px;
+  }
+  body.op-on #opPageStok .ope-mtbl th:nth-child(1),
+  body.op-on #opPageStok .ope-mtbl td:nth-child(1){width:auto}
+  body.op-on #opPageStok .ope-mtbl th:nth-child(2),
+  body.op-on #opPageStok .ope-mtbl td:nth-child(2){width:145px !important}
+  body.op-on #opPageStok .ope-mtbl th:nth-child(3),
+  body.op-on #opPageStok .ope-mtbl td:nth-child(3){width:58px !important}
+  body.op-on #opPageStok .ope-mtbl th:nth-child(4),
+  body.op-on #opPageStok .ope-mtbl td:nth-child(4){width:76px !important}
+  body.op-on #opPageStok .ope-mname{
+    min-width:0;
+    font-size:12.5px;
+    gap:6px;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  body.op-on #opPageStok .ope-msub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  body.op-on #opPageStok .ope-mrez{gap:3px;min-width:0}
+  body.op-on #opPageStok .ope-mrez span{
+    max-width:138px;
+    padding:2px 6px;
+    font-size:9.5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  body.op-on #opPageStok .ope-mnum{font-size:14.5px}
+  body.op-on #opPageStok .ope-mnum small{font-size:9px}
+  body.op-on #opPageStok .ope-mtag{font-size:8px;padding:1px 4px}
+
+  /* Sağ işlem panelini kompaktlaştır; içerik dikey kayabilir ama yatay taşmaz. */
+  body.op-on #opPageStok .ope-mform{
+    padding:10px 11px;
+    overflow-x:hidden;
+  }
+  body.op-on #opPageStok .ope-msel{padding:9px 11px;margin-bottom:8px}
+  body.op-on #opPageStok .ope-msel .n{font-size:14px}
+  body.op-on #opPageStok .ope-msel .s{font-size:10.5px}
+  body.op-on #opPageStok .ope-msel .q{gap:8px;margin-top:7px;padding-top:7px}
+  body.op-on #opPageStok .ope-msel .q .k{font-size:8.5px}
+  body.op-on #opPageStok .ope-msel .q .v{font-size:16px}
+  body.op-on #opPageStok .ope-duzenle{height:38px;margin-bottom:8px;font-size:12px}
+  body.op-on #opPageStok .ope-rez{padding:8px 9px;margin-bottom:8px}
+  body.op-on #opPageStok .ope-rhead{margin-bottom:6px;font-size:9.5px}
+  body.op-on #opPageStok .ope-radd{height:30px;padding:0 9px;font-size:11px}
+  body.op-on #opPageStok .ope-ritem{padding:6px 8px;margin-bottom:5px;gap:6px}
+  body.op-on #opPageStok .ope-ritem .q{font-size:12px}
+  body.op-on #opPageStok .ope-ritem .d{font-size:11px}
+  body.op-on #opPageStok .ope-ritem .x{width:29px;height:29px}
+  body.op-on #opPageStok .ope-mtoggle{gap:7px;margin-bottom:8px}
+  body.op-on #opPageStok .ope-mtoggle button{height:46px;font-size:13px;border-radius:9px}
+  body.op-on #opPageStok .ope-fg{margin-bottom:8px}
+  body.op-on #opPageStok .ope-fg label{margin-bottom:4px;font-size:9.5px}
+  body.op-on #opPageStok .ope-fld{height:43px;font-size:13px;border-radius:9px;padding:0 10px}
+  body.op-on #opPageStok .ope-fld.num{font-size:20px}
+  body.op-on #opPageStok .ope-msave{height:50px;font-size:15px;border-radius:10px}
+
+  /* -----------------------------------------------------
+     TEZGÂH / BAŞLAT - DURAKLA - BİTİR
+     ----------------------------------------------------- */
+  body.op-on .ope-main{
+    grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);
+    gap:9px;
+    padding:9px 10px;
+  }
+  body.op-on .ope-ctitle{margin-bottom:6px;font-size:9.5px}
+  body.op-on .ope-jhead{padding:10px 12px;gap:9px}
+  body.op-on .ope-live{padding:3px 9px;font-size:8.5px}
+  body.op-on .ope-jdt{font-size:22px;margin-top:6px}
+  body.op-on .ope-jfile{font-size:10.5px;margin-top:3px}
+  body.op-on .ope-jmat{font-size:14px}
+  body.op-on .ope-jsub{font-size:10px}
+  body.op-on .ope-jstat{padding:9px 10px}
+  body.op-on .ope-jstat .k{font-size:8.5px}
+  body.op-on .ope-jstat .v{font-size:20px;margin-top:2px}
+  body.op-on .ope-jstat .v small{font-size:10px}
+  body.op-on .ope-jstat .s{font-size:9px}
+  body.op-on .ope-jprog{padding:10px 12px}
+  body.op-on .ope-bar{height:10px}
+  body.op-on .ope-bart{font-size:10.5px;margin-top:5px}
+  body.op-on .ope-jact{gap:8px;padding:0 12px 11px}
+  body.op-on .ope-big{height:54px;font-size:15px;border-radius:10px;gap:7px}
+  body.op-on .ope-bos{padding:18px 15px}
+  body.op-on .ope-bico{width:50px;height:50px;margin-bottom:10px}
+  body.op-on .ope-bos h3{font-size:18px}
+  body.op-on .ope-bos p{font-size:11.5px;margin-bottom:12px}
+  body.op-on .ope-bnext{padding:9px 11px;margin-bottom:12px;gap:9px}
+  body.op-on .ope-bnext .n{width:30px;height:30px}
+  body.op-on .ope-bnext .t b{font-size:13.5px}
+  body.op-on .ope-bnext .t span{font-size:10px}
+
+  body.op-on .ope-qhead{padding:8px 10px}
+  body.op-on .ope-qhead .ht{font-size:9.5px}
+  body.op-on .ope-seg button{padding:5px 9px;font-size:10.5px}
+  body.op-on .ope-search{padding:6px 10px}
+  body.op-on .ope-search input{font-size:12px}
+  body.op-on .ope-qdt{padding:8px 10px;gap:8px}
+  body.op-on .ope-qdt .no{width:26px;height:26px;font-size:11px}
+  body.op-on .ope-qdt .dt{font-size:13px}
+  body.op-on .ope-qdt .cnt{font-size:9.5px}
+  body.op-on .ope-qfile{padding:7px 9px 7px 34px;gap:7px}
+  body.op-on .ope-qfile .fn{font-size:11.5px}
+  body.op-on .ope-qfile .fm{font-size:9.5px}
+  body.op-on .ope-qtime{font-size:9.5px}
+  body.op-on .ope-qtime b{font-size:10.5px}
+  body.op-on .ope-qbtn{height:38px;padding:0 12px;font-size:11.5px;border-radius:8px}
+
+  /* Başlat / bitir sürecinde açılan bilgi pencereleri terminal yüksekliğine sığsın. */
+  body.op-on .jobplan-start-modal,
+  body.op-on .jobplan-remnant-modal,
+  body.op-on .jobplan-pause-modal{
+    padding:8px;
+  }
+  body.op-on .jobplan-start-modal .modal-box,
+  body.op-on .jobplan-remnant-modal .modal-box,
+  body.op-on .jobplan-pause-modal .modal-box{
+    width:min(470px,calc(100vw - 16px));
+    max-height:calc(100vh - 16px);
+    padding:13px;
+    overflow:auto;
+  }
+  body.op-on .jobplan-start-modal h2,
+  body.op-on .jobplan-remnant-modal h2,
+  body.op-on .jobplan-pause-modal h2{font-size:17px}
+  body.op-on .jobplan-start-head{padding:8px 10px;margin-bottom:8px;font-size:11px}
+  body.op-on .jobplan-start-item{padding:8px 10px;gap:8px;border-radius:8px}
+  body.op-on .jobplan-start-list{gap:6px}
+  body.op-on .jobplan-start-item .jp-ico{font-size:19px}
+  body.op-on .jobplan-start-item .jp-main{font-size:14.5px}
+  body.op-on .jobplan-start-item .jp-sub{font-size:10px;margin-top:2px}
+  body.op-on .jobplan-start-stock{margin-top:8px;padding:7px 9px;font-size:11px}
+  body.op-on .jobplan-remnant-card{padding:8px 10px;font-size:11px;line-height:1.45;margin-bottom:8px}
+  body.op-on .jobplan-remnant-input{padding:8px;font-size:18px}
+  body.op-on .jobplan-remnant-quick{margin-top:6px}
+  body.op-on .jobplan-remnant-quick button{padding:5px 9px;font-size:11px}
+  body.op-on .modal-buttons{gap:7px;margin-top:9px}
+  body.op-on .modal-buttons button{padding:9px 11px;font-size:12px}
+
+  /* Ekran klavyesi küçük terminalde pencerelerin tamamını kaplamasın. */
+  body.op-on .numeric-keypad{
+    width:min(340px,calc(100vw - 12px));
+    bottom:5px;
+    padding:7px;
+    border-radius:11px;
+  }
+  body.op-on .keypad-head{margin-bottom:5px;font-size:10.5px}
+  body.op-on .keypad-move{width:30px;height:25px;font-size:13px}
+  body.op-on .keypad-mode-tabs{gap:5px;margin-bottom:6px}
+  body.op-on .keypad-mode-tabs button{min-height:34px;padding:4px;font-size:11.5px}
+  body.op-on .keypad-grid{gap:5px}
+  body.op-on .keypad-grid button{min-height:39px;padding:4px;font-size:17px;border-radius:7px}
+  body.op-on .keypad-grid button.keypad-action,
+  body.op-on .keypad-grid button.keypad-done{font-size:12px}
+  body.op-on .alpha-keypad-grid,
+  body.op-on .symbol-keypad-grid{gap:4px}
+  body.op-on .alpha-keypad-grid button,
+  body.op-on .symbol-keypad-grid button{min-height:38px;font-size:15px;border-radius:6px}
+}
+
+/* Çok dar terminal çözünürlüğü: iki paneli koru ama sağ paneli biraz daha daralt. */
+@media (max-width:1100px) and (max-height:800px){
+  body.op-on #opPageStok .ope-mvsplit,
+  body.op-on .ope-main{
+    grid-template-columns:minmax(0,1fr) minmax(310px,.78fr);
+  }
+  body.op-on #opPageStok .ope-mtbl th:nth-child(2),
+  body.op-on #opPageStok .ope-mtbl td:nth-child(2){width:125px !important}
+  body.op-on #opPageStok .ope-mrez span{max-width:118px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->

@@ -5043,6 +5043,19 @@ body.planner-on.planner-stock-open #jobPlanModal>.jobplan-modal-box>.modal-butto
 .planner-stock-table th.num,.planner-stock-table td.num{text-align:right}
 .planner-stock-name{font-size:13px;font-weight:900;color:#0f172a}
 .planner-stock-sub{font-size:10.5px;color:#94a3b8;margin-top:2px;line-height:1.35}
+
+.planner-stock-tags{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:5px}
+.planner-stock-tag{
+  display:inline-flex;align-items:center;min-height:20px;padding:2px 7px;
+  border:1px dashed #94a3b8;border-radius:5px;background:#fff;color:#475569;
+  font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap
+}
+.planner-stock-tag.part{border-color:#94a3b8;color:#475569;background:#f8fafc}
+.planner-stock-tag.special{border-color:#0284c7;color:#075985;background:#f0f9ff}
+.planner-stock-tag.paint{border-color:#d97706;color:#92400e;background:#fffbeb}
+.planner-stock-tag.seam{border-color:#0f766e;color:#0f766e;background:#f0fdfa}
+.planner-stock-tag.seamless{border-color:#7c3aed;color:#6d28d9;background:#faf5ff}
 .planner-stock-note{font-size:10px;color:#b45309;margin-top:2px;font-weight:700;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .planner-stock-reservations{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:155px;max-width:245px}
 .planner-stock-reservation{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:3px 7px;border:1px solid #fed7aa;border-radius:7px;background:#fff7ed;color:#9a3412;font-size:10.5px;font-weight:750;line-height:1.2;white-space:nowrap}
@@ -5059,6 +5072,102 @@ body.planner-on.planner-stock-open #jobPlanModal>.jobplan-modal-box>.modal-butto
 .planner-stock-actions{display:flex;gap:4px;flex-wrap:wrap;min-width:215px}
 .planner-stock-actions button{padding:5px 7px;font-size:10px;border-radius:6px;white-space:nowrap}
 .planner-stock-empty{text-align:center;padding:38px;color:#94a3b8;font-size:13px}
+
+
+/* Planlamacı stok — operatör ekranındaki seç / yanda işlem yap akışı */
+.planner-stock-workspace{
+  flex:1 1 auto;min-height:0;display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);
+  gap:12px;
+}
+.planner-stock-list-pane,.planner-stock-detail-pane{
+  min-width:0;min-height:0;background:#fff;border:1px solid #dbe3ee;
+  border-radius:12px;box-shadow:0 1px 3px #0f172a0b;overflow:hidden;
+}
+.planner-stock-list-pane{display:flex;flex-direction:column}
+.planner-stock-pane-title{
+  flex:0 0 auto;padding:10px 12px;border-bottom:1px solid #eef2f7;
+  font-size:10px;font-weight:900;letter-spacing:.09em;color:#64748b;
+}
+.planner-stock-list-pane .planner-stock-table-wrap{
+  flex:1 1 auto;border:0;border-radius:0;box-shadow:none;overflow:auto;
+}
+.planner-stock-list-pane .planner-stock-table{min-width:660px;table-layout:fixed}
+.planner-stock-list-pane .planner-stock-table th:nth-child(1){width:40%}
+.planner-stock-list-pane .planner-stock-table th:nth-child(2){width:31%}
+.planner-stock-list-pane .planner-stock-table th:nth-child(3){width:13%}
+.planner-stock-list-pane .planner-stock-table th:nth-child(4){width:16%}
+.planner-stock-list-pane .planner-stock-table tbody tr{cursor:pointer}
+.planner-stock-list-pane .planner-stock-table tbody tr.selected{
+  background:#ecfdf5;box-shadow:inset 3px 0 0 #0f766e
+}
+.planner-stock-part-dt{
+  display:inline-flex;align-items:center;gap:5px;margin-top:4px;
+  max-width:100%;padding:3px 7px;border:1px solid #fed7aa;border-radius:7px;
+  background:#fff7ed;color:#9a3412;font-size:10px;font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.planner-stock-reservations.compact{min-width:0;max-width:100%;gap:3px}
+.planner-stock-reservations.compact .planner-stock-reservation{font-size:10px;padding:3px 6px}
+
+.planner-stock-detail-pane{display:flex;flex-direction:column;overflow:auto}
+.planner-stock-detail-empty{
+  flex:1;min-height:240px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:10px;color:#94a3b8;font-size:13px;text-align:center;padding:28px
+}
+.planner-stock-detail-empty-icon{
+  width:58px;height:58px;border-radius:16px;background:#f1f5f9;color:#64748b;
+  display:flex;align-items:center;justify-content:center;font-size:26px
+}
+.planner-stock-detail{padding:14px;overflow:auto}
+.planner-stock-selected{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:13px 14px;margin-bottom:11px
+}
+.planner-stock-selected-name{font-size:17px;font-weight:900;color:#0f172a}
+.planner-stock-selected-sub{font-size:11px;color:#64748b;margin-top:3px}
+.planner-stock-selected-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:11px;
+  border-top:1px solid #e2e8f0
+}
+.planner-stock-selected-stats span{display:block;font-size:9px;font-weight:900;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em}
+.planner-stock-selected-stats strong{display:block;font-size:20px;margin-top:2px;color:#0f172a}
+.planner-stock-selected-stats .reserved strong{color:#9a3412}
+.planner-stock-selected-stats .available strong{color:#0f766e}
+.planner-stock-edit-btn{
+  width:100%;height:42px;margin-bottom:11px;border:1px solid #cbd5e1;border-radius:9px;
+  background:#fff;color:#475569;font-size:12.5px;font-weight:900;cursor:pointer
+}
+.planner-stock-res-box{
+  background:#fff7ed;border:1px solid #fed7aa;border-radius:11px;padding:10px 11px;margin-bottom:11px
+}
+.planner-stock-res-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:#9a3412;font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+.planner-stock-res-head button{margin-left:auto;border:0;border-radius:7px;background:#ea580c;color:#fff;padding:6px 9px;font-size:10.5px;font-weight:900;cursor:pointer;text-transform:none;letter-spacing:0}
+.planner-stock-res-item{
+  display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #fed7aa;border-radius:8px;
+  padding:7px 9px;margin-top:6px;font-size:11px
+}
+.planner-stock-res-item .qty{font-weight:900;color:#9a3412;white-space:nowrap}
+.planner-stock-res-item .note{flex:1;min-width:0;font-weight:750;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.planner-stock-res-item .remove{width:28px;height:28px;border:0;border-radius:7px;background:#fee2e2;color:#b91c1c;font-weight:900;cursor:pointer}
+.planner-stock-res-empty{font-size:11px;color:#a16207;padding:3px 1px}
+.planner-stock-movement-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+.planner-stock-movement-toggle button{height:48px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;color:#64748b;font-weight:900;cursor:pointer}
+.planner-stock-movement-toggle button.entry.active{background:#15803d;border-color:#15803d;color:#fff}
+.planner-stock-movement-toggle button.exit.active{background:#b91c1c;border-color:#b91c1c;color:#fff}
+.planner-stock-field{margin-bottom:10px}
+.planner-stock-field label{display:block;margin-bottom:5px;color:#475569;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.055em}
+.planner-stock-field input,.planner-stock-field select{width:100%;height:43px;border:2px solid #cbd5e1;border-radius:9px;background:#fff;padding:0 10px;font-size:13px}
+.planner-stock-field input.qty{font-size:20px;text-align:center;font-weight:900}
+.planner-stock-save{
+  width:100%;height:52px;border:0;border-radius:10px;color:#fff;background:#15803d;
+  font-size:15px;font-weight:900;cursor:pointer
+}
+.planner-stock-save.exit{background:#b91c1c}
+.planner-stock-inline-warn{min-height:17px;margin:4px 0 8px;color:#b91c1c;font-size:11px;font-weight:800}
+@media(max-width:1100px){
+  .planner-stock-workspace{grid-template-columns:minmax(0,1fr) minmax(310px,.72fr)}
+  .planner-stock-list-pane .planner-stock-table{min-width:600px}
+}
 
 /* Planlamacı tam ekran kabuğunun üstünde mevcut modül pencereleri görünür kalsın. */
 body.planner-on #priceModal,
@@ -5366,6 +5475,45 @@ body.planner-on.planner-stock-open #plannerStockPage{display:flex !important}
   .page-login-simple-content{padding:20px 24px}
   .page-login-simple-logo{padding-bottom:15px;margin-bottom:15px}
   .page-login-simple-content .page-login-subtitle{margin-bottom:14px}
+}
+
+
+/* =====================================================
+   METRENİN YANINDA RENKLİ, KESİK ÇERÇEVELİ STOK ETİKETLERİ
+   Tüm kurallar stok bilgi satırlarıyla sınırlıdır.
+===================================================== */
+.stock-meta-line{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:3px 8px;min-width:0;max-width:100%;line-height:1.45;
+  white-space:normal
+}
+.stock-meta-facts{white-space:nowrap}
+.stock-length-meta{
+  display:inline-flex;align-items:center;flex-wrap:wrap;
+  gap:4px;max-width:100%;vertical-align:middle;line-height:1.3
+}
+.stock-length-leading{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.stock-length-value{white-space:nowrap;flex:0 0 auto}
+.stock-meta-tag{
+  display:inline-flex;align-items:center;flex:0 0 auto;
+  min-height:19px;padding:2px 6px;border:1px dashed;border-radius:5px;
+  font-size:9px;font-weight:800;line-height:1.25;letter-spacing:.025em;
+  text-transform:uppercase;white-space:nowrap
+}
+.stock-meta-tag.part{border-color:#d97706;color:#92400e;background:#fffbeb}
+.stock-meta-tag.special{border-color:#0284c7;color:#075985;background:#f0f9ff}
+.stock-meta-tag.paint{border-color:#db2777;color:#9d174d;background:#fdf2f8}
+.stock-meta-tag.seam{border-color:#0d9488;color:#115e59;background:#f0fdfa}
+.stock-meta-tag.seamless{border-color:#7c3aed;color:#5b21b6;background:#faf5ff}
+body.op-on #opPageStok .ope-msub.stock-meta-line{
+  white-space:normal;overflow:visible;text-overflow:clip;line-height:1.45
+}
+#viewerStockPage .vw-boy{white-space:normal}
+#viewerStockPage .vw-ozel .stock-length-value{font-weight:800;color:#0f172a}
+#viewerStockPage .stock-meta-tag{font-size:10px;min-height:21px}
+@media(max-width:1100px){
+  #opPageStok .stock-meta-tag,
+  .planner-stock-list-pane .stock-meta-tag{font-size:9px;padding:2px 5px;letter-spacing:0}
 }
 
 </style>
@@ -6612,21 +6760,27 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     </select>
   </div>
 
-  <div class="planner-stock-table-wrap">
-    <table class="planner-stock-table">
-      <thead><tr>
-        <th>Malzeme</th>
-        <th>Boy</th>
-        <th class="num">Stok</th>
-        <th class="num">Ayrılan</th>
-        <th class="num">Kullanılabilir</th>
-        <th class="num">Metre</th>
-        <th class="num">Kg</th>
-        <th>Durum</th>
-        <th>İşlem</th>
-      </tr></thead>
-      <tbody id="plannerStockBody"><tr><td colspan="9" class="planner-stock-empty">Stok verileri yükleniyor…</td></tr></tbody>
-    </table>
+  <div class="planner-stock-workspace">
+    <div class="planner-stock-list-pane">
+      <div class="planner-stock-pane-title">MALZEME SEÇ</div>
+      <div class="planner-stock-table-wrap">
+        <table class="planner-stock-table">
+          <thead><tr>
+            <th>Malzeme</th>
+            <th>Ayrılan</th>
+            <th class="num">Toplam</th>
+            <th class="num">Kullanılabilir</th>
+          </tr></thead>
+          <tbody id="plannerStockBody"><tr><td colspan="4" class="planner-stock-empty">Stok verileri yükleniyor…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="planner-stock-detail-pane" id="plannerStockDetail">
+      <div class="planner-stock-detail-empty">
+        <div class="planner-stock-detail-empty-icon">▤</div>
+        <div>Soldaki listeden bir malzeme seçin</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -10406,6 +10560,48 @@ let match=String(product.description || "")
 .match(/\[BORU_YAPISI:([^\]]+)\]/i);
 
 return match ? normalizePipeSeam(match[1]) : "Dikişli";
+}
+
+/* =====================================================
+   STOK BİLGİ ETİKETLERİ — PLANLAMACI / OPERATÖR / İZLEYİCİ
+   Yalnızca görünüm üretir; stok ve ayırma kayıtlarını değiştirmez.
+===================================================== */
+function stockMetaTagsHTML(product){
+  if(!product)return "";
+  let tags=[];
+  let length=parseLength(product.length);
+  if(Number.isFinite(length) && length>0){
+    let kind=getProductLengthKind(product);
+    if(kind==="parca")tags.push(["part","Parça"]);
+    else if(kind==="ozel")tags.push(["special","Özel Boy"]);
+  }
+  if(getProductFinish(product)==="Boyalı")tags.push(["paint","Boyalı"]);
+  if(product.type==="Boru"){
+    let seam=getProductPipeSeam(product);
+    if(seam==="Dikişsiz")tags.push(["seamless","Dikişsiz"]);
+    else if(seam==="Dikişli")tags.push(["seam","Dikişli"]);
+  }
+  return tags.map(([kind,label])=>
+    '<span class="stock-meta-tag '+kind+'">'+escapeHTML(label)+'</span>'
+  ).join("");
+}
+
+function stockLengthMetaHTML(product){
+  let length=formatLength(product?.length)||"—";
+  let tags=stockMetaTagsHTML(product);
+  /* Boy ile ilk etiket aynı gruptadır: dar alanda etiket tek başına alta düşmez. */
+  let firstEnd=tags.indexOf("</span>");
+  let first=firstEnd<0?"":tags.slice(0,firstEnd+7);
+  let remaining=firstEnd<0?"":tags.slice(firstEnd+7);
+  return '<span class="stock-length-meta">'+
+    '<span class="stock-length-leading"><span class="stock-length-value">'+escapeHTML(length)+'</span>'+first+'</span>'+
+    remaining+'</span>';
+}
+
+function stockMaterialMetaHTML(product){
+  let facts=[formatThickness(product?.thickness),product?.quality].filter(Boolean).join(" · ");
+  return (facts?'<span class="stock-meta-facts">'+escapeHTML(facts)+'</span>':"")+
+    stockLengthMetaHTML(product);
 }
 
 /* =====================================================
@@ -20457,9 +20653,45 @@ return file.tubes;
 
 /* ---------- PARÇA KARTI ARAMA ---------- */
 
+/* Parça profil kartında gerçekten serbest kaç ADET kaldığını hesapla.
+   - Normal kullanımda tüm aktif ayırmalar stoktan düşülür.
+   - Plan senkronu sırasında ise daha önce sırayla sahiplenilmiş plan ayırmaları
+     + elle açılan ayırmalar düşülür. Böylece aynı fiziksel parça iki setup'a
+     birden atanamaz; kartta 2 adet varsa iki ayrı setup birer adet kullanabilir. */
+function jobPlanRemnantAvailableUnits(product,ownReservationId="",claimedSet=null){
+if(!product)return 0;
+let stock=Math.max(0,Number(product.stock)||0);
+let pid=String(product.id);
+let list=Array.isArray(standardReservations[pid])?standardReservations[pid]:[];
+let own=String(ownReservationId||"");
+let reserved=0;
+
+list.forEach(r=>{
+let id=String(r&&r.id||"");
+let qty=Math.max(0,Number(r&&r.quantity)||0);
+if(!qty)return;
+
+/* Kendi mevcut ayırması bu dosyanın kapasitesini tüketmiş sayılmaz. */
+if(own && id===own)return;
+
+if(claimedSet instanceof Set){
+/* Planın kendi henüz sıra gelmemiş eski kayıtlarını burada sayma;
+   senkron döngüsü claimed ile fiziksel adetleri sırayla paylaştırır. */
+if(String(r&&r.source||"")==="jobplan"){
+if(claimedSet.has(id))reserved+=qty;
+return;
+}
+}
+
+reserved+=qty;
+});
+
+return Math.max(0,stock-reserved);
+}
+
 /* Aynı profilin parça kartları: ebat, kalınlık, kalite, yüzey ve dikiş aynı,
-   boy ham boydan farklı. Yeten en küçük parça seçilir. */
-function jobPlanRemnantCandidates(file,neededM){
+   boy ham boydan farklı. Yeten ve AYRILMAMIŞ en küçük parça seçilir. */
+function jobPlanRemnantCandidates(file,neededM,claimed=null){
 if(!file || !file.size)return [];
 
 let need=Number(neededM)||0;
@@ -20485,6 +20717,11 @@ if(Math.abs(len-rawM)<0.005)return false;   /* tam boy kartı parça değildir *
 if(len+0.0001<need)return false;            /* yetmiyor */
 if(Number(p.stock||0)<1)return false;
 
+/* Başka bir setup / manuel ayırma bu parçanın tüm adetlerini kullanmışsa
+   aynı kartı yeniden seçme. */
+let claimedSet=claimed&&claimed[String(p.id)] instanceof Set?claimed[String(p.id)]:null;
+if(jobPlanRemnantAvailableUnits(p,file.partialReservationId,claimedSet)<1)return false;
+
 if(base){
 if(normalizeQuality(p.quality)!==normalizeQuality(base.quality))return false;
 if(getProductFinish(p)!==getProductFinish(base))return false;
@@ -20497,7 +20734,7 @@ return true;
 }
 
 /* Dosyaya uygun parça kartını seçer ve kaydeder. */
-function jobPlanPickRemnant(file){
+function jobPlanPickRemnant(file,claimed=null){
 if(!file || file.customerMaterial)return null;
 
 let need=jobPlanPartialM(file);
@@ -20509,12 +20746,20 @@ return null;
 /* Elle seçilmiş kart hâlâ uygunsa korunur. */
 if(file.partialProductId){
 let secili=products.find(p=>String(p.id)===String(file.partialProductId));
-if(secili && parseLength(secili.length)+0.0001>=need && Number(secili.stock||0)>=1){
+let claimedSet=claimed&&claimed[String(file.partialProductId)] instanceof Set
+?claimed[String(file.partialProductId)]
+:null;
+if(
+secili &&
+parseLength(secili.length)+0.0001>=need &&
+Number(secili.stock||0)>=1 &&
+jobPlanRemnantAvailableUnits(secili,file.partialReservationId,claimedSet)>=1
+){
 return secili;
 }
 }
 
-let liste=jobPlanRemnantCandidates(file,need);
+let liste=jobPlanRemnantCandidates(file,need,claimed);
 file.partialProductId=liste.length?String(liste[0].id):"";
 return liste.length?liste[0]:null;
 }
@@ -20532,7 +20777,12 @@ let remnant=file.partialProductId
 ?products.find(p=>String(p.id)===String(file.partialProductId))
 :null;
 
-if(remnant && parseLength(remnant.length)+0.0001>=need && Number(remnant.stock||0)>=1){
+if(
+remnant &&
+parseLength(remnant.length)+0.0001>=need &&
+Number(remnant.stock||0)>=1 &&
+jobPlanRemnantAvailableUnits(remnant,file.partialReservationId,null)>=1
+){
 return {
 kind:"parca",
 product:remnant,
@@ -21172,10 +21422,15 @@ if(need<=0)return false;
 /* Elle ya da daha önce seçilmiş parça kartı hâlâ uygunsa tam boy gerekmez. */
 if(file.partialProductId){
 let secili=products.find(p=>String(p.id)===String(file.partialProductId));
-if(secili && parseLength(secili.length)+0.0001>=need && Number(secili.stock||0)>=1)return false;
+if(
+secili &&
+parseLength(secili.length)+0.0001>=need &&
+Number(secili.stock||0)>=1 &&
+jobPlanRemnantAvailableUnits(secili,file.partialReservationId,null)>=1
+)return false;
 }
 
-/* Stokta yeten parça profil yoksa kesim tam boydan yapılır. */
+/* Stokta gerçekten serbest ve yeten parça profil yoksa kesim tam boydan yapılır. */
 return jobPlanRemnantCandidates(file,need).length===0;
 }
 
@@ -21198,7 +21453,7 @@ file.status!=="bitti" &&
 !file.partialDeducted &&
 jobPlanHasPartial(file);
 
-if(gerekli)jobPlanPickRemnant(file);
+if(gerekli)jobPlanPickRemnant(file,claimed);
 
 /* Parça kartı yoksa kısmi boy tam boydan kesilecek; ayrı kart
    ayırması yapılmaz, tam boy kartında 1 boy fazladan ayrılır
@@ -21387,15 +21642,9 @@ return "";
 
 /* 6 m dışındaki her boy standart dışıdır. */
 function viewerBoyHucresi(product){
-let metin=formatLength(product.length)||"—";
-let etiket=typeof productLengthKindLabel==="function"
-?productLengthKindLabel(product)
-:(Math.abs((parseLength(product.length)||0)-6)>=0.005?"özel boy":"");
-
-return '<td class="vw-boy'+(etiket?" vw-ozel":"")+'">'+
-'<span class="vw-boy-v">'+escapeHTML(metin)+'</span>'+
-(etiket?'<span class="vw-boy-tag">'+escapeHTML(etiket)+'</span>':'')+
-'</td>';
+  let kind=getProductLengthKind(product);
+  return '<td class="vw-boy'+(kind!=="standart"?" vw-ozel":"")+'">'+
+    stockLengthMetaHTML(product)+'</td>';
 }
 
 /* Uygulamanın sayfa sekmeleriyle aynı sıra — stokta olmasa da görünür. */
@@ -21579,9 +21828,7 @@ return '<tr'+(stok<=0?' class="vw-yokrow"':'')+'>'+
 '<td><div class="vw-name"><i class="vw-dot '+viewerTipSinifi(p.type)+'"></i>'+
 escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div>'+
 '<div class="vw-sub2">'+escapeHTML(
-[formatThickness(p.thickness),p.quality,
-(typeof getProductFinish==="function"&&getProductFinish(p)==="Boyalı")?"Boyalı":"",
-(p.type==="Boru"&&typeof getProductPipeSeam==="function")?getProductPipeSeam(p):""]
+[formatThickness(p.thickness),p.quality]
 .filter(Boolean).join(" · "))+'</div></td>'+
 viewerBoyHucresi(p)+
 '<td class="num"><span class="vw-big"'+(stok<=0?' style="color:#b91c1c"':'')+'>'+stok+'</span></td>'+
@@ -22822,7 +23069,6 @@ let ayrilan=typeof getReservedQuantity==="function"?Number(getReservedQuantity(p
 let serbest=Math.max(0,stok-ayrilan);
 let rez=opRezListesi(p);
 
-let etiket=typeof productLengthKindLabel==="function"?productLengthKindLabel(p):"";
 
 let rezHtml=rez.length
 ?'<div class="ope-mrez">'+
@@ -22834,10 +23080,8 @@ rez.slice(0,2).map(r=>'<span><b>'+Number(r.quantity)+' boy</b> '+escapeHTML(Stri
 return '<tr class="'+(String(p.id)===opStokSelected?"on":"")+'" '+
 'onclick="opStokSec(\''+String(p.id).replace(/'/g,"\\'")+'\')">'+
 '<td><div class="ope-mname"><i class="ope-mdot '+opTipSinifi(p.type)+'"></i>'+
-escapeHTML(String(p.type||"")+" "+String(p.size||""))+
-(etiket?' <span class="ope-mtag">'+escapeHTML(etiket)+'</span>':'')+'</div>'+
-'<div class="ope-msub">'+escapeHTML([formatThickness(p.thickness),p.quality,formatLength(p.length)]
-.filter(Boolean).join(" · "))+'</div></td>'+
+escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div>'+
+'<div class="ope-msub stock-meta-line">'+stockMaterialMetaHTML(p)+'</div></td>'+
 '<td>'+rezHtml+'</td>'+
 '<td class="ope-mnum'+(stok<=0?" sifir":"")+'">'+stok+'<small>boy</small></td>'+
 '<td class="ope-mnum '+(serbest<=0?(stok<=0?"sifir":"tuk"):"kul")+'">'+serbest+'<small>boy</small></td>'+
@@ -22879,8 +23123,7 @@ box.innerHTML=
 
 '<div class="ope-msel">'+
 '<div class="n">'+escapeHTML(String(product.type||"")+" "+String(product.size||""))+'</div>'+
-'<div class="s">'+escapeHTML([formatThickness(product.thickness),product.quality,formatLength(product.length)]
-.filter(Boolean).join(" · "))+'</div>'+
+'<div class="s stock-meta-line">'+stockMaterialMetaHTML(product)+'</div>'+
 '<div class="q">'+
 '<div><div class="k">Stok</div><div class="v">'+stok+'</div></div>'+
 '<div><div class="k">Ayrılan</div><div class="v" style="color:#9a3412">'+ayrilan+'</div></div>'+
@@ -23427,6 +23670,8 @@ return opEski.apply(this,arguments);
 let plannerClockTimer=null;
 let plannerSettingsOpen=false;
 let plannerPage="plan";
+let plannerStockSelectedId=null;
+let plannerStockMovementType="Giriş";
 
 function plannerActive(){
   if(!systemData || !systemData.loginEnabled)return false;
@@ -23562,26 +23807,41 @@ function plannerStockList(){
 
 function plannerStockReservationInfo(p){
   let stock=Number(p.stock)||0;
-  let reserved=0;
-  let note="";
+  let standardReserved=typeof getReservedQuantity==="function"?(Number(getReservedQuantity(p.id))||0):0;
+  let usageSelected=typeof isUsageSelected==="function" && isUsageSelected(p.id);
+  let usageNote=usageSelected && typeof getUsageNote==="function"?String(getUsageNote(p.id)||""):"";
 
-  if(typeof isStandardLength==="function" && isStandardLength(p.length)){
-    reserved=typeof getReservedQuantity==="function"?(Number(getReservedQuantity(p.id))||0):0;
-    if(reserved>0 && typeof standardReservationExcelText==="function")note=standardReservationExcelText(p);
-  }else if(typeof isUsageSelected==="function" && isUsageSelected(p.id)){
-    reserved=stock;
-    note=typeof getUsageNote==="function"?getUsageNote(p.id):"Ayrıldı";
+  /* Operatör panelindeki + Ayır kayıtları 6 m dışındaki parça profillerde de
+     standardReservations içinde tutulabiliyor. Bu nedenle önce onları esas al. */
+  let reserved=standardReserved>0?standardReserved:(usageSelected?stock:0);
+  let note="";
+  if(standardReserved>0 && typeof standardReservationExcelText==="function")note=standardReservationExcelText(p);
+  else if(usageSelected)note=usageNote||"Ayrıldı";
+
+  return {
+    reserved:Math.max(0,reserved),
+    available:Math.max(0,stock-reserved),
+    note:String(note||""),
+    explicitReservations:standardReserved>0,
+    usageSelected:usageSelected,
+    usageNote:usageNote
+  };
+}
+function plannerStockReservationItems(p,info=null){
+  let standard=typeof getStandardReservations==="function"?(getStandardReservations(p.id)||[]):[];
+  if(standard.length){
+    return standard.map(r=>({id:String(r.id||""),quantity:Number(r.quantity)||0,note:String(r.note||""),kind:"standard"}));
   }
-  return {reserved:Math.max(0,reserved),available:Math.max(0,stock-reserved),note:String(note||"")};
+  let selected=info?info.usageSelected:(typeof isUsageSelected==="function"&&isUsageSelected(p.id));
+  if(selected){
+    let note=info?info.usageNote:(typeof getUsageNote==="function"?getUsageNote(p.id):"");
+    return [{id:"usage",quantity:Number(p.stock)||0,note:String(note||"Ayrıldı"),kind:"usage"}];
+  }
+  return [];
 }
 
 function plannerStockReservationHTML(p,info){
-  let items=[];
-  if(typeof isStandardLength==="function" && isStandardLength(p.length) && typeof getStandardReservations==="function"){
-    items=(getStandardReservations(p.id)||[]).map(r=>({quantity:Number(r.quantity)||0,note:String(r.note||"")}));
-  }else if(info && info.reserved>0){
-    items=[{quantity:info.reserved,note:info.note||"Ayrıldı"}];
-  }
+  let items=plannerStockReservationItems(p,info);
   if(!items.length)return '<span class="planner-stock-reservation-empty">—</span>';
   let shown=items.slice(0,3).map(r=>
     '<div class="planner-stock-reservation" title="'+escapeHTML((r.quantity?String(r.quantity)+" boy ":"")+r.note)+'">'+
@@ -23590,9 +23850,21 @@ function plannerStockReservationHTML(p,info){
     '</div>'
   ).join("");
   let more=items.length>3?'<div class="planner-stock-reservation-more">+'+(items.length-3)+' iş daha</div>':'';
-  return '<div class="planner-stock-reservations">'+shown+more+'</div>';
+  return '<div class="planner-stock-reservations compact">'+shown+more+'</div>';
 }
 
+function plannerStockPartDtHTML(p,info){
+  if(typeof isStandardLength==="function" && isStandardLength(p.length))return "";
+  let items=plannerStockReservationItems(p,info);
+  if(!items.length)return "";
+  let txt=items.map(r=>String(r.note||"").trim()).filter(Boolean).join(" · ");
+  if(!txt)return "";
+  return '<div class="planner-stock-part-dt" title="'+escapeHTML(txt)+'">Ayrıldı · '+escapeHTML(txt)+'</div>';
+}
+
+function plannerStockMetaTagsHTML(p){
+  return stockMetaTagsHTML(p);
+}
 function plannerStockActions(p){
   let out=[];
   if(typeof systemCan!=="function" || systemCan("stok.hareket")){
@@ -23606,6 +23878,140 @@ function plannerStockActions(p){
     out.push('<button type="button" class="btn-gray" onclick="openProductModal('+Number(p.id)+')">Düzenle</button>');
   }
   return out.join("");
+}
+
+
+function plannerStockSelect(id){
+  plannerStockSelectedId=String(id);
+  plannerRenderStock();
+}
+
+function plannerStockSelectedProduct(){
+  return (Array.isArray(products)?products:[]).find(p=>String(p.id)===String(plannerStockSelectedId))||null;
+}
+
+function plannerStockSetMovementType(type){
+  plannerStockMovementType=type==="Çıkış"?"Çıkış":"Giriş";
+  plannerRenderStockDetail();
+}
+
+function plannerStockEditSelected(){
+  let p=plannerStockSelectedProduct();
+  if(!p)return;
+  if(typeof systemGuard==="function" && !systemGuard("stok.kart"))return;
+  if(typeof openProductModal==="function")openProductModal(p.id);
+}
+
+function plannerStockReserveSelected(){
+  let p=plannerStockSelectedProduct();
+  if(!p)return;
+  if(typeof systemGuard==="function" && !systemGuard("stok.ayir"))return;
+  if(typeof openReservationModal==="function")openReservationModal(p.id);
+}
+
+function plannerStockRemoveReservation(id,kind){
+  let p=plannerStockSelectedProduct();
+  if(!p)return;
+  if(kind==="usage"){
+    if(typeof systemGuard==="function" && !systemGuard("stok.ayirkaldir"))return;
+    if(!confirm("Bu ayırmayı kaldırmak istiyor musunuz?"))return;
+    if(typeof toggleUsageSelection==="function")toggleUsageSelection(p.id,false);
+  }else if(typeof removeStandardReservation==="function"){
+    removeStandardReservation(p.id,id,true,null);
+  }
+  setTimeout(()=>plannerRenderStock(),0);
+}
+
+function plannerStockReservationChanged(){
+  let p=plannerStockSelectedProduct();
+  let sel=document.getElementById("plannerStockReservationSelect");
+  if(!p||!sel||!sel.value)return;
+  let item=plannerStockReservationItems(p).find(r=>String(r.id)===String(sel.value));
+  if(!item)return;
+  let qty=document.getElementById("plannerStockMoveQty");
+  let desc=document.getElementById("plannerStockMoveDesc");
+  if(qty)qty.value=String(item.quantity||"");
+  if(desc&&!desc.value.trim())desc.value=String(item.note||"");
+}
+
+async function plannerStockSaveMovement(){
+  if(typeof systemGuard==="function" && !systemGuard("stok.hareket"))return;
+  let p=plannerStockSelectedProduct();
+  let warn=document.getElementById("plannerStockMoveWarn");
+  if(!p){if(warn)warn.textContent="Malzeme seçin.";return;}
+  let raw=String(document.getElementById("plannerStockMoveQty")?.value||"").trim().replace(",",".");
+  let qty=Math.floor(Number(raw));
+  if(!Number.isFinite(qty)||qty<=0){if(warn)warn.textContent="Geçerli bir miktar girin.";return;}
+  if(warn)warn.textContent="";
+
+  currentProductId=p.id;
+  currentMovementType=plannerStockMovementType;
+  let hiddenQty=document.getElementById("movementQuantity");
+  let hiddenDesc=document.getElementById("movementDescription");
+  if(hiddenQty)hiddenQty.value=String(qty);
+  let desc=String(document.getElementById("plannerStockMoveDesc")?.value||"").trim();
+  if(hiddenDesc)hiddenDesc.value=desc;
+
+  if(typeof populateMovementReservation==="function")populateMovementReservation(p,plannerStockMovementType);
+  let hiddenSel=document.getElementById("movementReservationSelect");
+  let plannerSel=document.getElementById("plannerStockReservationSelect");
+  if(hiddenSel){
+    let selected=plannerStockMovementType==="Çıkış"&&plannerSel?String(plannerSel.value||""):"";
+    /* usage pseudo kaydı standardReservations içinde olmadığı için hidden select'e verilmez. */
+    hiddenSel.value=selected==="usage"?"":selected;
+    if(selected==="usage" && hiddenDesc && !hiddenDesc.value.trim()){
+      let usage=plannerStockReservationItems(p).find(r=>r.kind==="usage");
+      if(usage)hiddenDesc.value=usage.note;
+    }
+  }
+
+  if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+  if(typeof saveMovement==="function")await saveMovement();
+  if(!(Array.isArray(products)?products:[]).some(x=>String(x.id)===String(plannerStockSelectedId)))plannerStockSelectedId=null;
+  plannerRenderStock();
+}
+
+function plannerRenderStockDetail(){
+  let box=document.getElementById("plannerStockDetail");
+  if(!box)return;
+  let p=plannerStockSelectedProduct();
+  if(!p){
+    box.innerHTML='<div class="planner-stock-detail-empty"><div class="planner-stock-detail-empty-icon">▤</div><div>Soldaki listeden bir malzeme seçin</div></div>';
+    return;
+  }
+
+  let stock=Number(p.stock)||0;
+  let info=plannerStockReservationInfo(p);
+  let items=plannerStockReservationItems(p,info);
+  let metaHTML=stockMaterialMetaHTML(p);
+  let entry=plannerStockMovementType!=="Çıkış";
+  let canEdit=typeof systemCan!=="function"||systemCan("stok.kart");
+  let canReserve=typeof systemCan!=="function"||systemCan("stok.ayir");
+  let canRemove=typeof systemCan!=="function"||systemCan("stok.ayirkaldir");
+  let canMove=typeof systemCan!=="function"||systemCan("stok.hareket");
+
+  let resHtml=items.length?items.map(r=>
+    '<div class="planner-stock-res-item"><span class="qty">'+r.quantity+' boy</span><span class="note">'+escapeHTML(r.note||"Ayrıldı")+'</span>'+
+    (canRemove?'<button type="button" class="remove" onclick="plannerStockRemoveReservation(\''+String(r.id).replace(/'/g,"\\'")+'\',\''+r.kind+'\')">×</button>':'')+
+    '</div>'
+  ).join(""):'<div class="planner-stock-res-empty">Bu malzemede ayrılmış iş yok.</div>';
+
+  let selectHtml="";
+  if(!entry&&items.length){
+    selectHtml='<div class="planner-stock-field"><label>Ayrılan İş (isteğe bağlı)</label><select id="plannerStockReservationSelect" onchange="plannerStockReservationChanged()"><option value="">Ayrılan iş seçmeden çıkış</option>'+items.map(r=>'<option value="'+escapeHTML(String(r.id))+'">'+r.quantity+' boy — '+escapeHTML(r.note||"Ayrıldı")+'</option>').join("")+'</select></div>';
+  }
+
+  box.innerHTML='<div class="planner-stock-detail">'+
+    '<div class="planner-stock-selected"><div class="planner-stock-selected-name">'+escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div><div class="planner-stock-selected-sub stock-meta-line">'+metaHTML+'</div><div class="planner-stock-selected-stats">'+
+      '<div><span>Stok</span><strong>'+stock+'</strong></div><div class="reserved"><span>Ayrılan</span><strong>'+info.reserved+'</strong></div><div class="available"><span>Kullanılabilir</span><strong>'+info.available+'</strong></div></div></div>'+
+    (canEdit?'<button type="button" class="planner-stock-edit-btn" onclick="plannerStockEditSelected()">✎ Kartı Düzenle</button>':'')+
+    '<div class="planner-stock-res-box"><div class="planner-stock-res-head">▮ Ayrılan İşler'+(canReserve?'<button type="button" onclick="plannerStockReserveSelected()">+ Ayır</button>':'')+'</div>'+resHtml+'</div>'+
+    (canMove?'<div class="planner-stock-movement-toggle"><button type="button" class="entry '+(entry?'active':'')+'" onclick="plannerStockSetMovementType(\'Giriş\')">＋ GİRİŞ</button><button type="button" class="exit '+(!entry?'active':'')+'" onclick="plannerStockSetMovementType(\'Çıkış\')">− ÇIKIŞ</button></div>'+selectHtml+
+      '<div class="planner-stock-field"><label>Miktar (boy)</label><input id="plannerStockMoveQty" class="qty" type="text" inputmode="none" data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Stok miktarı"></div>'+ 
+      '<div class="planner-stock-field"><label>Açıklama</label><input id="plannerStockMoveDesc" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Açıklama" placeholder="Örn: irsaliye no, firma"></div>'+ 
+      '<div class="planner-stock-inline-warn" id="plannerStockMoveWarn"></div><button type="button" class="planner-stock-save '+(!entry?'exit':'')+'" onclick="plannerStockSaveMovement()">'+(entry?'GİRİŞİ KAYDET':'ÇIKIŞI KAYDET')+'</button>':'')+
+    '</div>';
+  if(typeof updateInputModes==="function")updateInputModes();
 }
 
 function plannerRenderStock(){
@@ -23630,40 +24036,32 @@ function plannerRenderStock(){
   set("plannerStockKg",totalKg.toLocaleString("tr-TR",{maximumFractionDigits:2})+" kg");
   set("plannerStockOut",outCount);
 
+  if(plannerStockSelectedId && !all.some(p=>String(p.id)===String(plannerStockSelectedId)))plannerStockSelectedId=null;
+
   if(!list.length){
-    body.innerHTML='<tr><td colspan="9" class="planner-stock-empty">Aramaya uygun stok kartı bulunamadı.</td></tr>';
+    body.innerHTML='<tr><td colspan="4" class="planner-stock-empty">Aramaya uygun stok kartı bulunamadı.</td></tr>';
+    plannerRenderStockDetail();
     return;
   }
 
   body.innerHTML=list.map(p=>{
     let stock=Number(p.stock)||0;
     let info=plannerStockReservationInfo(p);
-    let length=parseLength(p.length)||0;
-    let meters=stock*length;
-    let kg=typeof productTotalKg==="function"?productTotalKg(p):0;
-    let status=stock<=0?{c:"bad",t:"Stok Yok"}:(info.available<=0?{c:"wait",t:"Tamamı Ayrıldı"}:{c:"ok",t:"Stokta Var"});
-    let finish=typeof getProductFinish==="function"?getProductFinish(p):"";
-    let seam=(p.type==="Boru"&&typeof getProductPipeSeam==="function")?getProductPipeSeam(p):"";
-    let kind=(!isStandardLength(p.length)&&typeof productLengthKindLabel==="function")?productLengthKindLabel(p):"";
-    let sub=[formatThickness(p.thickness),p.quality,finish==="Boyalı"?"Boyalı":"",seam,kind].filter(Boolean).join(" · ");
     let reservationHTML=plannerStockReservationHTML(p,info);
+    let metaHTML=stockMaterialMetaHTML(p);
+    let selected=String(p.id)===String(plannerStockSelectedId);
 
-    return '<tr>'+ 
-      '<td><div class="planner-stock-name">'+escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div><div class="planner-stock-sub">'+escapeHTML(sub)+'</div></td>'+ 
-      '<td>'+escapeHTML(formatLength(p.length)||"—")+'</td>'+ 
-      '<td class="num"><span class="planner-stock-big">'+stock+'</span></td>'+ 
+    return '<tr class="'+(selected?'selected':'')+'" onclick="plannerStockSelect(\''+String(p.id).replace(/'/g,"\\'")+'\')">'+
+      '<td><div class="planner-stock-name">'+escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div><div class="planner-stock-sub stock-meta-line">'+metaHTML+'</div></td>'+ 
       '<td>'+reservationHTML+'</td>'+ 
+      '<td class="num"><span class="planner-stock-big">'+stock+'</span></td>'+ 
       '<td class="num"><span class="planner-stock-big">'+info.available+'</span></td>'+ 
-      '<td class="num">'+meters.toLocaleString("tr-TR",{maximumFractionDigits:2})+'</td>'+ 
-      '<td class="num">'+(Number.isFinite(kg)?kg.toLocaleString("tr-TR",{maximumFractionDigits:2}):"—")+'</td>'+ 
-      '<td><span class="planner-stock-status '+status.c+'">'+status.t+'</span></td>'+ 
-      '<td><div class="planner-stock-actions">'+plannerStockActions(p)+'</div></td>'+ 
       '</tr>';
   }).join("");
 
+  plannerRenderStockDetail();
   if(typeof updateInputModes==="function")updateInputModes();
 }
-
 function plannerApply(){
   let active=plannerActive();
   document.body.classList.toggle("planner-on",active);

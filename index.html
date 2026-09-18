@@ -4525,6 +4525,286 @@ body.op-on #errorCodeModal .jobplan-table-wrap{display:none !important}
   body.op-on #opPageStok .ope-mrez span{max-width:118px}
 }
 
+
+/* =====================================================
+   KURUMSAL GİRİŞ EKRANI
+   Mevcut giriş / kullanıcı doğrulama mantığı değişmez.
+===================================================== */
+.page-login-gate{
+  background:
+    radial-gradient(circle at 18% 18%,rgba(20,184,166,.16),transparent 30%),
+    radial-gradient(circle at 82% 82%,rgba(59,130,246,.12),transparent 34%),
+    linear-gradient(135deg,#08111f 0%,#101b30 55%,#0f172a 100%);
+  padding:24px;
+}
+
+.page-login-card{
+  width:min(900px,100%);
+  padding:0;
+  display:grid;
+  grid-template-columns:minmax(270px,.88fr) minmax(360px,1.12fr);
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.24);
+  border-radius:20px;
+  box-shadow:0 28px 70px rgba(2,6,23,.38);
+}
+
+.page-login-brand{
+  position:relative;
+  min-height:448px;
+  padding:34px 32px;
+  color:#e2e8f0;
+  background:
+    linear-gradient(155deg,rgba(15,118,110,.22),transparent 48%),
+    linear-gradient(180deg,#111c2f 0%,#0b1424 100%);
+  display:flex;
+  flex-direction:column;
+}
+
+.page-login-brand:after{
+  content:"";
+  position:absolute;
+  inset:auto 26px 26px auto;
+  width:110px;
+  height:110px;
+  border:1px solid rgba(148,163,184,.10);
+  border-radius:28px;
+  transform:rotate(16deg);
+  pointer-events:none;
+}
+
+.page-login-brand-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.page-login-brand-mark{
+  width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  background:#0f766e;color:white;font-size:22px;font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.13)
+}
+.page-login-brand-name{font-size:14px;font-weight:900;letter-spacing:.13em;color:#fff}
+.page-login-brand-sub{font-size:10.5px;color:#94a3b8;margin-top:2px;letter-spacing:.05em}
+
+.page-login-brand-copy{margin:auto 0;position:relative;z-index:1}
+.page-login-brand-kicker{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 10px;border-radius:999px;
+  background:rgba(20,184,166,.10);border:1px solid rgba(45,212,191,.22);
+  color:#5eead4;font-size:10px;font-weight:800;letter-spacing:.10em;text-transform:uppercase
+}
+.page-login-brand-copy h3{margin:16px 0 9px;font-size:25px;line-height:1.16;color:white;letter-spacing:-.025em}
+.page-login-brand-copy p{margin:0;color:#94a3b8;font-size:13px;line-height:1.65;max-width:285px}
+
+.page-login-brand-list{display:grid;gap:9px;margin-top:22px}
+.page-login-brand-item{display:flex;align-items:center;gap:9px;color:#cbd5e1;font-size:11.5px;font-weight:700}
+.page-login-brand-item i{width:7px;height:7px;border-radius:50%;background:#2dd4bf;box-shadow:0 0 0 4px rgba(45,212,191,.08)}
+.page-login-brand-foot{font-size:10px;color:#64748b;position:relative;z-index:1}
+
+.page-login-content{
+  min-width:0;
+  padding:34px 38px 32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:#fff;
+}
+.page-login-eyebrow{font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#0f766e;margin-bottom:8px}
+.page-login-logo{display:none}
+.page-login-title{text-align:left;font-size:24px;letter-spacing:-.025em;color:#0f172a}
+.page-login-subtitle{text-align:left;margin:7px 0 22px;font-size:13.5px;color:#64748b}
+
+.page-login-form{gap:11px}
+.page-login-form label,.page-login-users label{font-size:11.5px;font-weight:800;color:#475569;letter-spacing:.02em}
+.page-login-form input[type="password"],#pageLoginUserPassword{
+  min-height:48px;width:100%;border:1.5px solid #cbd5e1;border-radius:10px;
+  padding:11px 13px;font-size:16px;background:#f8fafc;color:#0f172a;
+  transition:border-color .15s,box-shadow .15s,background .15s
+}
+.page-login-form input[type="password"]:focus,#pageLoginUserPassword:focus{
+  outline:0;border-color:#0f766e;background:#fff;box-shadow:0 0 0 3px rgba(15,118,110,.10)
+}
+.page-login-remember{
+  width:fit-content;padding:2px 0;font-size:12.5px;color:#64748b;font-weight:600
+}
+.page-login-remember input{accent-color:#0f766e}
+.page-login-button{
+  min-height:48px;border-radius:10px;font-size:14px;letter-spacing:.01em;
+  box-shadow:0 2px 0 rgba(15,23,42,.12)
+}
+#pageLoginButton,#pageLoginUserButton{background:#0f766e}
+#pageLoginSetupButton{background:#15803d}
+.page-login-error{font-size:12px;min-height:17px}
+.page-login-loading{text-align:left;padding:12px 0;color:#64748b;font-size:13px}
+
+.page-login-users{gap:12px}
+.page-login-user-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:258px;padding-right:3px}
+.page-login-user-card{
+  position:relative;background:#fff;border:1px solid #e2e8f0;color:#0f172a;
+  border-radius:11px;padding:14px 12px;text-align:left;min-height:82px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04);transition:border-color .15s,background .15s,transform .15s
+}
+.page-login-user-card:hover{border-color:#0f766e;background:#f0fdfa;transform:translateY(-1px)}
+.page-login-user-avatar{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;margin:0 7px 0 0;border-radius:8px;
+  background:#ecfdf5;color:#0f766e;font-size:14px;vertical-align:middle
+}
+.page-login-user-card .role{margin:7px 0 0 36px;color:#94a3b8;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em}
+.page-login-selected{background:#f8fafc;border:1px solid #e2e8f0;color:#0f172a;border-radius:10px;padding:9px 11px}
+.page-login-selected button{background:#e2e8f0;color:#475569}
+.page-login-selected button:hover{background:#cbd5e1}
+.page-login-master-link{color:#64748b;text-decoration:none;border-top:1px solid #f1f5f9;margin-top:2px;padding:12px 4px 2px;text-align:center}
+.page-login-master-link:hover{color:#0f766e}
+
+@media(max-width:760px){
+  .page-login-gate{padding:12px}
+  .page-login-card{grid-template-columns:1fr;width:min(470px,100%);max-height:calc(100vh - 24px);overflow:auto}
+  .page-login-brand{min-height:auto;padding:16px 20px}
+  .page-login-brand-copy,.page-login-brand-foot{display:none}
+  .page-login-content{padding:24px 22px}
+}
+
+@media(max-height:660px) and (min-width:761px){
+  .page-login-card{max-height:calc(100vh - 24px)}
+  .page-login-brand{min-height:0;padding:24px 26px}
+  .page-login-content{padding:24px 30px;overflow:auto}
+  .page-login-brand-copy h3{font-size:22px}
+  .page-login-brand-list{margin-top:16px;gap:7px}
+}
+
+
+
+/* =====================================================
+   SADE KURUMSAL GİRİŞ — LOGO + KULLANICI SEÇİMİ
+===================================================== */
+.page-login-gate{
+  background:#eef2f7;
+  padding:20px;
+}
+.page-login-card.page-login-simple-card{
+  display:block;
+  width:min(440px,100%);
+  padding:0;
+  border:1px solid #d9e1ea;
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 18px 48px rgba(15,23,42,.16);
+}
+.page-login-simple-content{
+  padding:32px 34px 28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  background:#fff;
+}
+.page-login-simple-logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  padding-bottom:24px;
+  margin-bottom:24px;
+  border-bottom:1px solid #e8edf3;
+}
+.page-login-simple-mark{
+  width:43px;
+  height:43px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0f766e;
+  color:#fff;
+  font-size:21px;
+  font-weight:900;
+}
+.page-login-simple-brand strong{
+  display:block;
+  color:#0f172a;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.page-login-simple-brand span{
+  display:block;
+  margin-top:3px;
+  color:#64748b;
+  font-size:10.5px;
+  font-weight:600;
+}
+.page-login-simple-content .page-login-title{
+  text-align:center;
+  margin:0;
+  font-size:24px;
+  color:#0f172a;
+}
+.page-login-simple-content .page-login-subtitle{
+  text-align:center;
+  margin:7px 0 22px;
+  color:#64748b;
+  font-size:13px;
+}
+.page-login-simple-content .page-login-loading{text-align:center}
+.page-login-users{gap:14px}
+.page-login-user-select-wrap{display:flex;flex-direction:column;gap:7px}
+.page-login-user-select-wrap label,
+.page-login-password-panel>label{
+  font-size:12px;
+  font-weight:800;
+  color:#475569;
+}
+.page-login-user-select{
+  width:100%;
+  min-height:52px;
+  padding:0 42px 0 14px;
+  border:1.5px solid #cbd5e1;
+  border-radius:10px;
+  background:#f8fafc;
+  color:#0f172a;
+  font-size:14px;
+  font-weight:750;
+  cursor:pointer;
+}
+.page-login-user-select:focus{
+  outline:0;
+  border-color:#0f766e;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(15,118,110,.10);
+}
+.page-login-password-panel{
+  margin-top:2px;
+  padding-top:14px;
+  border-top:1px solid #eef2f6;
+}
+.page-login-password-panel #pageLoginUserPassword{
+  min-height:50px;
+  width:100%;
+  border:1.5px solid #cbd5e1;
+  border-radius:10px;
+  padding:11px 13px;
+  font-size:16px;
+  background:#f8fafc;
+}
+.page-login-password-panel #pageLoginUserPassword:focus{
+  outline:0;
+  border-color:#0f766e;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(15,118,110,.10);
+}
+.page-login-master-link{
+  border-top:1px solid #eef2f6;
+  margin-top:2px;
+  padding-top:14px;
+  color:#64748b;
+  text-decoration:none;
+}
+.page-login-master-link:hover{color:#0f766e}
+@media(max-height:620px){
+  .page-login-gate{align-items:flex-start;overflow:auto;padding:12px}
+  .page-login-simple-content{padding:20px 24px}
+  .page-login-simple-logo{padding-bottom:15px;margin-bottom:15px}
+  .page-login-simple-content .page-login-subtitle{margin-bottom:14px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -4538,62 +4818,71 @@ body.op-on #errorCodeModal .jobplan-table-wrap{display:none !important}
 
 <!-- SAYFA GİRİŞ ŞİFRESİ -->
 <div class="page-login-gate" id="pageLoginGate" aria-modal="true" role="dialog" aria-labelledby="pageLoginTitle">
-  <div class="page-login-card">
-    <div class="page-login-logo">🔐</div>
-    <h2 class="page-login-title" id="pageLoginTitle">Stok Takip Girişi</h2>
-    <div class="page-login-subtitle" id="pageLoginSubtitle">Giriş güvenliği kontrol ediliyor...</div>
-
-    <div class="page-login-loading" id="pageLoginLoading">Lütfen bekleyin...</div>
-
-    <form class="page-login-form" id="pageLoginForm" autocomplete="off">
-      <label for="pageLoginPassword">Giriş Şifresi</label>
-      <input id="pageLoginPassword" data-enter-action="handlePageLoginSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Giriş şifresi" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
-      <label class="page-login-remember">
-        <input id="pageLoginRemember" type="checkbox" checked>
-        Bu bilgisayarda hatırla
-      </label>
-      <div class="page-login-error" id="pageLoginError"></div>
-      <button class="btn-blue page-login-button" id="pageLoginButton" type="submit">Giriş Yap</button>
-    </form>
-
-    <form class="page-login-form" id="pageLoginSetupForm" autocomplete="off">
-      <label for="pageLoginNewPassword">Yeni Giriş Şifresi</label>
-      <input id="pageLoginNewPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
-      <label for="pageLoginNewPasswordRepeat">Şifreyi Tekrar Yaz</label>
-      <input id="pageLoginNewPasswordRepeat" data-enter-action="handlePageLoginSetupSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni şifre tekrar" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
-      <label class="page-login-remember">
-        <input id="pageLoginSetupRemember" type="checkbox" checked>
-        Bu bilgisayarda hatırla
-      </label>
-      <div class="page-login-error" id="pageLoginSetupError"></div>
-      <button class="btn-green page-login-button" id="pageLoginSetupButton" type="submit">Şifreyi Belirle ve Gir</button>
-    </form>
-
-    <div class="page-login-users" id="pageLoginUsersForm">
-      <div class="page-login-user-grid" id="pageLoginUserGrid"></div>
-
-      <div id="pageLoginUserPanel" style="display:none;flex-direction:column;gap:10px">
-        <div class="page-login-selected">
-          <span>👤 <span id="pageLoginUserName"></span></span>
-          <button type="button" onclick="systemBackToUserList()">Değiştir</button>
+  <div class="page-login-card page-login-simple-card">
+    <section class="page-login-content page-login-simple-content">
+      <div class="page-login-simple-logo" aria-label="Doğrar Metal">
+        <div class="page-login-simple-mark">D</div>
+        <div class="page-login-simple-brand">
+          <strong>DOĞRAR METAL</strong>
+          <span>Stok &amp; Üretim Takip Sistemi</span>
         </div>
-        <label for="pageLoginUserPassword">Şifren</label>
-        <input id="pageLoginUserPassword" data-enter-action="systemUserLoginSubmit" type="password" inputmode="none"
-        data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
-        autocomplete="off" placeholder="Şifreni yaz">
-        <label class="page-login-remember">
-          <input id="pageLoginUserRemember" type="checkbox" checked>
-          Bu bilgisayarda hatırla
-        </label>
-        <div class="page-login-error" id="pageLoginUserError"></div>
-        <button class="btn-blue page-login-button" id="pageLoginUserButton" type="button" onclick="systemUserLoginSubmit()">Giriş Yap</button>
       </div>
 
-      <button type="button" class="page-login-master-link" onclick="systemMasterLoginPrompt()">🛡️ Sistem şifresiyle gir</button>
-    </div>
+      <h2 class="page-login-title" id="pageLoginTitle">Hoş Geldiniz</h2>
+      <div class="page-login-subtitle" id="pageLoginSubtitle">Giriş güvenliği kontrol ediliyor...</div>
+
+      <div class="page-login-loading" id="pageLoginLoading">Sistem hazırlanıyor...</div>
+
+      <form class="page-login-form" id="pageLoginForm" autocomplete="off">
+        <label for="pageLoginPassword">Giriş Şifresi</label>
+        <input id="pageLoginPassword" data-enter-action="handlePageLoginSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Giriş şifresi" type="password" autocomplete="current-password" placeholder="Giriş şifresini yazın">
+        <label class="page-login-remember">
+          <input id="pageLoginRemember" type="checkbox" checked>
+          Bu bilgisayarda oturumu hatırla
+        </label>
+        <div class="page-login-error" id="pageLoginError"></div>
+        <button class="btn-blue page-login-button" id="pageLoginButton" type="submit">Giriş Yap</button>
+      </form>
+
+      <form class="page-login-form" id="pageLoginSetupForm" autocomplete="off">
+        <label for="pageLoginNewPassword">Yeni Giriş Şifresi</label>
+        <input id="pageLoginNewPassword" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni giriş şifresi" type="password" autocomplete="new-password" placeholder="Yeni giriş şifresi">
+        <label for="pageLoginNewPasswordRepeat">Şifreyi Tekrar Yaz</label>
+        <input id="pageLoginNewPasswordRepeat" data-enter-action="handlePageLoginSetupSubmit" data-keypad="text" data-native-inputmode="text" data-keypad-label="Yeni şifre tekrar" type="password" autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
+        <label class="page-login-remember">
+          <input id="pageLoginSetupRemember" type="checkbox" checked>
+          Bu bilgisayarda oturumu hatırla
+        </label>
+        <div class="page-login-error" id="pageLoginSetupError"></div>
+        <button class="btn-green page-login-button" id="pageLoginSetupButton" type="submit">Şifreyi Belirle ve Gir</button>
+      </form>
+
+      <div class="page-login-users" id="pageLoginUsersForm">
+        <div class="page-login-user-select-wrap">
+          <label for="pageLoginUserSelect">Kullanıcı</label>
+          <select id="pageLoginUserSelect" class="page-login-user-select" onchange="systemPickLoginUser(this.value)">
+            <option value="">Kullanıcı seç...</option>
+          </select>
+        </div>
+
+        <div id="pageLoginUserPanel" class="page-login-password-panel" style="display:none;flex-direction:column;gap:10px">
+          <label for="pageLoginUserPassword">Şifre</label>
+          <input id="pageLoginUserPassword" data-enter-action="systemUserLoginSubmit" type="password" inputmode="none"
+          data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
+          autocomplete="off" placeholder="Şifrenizi yazın">
+          <label class="page-login-remember">
+            <input id="pageLoginUserRemember" type="checkbox" checked>
+            Bu bilgisayarda oturumu hatırla
+          </label>
+          <div class="page-login-error" id="pageLoginUserError"></div>
+          <button class="btn-blue page-login-button" id="pageLoginUserButton" type="button" onclick="systemUserLoginSubmit()">Giriş Yap</button>
+        </div>
+
+        <button type="button" class="page-login-master-link" onclick="systemMasterLoginPrompt()">Sistem yöneticisi girişi</button>
+      </div>
+    </section>
   </div>
 </div>
-
 
 <header>
 
@@ -14449,7 +14738,7 @@ unlockPageAfterLogin();
 console.error(err);
 if(error)error.textContent=err?.message||"Giriş doğrulanamadı.";
 }finally{
-if(button){button.disabled=false;button.textContent="Giriş Yap";}
+if(button){button.disabled=false;button.textContent="Sisteme Giriş Yap";}
 }
 }
 
@@ -14494,7 +14783,7 @@ unlockPageAfterLogin();
 console.error(err);
 if(error)error.textContent=err?.message||"Giriş şifresi kaydedilemedi.";
 }finally{
-if(button){button.disabled=false;button.textContent="Şifreyi Belirle ve Gir";}
+if(button){button.disabled=false;button.textContent="Şifreyi Belirle ve Giriş Yap";}
 }
 }
 
@@ -18470,46 +18759,53 @@ location.reload();
 let systemLoginSelectedId=null;
 
 function systemRenderLoginUsers(){
-let grid=document.getElementById("pageLoginUserGrid");
-if(!grid)return;
+let select=document.getElementById("pageLoginUserSelect");
+if(!select)return;
 
 let users=((systemData&&systemData.users)||[]).filter(u=>u.active!==false);
+select.innerHTML='<option value="">Kullanıcı seç...</option>';
 
 if(!users.length){
-grid.innerHTML='<div style="color:#94a3b8;font-size:13px;grid-column:1/-1;text-align:center">'+
-'Aktif kullanıcı yok. Sistem şifresiyle gir.</div>';
+let option=document.createElement("option");
+option.value="";
+option.textContent="Aktif kullanıcı bulunamadı";
+option.disabled=true;
+select.appendChild(option);
 return;
 }
 
-grid.innerHTML=users.map(user=>
-'<button type="button" class="page-login-user-card" onclick="systemPickLoginUser(\''+user.id+'\')">'+
-'<span class="page-login-user-avatar">👤</span>'+
-escapeHTML(user.name||"")+
-'<span class="role">'+escapeHTML(systemRoleName(user.role))+'</span>'+
-'</button>'
-).join("");
+users.forEach(user=>{
+let option=document.createElement("option");
+option.value=user.id;
+option.textContent=(user.name||"")+" — "+systemRoleName(user.role);
+select.appendChild(option);
+});
 }
 
 function systemPickLoginUser(id){
+let panel=document.getElementById("pageLoginUserPanel");
+let input=document.getElementById("pageLoginUserPassword");
+let error=document.getElementById("pageLoginUserError");
+
+if(error)error.textContent="";
+if(input)input.value="";
+
+if(!id){
+systemLoginSelectedId=null;
+if(panel)panel.style.display="none";
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+return;
+}
+
 let user=((systemData&&systemData.users)||[]).find(u=>u.id===id);
 if(!user)return;
 
 systemLoginSelectedId=id;
-
-let grid=document.getElementById("pageLoginUserGrid");
-let panel=document.getElementById("pageLoginUserPanel");
-let nameEl=document.getElementById("pageLoginUserName");
-let input=document.getElementById("pageLoginUserPassword");
-let error=document.getElementById("pageLoginUserError");
-
-if(grid)grid.style.display="none";
 if(panel)panel.style.display="flex";
-if(nameEl)nameEl.textContent=user.name||"";
-if(error)error.textContent="";
+
 if(input){
-input.value="";
 setTimeout(()=>{
-try{input.focus({preventScroll:true});}catch(e){}
+try{input.focus({preventScroll:true});}catch(e){try{input.focus();}catch(_){}}
 if(typeof openNumericKeypad==="function")openNumericKeypad(input);
 },60);
 }
@@ -18517,10 +18813,14 @@ if(typeof openNumericKeypad==="function")openNumericKeypad(input);
 
 function systemBackToUserList(){
 systemLoginSelectedId=null;
-let grid=document.getElementById("pageLoginUserGrid");
+let select=document.getElementById("pageLoginUserSelect");
 let panel=document.getElementById("pageLoginUserPanel");
-if(grid)grid.style.display="grid";
+let input=document.getElementById("pageLoginUserPassword");
+let error=document.getElementById("pageLoginUserError");
+if(select)select.value="";
 if(panel)panel.style.display="none";
+if(input)input.value="";
+if(error)error.textContent="";
 if(typeof closeNumericKeypad==="function")closeNumericKeypad();
 }
 
@@ -18562,7 +18862,7 @@ console.error(err);
 if(error)error.textContent=err&&err.message||"Giriş doğrulanamadı.";
 }
 finally{
-if(button){button.disabled=false;button.textContent="Giriş Yap";}
+if(button){button.disabled=false;button.textContent="Sisteme Giriş Yap";}
 }
 }
 

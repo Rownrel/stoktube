@@ -5748,6 +5748,25 @@ display:flex;align-items:center;justify-content:center;font-size:13px;font-weigh
 .mus-itext small{display:block;font-size:11.5px;color:#94a3b8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .mus-itext small.yok{color:#b45309}
 .mus-ichip{background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:800;white-space:nowrap}
+.mus-itext small.mod{color:#0f766e;font-weight:700}
+
+/* müşteri kartında otomatik mail tercihi */
+.mus-preset{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.mus-preset button{
+border:1px solid #e2e8f0;background:#fff;color:#475569;border-radius:999px;padding:7px 13px;
+font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit
+}
+.mus-preset button:hover{background:#f8fafc;opacity:1}
+.mus-preset button.on{background:#0f766e;border-color:#0f766e;color:#fff}
+.mus-ochks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mus-ochk{
+display:flex !important;align-items:flex-start;gap:9px;border:1.5px solid #e2e8f0;border-radius:11px;background:#fff;
+padding:10px 11px;cursor:pointer;margin:0 !important;text-transform:none !important;letter-spacing:0 !important
+}
+.mus-ochk.on{border-color:#5eead4;background:#f0fdfa}
+.mus-ochk input{width:18px;height:18px;margin:1px 0 0;accent-color:#0f766e;flex:0 0 auto;padding:0;cursor:pointer}
+.mus-ochk b{display:block;font-size:13px;font-weight:800;color:#0f172a}
+.mus-ochk small{display:block;font-size:11px;color:#64748b;font-weight:600;margin-top:2px}
 
 .mus-form{flex:1;overflow:auto;padding:18px 20px}
 .mus-fhead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -5898,6 +5917,7 @@ border-left:4px solid #14b8a6;animation:musIn .18s ease-out
 .mus-irow{grid-template-columns:1fr}
 .mus-steps{grid-template-columns:1fr}
 .mus-row2{grid-template-columns:1fr}
+.mus-ochks{grid-template-columns:1fr}
 }
 
 </style>
@@ -24808,6 +24828,39 @@ if(!musteri || !Array.isArray(musteri.emails))return [];
 return musteri.emails.filter(a=>MUS_ADRES_RE.test(String(a||"")));
 }
 
+/* Müşterinin otomatik mail tercihleri. Kendi ayarı yoksa genel varsayılan geçerli. */
+const MUS_OTO_OLAYLAR=["plan","basla","bitti"];
+
+function musOzelOlaylarVar(musteri){
+return !!(musteri && musteri.olaylar && typeof musteri.olaylar==="object");
+}
+
+function musEtkinOlaylar(musteri,ayar){
+ayar=ayar||musAyar||musVarsayilanAyar();
+let ozel=musOzelOlaylarVar(musteri)?musteri.olaylar:null;
+let sonuc={};
+MUS_OTO_OLAYLAR.forEach(k=>{
+sonuc[k]=ozel && Object.prototype.hasOwnProperty.call(ozel,k)?!!ozel[k]:!!(ayar.olaylar||{})[k];
+});
+return sonuc;
+}
+
+function musOlayAcik(musteri,olay,ayar){
+ayar=ayar||musAyar||musVarsayilanAyar();
+if(!ayar.acik)return false;
+return !!musEtkinOlaylar(musteri,ayar)[olay];
+}
+
+/* "Tüm süreç", "Sadece tamamlanınca" gibi kısa ad */
+function musOlayOzeti(olaylar){
+let acik=MUS_OTO_OLAYLAR.filter(k=>olaylar[k]);
+if(acik.length===3)return "Tüm süreç";
+if(!acik.length)return "Otomatik mail yok";
+if(acik.length===1 && acik[0]==="bitti")return "Sadece tamamlanınca";
+let kisa={plan:"Plana alındı",basla:"Üretime başladı",bitti:"Tamamlandı"};
+return acik.map(k=>kisa[k]).join(" + ");
+}
+
 function musSiraliMusteriler(){
 return musMusteriler.slice().sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"tr"));
 }
@@ -25223,11 +25276,13 @@ return musSirayaAl(async()=>{
 try{
 await musYukle();
 let ayar=musAyar;
-if(!ayar.acik || !ayar.olaylar[olay])return null;
+if(!ayar.acik)return null;
 let guncel=musIsler().find(j=>String(j.id)===jobId)||job;
 if(!guncel.customerId)return null;
 let musteri=musBul(guncel.customerId);
 if(!musteri)return null;
+/* Bu müşteri bu olayda mail almak istemiyorsa sessizce geçilir. */
+if(!musEtkinOlaylar(musteri,ayar)[olay])return null;
 let adresler=musAdresler(musteri);
 if(!adresler.length){
 musBildir("✉ "+dt+" · "+musteri.name+" için kayıtlı e-posta adresi yok; mail gönderilmedi.","uyari");
@@ -25439,6 +25494,7 @@ return '<button type="button" class="mus-item'+(String(m.id)===String(musSeciliI
 (adresler.length
 ?'<small>'+musEsc(adresler[0])+(adresler.length>1?" · +"+(adresler.length-1):"")+'</small>'
 :'<small class="yok">E-posta adresi yok</small>')+
+'<small class="mod">✉ '+musEsc(musOlayOzeti(musEtkinOlaylar(m)))+(musOzelOlaylarVar(m)?"":" · varsayılan")+'</small>'+
 '</span>'+
 (aktif?'<span class="mus-ichip">'+aktif+' aktif iş</span>':'')+
 '</button>';
@@ -25509,6 +25565,7 @@ musAlan("musFYetkili","Yetkili / hitap (isteğe bağlı)",m?m.yetkili||"":"",{ye
 ipucu:"Doluysa mail \"Sayın Ahmet Bey\" diye başlar; boşsa \"Sayın firma yetkilisi\"."})+
 musAlan("musFTel","Telefon (isteğe bağlı)",m?m.telefon||"":"",{mod:"tel",kapali:kapali})+
 '</div>'+
+musOlayFormHtml(m,kapali)+
 musAlan("musFNot","Not (isteğe bağlı)",m?m.not||"":"",{satir:2,kapali:kapali})+
 '<div class="mus-warn" id="musFUyari"></div>'+
 (duzen
@@ -25534,7 +25591,57 @@ return '<button type="button" class="mus-job" onclick="musDtAc(\''+musJs(j.id)+'
 '</div>'
 :'');
 
+musOlayFormDegisti();
 if(typeof updateInputModes==="function")updateInputModes();
+}
+
+function musOlayFormHtml(m,kapali){
+let etkin=musEtkinOlaylar(m);
+let kutu=(k,ad,acikla)=>
+'<label class="mus-ochk'+(etkin[k]?" on":"")+'"><input type="checkbox" id="musFO_'+k+'"'+(etkin[k]?" checked":"")+(kapali?" disabled":"")+
+' onchange="musOlayFormDegisti()"><span><b>'+ad+'</b><small>'+acikla+'</small></span></label>';
+return '<div class="mus-fg"><label>Bu müşteriye otomatik gidecek mailler</label>'+
+(kapali?'':'<div class="mus-preset" id="musFOHazir">'+
+'<button type="button" data-h="tum" onclick="musOlayHazir(\'tum\')">Tüm süreç</button>'+
+'<button type="button" data-h="bitti" onclick="musOlayHazir(\'bitti\')">Sadece tamamlanınca</button>'+
+'<button type="button" data-h="yok" onclick="musOlayHazir(\'yok\')">Otomatik mail yok</button>'+
+'</div>')+
+'<div class="mus-ochks">'+
+kutu("plan","Plana alındı","Tahmini bitiş tarihiyle")+
+kutu("basla","Üretime başladı","İlk dosya başlayınca")+
+kutu("bitti","Tamamlandı","Bütün dosyalar bitince")+
+'</div>'+
+'<div class="ipucu">'+(m && !musOzelOlaylarVar(m)
+?"Bu müşteri şimdilik genel varsayılanı kullanıyor. Kaydedince buradaki seçim geçerli olur."
+:"Seçili olmayan mailler bu müşteriye otomatik gitmez; gerekirse DT penceresinden elle gönderilir.")+'</div>'+
+'</div>';
+}
+
+function musOlayFormDegeri(){
+let sonuc={};
+MUS_OTO_OLAYLAR.forEach(k=>{let el=document.getElementById("musFO_"+k);sonuc[k]=!!(el && el.checked);});
+return sonuc;
+}
+
+function musOlayFormDegisti(){
+let d=musOlayFormDegeri();
+MUS_OTO_OLAYLAR.forEach(k=>{
+let el=document.getElementById("musFO_"+k);
+if(el && el.parentNode)el.parentNode.classList.toggle("on",!!d[k]);
+});
+let hazir=d.plan && d.basla && d.bitti?"tum":(!d.plan && !d.basla && d.bitti?"bitti":(!d.plan && !d.basla && !d.bitti?"yok":""));
+document.querySelectorAll("#musFOHazir button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-h")===hazir));
+}
+
+function musOlayHazir(tur){
+let deger={
+tum:{plan:true,basla:true,bitti:true},
+bitti:{plan:false,basla:false,bitti:true},
+yok:{plan:false,basla:false,bitti:false}
+}[tur];
+if(!deger)return;
+MUS_OTO_OLAYLAR.forEach(k=>{let el=document.getElementById("musFO_"+k);if(el)el.checked=!!deger[k];});
+musOlayFormDegisti();
 }
 
 function musDeger(id){
@@ -25570,6 +25677,7 @@ emails:adres.gecerli,
 yetkili:musDeger("musFYetkili").replace(/\s+/g," ").trim(),
 telefon:musDeger("musFTel").trim(),
 not:musDeger("musFNot").trim(),
+olaylar:musOlayFormDegeri(),
 createdAt:eski&&eski.createdAt?eski.createdAt:simdi,
 updatedAt:simdi,
 guncelleyen:musKim()
@@ -25766,8 +25874,9 @@ musAyarInput("gonderenAdi","Gönderen adı",t.gonderenAdi,"Doğrar Metal","Fonks
 musAyarInput("yanitAdresi","Yanıt adresi (isteğe bağlı)",t.yanitAdresi,"info@firma.com","Müşteri \"Yanıtla\"ya basınca bu adrese yazar.","email")+
 '</div>'+
 
-'<div class="mus-card"><h3>Ne zaman gönderilsin?</h3>'+
-'<p class="d">Aynı iş için aynı mail yalnızca bir kez gider. Müşterisi seçilmemiş işlere mail gitmez.</p>'+
+'<div class="mus-card"><h3>Varsayılan: ne zaman gönderilsin?</h3>'+
+'<p class="d">Kendi seçimi yapılmamış müşteriler (ve DT penceresinden hızlı eklenenler) bu ayarı kullanır. '+
+'Bir müşteriye özel seçim <b>Müşteriler</b> sekmesinde, müşteri kartından yapılır. Aynı iş için aynı mail yalnızca bir kez gider.</p>'+
 olayToggle("plan","Plana alınınca","DT plana eklendiğinde ya da sonradan müşteri bağlandığında, tahmini bitiş tarihiyle.")+
 olayToggle("basla","Üretime başlayınca","DT\'nin ilk dosyası tezgâhta başlatıldığında.")+
 olayToggle("bitti","İş tamamlanınca","DT\'nin bütün dosyaları bittiğinde.")+
@@ -26085,7 +26194,7 @@ let degisti=String(sel.value||"")!==String(job.customerId||"");
 if(bar)bar.style.display=degisti?"flex":"none";
 if(ipucu){
 let planGitmedi=!musLog.some(k=>k.jobId===job.id && k.olay==="plan" && k.durum==="gonderildi");
-let gidecek=m && musAdresler(m).length && musAyar && musAyar.acik && musAyar.olaylar.plan && planGitmedi && job.status!=="completed";
+let gidecek=m && musAdresler(m).length && musOlayAcik(m,"plan") && planGitmedi && job.status!=="completed";
 ipucu.textContent=gidecek?"Kaydedince \"Plana alındı\" maili gönderilir.":"";
 }
 }
@@ -26198,7 +26307,7 @@ durum='<span class="bad">✕ Gönderilemedi: '+musEsc(d.son.hata)+'</span>';
 else if(d.son && d.son.durum==="gonderiliyor" && !musKayitBayat(d.son)){
 durum='<span>Gönderiliyor…</span>';
 }
-else durum='<span>Gönderilmedi</span>';
+else durum='<span>'+(olay!=="termin" && m && !musOlayAcik(m,olay,ayar)?"Gönderilmedi · bu müşteriye otomatik gitmez":"Gönderilmedi")+'</span>';
 
 let uygun=true,neden="";
 if(olay==="basla" && asama<2){uygun=false;neden="İş başlayınca gönderilebilir";}
@@ -26206,7 +26315,7 @@ if(olay==="bitti" && asama<3){uygun=false;neden="İş tamamlanınca gönderilebi
 if(olay==="termin" && asama>=3){uygun=false;neden="İş tamamlandı";}
 if(!m || !adresVar){uygun=false;neden="Önce e-posta adresi olan bir müşteri seçin";}
 
-let oto=olay!=="termin" && ayar.acik && ayar.olaylar[olay];
+let oto=olay!=="termin" && m && musOlayAcik(m,olay,ayar);
 return '<div class="mus-ev">'+
 '<div class="mus-evi '+olay+'">'+MUS_IKON[olay]+'</div>'+
 '<div class="mus-evt"><b>'+musEsc(MUS_OLAY_AD[olay])+(oto?'<span class="oto">OTOMATİK</span>':'')+'</b>'+durum+'</div>'+
@@ -26326,12 +26435,14 @@ liste.map(x=>'<option value="'+musEsc(x.id)+'"'+(String(x.id)===secim?" selected
 '</select>'+
 '<span class="h'+(secim && !adresler.length?" yok":"")+'">'+
 (!secim?(mevcut?"Plandaki DT'ye eklenecek":"Mail gitmez")
-:(adresler.length?musEsc(adresler.join(", ")):"E-posta adresi yok — mail gitmez"))+
+:(adresler.length
+?musEsc(adresler.join(", "))+' · <b>'+musEsc(musOlayOzeti(musEtkinOlaylar(m)))+'</b>'
+:"E-posta adresi yok — mail gitmez"))+
 '</span></div>';
 }).join("")+
-'<div class="mus-inote">'+(ayar.acik && ayar.olaylar.plan
-?"Plana eklenince seçilen müşteriye \"Plana alındı\" maili tahmini bitiş tarihiyle gönderilir."
-:"Otomatik \"Plana alındı\" maili kapalı; müşteri yalnızca işe bağlanır.")+'</div>';
+'<div class="mus-inote">'+(ayar.acik
+?"Hangi maillerin gideceği müşterinin kendi seçimine göredir. \"Plana alındı\" açık olan müşterilere, plana eklenince tahmini bitiş tarihiyle mail gider."
+:"Otomatik mail gönderimi kapalı; müşteri yalnızca işe bağlanır.")+'</div>';
 }
 
 function musImportSec(dt,id){

@@ -5642,6 +5642,264 @@ body.op-on #opPageStok .ope-msub.stock-meta-line{
   #numericKeypad .keypad-head{gap:7px}
 }
 
+/* =====================================================
+   MÜŞTERİLER VE OTOMATİK MAİL
+===================================================== */
+.btn-musteri{background:#0369a1;color:#fff;white-space:nowrap;position:relative}
+.musteri-badge{
+position:absolute;top:-8px;right:-8px;min-width:20px;height:20px;padding:0 6px;border-radius:999px;
+background:#dc2626;color:#fff;font-size:11px;font-weight:800;display:none;align-items:center;justify-content:center;
+box-shadow:0 0 0 2px #fff
+}
+.musteri-badge.on{display:inline-flex}
+
+#musModal,#musDtModal{z-index:15950}
+.modal-box.mus-box{
+max-width:1120px;width:100%;height:min(88vh,780px);max-height:none;padding:0;overflow:hidden;
+display:flex;flex-direction:column;border-radius:16px;background:#f4f7fb;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a
+}
+.modal-box.mus-dtbox{max-width:720px;height:auto;max-height:90vh}
+
+.mus-head{background:#0f172a;color:#fff;padding:15px 20px;display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.mus-hico{width:40px;height:40px;border-radius:11px;background:#0f766e;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.mus-htext{flex:1;min-width:0}
+.mus-htext h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em}
+.mus-htext p{margin:2px 0 0;font-size:12px;color:#94a3b8}
+.mus-close{
+background:transparent;border:1px solid rgba(255,255,255,.22);color:#cbd5e1;border-radius:9px;
+width:40px;height:40px;font-size:16px;font-weight:800;cursor:pointer;padding:0
+}
+.mus-close:hover{background:rgba(255,255,255,.08);color:#fff}
+
+.mus-tabs{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 16px;display:flex;gap:4px;flex:0 0 auto}
+.mus-tab{
+background:transparent;border:0;border-bottom:3px solid transparent;border-radius:0;color:#64748b;
+padding:13px 14px 11px;font-size:13.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:inherit
+}
+.mus-tab:hover{color:#0f172a;opacity:1}
+.mus-tab.on{color:#0f172a;border-bottom-color:#0f766e}
+.mus-tab .n{background:#f1f5f9;color:#64748b;border-radius:999px;padding:1px 8px;font-size:11px}
+.mus-tab.on .n{background:#0f172a;color:#fff}
+.mus-tab .h{background:#fee2e2;color:#b91c1c;border-radius:999px;padding:1px 7px;font-size:11px}
+
+.mus-body{flex:1;min-height:0;overflow:auto;padding:16px}
+.mus-loading{padding:60px 20px;text-align:center;color:#94a3b8;font-size:14px}
+
+/* ---------- ortak ---------- */
+.mus-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.mus-card h3{margin:0 0 4px;font-size:14px;font-weight:800;letter-spacing:-.01em}
+.mus-card .d{margin:0 0 14px;font-size:12px;color:#64748b;line-height:1.5}
+.mus-fg{margin-bottom:12px}
+.mus-fg label{display:block;font-size:11px;font-weight:800;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.mus-fg .ipucu{font-size:11.5px;color:#94a3b8;margin-top:5px;line-height:1.45}
+.mus-fld{
+width:100%;border:1.5px solid #cbd5e1;border-radius:10px;background:#fff;padding:10px 12px;
+font-size:14px;color:#0f172a;font-family:inherit
+}
+.mus-fld:focus{outline:0;border-color:#0f766e;box-shadow:0 0 0 3px rgba(15,118,110,.12)}
+.mus-fld:disabled{background:#f8fafc;color:#64748b}
+textarea.mus-fld{resize:vertical;line-height:1.55;min-height:44px}
+select.mus-fld{height:44px;padding:0 10px}
+.mus-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mus-btn{
+border:0;border-radius:10px;height:42px;padding:0 16px;font-size:13.5px;font-weight:800;cursor:pointer;
+font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap
+}
+.mus-btn.primary{background:#0f766e;color:#fff}
+.mus-btn.dark{background:#0f172a;color:#fff}
+.mus-btn.blue{background:#1d4ed8;color:#fff}
+.mus-btn.ghost{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+.mus-btn.danger{background:#fff;color:#b91c1c;border:1px solid #fecaca}
+.mus-btn.sm{height:34px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.mus-btn:disabled{opacity:.45;cursor:not-allowed}
+.mus-link{background:none;border:0;color:#0f766e;font-weight:800;font-size:12.5px;cursor:pointer;padding:4px 2px;font-family:inherit}
+.mus-warn{min-height:18px;font-size:12.5px;font-weight:700;color:#b91c1c;margin:4px 0 10px}
+.mus-ok{color:#15803d}
+.mus-empty{padding:36px 18px;text-align:center;color:#94a3b8;font-size:13.5px;line-height:1.6}
+.mus-pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;white-space:nowrap}
+.mus-pill.ok{background:#dcfce7;color:#166534}
+.mus-pill.bad{background:#fee2e2;color:#991b1b}
+.mus-pill.wait{background:#fef3c7;color:#92400e}
+.mus-pill.gray{background:#f1f5f9;color:#475569}
+.mus-pill.blue{background:#dbeafe;color:#1e40af}
+
+/* ---------- müşteri listesi ---------- */
+.mus-split{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:14px;height:100%;min-height:0}
+.mus-pane{background:#fff;border:1px solid #e2e8f0;border-radius:14px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.mus-listhead{padding:12px;border-bottom:1px solid #f1f5f9;display:flex;gap:8px;align-items:center}
+.mus-search{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:0 11px;height:42px}
+.mus-search svg{color:#94a3b8;flex:0 0 auto}
+.mus-search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:13.5px;font-family:inherit;padding:0}
+.mus-list{flex:1;overflow:auto}
+.mus-item{
+width:100%;background:#fff;border:0;border-bottom:1px solid #f1f5f9;border-radius:0;padding:12px 14px;
+display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;font-family:inherit;color:inherit
+}
+.mus-item:hover{background:#f8fafc;opacity:1}
+.mus-item.on{background:#f0fdfa;box-shadow:inset 3px 0 0 #0f766e}
+.mus-av{
+width:38px;height:38px;border-radius:10px;background:#e2e8f0;color:#334155;flex:0 0 auto;
+display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800
+}
+.mus-item.on .mus-av{background:#0f766e;color:#fff}
+.mus-itext{flex:1;min-width:0}
+.mus-itext b{display:block;font-size:14px;font-weight:800;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mus-itext small{display:block;font-size:11.5px;color:#94a3b8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.mus-itext small.yok{color:#b45309}
+.mus-ichip{background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:800;white-space:nowrap}
+
+.mus-form{flex:1;overflow:auto;padding:18px 20px}
+.mus-fhead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.mus-fhead .mus-av{width:46px;height:46px;border-radius:12px;background:#0f766e;color:#fff;font-size:15px}
+.mus-fhead h3{margin:0;font-size:18px;font-weight:800;letter-spacing:-.015em}
+.mus-fhead p{margin:2px 0 0;font-size:12px;color:#94a3b8}
+.mus-factions{display:flex;gap:10px;justify-content:flex-end;padding-top:6px}
+.mus-factions .sol{margin-right:auto}
+.mus-jobs{margin-top:18px;border-top:1px solid #f1f5f9;padding-top:14px}
+.mus-jobs h4{margin:0 0 10px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.1em}
+.mus-job{
+width:100%;display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;
+padding:9px 12px;margin-bottom:7px;cursor:pointer;font-family:inherit;color:inherit;text-align:left
+}
+.mus-job:hover{background:#f1f5f9;opacity:1}
+.mus-job b{font-size:13.5px;font-weight:800}
+.mus-job .t{flex:1;min-width:0;font-size:12px;color:#64748b}
+.mus-job .m{font-size:11.5px;color:#0f766e;font-weight:800;white-space:nowrap}
+.mus-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;text-align:left}
+.mus-step{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 13px}
+.mus-step b{display:block;font-size:12.5px;font-weight:800;margin-bottom:3px}
+.mus-step span{font-size:11.5px;color:#64748b;line-height:1.45}
+.mus-step i{
+display:inline-flex;width:22px;height:22px;border-radius:7px;background:#0f766e;color:#fff;font-style:normal;
+font-size:12px;font-weight:800;align-items:center;justify-content:center;margin-bottom:8px
+}
+
+/* ---------- mail geçmişi ---------- */
+.mus-loghead{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.mus-filt{
+background:#fff;border:1px solid #e2e8f0;color:#475569;border-radius:999px;padding:7px 13px;font-size:12.5px;
+font-weight:800;cursor:pointer;font-family:inherit;display:inline-flex;gap:6px;align-items:center
+}
+.mus-filt.on{background:#0f172a;border-color:#0f172a;color:#fff}
+.mus-filt .n{opacity:.7}
+.mus-tablewrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:auto}
+.mus-table{width:100%;border-collapse:collapse;min-width:820px}
+.mus-table th{
+background:#f8fafc;border-bottom:1px solid #e2e8f0;text-align:left;padding:10px 13px;font-size:10px;font-weight:800;
+color:#94a3b8;text-transform:uppercase;letter-spacing:.09em;white-space:nowrap;position:sticky;top:0
+}
+.mus-table td{padding:11px 13px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:top}
+.mus-table tr:hover{background:#fbfdfe}
+.mus-table .sub{font-size:11.5px;color:#94a3b8;margin-top:2px}
+.mus-table .err{font-size:11.5px;color:#b91c1c;margin-top:4px;max-width:280px;word-break:break-word;font-weight:600}
+.mus-table .to{font-size:12px;color:#475569;word-break:break-all;max-width:220px}
+
+/* ---------- ayarlar ---------- */
+.mus-ayar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,470px);gap:14px;align-items:start}
+.mus-toggle{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid #f1f5f9;cursor:pointer}
+.mus-toggle:last-of-type{border-bottom:0}
+.mus-toggle input{width:20px;height:20px;margin:1px 0 0;accent-color:#0f766e;flex:0 0 auto;cursor:pointer;padding:0}
+.mus-toggle b{display:block;font-size:13.5px;font-weight:800}
+.mus-toggle span{display:block;font-size:12px;color:#64748b;margin-top:2px;line-height:1.45}
+.mus-toggle.ana{background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:12px 13px;margin-bottom:12px}
+.mus-seg{display:flex;background:#f1f5f9;border-radius:10px;padding:3px;gap:3px;margin-bottom:14px;flex-wrap:wrap}
+.mus-seg button{
+flex:1;border:0;background:transparent;color:#64748b;border-radius:8px;padding:8px 10px;font-size:12.5px;
+font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap
+}
+.mus-seg button.on{background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.12)}
+.mus-vars{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.mus-var{
+border:1px dashed #94a3b8;background:#fff;color:#334155;border-radius:7px;padding:4px 8px;font-size:11.5px;
+font-weight:700;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace
+}
+.mus-var:hover{background:#f1f5f9;opacity:1}
+.mus-preview{position:sticky;top:0}
+.mus-prevbox{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden}
+.mus-prevhead{padding:11px 14px;border-bottom:1px solid #f1f5f9}
+.mus-prevhead .k{font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.09em}
+.mus-prevhead .v{font-size:13.5px;font-weight:800;margin-top:3px;word-break:break-word}
+.mus-prevhead .a{font-size:11.5px;color:#64748b;margin-top:3px}
+.mus-prevbox iframe{display:block;width:100%;height:560px;border:0;background:#eef2f6}
+.mus-savebar{
+position:sticky;bottom:-16px;margin:0 -16px -16px;padding:12px 16px;background:#f4f7fb;box-shadow:0 -6px 14px rgba(15,23,42,.05);
+border-top:1px solid #e2e8f0;display:flex;align-items:center;gap:12px;justify-content:flex-end;z-index:2
+}
+.mus-savebar .durum{margin-right:auto;font-size:12.5px;font-weight:700;color:#64748b}
+.mus-savebar .durum.kirli{color:#b45309}
+.mus-testrow{display:flex;gap:8px}
+.mus-testrow .mus-fld{flex:1}
+.mus-testsonuc{font-size:12.5px;font-weight:700;margin-top:8px;line-height:1.5;word-break:break-word}
+
+/* ---------- DT penceresi ---------- */
+.mus-dtsec{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.mus-dtsec h4{margin:0 0 12px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:8px}
+.mus-dtsel{display:flex;gap:8px;align-items:center}
+.mus-dtsel select{flex:1}
+.mus-to{font-size:12.5px;color:#475569;margin-top:10px;line-height:1.5;word-break:break-all}
+.mus-to b{color:#0f172a}
+.mus-to.yok{color:#b45309;font-weight:700}
+.mus-quick{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:13px;margin-top:12px}
+.mus-ev{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f1f5f9}
+.mus-ev:last-child{border-bottom:0}
+.mus-evi{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:15px}
+.mus-evi.plan{background:#dbeafe;color:#1d4ed8}
+.mus-evi.basla{background:#ccfbf1;color:#0f766e}
+.mus-evi.termin{background:#fef3c7;color:#b45309}
+.mus-evi.bitti{background:#dcfce7;color:#15803d}
+.mus-evt{flex:1;min-width:0}
+.mus-evt b{display:block;font-size:13.5px;font-weight:800}
+.mus-evt span{display:block;font-size:12px;color:#64748b;margin-top:2px}
+.mus-evt span.ok{color:#15803d;font-weight:700}
+.mus-evt span.bad{color:#b91c1c;font-weight:700;word-break:break-word}
+.mus-evt .oto{display:inline-block;margin-top:0;font-size:10px;font-weight:800;color:#0f766e;background:#ccfbf1;border-radius:6px;padding:1px 6px;margin-left:7px;vertical-align:2px;letter-spacing:.04em}
+
+/* ---------- iş planı içi ---------- */
+.mus-chip{
+display:inline-flex;align-items:center;gap:5px;margin-left:8px;vertical-align:2px;
+background:#f0fdfa;border:1px solid #99f6e4;color:#0f766e;border-radius:999px;padding:2px 9px;
+font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis
+}
+.mus-chip:hover{background:#ccfbf1}
+.mus-chip i{font-style:normal;background:#0f766e;color:#fff;border-radius:999px;padding:0 6px;font-size:10.5px}
+.mus-chip i.h{background:#dc2626}
+.mus-chip.bos{background:#fff;border:1px dashed #94a3b8;color:#64748b}
+.mus-chip.hata{border-color:#fecaca;background:#fef2f2;color:#b91c1c}
+
+.mus-import{display:none;background:#f0fdfa;border:1px solid #99f6e4;border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.mus-import.on{display:block}
+.mus-import-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:#0f766e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.mus-import-title .mus-link{margin-left:auto;text-transform:none;letter-spacing:0}
+.mus-irow{display:grid;grid-template-columns:130px minmax(0,340px) minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
+.mus-irow b{font-size:14px;font-weight:800}
+.mus-irow select{height:40px;border-radius:9px;border:1.5px solid #99f6e4;background:#fff;font-weight:700;padding:0 8px}
+.mus-irow .h{font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mus-irow .h.yok{color:#b45309;font-weight:700}
+.mus-inote{font-size:12px;color:#0f766e;margin-top:4px}
+
+/* ---------- bildirim balonları ---------- */
+.mus-toasts{position:fixed;right:18px;bottom:18px;z-index:19000;display:flex;flex-direction:column;gap:8px;max-width:min(420px,calc(100vw - 36px));pointer-events:none}
+.mus-toast{
+pointer-events:auto;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;
+box-shadow:0 12px 30px rgba(15,23,42,.35);display:flex;gap:10px;align-items:flex-start;line-height:1.45;
+border-left:4px solid #14b8a6;animation:musIn .18s ease-out
+}
+.mus-toast.hata{border-left-color:#ef4444;cursor:pointer}
+.mus-toast.uyari{border-left-color:#f59e0b}
+.mus-toast .x{margin-left:auto;background:none;border:0;color:#94a3b8;font-size:14px;cursor:pointer;padding:0 0 0 6px}
+@keyframes musIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+@media(max-width:900px){
+.mus-split,.mus-ayar{grid-template-columns:1fr}
+.mus-split{height:auto}
+.mus-pane{min-height:320px}
+.mus-preview{position:static}
+.mus-irow{grid-template-columns:1fr}
+.mus-steps{grid-template-columns:1fr}
+.mus-row2{grid-template-columns:1fr}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -5747,6 +6005,11 @@ body.op-on #opPageStok .ope-msub.stock-meta-line{
 
 <button class="btn-errorcode" id="errorCodeButton" type="button" data-perm="bolum.hatakodu" onclick="openErrorCodeModal()">
 ⚠️ Hata Kodları
+</button>
+
+<button class="btn-musteri" id="musteriButton" type="button" data-perm="bolum.musteri" onclick="musAc()">
+✉️ Müşteriler
+<span class="musteri-badge" id="musteriBadge" aria-label="Gönderilemeyen mail sayısı"></span>
 </button>
 
 <button class="btn-consumables" id="consumablesButton" type="button" data-perm="bolum.sarf" onclick="openConsumablesModal()">
@@ -6816,6 +7079,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" onclick="plannerOpenModule('maintenance')">⚒ Bakım</button>
     <button type="button" class="planner-corp-nav-item" onclick="plannerOpenModule('error')">⚠ Hata Kodları</button>
     <button type="button" class="planner-corp-nav-item" onclick="plannerOpenModule('consumables')">▣ Sarf</button>
+    <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
   <div class="planner-corp-user">
@@ -7005,6 +7269,7 @@ onchange="jobPlanSetScrapLimit(this.value)">
 
 <div class="jobplan-import-panel" id="jobPlanImportPanel" data-perm="isplani.dosya">
 <div class="jobplan-import-title" id="jobPlanImportTitle">Okunan dosyalar</div>
+<div class="mus-import" id="musImportBox" data-jobplan-keep="1"></div>
 <div class="jobplan-table-wrap">
 <table class="jobplan-table" id="jobPlanImportTable">
 <thead>
@@ -7911,6 +8176,33 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 </div>
 </div>
 </div>
+
+<!-- ================= MÜŞTERİLER VE BİLDİRİMLER ================= -->
+<div class="modal mus-modal" id="musModal">
+<div class="modal-box mus-box">
+<div class="mus-head">
+<div class="mus-hico"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></div>
+<div class="mus-htext"><h2>Müşteriler ve Bildirimler</h2><p>Firma e-postaları, otomatik mailler ve gönderim geçmişi</p></div>
+<button type="button" class="mus-close" onclick="musKapat()" title="Kapat">✕</button>
+</div>
+<div class="mus-tabs" id="musTabs"></div>
+<div class="mus-body" id="musBody"></div>
+</div>
+</div>
+
+<!-- DT → MÜŞTERİ / BİLDİRİM PENCERESİ -->
+<div class="modal mus-modal" id="musDtModal">
+<div class="modal-box mus-box mus-dtbox">
+<div class="mus-head">
+<div class="mus-hico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/><path d="M16 9h2a2 2 0 012 2v10"/><path d="M8 7h4M8 11h4M8 15h4"/><path d="M2 21h20"/></svg></div>
+<div class="mus-htext"><h2 id="musDtBaslik">İş</h2><p id="musDtAlt"></p></div>
+<button type="button" class="mus-close" onclick="musDtKapat()" title="Kapat">✕</button>
+</div>
+<div class="mus-body" id="musDtBody"></div>
+</div>
+</div>
+
+<div class="mus-toasts" id="musToasts" aria-live="polite"></div>
 
 <!-- ÇİFT MODLU EKRAN KLAVYESİ -->
 <div class="numeric-keypad" id="numericKeypad" data-mode="numeric" aria-hidden="true" role="region" aria-label="Ekran klavyesi">
@@ -13987,7 +14279,10 @@ standardReservations:standardReservations,
 consumables:consumables,
 maintenanceRecords:maintenanceRecords,
 maintenanceEquipments:maintenanceEquipments,
-maintenanceVendors:maintenanceVendors
+maintenanceVendors:maintenanceVendors,
+
+customers:typeof musYedekVerisi==="function" && musYedekVerisi()?musYedekVerisi().customers:undefined,
+mailSettings:typeof musYedekVerisi==="function" && musYedekVerisi()?musYedekVerisi().mailSettings:undefined
 
 };
 
@@ -14147,6 +14442,11 @@ await jobPlanSaveJobs();
 if(backup.jobPlanSettings && typeof backup.jobPlanSettings==="object"){
 jobPlanSettings=jobPlanNormalizeSettings(backup.jobPlanSettings);
 await jobPlanSaveSettings();
+}
+
+/* Müşteriler ve mail ayarları */
+if(typeof musYedektenYukle==="function"){
+try{await musYedektenYukle(backup);}catch(e){console.warn("Müşteri yedeği:",e);}
 }
 
 /* Hata kodları (yedek sürüm 7 ve sonrası) */
@@ -17628,11 +17928,21 @@ jobPlanPickRemnant(file);
 jobPlanExpanded[job.id]=true;
 });
 
+/* Seçilen müşteriler işlere bağlanır (kayıttan önce). */
+if(typeof musImportUygula==="function"){
+try{musImportUygula(selected);}catch(e){console.warn("Müşteri bağlama:",e);}
+}
+
 jobPlanImportFiles=[];
 jobPlanRenderImport();
 jobPlanRefreshAll();
 if(typeof showMovements==="function")showMovements();
 await jobPlanSaveJobs();
+
+/* Plan kaydedildi: müşterisi olan yeni işlere "plana alındı" maili. */
+if(typeof musImportSonrasi==="function"){
+try{musImportSonrasi();}catch(e){console.warn("Plana alındı maili:",e);}
+}
 
 let messages=[];
 
@@ -18043,6 +18353,9 @@ if(file.status==="basladi")return;
 if(jobPlanBlockIfRunning(file))return;
 }
 
+/* DT'de daha önce hiç başlatılmış dosya yoksa bu, işin üretime başladığı andır. */
+let musIlkBaslangic=!(job.files||[]).some(f=>f!==file && (f.startedAt || (f.status && f.status!=="bekliyor")));
+
 file.status="basladi";
 file.startedAt=Date.now();
 file.pausedAt=null;
@@ -18054,6 +18367,8 @@ jobPlanBringToFront(job,file);
 
 jobPlanRefreshAll();
 await jobPlanSaveJobs();
+
+if(musIlkBaslangic && typeof musOlay==="function")musOlay("basla",job);
 }
 
 /* ---------- KESİLEN BOY PENCERESİ ----------
@@ -18270,6 +18585,9 @@ job.status="active";
 jobPlanRefreshAll();
 if(typeof showMovements==="function")showMovements();
 await jobPlanSaveJobs();
+
+/* Mail, bilgi penceresi kapanmasını beklemeden yola çıkar. */
+if(allDone && typeof musOlay==="function")musOlay("bitti",job);
 
 if(allDone)alert("✅ "+job.dtNo+" tamamlandı ve tamamlananlara taşındı.");
 }
@@ -18535,6 +18853,7 @@ rows.push(
 '</td>'+
 '<td><span class="jobplan-caret">'+(open?"▼":"►")+'</span>'+
 '<span class="jobplan-dt-name">'+escapeHTML(job.dtNo)+'</span>'+
+(typeof musDtEtiket==="function"?musDtEtiket(job):'')+
 '<div class="jobplan-sub">'+(job.files||[]).length+' dosya · yüklendi '+jobPlanFormatDateTime(job.createdAt)+'</div></td>'+
 '<td class="jp-c-ebat">'+escapeHTML(jobPlanSizeSummary(job))+'</td>'+
 '<td class="jp-c-boy">'+jobPlanTubeSummary(job)+'</td>'+
@@ -18686,7 +19005,8 @@ let worked=jobPlanJobWorkedMs(job);
 let diff=worked>0?(worked/1000-planned):0;
 
 return '<tr>'+
-'<td><strong>'+escapeHTML(job.dtNo)+'</strong></td>'+
+'<td><strong>'+escapeHTML(job.dtNo)+'</strong>'+
+(typeof musDtEtiket==="function"?'<div style="margin:4px 0 0 -8px">'+musDtEtiket(job)+'</div>':'')+'</td>'+
 '<td>'+(job.files||[]).length+
 '<div class="jobplan-sub">'+(job.files||[]).map(f=>escapeHTML(f.fileName)).join("<br>")+'</div></td>'+
 '<td class="jp-c-sure">'+jobPlanFormatDuration(planned)+
@@ -20093,6 +20413,14 @@ items:[
 ]
 },
 {
+title:"Müşteri ve Mail",
+items:[
+{key:"bolum.musteri",label:"Müşteriler penceresi",hint:"Üstteki ✉️ Müşteriler butonu, mail geçmişi"},
+{key:"musteri.duzenle",label:"Müşteri ekle / düzenle, DT'ye bağla, mail gönder",hint:"Kapalıyken sadece görür"},
+{key:"mail.ayar",label:"Mail ayarları ve metinleri",hint:"Otomatik gönderim, fonksiyon adı, deneme maili"}
+]
+},
+{
 title:"Hata Kodları",
 items:[
 {key:"hatakodu.duzenle",label:"Hata kodu ekle / düzenle / sil",hint:"Kapalıyken sadece okur"}
@@ -20164,7 +20492,8 @@ const plannerRequired=new Set([
 "bolum.fiyat","bolum.bakim","bakim.duzenle","bolum.sarf","bolum.hatakodu","bolum.isplani",
 "stok.ozet","stok.kart","stok.hareketgor","stok.hareket","stok.ayir","stok.ayirkaldir","stok.excel","stok.alis",
 "isplani.ozet","isplani.ebat","isplani.vardiya","isplani.dosya","isplani.sure","isplani.duzenle","isplani.calistir","isplani.stok",
-"hatakodu.duzenle"
+"hatakodu.duzenle",
+"bolum.musteri","musteri.duzenle","mail.ayar"
 ]);
 if(plannerRequired.has(key))return true;
 }
@@ -23964,6 +24293,7 @@ function plannerOpenModule(kind){
   if(kind==="maintenance" && typeof openMaintenanceModal==="function")return openMaintenanceModal();
   if(kind==="error" && typeof openErrorCodeModal==="function")return openErrorCodeModal();
   if(kind==="consumables" && typeof openConsumablesModal==="function")return openConsumablesModal();
+  if(kind==="musteri" && typeof musAc==="function")return musAc();
 }
 
 function plannerToggleSettings(){
@@ -24335,6 +24665,1748 @@ if(typeof closeJobPlanModal==="function"){
     return plannerOldCloseJobPlanModal.apply(this,arguments);
   };
 }
+
+/* =====================================================
+   MÜŞTERİLER VE OTOMATİK MAİL
+   - Müşteri listesi: firma adı + e-posta adresleri   (StokAppData: customers_v1)
+   - Mail ayarları ve metinleri                       (StokAppData: mail_settings_v1)
+   - Gönderim geçmişi                                 (StokAppData: mail_log_v1)
+   - DT → müşteri bağlantısı iş planı kaydında tutulur (job.customerId)
+   Olaylar: plan (plana alındı) · basla (üretime başladı) · bitti (tamamlandı)
+            termin (termin güncellendi — yalnızca elle gönderilir)
+   Gönderim Supabase Edge Function üzerinden yapılır (varsayılan ad: send-email).
+   Aynı iş için aynı olay iki kez gönderilmez: geçmişte "iş:olay" anahtarı aranır.
+===================================================== */
+
+const MUS_KEY_MUSTERI="customers_v1";
+const MUS_KEY_AYAR="mail_settings_v1";
+const MUS_KEY_LOG="mail_log_v1";
+const MUS_LOG_LIMIT=300;
+const MUS_OLAYLAR=["plan","basla","termin","bitti"];
+const MUS_OLAY_AD={plan:"Plana alındı",basla:"Üretime başladı",termin:"Termin güncellendi",bitti:"Tamamlandı",test:"Deneme maili"};
+const MUS_GUNLER=["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+const MUS_AYLAR=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const MUS_ADRES_RE=/^[^\s@,;<>()]+@[^\s@,;<>()]+\.[^\s@,;<>()]{2,}$/;
+
+const MUS_IKON={
+zarf:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>',
+bina:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/><path d="M16 9h2a2 2 0 012 2v10"/><path d="M2 21h20"/></svg>',
+ara:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+plan:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+basla:'<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 001.5.87l10.5-6.5a1 1 0 000-1.74L9.5 4.63A1 1 0 008 5.5z"/></svg>',
+termin:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+bitti:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+let musMusteriler=[];
+let musMusterilerYuklendi=false;
+let musMusterilerDenendi=false;
+let musAyar=null;
+let musLog=[];
+let musLogYuklendi=false;
+let musLogZamani=0;
+let musYukleniyor=null;
+let musSira=Promise.resolve();
+
+let musSekme="musteri";
+let musSeciliId=null;
+let musArama="";
+let musLogFiltre="tum";
+let musYeniBaglam=null;
+
+let musAyarTaslak=null;
+let musAyarKirli=false;
+let musAyarSablon="plan";
+let musSonAlan=null;
+let musOnizZamanlayici=null;
+
+let musImportSecim={};
+let musImportBekleyen=[];
+
+let musDtJobId=null;
+let musDtHizliAcik=false;
+
+
+/* ---------- KÜÇÜK YARDIMCILAR ---------- */
+
+function musEsc(value){
+return String(value===undefined||value===null?"":value)
+.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
+function musJs(value){
+return musEsc(String(value===undefined||value===null?"":value).replace(/\\/g,"\\\\").replace(/'/g,"\\'"));
+}
+
+function musYetki(key){
+return typeof systemCan==="function"?systemCan(key):true;
+}
+
+function musGuardla(key){
+if(typeof systemGuard==="function")return systemGuard(key);
+return musYetki(key);
+}
+
+function musKim(){
+return typeof jobPlanWho==="function"?jobPlanWho():"";
+}
+
+function musKopya(obj){
+return JSON.parse(JSON.stringify(obj));
+}
+
+function musId(onEk){
+return onEk+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+}
+
+function musNorm(text){
+return String(text||"").toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i").replace(/ğ/g,"g").replace(/ü/g,"u").replace(/ş/g,"s").replace(/ö/g,"o").replace(/ç/g,"c")
+.replace(/\s+/g," ").trim();
+}
+
+function musBasHarf(ad){
+let parcalar=String(ad||"").trim().split(/\s+/).filter(Boolean);
+if(!parcalar.length)return "?";
+let a=parcalar[0][0]||"";
+let b=parcalar.length>1?(parcalar[1][0]||""):(parcalar[0][1]||"");
+return (a+b).toLocaleUpperCase("tr-TR");
+}
+
+function musTarihGun(ms,gunsuz){
+if(!ms || !Number.isFinite(Number(ms)))return "belirlenecek";
+let d=new Date(Number(ms));
+return d.getDate()+" "+MUS_AYLAR[d.getMonth()]+" "+d.getFullYear()+(gunsuz?"":" "+MUS_GUNLER[d.getDay()]);
+}
+
+function musTarihSaat(ms){
+if(!ms || !Number.isFinite(Number(ms)))return "belirlenecek";
+let d=new Date(Number(ms));
+let iki=n=>String(n).padStart(2,"0");
+return iki(d.getDate())+"."+iki(d.getMonth()+1)+"."+d.getFullYear()+" "+iki(d.getHours())+":"+iki(d.getMinutes());
+}
+
+/* "a@b.com, c@d.com" ya da alt alta yazılmış adresler → temiz liste */
+function musAdresAyir(text){
+let gecerli=[],gecersiz=[];
+String(text||"").split(/[\s,;]+/).map(s=>s.trim()).filter(Boolean).forEach(a=>{
+let temiz=a.replace(/^<|>$/g,"").toLocaleLowerCase("en-US");
+if(MUS_ADRES_RE.test(temiz)){if(gecerli.indexOf(temiz)<0)gecerli.push(temiz);}
+else gecersiz.push(a);
+});
+return {gecerli:gecerli,gecersiz:gecersiz};
+}
+
+function musBul(id){
+if(!id)return null;
+return musMusteriler.find(m=>String(m.id)===String(id))||null;
+}
+
+function musAdresler(musteri){
+if(!musteri || !Array.isArray(musteri.emails))return [];
+return musteri.emails.filter(a=>MUS_ADRES_RE.test(String(a||"")));
+}
+
+function musSiraliMusteriler(){
+return musMusteriler.slice().sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"tr"));
+}
+
+function musIsler(){
+return typeof jobPlanJobs!=="undefined" && Array.isArray(jobPlanJobs)?jobPlanJobs:[];
+}
+
+function musKisaHata(e){
+let t=String(e&&e.message||e||"Bilinmeyen hata");
+return t.length>160?t.slice(0,157)+"…":t;
+}
+
+function musKlavyeKapat(){
+if(typeof closeNumericKeypad==="function"){try{closeNumericKeypad();}catch(e){}}
+}
+
+function musDepoOku(anahtar){
+try{return localStorage.getItem(anahtar)||"";}catch(e){return "";}
+}
+
+function musDepoYaz(anahtar,deger){
+try{localStorage.setItem(anahtar,deger);}catch(e){}
+}
+
+
+/* ---------- AYARLAR ---------- */
+
+function musVarsayilanAyar(){
+return {
+acik:true,
+fonksiyon:"send-email",
+gonderenAdi:"Doğrar Metal",
+yanitAdresi:"",
+olaylar:{plan:true,basla:false,bitti:true},
+imza:"Saygılarımızla,\nDoğrar Metal Sanayi",
+sablonlar:{
+plan:{
+konu:"{dt} numaralı siparişiniz üretim planına alındı",
+metin:"Sayın {hitap},\n\n{dt} numaralı siparişiniz üretim planımıza alınmıştır.\n\nTahmini tamamlanma tarihi: {termin_gun}\n\nÜretim sürecindeki gelişmeleri ayrıca bilginize sunacağız."
+},
+basla:{
+konu:"{dt} numaralı siparişinizin üretimine başlandı",
+metin:"Sayın {hitap},\n\n{dt} numaralı siparişinizin üretimine başlanmıştır.\n\nTahmini tamamlanma tarihi: {termin_gun}"
+},
+termin:{
+konu:"{dt} numaralı siparişinizin termin tarihi güncellendi",
+metin:"Sayın {hitap},\n\n{dt} numaralı siparişinizin tahmini tamamlanma tarihi güncellenmiştir.\n\nYeni tahmini tamamlanma tarihi: {termin_gun}\n\nBilgilerinize sunarız."
+},
+bitti:{
+konu:"{dt} numaralı siparişiniz tamamlandı",
+metin:"Sayın {hitap},\n\n{dt} numaralı siparişinizin üretimi {bugun} itibarıyla tamamlanmıştır.\n\nSevkiyat ve teslimat planlaması için sizinle ayrıca iletişime geçeceğiz."
+}
+}
+};
+}
+
+function musAyarNormal(a){
+let v=musVarsayilanAyar();
+if(!a || typeof a!=="object")return v;
+let s={
+acik:a.acik===undefined?v.acik:!!a.acik,
+fonksiyon:String(a.fonksiyon||"").trim()||v.fonksiyon,
+gonderenAdi:typeof a.gonderenAdi==="string"?a.gonderenAdi:v.gonderenAdi,
+yanitAdresi:typeof a.yanitAdresi==="string"?a.yanitAdresi.trim():"",
+imza:typeof a.imza==="string"?a.imza:v.imza,
+olaylar:{},
+sablonlar:{}
+};
+["plan","basla","bitti"].forEach(k=>{
+let o=a.olaylar||{};
+s.olaylar[k]=Object.prototype.hasOwnProperty.call(o,k)?!!o[k]:v.olaylar[k];
+});
+MUS_OLAYLAR.forEach(k=>{
+let x=(a.sablonlar||{})[k]||{};
+s.sablonlar[k]={
+konu:typeof x.konu==="string" && x.konu.trim()?x.konu:v.sablonlar[k].konu,
+metin:typeof x.metin==="string" && x.metin.trim()?x.metin:v.sablonlar[k].metin
+};
+});
+return s;
+}
+
+
+/* ---------- BULUT ---------- */
+
+async function musYukle(){
+let sonuc=await Promise.all([cloudStateGet(MUS_KEY_MUSTERI),cloudStateGet(MUS_KEY_AYAR)]);
+musMusteriler=Array.isArray(sonuc[0])?sonuc[0].filter(m=>m && m.id):[];
+musMusterilerYuklendi=true;
+musMusterilerDenendi=true;
+musAyar=musAyarNormal(sonuc[1]);
+return musMusteriler;
+}
+
+async function musLogYukle(){
+let log=await cloudStateGet(MUS_KEY_LOG);
+musLog=Array.isArray(log)?log.filter(k=>k && k.id):[];
+musLogYuklendi=true;
+musLogZamani=Date.now();
+return musLog;
+}
+
+async function musLogKaydet(log){
+let liste=(log||[]).slice(0,MUS_LOG_LIMIT);
+await cloudStateSet(MUS_KEY_LOG,liste);
+musLog=liste;
+musLogYuklendi=true;
+musLogZamani=Date.now();
+}
+
+async function musLogGuncelle(kayit){
+let log=await musLogYukle();
+let i=log.findIndex(k=>k.id===kayit.id);
+if(i>-1)log[i]=kayit;
+else log.unshift(kayit);
+await musLogKaydet(log);
+}
+
+/* Başka bir bilgisayar aynı anda müşteri eklemiş olabilir: her yazışta buluttaki
+   son hâl okunur, değişiklik onun üstüne uygulanır. */
+async function musMusteriBulutaYaz(degistir){
+let guncel=await cloudStateGet(MUS_KEY_MUSTERI);
+let liste=Array.isArray(guncel)?guncel.filter(m=>m && m.id):[];
+let yeni=degistir(liste);
+if(Array.isArray(yeni))liste=yeni;
+await cloudStateSet(MUS_KEY_MUSTERI,liste);
+musMusteriler=liste;
+musMusterilerYuklendi=true;
+musMusterilerDenendi=true;
+return liste;
+}
+
+function musArkaYukle(){
+if(musYukleniyor)return musYukleniyor;
+musYukleniyor=Promise.all([musYukle(),musLogYukle()])
+.catch(e=>{musMusterilerDenendi=true;console.warn("Müşteri / mail verisi okunamadı:",e);})
+.then(()=>{musYukleniyor=null;musTumunuYenile();});
+return musYukleniyor;
+}
+
+/* Aynı bilgisayardaki gönderimler sırayla yapılır; geçmiş listesi üst üste yazılmaz. */
+function musSirayaAl(fn){
+let is=musSira.catch(()=>{}).then(()=>fn());
+musSira=is.catch(()=>{});
+return is;
+}
+
+
+/* ---------- MAİL İÇERİĞİ ---------- */
+
+function musAsama(job){
+if(!job)return 1;
+if(job.status==="completed")return 3;
+if((job.files||[]).some(f=>f.startedAt || (f.status && f.status!=="bekliyor")))return 2;
+return 1;
+}
+
+function musDegiskenler(olay,job,musteri){
+let firma=musteri?String(musteri.name||""):String(job&&job.customerName||"");
+let yetkili=musteri&&musteri.yetkili?String(musteri.yetkili).trim():"";
+let terminMs=job&&job.planEnd?Number(job.planEnd):null;
+if(olay==="bitti")terminMs=Number(job&&job.completedAt)||Date.now();
+let asama=olay==="bitti"?3:(olay==="basla"?Math.max(2,musAsama(job)):musAsama(job));
+return {
+dt:job?String(job.dtNo||""):"",
+firma:firma,
+hitap:yetkili||(firma?firma+" yetkilisi":"Yetkili"),
+termin:musTarihSaat(terminMs),
+termin_gun:musTarihGun(terminMs),
+bugun:musTarihGun(Date.now(),true),
+asama:asama
+};
+}
+
+function musDoldur(sablon,vars){
+return String(sablon||"").replace(/\{([a-z_]+)\}/gi,(tam,k)=>
+Object.prototype.hasOwnProperty.call(vars||{},k)?String(vars[k]):tam);
+}
+
+function musDurumMetni(sablon,vars){
+if(sablon==="bitti")return "Tamamlandı";
+if(sablon==="basla")return "Üretimde";
+if(sablon==="termin")return Number(vars.asama)>=2?"Üretimde":"Üretim planında";
+if(sablon==="test")return "Deneme";
+return "Üretim planına alındı";
+}
+
+function musBilgiSatirlari(sablon,vars){
+let satirlar=[["İş No",vars.dt],["Firma",vars.firma],["Durum",musDurumMetni(sablon,vars)]];
+if(sablon==="bitti")satirlar.push(["Tamamlanma",vars.termin_gun]);
+else satirlar.push(["Tahmini tamamlanma",vars.termin_gun]);
+return satirlar.filter(r=>String(r[1]||"").trim());
+}
+
+const MUS_ETIKET_RENK={
+plan:["#1e3a8a","#bfdbfe","PLANA ALINDI"],
+basla:["#134e4a","#99f6e4","ÜRETİMDE"],
+termin:["#78350f","#fde68a","TERMİN GÜNCELLENDİ"],
+bitti:["#14532d","#bbf7d0","TAMAMLANDI"]
+};
+
+function musAdimlarHtml(seviye){
+let adlar=["Plana alındı","Üretimde","Tamamlandı"];
+return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'+
+adlar.map((ad,i)=>{
+let tamam=i<seviye;
+let simdi=i===seviye-1;
+return '<td width="33%" style="padding:0 4px;vertical-align:top;">'+
+'<div style="height:5px;line-height:5px;font-size:0;border-radius:3px;background:'+(tamam?"#0f766e":"#e2e8f0")+';">&nbsp;</div>'+
+'<div style="padding-top:9px;font-size:12px;font-weight:'+(simdi?"800":"600")+';color:'+(tamam?"#0f172a":"#94a3b8")+';">'+
+(tamam?"&#10003; ":"")+musEsc(ad)+'</div></td>';
+}).join("")+
+'</tr></table>';
+}
+
+function musMailHtml(sablon,konu,metin,imza,vars){
+let renk=MUS_ETIKET_RENK[sablon]||MUS_ETIKET_RENK.plan;
+let paragraflar=String(metin||"").trim().split(/\n\s*\n/).map(p=>
+'<p style="margin:0 0 14px;">'+musEsc(p.trim()).replace(/\n/g,"<br>")+'</p>').join("");
+let bilgi=musBilgiSatirlari(sablon,vars).map((r,i,dizi)=>
+'<tr><td style="padding:10px 16px;font-size:12.5px;color:#64748b;width:42%;'+(i<dizi.length-1?"border-bottom:1px solid #e2e8f0;":"")+'">'+musEsc(r[0])+'</td>'+
+'<td style="padding:10px 16px;font-size:13.5px;color:#0f172a;font-weight:700;'+(i<dizi.length-1?"border-bottom:1px solid #e2e8f0;":"")+'">'+musEsc(r[1])+'</td></tr>').join("");
+let imzaHtml=String(imza||"").trim()?musEsc(String(imza).trim()).replace(/\n/g,"<br>"):"";
+
+return '<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">'+
+'<meta name="viewport" content="width=device-width,initial-scale=1"><title>'+musEsc(konu)+'</title></head>'+
+'<body style="margin:0;padding:0;background:#eef2f6;">'+
+'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef2f6;">'+
+'<tr><td align="center" style="padding:28px 12px;font-family:\'Segoe UI\',Roboto,Arial,sans-serif;">'+
+'<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;">'+
+
+'<tr><td style="background:#0f172a;padding:20px 28px;">'+
+'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'+
+'<td style="vertical-align:middle;">'+
+'<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+'<td width="40" height="40" align="center" style="width:40px;height:40px;background:#0f766e;border-radius:10px;color:#ffffff;font-weight:900;font-size:19px;font-family:Arial,sans-serif;">D</td>'+
+'<td style="padding-left:12px;">'+
+'<div style="color:#ffffff;font-weight:800;font-size:14px;letter-spacing:3px;">DOĞRAR METAL</div>'+
+'<div style="color:#94a3b8;font-size:11px;letter-spacing:1px;margin-top:3px;">Üretim Bilgilendirme</div>'+
+'</td></tr></table>'+
+'</td>'+
+'<td align="right" style="vertical-align:middle;">'+
+'<span style="display:inline-block;background:'+renk[0]+';color:'+renk[1]+';border-radius:999px;padding:6px 12px;font-size:10.5px;font-weight:800;letter-spacing:1px;white-space:nowrap;">'+musEsc(sablon==="test"?"DENEME":renk[2])+'</span>'+
+'</td></tr></table>'+
+'</td></tr>'+
+
+'<tr><td style="padding:26px 24px 6px;">'+musAdimlarHtml(Number(vars.asama)||1)+'</td></tr>'+
+
+'<tr><td style="padding:18px 28px 4px;color:#334155;font-size:15px;line-height:1.65;">'+paragraflar+'</td></tr>'+
+
+'<tr><td style="padding:4px 28px 6px;">'+
+'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;">'+bilgi+'</table>'+
+'</td></tr>'+
+
+(imzaHtml?'<tr><td style="padding:20px 28px 26px;color:#334155;font-size:14.5px;line-height:1.6;">'+imzaHtml+'</td></tr>':'<tr><td style="padding:10px"></td></tr>')+
+
+'<tr><td style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:15px 28px;color:#94a3b8;font-size:11.5px;line-height:1.6;">'+
+'Bu e-posta Doğrar Metal üretim takip sistemi tarafından otomatik olarak gönderilmiştir.'+
+'</td></tr>'+
+
+'</table>'+
+'</td></tr></table>'+
+'</body></html>';
+}
+
+function musIcerik(ayar,sablon,vars,deneme){
+let kaynak=sablon==="test"?"plan":sablon;
+let s=(ayar.sablonlar||{})[kaynak]||musVarsayilanAyar().sablonlar.plan;
+let konu=musDoldur(s.konu,vars).replace(/\s+/g," ").trim();
+if(sablon==="test" || deneme)konu="[Deneme] "+konu;
+let metin=musDoldur(s.metin,vars).trim();
+let imza=musDoldur(ayar.imza||"",vars).trim();
+let duz=metin+"\n\n"+
+musBilgiSatirlari(sablon,vars).map(r=>r[0]+": "+r[1]).join("\n")+
+(imza?"\n\n"+imza:"")+
+"\n\n—\nBu e-posta Doğrar Metal üretim takip sistemi tarafından otomatik olarak gönderilmiştir.";
+return {konu:konu,metin:duz,html:musMailHtml(sablon,konu,metin,imza,vars)};
+}
+
+
+/* ---------- GÖNDERİM ---------- */
+
+function musHataAciklama(status,text){
+let ozet=String(text||"").replace(/\s+/g," ").trim().slice(0,220);
+if(status===401 || status===403){
+return "Yetki hatası ("+status+"). Supabase'de fonksiyonun ayarlarında \"Verify JWT\" kapalı olmalı. "+ozet;
+}
+if(status===404)return "Fonksiyon bulunamadı (404). Ayarlar'daki fonksiyon adını kontrol edin. "+ozet;
+return "Fonksiyon hata verdi ("+status+"). "+ozet;
+}
+
+async function musMailGonderHam(ayar,adresler,konu,html,metin){
+let ad=String(ayar.fonksiyon||"send-email").trim().replace(/^\/+|\/+$/g,"");
+if(!ad)throw new Error("Ayarlar'da fonksiyon adı boş.");
+let govde={to:adresler.length===1?adresler[0]:adresler,subject:konu,html:html,text:metin};
+if(String(ayar.gonderenAdi||"").trim())govde.fromName=String(ayar.gonderenAdi).trim();
+if(String(ayar.yanitAdresi||"").trim())govde.replyTo=String(ayar.yanitAdresi).trim();
+
+let kontrol=typeof AbortController==="function"?new AbortController():null;
+let zaman=kontrol?setTimeout(()=>kontrol.abort(),25000):null;
+let cevap;
+try{
+cevap=await fetch(SUPABASE_URL+"/functions/v1/"+ad,{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer "+SUPABASE_KEY
+},
+body:JSON.stringify(govde),
+signal:kontrol?kontrol.signal:undefined
+});
+}
+catch(e){
+if(e && e.name==="AbortError")throw new Error("Fonksiyon 25 saniyede cevap vermedi.");
+throw new Error("Fonksiyona ulaşılamadı. İnternet bağlantısını ve fonksiyonun CORS iznini kontrol edin. ("+musKisaHata(e)+")");
+}
+finally{
+if(zaman)clearTimeout(zaman);
+}
+
+let text="";
+try{text=await cevap.text();}catch(e){}
+if(!cevap.ok)throw new Error(musHataAciklama(cevap.status,text));
+
+/* Bazı fonksiyonlar 200 dönüp gövdede hata bildirir. */
+let json=null;
+try{json=text?JSON.parse(text):null;}catch(e){}
+if(json && typeof json==="object" && (json.error || json.ok===false || json.success===false)){
+let hata=json.error;
+throw new Error("Fonksiyon hata verdi: "+(typeof hata==="string"?hata:(hata&&hata.message)||JSON.stringify(hata||json)).slice(0,220));
+}
+return json||text;
+}
+
+/* Tek bir maili hazırlar, geçmişe yazar, gönderir ve sonucu işler.
+   o: {olay, sablon, job, musteri, adresler, vars, anahtar, otomatik, ayar} */
+async function musGonderIc(o){
+let ayar=o.ayar||musAyar||musVarsayilanAyar();
+let adresler=(o.adresler&&o.adresler.length)?o.adresler:musAdresler(o.musteri);
+if(!adresler.length)throw new Error("Müşterinin e-posta adresi yok.");
+let sablon=o.sablon||o.olay;
+let vars=o.vars||musDegiskenler(o.olay,o.job,o.musteri);
+let icerik=musIcerik(ayar,sablon,vars,o.olay==="test");
+
+let log=await musLogYukle();
+if(o.anahtar){
+let onceki=log.find(k=>k.anahtar===o.anahtar &&
+(k.durum==="gonderildi" || (k.durum==="gonderiliyor" && Date.now()-Number(k.tarih||0)<3*60*1000)));
+if(onceki)return {atlandi:true,kayit:onceki};
+}
+
+let kayit={
+id:musId("ml"),
+anahtar:o.anahtar||"",
+olay:o.olay,
+sablon:sablon,
+jobId:o.job?String(o.job.id||""):"",
+dtNo:vars.dt,
+customerId:o.musteri?String(o.musteri.id):"",
+firma:vars.firma,
+to:adresler.slice(),
+konu:icerik.konu,
+vars:vars,
+durum:"gonderiliyor",
+hata:"",
+tarih:Date.now(),
+gonderimTarihi:null,
+kim:musKim(),
+otomatik:!!o.otomatik,
+deneme:1
+};
+log.unshift(kayit);
+await musLogKaydet(log);
+
+try{
+await musMailGonderHam(ayar,adresler,icerik.konu,icerik.html,icerik.metin);
+kayit.durum="gonderildi";
+kayit.gonderimTarihi=Date.now();
+}
+catch(e){
+kayit.durum="hata";
+kayit.hata=musKisaHata(e);
+}
+
+try{await musLogGuncelle(kayit);}
+catch(e){console.warn("Mail geçmişi güncellenemedi:",e);}
+
+musTumunuYenile();
+return {kayit:kayit};
+}
+
+function musSonucBildir(sonuc){
+if(!sonuc || sonuc.atlandi || !sonuc.kayit)return;
+let k=sonuc.kayit;
+let ad=MUS_OLAY_AD[k.sablon]||MUS_OLAY_AD[k.olay]||"Mail";
+if(k.durum==="gonderildi"){
+musBildir("✉ "+(k.dtNo?k.dtNo+" · ":"")+"\""+ad+"\" maili "+(k.firma||k.to.join(", "))+" adresine gönderildi.","");
+}
+else{
+musBildir("✉ "+(k.dtNo?k.dtNo+" · ":"")+"\""+ad+"\" maili gönderilemedi: "+k.hata,"hata");
+}
+}
+
+/* İş planından gelen olaylar buraya düşer. Çağıran beklemez; hata olursa
+   iş akışı durmaz, yalnızca köşede bildirim çıkar ve geçmişe "hata" yazılır. */
+function musOlay(olay,job){
+if(!job || !job.id)return Promise.resolve(null);
+let jobId=String(job.id);
+let dt=String(job.dtNo||"");
+return musSirayaAl(async()=>{
+try{
+await musYukle();
+let ayar=musAyar;
+if(!ayar.acik || !ayar.olaylar[olay])return null;
+let guncel=musIsler().find(j=>String(j.id)===jobId)||job;
+if(!guncel.customerId)return null;
+let musteri=musBul(guncel.customerId);
+if(!musteri)return null;
+let adresler=musAdresler(musteri);
+if(!adresler.length){
+musBildir("✉ "+dt+" · "+musteri.name+" için kayıtlı e-posta adresi yok; mail gönderilmedi.","uyari");
+return null;
+}
+let sonuc=await musGonderIc({olay:olay,job:guncel,musteri:musteri,adresler:adresler,
+anahtar:jobId+":"+olay,otomatik:true,ayar:ayar});
+musSonucBildir(sonuc);
+return sonuc;
+}
+catch(e){
+console.warn("Otomatik mail:",e);
+musBildir("✉ "+dt+" · mail gönderilemedi: "+musKisaHata(e),"hata");
+return null;
+}
+});
+}
+
+
+/* ---------- BİLDİRİM BALONU ---------- */
+
+function musBildir(mesaj,tur){
+let kutu=document.getElementById("musToasts");
+if(!kutu)return;
+let el=document.createElement("div");
+el.className="mus-toast"+(tur?" "+tur:"");
+el.innerHTML='<span>'+musEsc(mesaj)+'</span><button type="button" class="x" title="Kapat">✕</button>';
+el.querySelector(".x").onclick=e=>{e.stopPropagation();el.remove();};
+if(tur==="hata"){
+el.title="Mail geçmişini aç";
+el.onclick=()=>{el.remove();if(musYetki("bolum.musteri"))musAc("log");};
+}
+kutu.appendChild(el);
+while(kutu.children.length>4)kutu.removeChild(kutu.firstChild);
+setTimeout(()=>{if(el.parentNode)el.remove();},tur==="hata"?14000:7000);
+}
+
+
+/* ---------- YENİLEME ---------- */
+
+/* Sonradan başarıyla gönderilmemiş hatalı kayıtlar (deneme mailleri hariç) */
+function musCozulmemisHatalar(){
+return musLog.filter(h=>h.durum==="hata" && h.olay!=="test" &&
+!musLog.some(k=>k.durum==="gonderildi" && k.jobId===h.jobId && k.olay===h.olay));
+}
+
+function musModalAcik(id){
+let m=document.getElementById(id);
+return !!(m && m.style.display==="flex");
+}
+
+function musRozetGuncelle(){
+let rozet=document.getElementById("musteriBadge");
+if(!rozet)return;
+let hata=musCozulmemisHatalar().length;
+rozet.textContent=hata?String(hata):"";
+rozet.classList.toggle("on",hata>0 && musYetki("bolum.musteri"));
+}
+
+/* Arka planda bir mail gittiğinde açık ekranlar güncellenir;
+   yazı yazılan alanlar (ayarlar, müşteri formu) yeniden çizilmez. */
+function musTumunuYenile(){
+try{
+musRozetGuncelle();
+if(musModalAcik("musModal")){
+musRenderSekmeler();
+if(musSekme==="log")musRenderLog();
+else if(musSekme==="musteri")musRenderListe();
+}
+if(musModalAcik("musDtModal"))musDtOlaylarRender();
+musImportRender();
+if(typeof jobPlanRenderSafe==="function")jobPlanRenderSafe();
+}catch(e){console.warn("Müşteri ekranı yenileme:",e);}
+}
+
+
+/* =====================================================
+   MÜŞTERİLER PENCERESİ
+===================================================== */
+
+async function musAc(sekme,baglam){
+if(!musGuardla("bolum.musteri"))return;
+musKlavyeKapat();
+musSekme=(sekme==="log"||sekme==="ayar")?sekme:"musteri";
+if(musSekme==="ayar" && !musYetki("mail.ayar"))musSekme="musteri";
+musYeniBaglam=baglam||null;
+if(baglam && baglam.yeni){musSeciliId="";}
+let modal=document.getElementById("musModal");
+if(!modal)return;
+modal.style.display="flex";
+musRenderSekmeler();
+let govde=document.getElementById("musBody");
+/* Ayar formu eski bir kopyadan açılıp üzerine yazmasın: ayarlar sekmesi
+   buluttaki son hâl gelmeden çizilmez. */
+if(govde && (!musMusterilerYuklendi || musSekme==="ayar"))govde.innerHTML='<div class="mus-loading">Yükleniyor…</div>';
+else musRender();
+try{
+await Promise.all([musYukle(),musLogYukle()]);
+}catch(e){
+if(govde)govde.innerHTML='<div class="mus-empty">Müşteri verisi buluttan okunamadı.<br>'+musEsc(musKisaHata(e))+'</div>';
+return;
+}
+if(!musAyarKirli)musAyarTaslak=null;
+musRender();
+musRozetGuncelle();
+}
+
+function musKapat(){
+if(musAyarKirli && !confirm("Kaydedilmemiş ayar değişiklikleri var.\n\nKapatırsan bu değişiklikler kaybolur. Kapatılsın mı?"))return;
+musAyarKirli=false;
+musAyarTaslak=null;
+musYeniBaglam=null;
+musKlavyeKapat();
+let modal=document.getElementById("musModal");
+if(modal)modal.style.display="none";
+musImportRender();
+if(typeof jobPlanRenderSafe==="function")jobPlanRenderSafe();
+}
+
+function musSekmeSec(sekme){
+if(sekme==="ayar" && !musGuardla("mail.ayar"))return;
+musKlavyeKapat();
+musSekme=sekme;
+musRender();
+}
+
+function musRender(){
+musRenderSekmeler();
+if(musSekme==="log")musRenderLog();
+else if(musSekme==="ayar")musRenderAyar();
+else musRenderMusteri();
+}
+
+function musRenderSekmeler(){
+let kutu=document.getElementById("musTabs");
+if(!kutu)return;
+let hata=musCozulmemisHatalar().length;
+let sekmeler=[
+{k:"musteri",ad:"Müşteriler",n:musMusteriler.length},
+{k:"log",ad:"Mail Geçmişi",n:musLog.length,h:hata}
+];
+if(musYetki("mail.ayar"))sekmeler.push({k:"ayar",ad:"Ayarlar"});
+kutu.innerHTML=sekmeler.map(s=>
+'<button type="button" class="mus-tab'+(musSekme===s.k?" on":"")+'" onclick="musSekmeSec(\''+s.k+'\')">'+
+musEsc(s.ad)+
+(s.n!==undefined?'<span class="n">'+s.n+'</span>':'')+
+(s.h?'<span class="h">'+s.h+' hata</span>':'')+
+(s.k==="ayar" && musAyarKirli?'<span class="h">kaydedilmedi</span>':'')+
+'</button>').join("");
+}
+
+
+/* ---------- Müşteriler sekmesi ---------- */
+
+function musRenderMusteri(){
+let govde=document.getElementById("musBody");
+if(!govde)return;
+let duzen=musYetki("musteri.duzenle");
+govde.innerHTML=
+'<div class="mus-split">'+
+'<div class="mus-pane">'+
+'<div class="mus-listhead">'+
+'<div class="mus-search">'+MUS_IKON.ara+
+'<input id="musAramaKutu" type="text" inputmode="none" data-keypad="search" data-native-inputmode="text" '+
+'data-keypad-label="Müşteri ara" placeholder="Firma veya e-posta ara…" value="'+musEsc(musArama)+'" '+
+'oninput="musAramaYap(this.value)"></div>'+
+(duzen?'<button type="button" class="mus-btn primary" onclick="musYeni()">+ Yeni</button>':'')+
+'</div>'+
+'<div class="mus-list" id="musListe"></div>'+
+'</div>'+
+'<div class="mus-pane"><div class="mus-form" id="musForm"></div></div>'+
+'</div>';
+musRenderListe();
+musRenderForm();
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+function musAramaYap(deger){
+musArama=String(deger||"");
+musRenderListe();
+}
+
+function musAktifIsSayisi(id){
+return musIsler().filter(j=>String(j.customerId||"")===String(id) && j.status!=="completed").length;
+}
+
+function musRenderListe(){
+let kutu=document.getElementById("musListe");
+if(!kutu)return;
+let aranan=musNorm(musArama);
+let liste=musSiraliMusteriler().filter(m=>!aranan ||
+musNorm(m.name).includes(aranan) ||
+(m.emails||[]).some(a=>musNorm(a).includes(aranan)) ||
+musNorm(m.yetkili).includes(aranan));
+
+if(!liste.length){
+kutu.innerHTML='<div class="mus-empty">'+(musMusteriler.length
+?"Aramaya uyan müşteri yok."
+:"Henüz müşteri eklenmedi.<br>Sağ üstteki <b>+ Yeni</b> ile ilk firmayı ekleyin.")+'</div>';
+return;
+}
+
+kutu.innerHTML=liste.map(m=>{
+let adresler=musAdresler(m);
+let aktif=musAktifIsSayisi(m.id);
+return '<button type="button" class="mus-item'+(String(m.id)===String(musSeciliId)?" on":"")+'" onclick="musSec(\''+musJs(m.id)+'\')">'+
+'<span class="mus-av">'+musEsc(musBasHarf(m.name))+'</span>'+
+'<span class="mus-itext"><b>'+musEsc(m.name)+'</b>'+
+(adresler.length
+?'<small>'+musEsc(adresler[0])+(adresler.length>1?" · +"+(adresler.length-1):"")+'</small>'
+:'<small class="yok">E-posta adresi yok</small>')+
+'</span>'+
+(aktif?'<span class="mus-ichip">'+aktif+' aktif iş</span>':'')+
+'</button>';
+}).join("");
+}
+
+function musSec(id){
+musKlavyeKapat();
+musSeciliId=String(id);
+musRenderListe();
+musRenderForm();
+}
+
+function musYeni(){
+if(!musGuardla("musteri.duzenle"))return;
+musKlavyeKapat();
+musSeciliId="";
+musRenderListe();
+musRenderForm();
+setTimeout(()=>{let el=document.getElementById("musFAd");if(el)try{el.focus();}catch(e){}},30);
+}
+
+function musAlan(id,etiket,deger,opts){
+opts=opts||{};
+let ortak='id="'+id+'" class="mus-fld" inputmode="none" data-keypad="text" data-native-inputmode="'+(opts.mod||"text")+'" '+
+'data-keypad-label="'+musEsc(etiket)+'" placeholder="'+musEsc(opts.yer||"")+'"'+(opts.kapali?" disabled":"");
+return '<div class="mus-fg"><label for="'+id+'">'+musEsc(etiket)+'</label>'+
+(opts.satir
+?'<textarea '+ortak+' rows="'+opts.satir+'">'+musEsc(deger)+'</textarea>'
+:'<input type="text" '+ortak+' value="'+musEsc(deger)+'">')+
+(opts.ipucu?'<div class="ipucu">'+opts.ipucu+'</div>':'')+
+'</div>';
+}
+
+function musRenderForm(){
+let kutu=document.getElementById("musForm");
+if(!kutu)return;
+
+if(musSeciliId===null){
+kutu.innerHTML=
+'<div class="mus-empty" style="padding:26px 10px 10px">'+
+'<b style="color:#0f172a;font-size:15px">Müşteriye otomatik bilgilendirme</b><br>'+
+'Soldan bir müşteri seçin ya da yeni müşteri ekleyin.</div>'+
+'<div class="mus-steps">'+
+'<div class="mus-step"><i>1</i><b>Müşteriyi ekle</b><span>Firma adı ve mail adresleri bir kez kaydedilir.</span></div>'+
+'<div class="mus-step"><i>2</i><b>DT\'ye bağla</b><span>HTML yüklerken ya da DT satırındaki etiketten müşteri seçilir.</span></div>'+
+'<div class="mus-step"><i>3</i><b>Mail kendiliğinden gider</b><span>Plana alınınca ve iş tamamlanınca müşteriye bilgi maili gönderilir.</span></div>'+
+'</div>';
+return;
+}
+
+let m=musSeciliId?musBul(musSeciliId):null;
+if(musSeciliId && !m){musSeciliId=null;musRenderForm();return;}
+let duzen=musYetki("musteri.duzenle");
+let kapali=!duzen;
+let isler=m?musIsler().filter(j=>String(j.customerId||"")===String(m.id))
+.sort((a,b)=>(a.status==="completed")-(b.status==="completed")||(Number(b.createdAt)||0)-(Number(a.createdAt)||0)):[];
+
+kutu.innerHTML=
+'<div class="mus-fhead"><span class="mus-av">'+musEsc(m?musBasHarf(m.name):"+")+'</span>'+
+'<div><h3>'+musEsc(m?m.name:"Yeni müşteri")+'</h3>'+
+'<p>'+(m?"Son güncelleme "+musTarihSaat(m.updatedAt||m.createdAt)+(m.guncelleyen?" · "+musEsc(m.guncelleyen):""):"Firma bilgilerini girip kaydedin")+'</p></div></div>'+
+musAlan("musFAd","Firma adı",m?m.name:"",{yer:"Örn: Kastamonu Entegre",kapali:kapali})+
+musAlan("musFMail","E-posta adresleri",m?(m.emails||[]).join("\n"):"",{satir:3,mod:"email",yer:"satinalma@firma.com",kapali:kapali,
+ipucu:"Birden çok adres için alt satıra geçin ya da virgülle ayırın. Mail hepsine gider."})+
+'<div class="mus-row2">'+
+musAlan("musFYetkili","Yetkili / hitap (isteğe bağlı)",m?m.yetkili||"":"",{yer:"Örn: Ahmet Bey",kapali:kapali,
+ipucu:"Doluysa mail \"Sayın Ahmet Bey\" diye başlar; boşsa \"Sayın firma yetkilisi\"."})+
+musAlan("musFTel","Telefon (isteğe bağlı)",m?m.telefon||"":"",{mod:"tel",kapali:kapali})+
+'</div>'+
+musAlan("musFNot","Not (isteğe bağlı)",m?m.not||"":"",{satir:2,kapali:kapali})+
+'<div class="mus-warn" id="musFUyari"></div>'+
+(duzen
+?'<div class="mus-factions">'+
+(m?'<button type="button" class="mus-btn danger sol" onclick="musMusteriSil(\''+musJs(m.id)+'\')">Sil</button>':'')+
+'<button type="button" class="mus-btn ghost" onclick="musSeciliId=null;musRenderListe();musRenderForm()">Vazgeç</button>'+
+'<button type="button" class="mus-btn primary" onclick="musMusteriKaydet()">Kaydet</button>'+
+'</div>'
+:'')+
+(m
+?'<div class="mus-jobs"><h4>Bu firmanın işleri</h4>'+
+(isler.length
+?isler.map(j=>{
+let gonderilen=musLog.filter(k=>k.jobId===j.id && k.durum==="gonderildi").length;
+return '<button type="button" class="mus-job" onclick="musDtAc(\''+musJs(j.id)+'\')">'+
+'<b>'+musEsc(j.dtNo)+'</b>'+
+'<span class="t">'+(j.status==="completed"
+?"Tamamlandı · "+musTarihSaat(j.completedAt)
+:"Termin "+musTarihSaat(j.planEnd))+'</span>'+
+'<span class="m">'+(gonderilen?gonderilen+" mail":"mail yok")+'</span></button>';
+}).join("")
+:'<div class="mus-fg ipucu">Bu müşteriye bağlı iş yok.</div>')+
+'</div>'
+:'');
+
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+function musDeger(id){
+let el=document.getElementById(id);
+return el?String(el.value||""):"";
+}
+
+async function musMusteriKaydet(){
+if(!musGuardla("musteri.duzenle"))return;
+let uyari=document.getElementById("musFUyari");
+let yaz=t=>{if(uyari)uyari.textContent=t;};
+let ad=musDeger("musFAd").replace(/\s+/g," ").trim();
+let adres=musAdresAyir(musDeger("musFMail"));
+if(!ad){yaz("Firma adı boş olamaz.");return;}
+if(adres.gecersiz.length){yaz("Geçersiz adres: "+adres.gecersiz.join(", "));return;}
+if(!adres.gecerli.length && !confirm("E-posta adresi girilmedi.\n\nBu müşteriye mail gönderilemez. Yine de kaydedilsin mi?"))return;
+
+let id=musSeciliId||musId("mu");
+let yeni=!musSeciliId;
+let simdi=Date.now();
+musKlavyeKapat();
+yaz("Kaydediliyor…");
+
+try{
+await musMusteriBulutaYaz(liste=>{
+let ayni=liste.find(x=>musNorm(x.name)===musNorm(ad) && String(x.id)!==String(id));
+if(ayni)throw new Error("\""+ayni.name+"\" adında bir müşteri zaten var.");
+let eski=liste.find(x=>String(x.id)===String(id));
+let kayit=Object.assign({},eski||{},{
+id:id,
+name:ad,
+emails:adres.gecerli,
+yetkili:musDeger("musFYetkili").replace(/\s+/g," ").trim(),
+telefon:musDeger("musFTel").trim(),
+not:musDeger("musFNot").trim(),
+createdAt:eski&&eski.createdAt?eski.createdAt:simdi,
+updatedAt:simdi,
+guncelleyen:musKim()
+});
+if(eski)return liste.map(x=>String(x.id)===String(id)?kayit:x);
+return liste.concat([kayit]);
+});
+}
+catch(e){
+yaz(musKisaHata(e));
+return;
+}
+
+/* İş kayıtlarındaki firma adı önbelleği de tazelenir. */
+musIsler().forEach(j=>{if(String(j.customerId||"")===String(id))j.customerName=ad;});
+
+musSeciliId=id;
+let baglam=musYeniBaglam;
+if(yeni && baglam && baglam.importDt){
+musImportSecim[baglam.importDt]=id;
+musYeniBaglam=null;
+musKapat();
+musBildir("✓ "+ad+" eklendi ve "+baglam.importDt+" için seçildi.","");
+return;
+}
+musRender();
+musImportRender();
+if(musModalAcik("musDtModal"))musDtRender();
+if(typeof jobPlanRenderSafe==="function")jobPlanRenderSafe();
+let u=document.getElementById("musFUyari");
+if(u){u.textContent="✓ Kaydedildi";u.className="mus-warn mus-ok";}
+}
+
+async function musMusteriSil(id){
+if(!musGuardla("musteri.duzenle"))return;
+let m=musBul(id);
+if(!m)return;
+let aktif=musAktifIsSayisi(id);
+if(!confirm(
+"\""+m.name+"\" müşterisi silinsin mi?"+
+(aktif?"\n\nBu müşteri "+aktif+" aktif işe bağlı. Silinirse bu işlere otomatik mail gitmez.":"")
+))return;
+try{
+await musMusteriBulutaYaz(liste=>liste.filter(x=>String(x.id)!==String(id)));
+}catch(e){
+alert("❌ Müşteri silinemedi.\n\n"+musKisaHata(e));
+return;
+}
+musSeciliId=null;
+musRender();
+musImportRender();
+if(typeof jobPlanRenderSafe==="function")jobPlanRenderSafe();
+}
+
+
+/* ---------- Mail geçmişi sekmesi ---------- */
+
+function musKayitBayat(k){
+return k.durum==="gonderiliyor" && Date.now()-Number(k.tarih||0)>3*60*1000;
+}
+
+function musDurumPill(k){
+if(k.durum==="gonderildi")return '<span class="mus-pill ok">Gönderildi</span>';
+if(k.durum==="hata")return '<span class="mus-pill bad">Gönderilemedi</span>';
+if(musKayitBayat(k))return '<span class="mus-pill gray">Belirsiz</span>';
+return '<span class="mus-pill wait">Gönderiliyor</span>';
+}
+
+function musLogFiltreSec(f){
+musLogFiltre=f;
+musRenderLog();
+}
+
+async function musLogYenile(){
+try{await musLogYukle();}catch(e){musBildir("Mail geçmişi okunamadı: "+musKisaHata(e),"hata");}
+musRenderSekmeler();
+musRenderLog();
+musRozetGuncelle();
+}
+
+function musRenderLog(){
+let govde=document.getElementById("musBody");
+if(!govde || musSekme!=="log")return;
+let say={
+tum:musLog.length,
+gonderildi:musLog.filter(k=>k.durum==="gonderildi").length,
+hata:musLog.filter(k=>k.durum==="hata"||musKayitBayat(k)).length
+};
+let liste=musLog.filter(k=>
+musLogFiltre==="tum" ||
+(musLogFiltre==="gonderildi" && k.durum==="gonderildi") ||
+(musLogFiltre==="hata" && (k.durum==="hata"||musKayitBayat(k))));
+let duzen=musYetki("musteri.duzenle");
+
+let filtre=(k,ad)=>'<button type="button" class="mus-filt'+(musLogFiltre===k?" on":"")+'" onclick="musLogFiltreSec(\''+k+'\')">'+ad+' <span class="n">'+say[k]+'</span></button>';
+
+govde.innerHTML=
+'<div class="mus-loghead">'+
+filtre("tum","Tümü")+filtre("gonderildi","Gönderildi")+filtre("hata","Gönderilemedi")+
+'<button type="button" class="mus-btn ghost sm" style="margin-left:auto" onclick="musLogYenile()">↻ Yenile</button>'+
+'</div>'+
+(liste.length
+?'<div class="mus-tablewrap"><table class="mus-table"><thead><tr>'+
+'<th>Tarih</th><th>İş</th><th>Firma</th><th>Mail</th><th>Alıcı</th><th>Durum</th><th></th>'+
+'</tr></thead><tbody>'+
+liste.map(k=>{
+let tekrar=duzen && (k.durum==="hata"||musKayitBayat(k)) && k.olay!=="test";
+return '<tr>'+
+'<td style="white-space:nowrap">'+musTarihSaat(k.tarih)+
+'<div class="sub">'+(k.otomatik?"otomatik":"elle")+(k.kim?" · "+musEsc(k.kim):"")+(Number(k.deneme)>1?" · "+k.deneme+". deneme":"")+'</div></td>'+
+'<td><b>'+musEsc(k.dtNo||"—")+'</b></td>'+
+'<td>'+musEsc(k.firma||"—")+'</td>'+
+'<td>'+musEsc(MUS_OLAY_AD[k.olay]||k.olay)+'<div class="sub">'+musEsc(k.konu||"")+'</div></td>'+
+'<td class="to">'+musEsc((k.to||[]).join(", "))+'</td>'+
+'<td>'+musDurumPill(k)+(k.hata?'<div class="err">'+musEsc(k.hata)+'</div>':'')+'</td>'+
+'<td>'+(tekrar?'<button type="button" class="mus-btn blue sm" onclick="musTekrarGonder(\''+musJs(k.id)+'\')">Tekrar gönder</button>':'')+'</td>'+
+'</tr>';
+}).join("")+
+'</tbody></table></div>'
+:'<div class="mus-empty">'+(musLog.length?"Bu süzgece uyan kayıt yok.":"Henüz mail gönderilmedi.")+'</div>');
+}
+
+async function musTekrarGonder(id){
+if(!musGuardla("musteri.duzenle"))return;
+let k=musLog.find(x=>x.id===id);
+if(!k)return;
+let musteri=k.customerId?musBul(k.customerId):null;
+let adresler=musteri?musAdresler(musteri):(k.to||[]);
+if(!adresler.length){alert("Bu müşterinin kayıtlı e-posta adresi yok.");return;}
+if(!confirm("\""+(MUS_OLAY_AD[k.olay]||k.olay)+"\" maili tekrar gönderilsin mi?\n\nİş: "+(k.dtNo||"—")+"\nAlıcı: "+adresler.join(", ")))return;
+
+let sonuc=await musSirayaAl(async()=>{
+await musYukle();
+let log=await musLogYukle();
+let kayit=log.find(x=>x.id===id);
+if(!kayit)throw new Error("Kayıt bulunamadı.");
+if(kayit.durum==="gonderildi")return {kayit:kayit};
+let icerik=musIcerik(musAyar,kayit.sablon||kayit.olay,kayit.vars||{});
+kayit.durum="gonderiliyor";
+kayit.hata="";
+kayit.to=adresler.slice();
+kayit.konu=icerik.konu;
+kayit.tarih=Date.now();
+kayit.kim=musKim();
+kayit.deneme=(Number(kayit.deneme)||1)+1;
+await musLogKaydet(log);
+try{
+await musMailGonderHam(musAyar,adresler,icerik.konu,icerik.html,icerik.metin);
+kayit.durum="gonderildi";
+kayit.gonderimTarihi=Date.now();
+}catch(e){
+kayit.durum="hata";
+kayit.hata=musKisaHata(e);
+}
+await musLogGuncelle(kayit);
+return {kayit:kayit};
+}).catch(e=>{musBildir("Tekrar gönderilemedi: "+musKisaHata(e),"hata");return null;});
+
+musSonucBildir(sonuc);
+musTumunuYenile();
+}
+
+
+/* ---------- Ayarlar sekmesi ---------- */
+
+function musRenderAyar(){
+let govde=document.getElementById("musBody");
+if(!govde)return;
+if(!musAyarTaslak)musAyarTaslak=musKopya(musAyar||musVarsayilanAyar());
+let t=musAyarTaslak;
+let s=t.sablonlar[musAyarSablon];
+
+let olayToggle=(k,baslik,aciklama)=>
+'<label class="mus-toggle"><input type="checkbox" '+(t.olaylar[k]?"checked":"")+' onchange="musAyarOlay(\''+k+'\',this.checked)">'+
+'<div><b>'+baslik+'</b><span>'+aciklama+'</span></div></label>';
+
+let degiskenler=[
+["{hitap}","Sayın ... kısmı"],["{firma}","Firma adı"],["{dt}","İş numarası"],
+["{termin_gun}","24 Eylül 2026 Perşembe"],["{termin}","24.09.2026 15:30"],["{bugun}","Bugünün tarihi"]
+];
+
+govde.innerHTML=
+'<div class="mus-ayar">'+
+'<div>'+
+
+'<div class="mus-card"><h3>Gönderim</h3>'+
+'<p class="d">Mailler Supabase\'deki e-posta fonksiyonu üzerinden gider. Sayfada şifre ya da gizli anahtar tutulmaz.</p>'+
+'<label class="mus-toggle ana"><input type="checkbox" '+(t.acik?"checked":"")+' onchange="musAyarAlan(\'acik\',this.checked)">'+
+'<div><b>Otomatik mail gönderimi açık</b><span>Kapalıyken hiçbir otomatik mail gitmez. DT penceresinden elle gönderim yine yapılabilir.</span></div></label>'+
+'<div class="mus-row2">'+
+musAyarInput("fonksiyon","Supabase fonksiyon adı",t.fonksiyon,"send-email","Edge Functions sayfasındaki ad.")+
+musAyarInput("gonderenAdi","Gönderen adı",t.gonderenAdi,"Doğrar Metal","Fonksiyon destekliyorsa gelen kutusunda bu ad görünür.")+
+'</div>'+
+musAyarInput("yanitAdresi","Yanıt adresi (isteğe bağlı)",t.yanitAdresi,"info@firma.com","Müşteri \"Yanıtla\"ya basınca bu adrese yazar.","email")+
+'</div>'+
+
+'<div class="mus-card"><h3>Ne zaman gönderilsin?</h3>'+
+'<p class="d">Aynı iş için aynı mail yalnızca bir kez gider. Müşterisi seçilmemiş işlere mail gitmez.</p>'+
+olayToggle("plan","Plana alınınca","DT plana eklendiğinde ya da sonradan müşteri bağlandığında, tahmini bitiş tarihiyle.")+
+olayToggle("basla","Üretime başlayınca","DT\'nin ilk dosyası tezgâhta başlatıldığında.")+
+olayToggle("bitti","İş tamamlanınca","DT\'nin bütün dosyaları bittiğinde.")+
+'<div class="mus-fg ipucu" style="margin:10px 0 0">Termin güncellemesi otomatik gitmez; DT satırındaki müşteri etiketinden elle gönderilir.</div>'+
+'</div>'+
+
+'<div class="mus-card"><h3>Mail metni</h3>'+
+'<p class="d">Süslü parantezli alanlar gönderirken doldurulur. Bir kutuya tıklayıp aşağıdaki etiketlere basarak ekleyebilirsin.</p>'+
+'<div class="mus-seg">'+MUS_OLAYLAR.map(k=>
+'<button type="button" class="'+(musAyarSablon===k?"on":"")+'" onclick="musAyarSablonSec(\''+k+'\')">'+musEsc(MUS_OLAY_AD[k])+'</button>').join("")+'</div>'+
+'<div class="mus-fg"><label for="musAKonu">Konu</label>'+
+'<input id="musAKonu" type="text" class="mus-fld" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Mail konusu" '+
+'value="'+musEsc(s.konu)+'" onfocus="musSonAlan=this" oninput="musSablonAlan(\'konu\',this.value)"></div>'+
+'<div class="mus-fg"><label for="musAMetin">Metin</label>'+
+'<textarea id="musAMetin" class="mus-fld" rows="9" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Mail metni" '+
+'onfocus="musSonAlan=this" oninput="musSablonAlan(\'metin\',this.value)">'+musEsc(s.metin)+'</textarea></div>'+
+'<div class="mus-vars">'+degiskenler.map(d=>
+'<button type="button" class="mus-var" title="'+musEsc(d[1])+'" onmousedown="event.preventDefault()" onclick="musDegiskenEkle(\''+d[0]+'\')">'+d[0]+'</button>').join("")+'</div>'+
+'<div class="mus-fg"><label for="musAImza">İmza (bütün maillerde aynı)</label>'+
+'<textarea id="musAImza" class="mus-fld" rows="3" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="İmza" '+
+'onfocus="musSonAlan=this" oninput="musAyarAlan(\'imza\',this.value)">'+musEsc(t.imza)+'</textarea></div>'+
+'<button type="button" class="mus-link" onclick="musSablonSifirla()">Bu metni varsayılana döndür</button>'+
+'</div>'+
+
+'<div class="mus-card"><h3>Deneme maili</h3>'+
+'<p class="d">Seçili metinle örnek veriler kullanılarak bir mail gönderir. Kaydedilmemiş değişiklikler de denemeye dahildir.</p>'+
+'<div class="mus-testrow">'+
+'<input id="musTestAdres" type="text" class="mus-fld" inputmode="none" data-keypad="text" data-native-inputmode="email" data-keypad-label="Deneme adresi" '+
+'placeholder="deneme@ornek.com" value="'+musEsc(musDepoOku("musTestAdres"))+'">'+
+'<button type="button" class="mus-btn blue" id="musTestBtn" onclick="musTestGonder()">Gönder</button>'+
+'</div>'+
+'<div class="mus-testsonuc" id="musTestSonuc"></div>'+
+'</div>'+
+
+'</div>'+
+
+'<div class="mus-preview"><div class="mus-prevbox">'+
+'<div class="mus-prevhead"><div class="k">Önizleme · '+musEsc(MUS_OLAY_AD[musAyarSablon])+'</div>'+
+'<div class="v" id="musOnizKonu"></div>'+
+'<div class="a">Örnek veri: Örnek Metal A.Ş. · DT034601</div></div>'+
+'<iframe id="musOnizFrame" title="Mail önizleme" sandbox=""></iframe>'+
+'</div></div>'+
+
+'</div>'+
+
+'<div class="mus-savebar">'+
+'<span class="durum" id="musAyarDurum"></span>'+
+'<button type="button" class="mus-btn ghost" onclick="musAyarVazgec()">Değişiklikleri geri al</button>'+
+'<button type="button" class="mus-btn primary" onclick="musAyarKaydet()">Ayarları Kaydet</button>'+
+'</div>';
+
+musAyarDurumYaz();
+musOnizle(true);
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+function musAyarInput(alan,etiket,deger,yer,ipucu,mod){
+return '<div class="mus-fg"><label for="musA_'+alan+'">'+musEsc(etiket)+'</label>'+
+'<input id="musA_'+alan+'" type="text" class="mus-fld" inputmode="none" data-keypad="text" data-native-inputmode="'+(mod||"text")+'" '+
+'data-keypad-label="'+musEsc(etiket)+'" placeholder="'+musEsc(yer)+'" value="'+musEsc(deger)+'" '+
+'oninput="musAyarAlan(\''+alan+'\',this.value)">'+
+(ipucu?'<div class="ipucu">'+musEsc(ipucu)+'</div>':'')+'</div>';
+}
+
+function musAyarKirlet(){
+if(!musAyarKirli){musAyarKirli=true;musRenderSekmeler();}
+musAyarDurumYaz();
+musOnizle();
+}
+
+function musAyarDurumYaz(){
+let el=document.getElementById("musAyarDurum");
+if(!el)return;
+el.textContent=musAyarKirli?"● Kaydedilmemiş değişiklik var":"Tüm değişiklikler kayıtlı";
+el.className="durum"+(musAyarKirli?" kirli":"");
+}
+
+function musAyarAlan(alan,deger){
+if(!musAyarTaslak)return;
+musAyarTaslak[alan]=alan==="acik"?!!deger:String(deger);
+musAyarKirlet();
+}
+
+function musAyarOlay(k,acik){
+if(!musAyarTaslak)return;
+musAyarTaslak.olaylar[k]=!!acik;
+musAyarKirlet();
+}
+
+function musSablonAlan(alan,deger){
+if(!musAyarTaslak)return;
+musAyarTaslak.sablonlar[musAyarSablon][alan]=String(deger);
+musAyarKirlet();
+}
+
+function musAyarSablonSec(k){
+musKlavyeKapat();
+musAyarSablon=MUS_OLAYLAR.indexOf(k)>-1?k:"plan";
+musSonAlan=null;
+musRenderAyar();
+}
+
+function musSablonSifirla(){
+if(!musAyarTaslak)return;
+if(!confirm("\""+MUS_OLAY_AD[musAyarSablon]+"\" metni varsayılana döndürülsün mü?"))return;
+musAyarTaslak.sablonlar[musAyarSablon]=musKopya(musVarsayilanAyar().sablonlar[musAyarSablon]);
+musAyarKirli=true;
+musRenderAyar();
+musRenderSekmeler();
+}
+
+function musDegiskenEkle(metin){
+let el=musSonAlan;
+if(!el || !el.isConnected)el=document.getElementById("musAMetin");
+if(!el)return;
+let bas=typeof el.selectionStart==="number"?el.selectionStart:el.value.length;
+let son=typeof el.selectionEnd==="number"?el.selectionEnd:el.value.length;
+el.value=el.value.slice(0,bas)+metin+el.value.slice(son);
+try{el.focus();el.setSelectionRange(bas+metin.length,bas+metin.length);}catch(e){}
+el.dispatchEvent(new Event("input",{bubbles:true}));
+}
+
+function musOrnekDegiskenler(sablon){
+let yarin=new Date();
+yarin.setDate(yarin.getDate()+2);
+yarin.setHours(15,30,0,0);
+let asama=sablon==="bitti"?3:(sablon==="basla"?2:1);
+return {
+dt:"DT034601",
+firma:"Örnek Metal A.Ş.",
+hitap:"Örnek Metal A.Ş. yetkilisi",
+termin:musTarihSaat(sablon==="bitti"?Date.now():yarin.getTime()),
+termin_gun:musTarihGun(sablon==="bitti"?Date.now():yarin.getTime()),
+bugun:musTarihGun(Date.now(),true),
+asama:asama
+};
+}
+
+function musOnizle(hemen){
+let calistir=()=>{
+musOnizZamanlayici=null;
+let frame=document.getElementById("musOnizFrame");
+if(!frame || !musAyarTaslak)return;
+let icerik=musIcerik(musAyarTaslak,musAyarSablon,musOrnekDegiskenler(musAyarSablon));
+frame.srcdoc=icerik.html;
+let konu=document.getElementById("musOnizKonu");
+if(konu)konu.textContent=icerik.konu;
+};
+if(musOnizZamanlayici)clearTimeout(musOnizZamanlayici);
+if(hemen)calistir();
+else musOnizZamanlayici=setTimeout(calistir,250);
+}
+
+async function musAyarKaydet(){
+if(!musGuardla("mail.ayar"))return;
+if(!musAyarTaslak)return;
+let t=musAyarNormal(musAyarTaslak);
+if(t.yanitAdresi && !MUS_ADRES_RE.test(t.yanitAdresi.toLocaleLowerCase("en-US"))){
+alert("Yanıt adresi geçerli bir e-posta değil.");
+return;
+}
+musKlavyeKapat();
+try{
+await cloudStateSet(MUS_KEY_AYAR,t);
+}catch(e){
+alert("❌ Ayarlar kaydedilemedi.\n\n"+musKisaHata(e));
+return;
+}
+musAyar=t;
+musAyarTaslak=musKopya(t);
+musAyarKirli=false;
+musRenderSekmeler();
+musAyarDurumYaz();
+musBildir("✓ Mail ayarları kaydedildi.","");
+}
+
+function musAyarVazgec(){
+if(musAyarKirli && !confirm("Kaydedilmemiş değişiklikler geri alınsın mı?"))return;
+musAyarTaslak=musKopya(musAyar||musVarsayilanAyar());
+musAyarKirli=false;
+musRenderSekmeler();
+musRenderAyar();
+}
+
+async function musTestGonder(){
+if(!musGuardla("mail.ayar"))return;
+let sonucEl=document.getElementById("musTestSonuc");
+let btn=document.getElementById("musTestBtn");
+let yaz=(t,ok)=>{if(sonucEl){sonucEl.textContent=t;sonucEl.style.color=ok?"#15803d":(ok===false?"#b91c1c":"#64748b");}};
+let adres=musAdresAyir(musDeger("musTestAdres"));
+if(!adres.gecerli.length || adres.gecersiz.length){yaz("Geçerli bir deneme adresi yazın.",false);return;}
+musDepoYaz("musTestAdres",adres.gecerli.join(", "));
+musKlavyeKapat();
+yaz("Gönderiliyor…");
+if(btn)btn.disabled=true;
+let ayar=musAyarNormal(musAyarTaslak||musAyar);
+try{
+let sonuc=await musSirayaAl(()=>musGonderIc({
+olay:"test",sablon:musAyarSablon,job:null,musteri:null,adresler:adres.gecerli,
+vars:musOrnekDegiskenler(musAyarSablon),anahtar:"",otomatik:false,ayar:ayar
+}));
+let k=sonuc&&sonuc.kayit;
+if(k && k.durum==="gonderildi")yaz("✓ Deneme maili gönderildi: "+adres.gecerli.join(", ")+". Gelen kutusunu (ve gereksiz klasörünü) kontrol edin.",true);
+else yaz("✕ "+(k?k.hata:"Gönderilemedi."),false);
+}catch(e){
+yaz("✕ "+musKisaHata(e),false);
+}
+finally{
+if(btn)btn.disabled=false;
+}
+}
+
+
+/* =====================================================
+   DT PENCERESİ — müşteri bağla, bildirimleri gör / gönder
+===================================================== */
+
+function musDtJob(){
+return musIsler().find(j=>String(j.id)===String(musDtJobId))||null;
+}
+
+async function musDtAc(jobId){
+if(!(musYetki("bolum.musteri")||musYetki("musteri.duzenle"))){
+musGuardla("bolum.musteri");
+return;
+}
+musKlavyeKapat();
+musDtJobId=String(jobId);
+musDtHizliAcik=false;
+let modal=document.getElementById("musDtModal");
+if(!modal)return;
+modal.style.display="flex";
+musDtRender();
+try{await Promise.all([musYukle(),musLogYukle()]);}
+catch(e){musBildir("Müşteri verisi okunamadı: "+musKisaHata(e),"hata");}
+musDtRender();
+}
+
+function musDtKapat(){
+musKlavyeKapat();
+let modal=document.getElementById("musDtModal");
+if(modal)modal.style.display="none";
+musDtJobId=null;
+}
+
+function musDtRender(){
+let job=musDtJob();
+let baslik=document.getElementById("musDtBaslik");
+let alt=document.getElementById("musDtAlt");
+let govde=document.getElementById("musDtBody");
+if(!govde)return;
+if(!job){
+if(baslik)baslik.textContent="İş bulunamadı";
+if(alt)alt.textContent="";
+govde.innerHTML='<div class="mus-empty">Bu iş plandan kaldırılmış olabilir.</div>';
+return;
+}
+if(baslik)baslik.textContent=job.dtNo;
+if(alt){
+alt.textContent=(job.status==="completed"
+?"Tamamlandı · "+musTarihSaat(job.completedAt)
+:(musAsama(job)>=2?"Üretimde":"Planda")+" · tahmini bitiş "+musTarihSaat(job.planEnd))+
+" · "+(job.files||[]).length+" dosya";
+}
+govde.innerHTML='<div id="musDtMusteri"></div><div id="musDtOlaylar"></div>';
+musDtMusteriRender();
+musDtOlaylarRender();
+}
+
+function musDtMusteriRender(){
+let kutu=document.getElementById("musDtMusteri");
+let job=musDtJob();
+if(!kutu || !job)return;
+let duzen=musYetki("musteri.duzenle");
+let secili=String(job.customerId||"");
+let bilinmeyen=secili && !musBul(secili);
+
+kutu.innerHTML=
+'<div class="mus-dtsec"><h4>'+MUS_IKON.bina+' Müşteri</h4>'+
+'<div class="mus-dtsel">'+
+'<select id="musDtSelect" class="mus-fld" onchange="musDtSecimDegisti()"'+(duzen?"":" disabled")+'>'+
+'<option value="">— Müşteri seçilmedi —</option>'+
+(bilinmeyen?'<option value="'+musEsc(secili)+'" selected>'+musEsc(job.customerName||"Silinmiş müşteri")+' (silinmiş)</option>':'')+
+musSiraliMusteriler().map(m=>'<option value="'+musEsc(m.id)+'"'+(String(m.id)===secili?" selected":"")+'>'+musEsc(m.name)+'</option>').join("")+
+'</select>'+
+(duzen?'<button type="button" class="mus-btn ghost" onclick="musDtHizliAc()">+ Yeni</button>':'')+
+'</div>'+
+'<div class="mus-to" id="musDtTo"></div>'+
+'<div id="musDtHizli"></div>'+
+'<div class="mus-factions" id="musDtKaydetBar" style="display:none;margin-top:12px">'+
+'<span class="sol mus-fg ipucu" id="musDtKaydetIpucu" style="margin:0;align-self:center"></span>'+
+'<button type="button" class="mus-btn primary" onclick="musDtKaydet()">Müşteriyi Kaydet</button>'+
+'</div>'+
+'</div>';
+musDtSecimDegisti();
+musDtHizliRender();
+}
+
+function musDtSecimDegisti(){
+let job=musDtJob();
+let sel=document.getElementById("musDtSelect");
+let to=document.getElementById("musDtTo");
+let bar=document.getElementById("musDtKaydetBar");
+let ipucu=document.getElementById("musDtKaydetIpucu");
+if(!job || !sel)return;
+let m=musBul(sel.value);
+if(to){
+let adresler=musAdresler(m);
+if(!sel.value){to.className="mus-to yok";to.textContent="Müşteri seçilmezse bu işe mail gitmez.";}
+else if(!m){to.className="mus-to yok";to.textContent="Bu müşteri listeden silinmiş.";}
+else if(!adresler.length){to.className="mus-to yok";to.textContent="Bu müşterinin kayıtlı e-posta adresi yok.";}
+else{to.className="mus-to";to.innerHTML='Mailler şu adreslere gider: <b>'+musEsc(adresler.join(", "))+'</b>';}
+}
+let degisti=String(sel.value||"")!==String(job.customerId||"");
+if(bar)bar.style.display=degisti?"flex":"none";
+if(ipucu){
+let planGitmedi=!musLog.some(k=>k.jobId===job.id && k.olay==="plan" && k.durum==="gonderildi");
+let gidecek=m && musAdresler(m).length && musAyar && musAyar.acik && musAyar.olaylar.plan && planGitmedi && job.status!=="completed";
+ipucu.textContent=gidecek?"Kaydedince \"Plana alındı\" maili gönderilir.":"";
+}
+}
+
+function musDtHizliAc(){
+if(!musGuardla("musteri.duzenle"))return;
+musDtHizliAcik=true;
+musDtHizliRender();
+setTimeout(()=>{let el=document.getElementById("musHAd");if(el)try{el.focus();}catch(e){}},30);
+}
+
+function musDtHizliRender(){
+let kutu=document.getElementById("musDtHizli");
+if(!kutu)return;
+if(!musDtHizliAcik){kutu.innerHTML="";return;}
+kutu.innerHTML=
+'<div class="mus-quick">'+
+'<div class="mus-row2">'+
+musAlan("musHAd","Firma adı","",{yer:"Örn: Kastamonu Entegre"})+
+musAlan("musHMail","E-posta",'',{mod:"email",yer:"satinalma@firma.com",ipucu:"Birden çok adres için virgül kullanın."})+
+'</div>'+
+'<div class="mus-warn" id="musHUyari" style="margin-top:0"></div>'+
+'<div class="mus-factions">'+
+'<button type="button" class="mus-btn ghost sm" onclick="musDtHizliAcik=false;musDtHizliRender()">Vazgeç</button>'+
+'<button type="button" class="mus-btn primary sm" onclick="musDtHizliKaydet()">Ekle ve bu işe bağla</button>'+
+'</div></div>';
+if(typeof updateInputModes==="function")updateInputModes();
+}
+
+async function musDtHizliKaydet(){
+if(!musGuardla("musteri.duzenle"))return;
+let uyari=document.getElementById("musHUyari");
+let yaz=t=>{if(uyari)uyari.textContent=t;};
+let ad=musDeger("musHAd").replace(/\s+/g," ").trim();
+let adres=musAdresAyir(musDeger("musHMail"));
+if(!ad){yaz("Firma adı boş olamaz.");return;}
+if(adres.gecersiz.length){yaz("Geçersiz adres: "+adres.gecersiz.join(", "));return;}
+if(!adres.gecerli.length){yaz("En az bir e-posta adresi yazın.");return;}
+let id=musId("mu");
+let simdi=Date.now();
+musKlavyeKapat();
+yaz("Kaydediliyor…");
+try{
+await musMusteriBulutaYaz(liste=>{
+let ayni=liste.find(x=>musNorm(x.name)===musNorm(ad));
+if(ayni)throw new Error("\""+ayni.name+"\" adında bir müşteri zaten var; listeden seçin.");
+return liste.concat([{id:id,name:ad,emails:adres.gecerli,yetkili:"",telefon:"",not:"",
+createdAt:simdi,updatedAt:simdi,guncelleyen:musKim()}]);
+});
+}catch(e){yaz(musKisaHata(e));return;}
+musDtHizliAcik=false;
+await musIseAta(musDtJobId,id);
+}
+
+async function musDtKaydet(){
+let sel=document.getElementById("musDtSelect");
+if(!sel)return;
+musKlavyeKapat();
+await musIseAta(musDtJobId,sel.value);
+}
+
+/* İşe müşteri bağlar; plana alındı maili daha önce gitmediyse şimdi gönderir. */
+async function musIseAta(jobId,customerId){
+if(!musGuardla("musteri.duzenle"))return false;
+let job=musIsler().find(j=>String(j.id)===String(jobId));
+if(!job)return false;
+let m=customerId?musBul(customerId):null;
+job.customerId=m?String(m.id):"";
+job.customerName=m?String(m.name):"";
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
+
+/* Kaydederken başka bilgisayarın planı alınmış olabilir; güncel kaydı bul. */
+let guncel=musIsler().find(j=>String(j.id)===String(jobId));
+if(musModalAcik("musDtModal"))musDtRender();
+musImportRender();
+if(musModalAcik("musModal") && musSekme==="musteri"){musRenderListe();musRenderForm();}
+if(guncel && m && String(guncel.customerId||"")===String(m.id) && guncel.status!=="completed"){
+musOlay("plan",guncel);
+}
+return true;
+}
+
+function musDtOlayDurumu(job,olay){
+let kayitlar=musLog.filter(k=>k.jobId===job.id && k.olay===olay);
+let gonderildi=kayitlar.find(k=>k.durum==="gonderildi");
+let son=kayitlar[0]||null;
+return {gonderildi:gonderildi||null,son:son};
+}
+
+function musDtOlaylarRender(){
+let kutu=document.getElementById("musDtOlaylar");
+let job=musDtJob();
+if(!kutu || !job)return;
+let duzen=musYetki("musteri.duzenle");
+let m=musBul(job.customerId);
+let adresVar=musAdresler(m).length>0;
+let asama=musAsama(job);
+let ayar=musAyar||musVarsayilanAyar();
+
+let satirlar=MUS_OLAYLAR.map(olay=>{
+let d=musDtOlayDurumu(job,olay);
+let durum;
+if(d.gonderildi){
+durum='<span class="ok">✓ '+musTarihSaat(d.gonderildi.gonderimTarihi||d.gonderildi.tarih)+' gönderildi · '+musEsc((d.gonderildi.to||[]).join(", "))+'</span>';
+}
+else if(d.son && d.son.durum==="hata"){
+durum='<span class="bad">✕ Gönderilemedi: '+musEsc(d.son.hata)+'</span>';
+}
+else if(d.son && d.son.durum==="gonderiliyor" && !musKayitBayat(d.son)){
+durum='<span>Gönderiliyor…</span>';
+}
+else durum='<span>Gönderilmedi</span>';
+
+let uygun=true,neden="";
+if(olay==="basla" && asama<2){uygun=false;neden="İş başlayınca gönderilebilir";}
+if(olay==="bitti" && asama<3){uygun=false;neden="İş tamamlanınca gönderilebilir";}
+if(olay==="termin" && asama>=3){uygun=false;neden="İş tamamlandı";}
+if(!m || !adresVar){uygun=false;neden="Önce e-posta adresi olan bir müşteri seçin";}
+
+let oto=olay!=="termin" && ayar.acik && ayar.olaylar[olay];
+return '<div class="mus-ev">'+
+'<div class="mus-evi '+olay+'">'+MUS_IKON[olay]+'</div>'+
+'<div class="mus-evt"><b>'+musEsc(MUS_OLAY_AD[olay])+(oto?'<span class="oto">OTOMATİK</span>':'')+'</b>'+durum+'</div>'+
+(duzen
+?'<button type="button" class="mus-btn sm '+(d.gonderildi?"ghost":"blue")+'" '+(uygun?"":'disabled title="'+musEsc(neden)+'"')+
+' onclick="musDtGonder(\''+olay+'\')">'+(d.gonderildi||(d.son&&d.son.durum==="hata")?"Tekrar gönder":"Gönder")+'</button>'
+:'')+
+'</div>';
+}).join("");
+
+kutu.innerHTML='<div class="mus-dtsec"><h4>'+MUS_IKON.zarf+' Bildirimler</h4>'+satirlar+'</div>';
+}
+
+async function musDtGonder(olay){
+if(!musGuardla("musteri.duzenle"))return;
+let job=musDtJob();
+if(!job)return;
+let m=musBul(job.customerId);
+let adresler=musAdresler(m);
+if(!m || !adresler.length){alert("Önce e-posta adresi olan bir müşteri seçin.");return;}
+let d=musDtOlayDurumu(job,olay);
+let ayar=musAyar||musVarsayilanAyar();
+let konu=musIcerik(ayar,olay,musDegiskenler(olay,job,m)).konu;
+if(!confirm(
+(d.gonderildi?"Bu mail "+musTarihSaat(d.gonderildi.gonderimTarihi||d.gonderildi.tarih)+" tarihinde zaten gönderildi.\nYine de tekrar gönderilsin mi?\n\n":"\""+MUS_OLAY_AD[olay]+"\" maili gönderilsin mi?\n\n")+
+"Alıcı: "+adresler.join(", ")+"\nKonu: "+konu
+))return;
+
+/* İlk gönderim otomatik anahtarla yapılır; sonradan otomatik tekrar gitmez. */
+let anahtar=(!d.gonderildi && olay!=="termin")?job.id+":"+olay:"";
+let sonuc=await musSirayaAl(async()=>{
+await musYukle();
+return musGonderIc({olay:olay,job:job,musteri:musBul(job.customerId)||m,anahtar:anahtar,otomatik:false,ayar:musAyar});
+}).catch(e=>{musBildir("Mail gönderilemedi: "+musKisaHata(e),"hata");return null;});
+
+if(sonuc && sonuc.atlandi){
+musBildir("Bu mail az önce başka bir ekrandan gönderildi.","uyari");
+}
+musSonucBildir(sonuc);
+musDtOlaylarRender();
+}
+
+
+/* =====================================================
+   İŞ PLANI BAĞLANTILARI
+===================================================== */
+
+/* DT satırındaki müşteri etiketi */
+function musDtEtiket(job){
+if(!job)return "";
+let gorur=musYetki("bolum.musteri");
+let duzen=musYetki("musteri.duzenle");
+if(!gorur && !duzen)return "";
+if(!musMusterilerDenendi && !musYukleniyor)musArkaYukle();
+else if(musLogYuklendi && Date.now()-musLogZamani>5*60*1000 && !musYukleniyor)musArkaYukle();
+
+let m=job.customerId?musBul(job.customerId):null;
+let ad=m?m.name:(job.customerId?job.customerName||"":"");
+let tik=' onclick="event.stopPropagation();musDtAc(\''+musJs(job.id)+'\')"';
+if(!ad)return duzen?'<span class="mus-chip bos"'+tik+' title="Müşteri bağla">+ Müşteri</span>':'';
+
+let kayitlar=musLog.filter(k=>k.jobId===job.id);
+let gonderilen=kayitlar.filter(k=>k.durum==="gonderildi").length;
+let hata=kayitlar.some(h=>h.durum==="hata" && !kayitlar.some(k=>k.olay===h.olay && k.durum==="gonderildi"));
+let adresYok=m && !musAdresler(m).length;
+return '<span class="mus-chip'+(hata||adresYok?" hata":"")+'"'+tik+' title="'+(adresYok?"Bu müşterinin e-posta adresi yok":"Müşteri ve bildirimler")+'">'+
+MUS_IKON.bina+musEsc(ad)+
+(gonderilen?'<i>'+gonderilen+' ✉</i>':'')+
+(hata?'<i class="h">!</i>':'')+
+'</span>';
+}
+
+/* HTML yükleme panelindeki DT → müşteri seçimi */
+function musImportRender(){
+let kutu=document.getElementById("musImportBox");
+if(!kutu)return;
+let dosyalar=(typeof jobPlanImportFiles!=="undefined" && Array.isArray(jobPlanImportFiles))?jobPlanImportFiles:[];
+if(!dosyalar.length)musImportSecim={};
+let secili=dosyalar.filter(f=>f.include);
+if(!secili.length || !musYetki("musteri.duzenle")){
+kutu.innerHTML="";
+kutu.classList.remove("on");
+return;
+}
+if(!musMusterilerDenendi){
+if(!musYukleniyor)musArkaYukle();
+kutu.classList.add("on");
+kutu.innerHTML='<div class="mus-import-title">'+MUS_IKON.zarf+' Müşteri ve bildirim</div><div class="mus-inote">Müşteri listesi yükleniyor…</div>';
+return;
+}
+
+let dtler=[];
+secili.forEach(f=>{let dt=String(f.dtNo||"").trim();if(dt && dtler.indexOf(dt)<0)dtler.push(dt);});
+dtler.forEach(dt=>{
+if(!Object.prototype.hasOwnProperty.call(musImportSecim,dt)){
+let mevcut=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
+musImportSecim[dt]=mevcut && mevcut.customerId?String(mevcut.customerId):"";
+}
+});
+
+let ayar=musAyar||musVarsayilanAyar();
+let liste=musSiraliMusteriler();
+kutu.classList.add("on");
+kutu.innerHTML=
+'<div class="mus-import-title">'+MUS_IKON.zarf+' Müşteri ve bildirim'+
+'<button type="button" class="mus-link" onclick="musImportYeni()">+ Yeni müşteri</button></div>'+
+dtler.map(dt=>{
+let secim=musImportSecim[dt]||"";
+let m=musBul(secim);
+let adresler=musAdresler(m);
+let mevcut=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
+return '<div class="mus-irow">'+
+'<b>'+musEsc(dt)+'</b>'+
+'<select onchange="musImportSec(\''+musJs(dt)+'\',this.value)">'+
+'<option value="">— Müşteri seçilmedi —</option>'+
+liste.map(x=>'<option value="'+musEsc(x.id)+'"'+(String(x.id)===secim?" selected":"")+'>'+musEsc(x.name)+'</option>').join("")+
+'</select>'+
+'<span class="h'+(secim && !adresler.length?" yok":"")+'">'+
+(!secim?(mevcut?"Plandaki DT'ye eklenecek":"Mail gitmez")
+:(adresler.length?musEsc(adresler.join(", ")):"E-posta adresi yok — mail gitmez"))+
+'</span></div>';
+}).join("")+
+'<div class="mus-inote">'+(ayar.acik && ayar.olaylar.plan
+?"Plana eklenince seçilen müşteriye \"Plana alındı\" maili tahmini bitiş tarihiyle gönderilir."
+:"Otomatik \"Plana alındı\" maili kapalı; müşteri yalnızca işe bağlanır.")+'</div>';
+}
+
+function musImportSec(dt,id){
+musImportSecim[String(dt)]=String(id||"");
+musImportRender();
+}
+
+function musImportYeni(){
+let secili=(typeof jobPlanImportFiles!=="undefined"?jobPlanImportFiles:[]).filter(f=>f.include);
+let bos=secili.map(f=>String(f.dtNo||"")).find(dt=>dt && !musImportSecim[dt]);
+musAc("musteri",{yeni:true,importDt:bos||""});
+}
+
+/* jobPlanCommitImport içinden, işler oluştuktan sonra ve kaydetmeden önce çağrılır. */
+function musImportUygula(secilenler){
+musImportBekleyen=[];
+let dtler=[];
+(secilenler||[]).forEach(d=>{let dt=String(d.dtNo||"").trim();if(dt && dtler.indexOf(dt)<0)dtler.push(dt);});
+dtler.forEach(dt=>{
+let job=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
+if(!job)return;
+let secim=musImportSecim[dt];
+if(secim){
+let m=musBul(secim);
+if(m){job.customerId=String(m.id);job.customerName=String(m.name);}
+}
+if(job.customerId)musImportBekleyen.push(String(job.id));
+});
+musImportSecim={};
+}
+
+/* Plan kaydedildikten sonra çağrılır. */
+function musImportSonrasi(){
+let idler=musImportBekleyen.slice();
+musImportBekleyen=[];
+idler.forEach(id=>{
+let job=musIsler().find(j=>String(j.id)===id);
+if(job && job.customerId)musOlay("plan",job);
+});
+}
+
+/* Yedek dosyasına müşteri listesi ve mail ayarları da girer (yüklenmişse). */
+function musYedekVerisi(){
+if(!musMusterilerYuklendi)return null;
+return {customers:musMusteriler,mailSettings:musAyar};
+}
+
+async function musYedektenYukle(yedek){
+if(!yedek || typeof yedek!=="object")return;
+if(Array.isArray(yedek.customers) && yedek.customers.length){
+await cloudStateSet(MUS_KEY_MUSTERI,yedek.customers.filter(m=>m && m.id));
+}
+if(yedek.mailSettings && typeof yedek.mailSettings==="object"){
+await cloudStateSet(MUS_KEY_AYAR,musAyarNormal(yedek.mailSettings));
+}
+musMusterilerDenendi=false;
+}
+
+/* HTML yükleme paneli her çizildiğinde müşteri seçimi de çizilir. */
+if(typeof jobPlanRenderImport==="function"){
+let musEskiRenderImport=jobPlanRenderImport;
+jobPlanRenderImport=function(){
+let sonuc=musEskiRenderImport.apply(this,arguments);
+try{musImportRender();}catch(e){console.warn("Müşteri seçimi:",e);}
+return sonuc;
+};
+}
+
+/* Giriş yapan kişi müşteri etiketlerini görebiliyorsa liste arka planda gelir. */
+setTimeout(()=>{
+try{
+if(musYetki("bolum.musteri")||musYetki("musteri.duzenle"))musArkaYukle();
+}catch(e){}
+},2500);
+
 
 /* =====================================================
    BAŞLANGIÇ

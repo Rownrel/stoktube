@@ -5894,9 +5894,10 @@ font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;max-width:260
 .mus-import.on{display:block}
 .mus-import-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:#0f766e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
 .mus-import-title .mus-link{margin-left:auto;text-transform:none;letter-spacing:0}
-.mus-irow{display:grid;grid-template-columns:130px minmax(0,340px) minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
+.mus-irow{display:grid;grid-template-columns:110px minmax(0,240px) minmax(0,260px) minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
 .mus-irow b{font-size:14px;font-weight:800}
-.mus-irow select{height:40px;border-radius:9px;border:1.5px solid #99f6e4;background:#fff;font-weight:700;padding:0 8px}
+.mus-irow select{height:40px;border-radius:9px;border:1.5px solid #99f6e4;background:#fff;font-weight:700;padding:0 8px;min-width:0}
+.mus-irow select.mus-isira{border-color:#cbd5e1;background:#f8fafc}
 .mus-irow .h{font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mus-irow .h.yok{color:#b45309;font-weight:700}
 .mus-inote{font-size:12px;color:#0f766e;margin-top:4px}
@@ -24745,6 +24746,7 @@ let musSonAlan=null;
 let musOnizZamanlayici=null;
 
 let musImportSecim={};
+let musImportSira={};
 let musImportBekleyen=[];
 
 let musDtJobId=null;
@@ -26392,22 +26394,68 @@ MUS_IKON.bina+musEsc(ad)+
 '</span>';
 }
 
+/* ---------- İÇE AKTARIRKEN KUYRUK SIRASI ----------
+   Yeni iş varsayılan olarak kuyruğun sonuna eklenir. Sonradan öne alınırsa
+   müşteriye gitmiş olan tahmini tarih yanlış kalır; bu yüzden sıra daha
+   plana eklenirken seçilir, mail doğru terminle gider. */
+
+function musSiraSecenekleri(haricDtler){
+let liste=musIsler().filter(j=>j.status!=="completed" &&
+(!haricDtler || haricDtler.indexOf(String(j.dtNo))<0))
+.sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
+return liste;
+}
+
+function musCalisanMi(job){
+return !!(job && (job.files||[]).some(f=>f.status==="basladi" || f.status==="durakladi" || f.startedAt));
+}
+
+/* Seçilen yere yerleştirir ve bütün sıra numaralarını 1..n olarak yeniler. */
+function musSiraYerlestir(job,secim,basSayaci){
+let liste=musIsler().filter(j=>j.status!=="completed" && j.id!==job.id)
+.sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0));
+let hedef=liste.length;
+
+if(secim==="bas"){
+/* Tezgâhta çalışan iş her zaman önde kalır. */
+hedef=(liste.length && musCalisanMi(liste[0]))?1:0;
+hedef+=Number(basSayaci)||0;
+if(hedef>liste.length)hedef=liste.length;
+}
+else if(secim && secim.indexOf("sonra:")===0){
+let id=secim.slice(6);
+let i=liste.findIndex(j=>String(j.id)===id);
+hedef=i<0?liste.length:i+1;
+}
+
+liste.splice(hedef,0,job);
+liste.forEach((j,i)=>{j.order=i+1;});
+return hedef;
+}
+
+function musImportSira_Sec(dt,deger){
+musImportSira[String(dt)]=String(deger||"");
+musImportRender();
+}
+
 /* HTML yükleme panelindeki DT → müşteri seçimi */
 function musImportRender(){
 let kutu=document.getElementById("musImportBox");
 if(!kutu)return;
 let dosyalar=(typeof jobPlanImportFiles!=="undefined" && Array.isArray(jobPlanImportFiles))?jobPlanImportFiles:[];
-if(!dosyalar.length)musImportSecim={};
+if(!dosyalar.length){musImportSecim={};musImportSira={};}
 let secili=dosyalar.filter(f=>f.include);
-if(!secili.length || !musYetki("musteri.duzenle")){
+let musteriVar=musYetki("musteri.duzenle");
+let siraVar=musYetki("isplani.duzenle");
+if(!secili.length || (!musteriVar && !siraVar)){
 kutu.innerHTML="";
 kutu.classList.remove("on");
 return;
 }
-if(!musMusterilerDenendi){
+if(musteriVar && !musMusterilerDenendi){
 if(!musYukleniyor)musArkaYukle();
 kutu.classList.add("on");
-kutu.innerHTML='<div class="mus-import-title">'+MUS_IKON.zarf+' Müşteri ve bildirim</div><div class="mus-inote">Müşteri listesi yükleniyor…</div>';
+kutu.innerHTML='<div class="mus-import-title">'+MUS_IKON.zarf+' Sıra ve müşteri</div><div class="mus-inote">Müşteri listesi yükleniyor…</div>';
 return;
 }
 
@@ -26415,38 +26463,64 @@ let dtler=[];
 secili.forEach(f=>{let dt=String(f.dtNo||"").trim();if(dt && dtler.indexOf(dt)<0)dtler.push(dt);});
 dtler.forEach(dt=>{
 if(!Object.prototype.hasOwnProperty.call(musImportSecim,dt)){
-let mevcut=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
-musImportSecim[dt]=mevcut && mevcut.customerId?String(mevcut.customerId):"";
+/* Önce plandaki aktif DT, yoksa aynı DT'nin en son tamamlanan işi hatırlanır. */
+let aday=musIsler().filter(j=>String(j.dtNo)===dt && j.customerId)
+.sort((a,b)=>(a.status==="completed")-(b.status==="completed")||(Number(b.createdAt)||0)-(Number(a.createdAt)||0))[0];
+musImportSecim[dt]=aday?String(aday.customerId):"";
 }
 });
 
 let ayar=musAyar||musVarsayilanAyar();
 let liste=musSiraliMusteriler();
 kutu.classList.add("on");
+let mevcutIsler=musSiraSecenekleri(dtler);
+
 kutu.innerHTML=
-'<div class="mus-import-title">'+MUS_IKON.zarf+' Müşteri ve bildirim'+
-'<button type="button" class="mus-link" onclick="musImportYeni()">+ Yeni müşteri</button></div>'+
+'<div class="mus-import-title">'+MUS_IKON.zarf+' Sıra ve müşteri'+
+(musteriVar?'<button type="button" class="mus-link" onclick="musImportYeni()">+ Yeni müşteri</button>':'')+
+'</div>'+
 dtler.map(dt=>{
 let secim=musImportSecim[dt]||"";
 let m=musBul(secim);
 let adresler=musAdresler(m);
 let mevcut=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
-return '<div class="mus-irow">'+
-'<b>'+musEsc(dt)+'</b>'+
+let sira=musImportSira[dt]||"";
+
+let siraKutusu=!siraVar?'':
+(mevcut
+?'<span class="h">Sıra: '+musEsc(dt)+' zaten planda</span>'
+:'<select class="mus-isira" onchange="musImportSira_Sec(\''+musJs(dt)+'\',this.value)">'+
+'<option value=""'+(sira?"":" selected")+'>Sona ekle</option>'+
+'<option value="bas"'+(sira==="bas"?" selected":"")+'>En başa al</option>'+
+mevcutIsler.map((j,i)=>'<option value="sonra:'+musEsc(j.id)+'"'+(sira==="sonra:"+j.id?" selected":"")+'>'+
+musEsc(j.dtNo)+' işinden sonra ('+(i+2)+'. sıra)</option>').join("")+
+'</select>');
+
+let musteriKutusu=!musteriVar?'':
 '<select onchange="musImportSec(\''+musJs(dt)+'\',this.value)">'+
 '<option value="">— Müşteri seçilmedi —</option>'+
 liste.map(x=>'<option value="'+musEsc(x.id)+'"'+(String(x.id)===secim?" selected":"")+'>'+musEsc(x.name)+'</option>').join("")+
-'</select>'+
-'<span class="h'+(secim && !adresler.length?" yok":"")+'">'+
-(!secim?(mevcut?"Plandaki DT'ye eklenecek":"Mail gitmez")
+'</select>';
+
+return '<div class="mus-irow">'+
+'<b>'+musEsc(dt)+'</b>'+
+siraKutusu+
+musteriKutusu+
+'<span class="h'+(musteriVar && secim && !adresler.length?" yok":"")+'">'+
+(!musteriVar?''
+:!secim?(mevcut?"Plandaki DT'ye eklenecek":"Mail gitmez")
 :(adresler.length
 ?musEsc(adresler.join(", "))+' · <b>'+musEsc(musOlayOzeti(musEtkinOlaylar(m)))+'</b>'
 :"E-posta adresi yok — mail gitmez"))+
 '</span></div>';
 }).join("")+
-'<div class="mus-inote">'+(ayar.acik
-?"Hangi maillerin gideceği müşterinin kendi seçimine göredir. \"Plana alındı\" açık olan müşterilere, plana eklenince tahmini bitiş tarihiyle mail gider."
-:"Otomatik mail gönderimi kapalı; müşteri yalnızca işe bağlanır.")+'</div>';
+'<div class="mus-inote">'+
+(siraVar?"Sırayı burada seçersen müşteriye giden tahmini tarih baştan doğru olur. ":"")+
+(!musteriVar?""
+:ayar.acik
+?"Hangi maillerin gideceği müşterinin kendi seçimine göredir; \"Plana alındı\" açık olanlara tahmini bitiş tarihiyle mail gider."
+:"Otomatik mail gönderimi kapalı; müşteri yalnızca işe bağlanır.")+
+'</div>';
 }
 
 function musImportSec(dt,id){
@@ -26465,6 +26539,21 @@ function musImportUygula(secilenler){
 musImportBekleyen=[];
 let dtler=[];
 (secilenler||[]).forEach(d=>{let dt=String(d.dtNo||"").trim();if(dt && dtler.indexOf(dt)<0)dtler.push(dt);});
+
+/* Önce kuyruk sırası: terminler bu sıraya göre hesaplanır, mail de öyle gider. */
+let basSayaci=0;
+if(musYetki("isplani.duzenle")){
+dtler.forEach(dt=>{
+let secim=musImportSira[dt];
+if(!secim)return;
+let job=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
+if(!job)return;
+musSiraYerlestir(job,secim,secim==="bas"?basSayaci:0);
+if(secim==="bas")basSayaci++;
+});
+}
+musImportSira={};
+
 dtler.forEach(dt=>{
 let job=musIsler().find(j=>j.status!=="completed" && String(j.dtNo)===dt);
 if(!job)return;
@@ -26490,7 +26579,11 @@ if(job && job.customerId)musOlay("plan",job);
 
 /* Yedek dosyasına müşteri listesi ve mail ayarları da girer (yüklenmişse). */
 function musYedekVerisi(){
-if(!musMusterilerYuklendi)return null;
+if(!musMusterilerYuklendi){
+/* Liste henüz gelmediyse yedeğe yazmak yerine sessizce yüklenir; bir sonraki yedek eksiksiz olur. */
+if(!musYukleniyor)musArkaYukle();
+return null;
+}
 return {customers:musMusteriler,mailSettings:musAyar};
 }
 

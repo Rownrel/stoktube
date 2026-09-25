@@ -6013,7 +6013,8 @@ border-left:4px solid #14b8a6;animation:musIn .18s ease-out
           <button class="btn-blue page-login-button" id="pageLoginUserButton" type="button" onclick="systemUserLoginSubmit()">Giriş Yap</button>
         </div>
 
-        <button type="button" class="page-login-master-link" onclick="systemMasterLoginPrompt()">Sistem yöneticisi girişi</button>
+        <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
+     Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
     </section>
   </div>
@@ -7555,7 +7556,7 @@ placeholder="Örn: Ahmet Yılmaz">
 </div>
 
 <div class="form-group">
-<label>Supabase maili</label>
+<label>Supabase maili <span style="font-weight:normal;color:#64748b">· doldurulursa şifre Supabase'de yönetilir</span></label>
 <input id="systemUserAuthEmail" type="text" inputmode="none"
 data-keypad="text" data-native-inputmode="text" data-keypad-label="Supabase maili"
 autocomplete="off" placeholder="orn: harun@dograr.local">
@@ -20048,7 +20049,7 @@ let editing=systemEditingUserId
 ?users.find(u=>u.id===systemEditingUserId)
 :null;
 
-if(!editing || password){
+if((!editing && !authEmail) || password){
 if(password.length<4){
 systemSetMessage("systemUserMessage","Şifre en az 4 karakter olmalı.","error");
 return;
@@ -20376,6 +20377,14 @@ let hatirla=document.getElementById("pageLoginUserRemember")?.checked;
 systemFinishLogin(sbaUser,hatirla);
 return;
 }
+}
+
+/* Supabase hesabı olan kullanıcının tek giriş yolu Supabase'dir.
+   Eski şifre ve sistem şifresi yedeği burada biter. */
+if(user.authEmail){
+if(error)error.textContent="Şifre yanlış.";
+if(input){input.value="";input.focus();}
+return;
 }
 
 let valid=await systemCheckCredential(password,user);

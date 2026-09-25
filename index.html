@@ -5902,6 +5902,21 @@ font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;max-width:260
 .mus-irow .h.yok{color:#b45309;font-weight:700}
 .mus-inote{font-size:12px;color:#0f766e;margin-top:4px}
 
+/* parça boyu / artan kutusu */
+.pbo-box{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:11px 13px;margin-top:10px}
+.pbo-title{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px}
+.pbo-title .mus-link{text-transform:none;letter-spacing:0}
+.pbo-title .mus-link:first-of-type{margin-left:auto}
+.pbo-row{display:flex;gap:10px;align-items:baseline;padding:6px 0;border-top:1px solid #f1f5f9;font-size:12.5px;flex-wrap:wrap}
+.pbo-row:first-of-type{border-top:0}
+.pbo-row b{font-weight:800;color:#0f172a;word-break:break-all}
+.pbo-row span{color:#64748b;flex:1;min-width:220px}
+.pbo-row.ok span{color:#0f766e}
+.pbo-row.eksik span{color:#b45309}
+.pbo-row.uymadi span,.pbo-row.yok span{color:#b91c1c}
+.pbo-note{font-size:11.5px;color:#94a3b8;margin-top:7px;line-height:1.5}
+.pbo-note code{background:#f1f5f9;border-radius:5px;padding:1px 5px;font-size:11px;color:#334155;word-break:break-all}
+
 /* ---------- bildirim balonları ---------- */
 .mus-toasts{position:fixed;right:18px;bottom:18px;z-index:19000;display:flex;flex-direction:column;gap:8px;max-width:min(420px,calc(100vw - 36px));pointer-events:none}
 .mus-toast{
@@ -8226,6 +8241,10 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 <div class="mus-body" id="musDtBody"></div>
 </div>
 </div>
+
+<!-- PROGRAM DOSYALARI (parça boyu) -->
+<input type="file" id="pboKlasorInput" multiple webkitdirectory directory style="display:none" onchange="pboSecildi(event)">
+<input type="file" id="pboDosyaInput" multiple accept=".teo,.TEO,.lst,.LST" style="display:none" onchange="pboSecildi(event)">
 
 <div class="mus-toasts" id="musToasts" aria-live="polite"></div>
 
@@ -26447,12 +26466,13 @@ if(!dosyalar.length){musImportSecim={};musImportSira={};}
 let secili=dosyalar.filter(f=>f.include);
 let musteriVar=musYetki("musteri.duzenle");
 let siraVar=musYetki("isplani.duzenle");
-if(!secili.length || (!musteriVar && !siraVar)){
+let parcaVar=typeof pboKutuHtml==="function" && musYetki("isplani.dosya");
+if(!secili.length || (!musteriVar && !siraVar && !parcaVar)){
 kutu.innerHTML="";
 kutu.classList.remove("on");
 return;
 }
-if(musteriVar && !musMusterilerDenendi){
+if(musteriVar && !musMusterilerDenendi && !parcaVar){
 if(!musYukleniyor)musArkaYukle();
 kutu.classList.add("on");
 kutu.innerHTML='<div class="mus-import-title">'+MUS_IKON.zarf+' Sıra ve müşteri</div><div class="mus-inote">Müşteri listesi yükleniyor…</div>';
@@ -26476,6 +26496,7 @@ kutu.classList.add("on");
 let mevcutIsler=musSiraSecenekleri(dtler);
 
 kutu.innerHTML=
+((musteriVar||siraVar)?
 '<div class="mus-import-title">'+MUS_IKON.zarf+' Sıra ve müşteri'+
 (musteriVar?'<button type="button" class="mus-link" onclick="musImportYeni()">+ Yeni müşteri</button>':'')+
 '</div>'+
@@ -26520,7 +26541,8 @@ musteriKutusu+
 :ayar.acik
 ?"Hangi maillerin gideceği müşterinin kendi seçimine göredir; \"Plana alındı\" açık olanlara tahmini bitiş tarihiyle mail gider."
 :"Otomatik mail gönderimi kapalı; müşteri yalnızca işe bağlanır.")+
-'</div>';
+'</div>':'')+
+(parcaVar?pboKutuHtml():'');
 }
 
 function musImportSec(dt,id){
@@ -26614,6 +26636,335 @@ try{
 if(musYetki("bolum.musteri")||musYetki("musteri.duzenle"))musArkaYukle();
 }catch(e){}
 },2500);
+
+
+/* =====================================================
+   PARÇA BOYU VE ARTAN HESABI
+   TruLaser üretim paketi HTML'i kaç boy kullanıldığını söyler ama son boyda
+   kaç metre kullanıldığını söylemez. Parça boyu program dosyalarında durur:
+     .teo  → 5. ve 6. satırdaki sınır kutusu; parça boyu = max X
+     .LST  → DA,'TPT-1',1,<adım>,<parça boyu>,...
+   Adım = parça boyu + 2,5 mm (kesim payı + boşluk).
+
+   Hesap: her program kendi tam boylarını doldurur, artan parçalar son boya biner.
+   Tahmin edilen boy sayısı HTML'deki "Number of tubes" ile tutmuyorsa hesap
+   güvenilmez sayılır (TruTops o işte programları aynı boyda karıştırmıştır);
+   kutular doldurulmaz, kullanıcı elle girer.
+===================================================== */
+
+const PBO_KEY="part_lengths_v1";
+const PBO_ARA=2.5;        /* parçalar arası pay (mm) */
+const PBO_LIMIT=1200;     /* saklanan program sayısı */
+
+let pboBoylar={};         /* {PROGRAM: {mm, kaynak, tarih, dosya}} */
+let pboYuklendi=false;
+let pboDeneme=false;
+let pboKlasor={};         /* dosyaAdı -> program dosyalarının klasörü */
+let pboSonBilgi="";
+
+/* Program adı anahtarı — dosya uzantısı atılır, büyük harfe çevrilir.
+   Türkçe yerel ayar kullanılmaz: program adları ASCII ve i/İ karışmamalı. */
+function pboAnahtar(ad){
+return String(ad||"").trim().replace(/\.[^.]+$/,"").toUpperCase();
+}
+
+function pboNormalListe(liste){
+let temiz={};
+Object.keys(liste||{}).forEach(k=>{
+let kayit=liste[k];
+if(kayit && Number(kayit.mm)>0)temiz[pboAnahtar(k)]=kayit;
+});
+return temiz;
+}
+
+function pboBoyu(program){
+let k=pboAnahtar(program);
+let kayit=k?pboBoylar[k]:null;
+return kayit && Number(kayit.mm)>0?Number(kayit.mm):0;
+}
+
+async function pboYukle(){
+let veri=await cloudStateGet(PBO_KEY);
+pboBoylar=pboNormalListe((veri && typeof veri==="object" && !Array.isArray(veri))?veri:{});
+pboYuklendi=true;
+pboDeneme=true;
+return pboBoylar;
+}
+
+function pboArkaYukle(){
+if(pboYuklendi || pboDeneme)return;
+pboDeneme=true;
+pboYukle().then(()=>{
+if(typeof musImportRender==="function")musImportRender();
+pboArtanUygula();
+}).catch(e=>console.warn("Parça boyları okunamadı:",e));
+}
+
+/* Buluttaki listenin üstüne yazar; başka bilgisayarın eklediği boylar korunur. */
+async function pboKaydet(yeni){
+let guncel=await cloudStateGet(PBO_KEY);
+let liste=pboNormalListe((guncel && typeof guncel==="object" && !Array.isArray(guncel))?guncel:{});
+Object.keys(yeni||{}).forEach(k=>{liste[pboAnahtar(k)]=yeni[k];});
+
+let anahtarlar=Object.keys(liste);
+if(anahtarlar.length>PBO_LIMIT){
+anahtarlar.sort((a,b)=>(Number(liste[b].tarih)||0)-(Number(liste[a].tarih)||0));
+let kirpik={};
+anahtarlar.slice(0,PBO_LIMIT).forEach(k=>{kirpik[k]=liste[k];});
+liste=kirpik;
+}
+
+await cloudStateSet(PBO_KEY,liste);
+pboBoylar=liste;
+pboYuklendi=true;
+pboDeneme=true;
+}
+
+
+/* ---------- DOSYA OKUMA ---------- */
+
+/* .teo: 5. satır sınır kutusunun küçük köşesi, 6. satır büyük köşesi.
+   Boru ekseni X olduğu için parça boyu büyük köşenin X değeridir. */
+function pboTeoBoyu(metin){
+let s=String(metin||"");
+if(s.indexOf("#~1")<0)return 0;
+let sat=s.replace(/\r/g,"").split("\n");
+let mx=(sat[5]||"").trim().split(/\s+/).map(Number);
+if(mx.length<3 || !Number.isFinite(mx[0]))return 0;
+return mx[0]>0 && mx[0]<20000?mx[0]:0;
+}
+
+/* .LST: DA,'TPT-1',1,252.080,250.240,'1_200X200X30_1_15', */
+function pboLstBoyu(metin){
+let m=/DA,'TPT-[^']*',\s*\d+\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,/.exec(String(metin||""));
+if(!m)return 0;
+let boy=Number(m[2]);
+return Number.isFinite(boy) && boy>0 && boy<20000?boy:0;
+}
+
+function pboDosyaTuru(ad){
+let alt=String(ad||"").toLocaleLowerCase("tr-TR");
+if(alt.endsWith(".teo"))return "teo";
+if(alt.endsWith(".lst"))return "lst";
+return "";
+}
+
+async function pboDosyalariOku(dosyalar){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.dosya"))return;
+let bulunan={};
+let sayac=0;
+let hatali=0;
+
+for(let dosya of (dosyalar||[])){
+let tur=pboDosyaTuru(dosya && dosya.name);
+if(!tur)continue;
+if(Number(dosya.size)>4*1024*1024)continue;
+
+let metin="";
+try{metin=await dosya.text();}
+catch(e){hatali++;continue;}
+
+let boy=tur==="teo"?pboTeoBoyu(metin):pboLstBoyu(metin);
+if(!(boy>0)){hatali++;continue;}
+
+let anahtar=pboAnahtar(dosya.name);
+/* Aynı program için .teo varsa .LST onu ezmez. */
+if(bulunan[anahtar] && bulunan[anahtar].kaynak==="teo" && tur==="lst")continue;
+bulunan[anahtar]={mm:Number(boy.toFixed(2)),kaynak:tur,tarih:Date.now(),dosya:String(dosya.name)};
+sayac++;
+}
+
+if(!sayac){
+pboSonBilgi="Seçilen yerde okunabilir .teo / .LST dosyası bulunamadı.";
+if(typeof musImportRender==="function")musImportRender();
+return;
+}
+
+try{await pboKaydet(bulunan);}
+catch(e){
+pboSonBilgi="Parça boyları kaydedilemedi: "+String(e&&e.message||e);
+if(typeof musImportRender==="function")musImportRender();
+return;
+}
+
+pboSonBilgi=sayac+" program dosyası okundu"+(hatali?" ("+hatali+" dosya çözülemedi)":"")+".";
+if(typeof musBildir==="function")musBildir("✓ "+pboSonBilgi,"");
+pboArtanUygula();
+if(typeof musImportRender==="function")musImportRender();
+}
+
+function pboSecildi(event){
+let dosyalar=Array.from((event && event.target && event.target.files)||[]);
+if(event && event.target)event.target.value="";
+pboDosyalariOku(dosyalar);
+}
+
+
+/* ---------- HESAP ---------- */
+
+function pboProgramlar(data){
+return ((data && data.ncPrograms)||[]).map(p=>({
+ad:String(p.program||""),
+rpt:Math.floor(Number(String(p.rpt||"").replace(/[^\d]/g,""))||0),
+boy:pboBoyu(p.program)
+})).filter(p=>p.ad);
+}
+
+/* Dönen durum:
+   {durum:"ok", tamBoy, sonBoyM, artanM}
+   {durum:"eksik", eksikler:[program]}
+   {durum:"uymadi", tahmin, html}
+   {durum:"yok"}  — hesap yapılamıyor */
+function pboArtanHesapla(data){
+if(!data)return {durum:"yok"};
+let ham=Number(data.rawLengthMm);
+if(!Number.isFinite(ham) || ham<=0)return {durum:"yok"};
+
+let programlar=pboProgramlar(data);
+if(!programlar.length || programlar.some(p=>!p.rpt))return {durum:"yok"};
+
+let eksikler=programlar.filter(p=>!p.boy).map(p=>p.ad);
+if(eksikler.length)return {durum:"eksik",eksikler:eksikler};
+
+let tam=0,son=0;
+for(let p of programlar){
+let adim=p.boy+PBO_ARA;
+let n=Math.floor(ham/adim);
+if(n<1)return {durum:"yok"};
+tam+=Math.floor(p.rpt/n);
+son+=(p.rpt%n)*adim;
+}
+
+let tahmin=tam+(son>0.5?1:0);
+let htmlBoy=Math.round(Number(data.tubes)||0);
+if(!htmlBoy || tahmin!==htmlBoy || son>ham)return {durum:"uymadi",tahmin:tahmin,html:htmlBoy};
+
+return {
+durum:"ok",
+tamBoy:tam,
+sonBoyM:Number((son/1000).toFixed(2)),
+artanM:Number(((ham-son)/1000).toFixed(2))
+};
+}
+
+/* Hesap tuttuysa Tam / Parça kutularını bir kez doldurur. */
+function pboArtanUygula(){
+let dosyalar=(typeof jobPlanImportFiles!=="undefined" && Array.isArray(jobPlanImportFiles))?jobPlanImportFiles:[];
+let degisti=false;
+
+dosyalar.forEach(f=>{
+if(f.pboDolduruldu)return;
+let sonuc=pboArtanHesapla(f);
+if(!sonuc || sonuc.durum!=="ok")return;
+if(!(sonuc.sonBoyM>0))return;
+
+f.fullTubes=sonuc.tamBoy;
+f.partialM=sonuc.sonBoyM;
+f.pboDolduruldu=true;
+f.pboArtanM=sonuc.artanM;
+if(typeof jobPlanSyncTubeCount==="function")jobPlanSyncTubeCount(f);
+if(typeof jobPlanPickRemnant==="function")jobPlanPickRemnant(f);
+degisti=true;
+});
+
+if(degisti && typeof jobPlanRenderImportSafe==="function")jobPlanRenderImportSafe();
+return degisti;
+}
+
+
+/* ---------- HTML İÇİNDEKİ KLASÖR İPUCU ----------
+   Üretim paketindeki program bağlantıları program dosyalarının yolunu verir:
+   file:///D:/musteriler/IMMAK_MAKINA/16_EYLUL_2026/P023946_60AD.PDF */
+
+function pboKlasorBul(metin){
+let m=/file:\/\/\/([A-Za-z]:\/[^"'<>]*)\/[^\/"'<>]+\.(pdf|PDF)/.exec(String(metin||""));
+if(!m)return "";
+try{return decodeURIComponent(m[1]).replace(/\//g,"\\");}
+catch(e){return m[1].replace(/\//g,"\\");}
+}
+
+function pboKlasorOku(dosyalar){
+(dosyalar||[]).forEach(dosya=>{
+let ad=String(dosya && dosya.name||"");
+if(!/\.html?$/i.test(ad))return;
+if(Number(dosya.size)>8*1024*1024)return;
+dosya.text().then(metin=>{
+let yol=pboKlasorBul(metin);
+if(yol){
+pboKlasor[ad.toLocaleLowerCase("tr-TR")]=yol;
+if(typeof musImportRender==="function")musImportRender();
+}
+}).catch(()=>{});
+});
+}
+
+/* HTML seçildiği anda (uygulamanın kendi okuyucusundan önce) yolu yakala. */
+document.addEventListener("change",function(e){
+try{
+if(e && e.target && e.target.id==="jobPlanFiles")pboKlasorOku(Array.from(e.target.files||[]));
+}catch(err){}
+},true);
+
+
+/* ---------- ARAYÜZ ---------- */
+
+function pboMetre(mm){
+let n=Number(mm);
+if(!Number.isFinite(n))return "—";
+return n.toFixed(2).replace(".",",")+" m";
+}
+
+function pboKutuHtml(){
+if(typeof musYetki==="function" && !musYetki("isplani.dosya"))return "";
+let dosyalar=(typeof jobPlanImportFiles!=="undefined" && Array.isArray(jobPlanImportFiles))?jobPlanImportFiles:[];
+let secili=dosyalar.filter(f=>f.include);
+if(!secili.length)return "";
+if(!pboYuklendi)pboArkaYukle();
+
+let klasorler=[];
+secili.forEach(f=>{
+let yol=pboKlasor[String(f.fileName||"").toLocaleLowerCase("tr-TR")];
+if(yol && klasorler.indexOf(yol)<0)klasorler.push(yol);
+});
+
+let satirlar=secili.map(f=>{
+let sonuc=pboArtanHesapla(f);
+let ad=musEsc(f.fileName||"");
+let durum,sinif;
+
+if(sonuc.durum==="ok"){
+sinif="ok";
+durum=sonuc.tamBoy+" tam boy + "+pboMetre(sonuc.sonBoyM)+" son boydan · artan "+
+'<b>'+pboMetre(sonuc.artanM)+'</b> · '+(f.pboDolduruldu?"kutulara yazıldı":"hazır");
+}
+else if(sonuc.durum==="eksik"){
+sinif="eksik";
+durum="parça boyu bilinmiyor: "+musEsc(sonuc.eksikler.join(", "));
+}
+else if(sonuc.durum==="uymadi"){
+sinif="uymadi";
+durum="hesap HTML ile tutmadı ("+sonuc.tahmin+" boy ≠ "+sonuc.html+" boy) · programlar aynı boyda karışmış, artanı elle gir";
+}
+else{
+sinif="yok";
+durum="hesaplanamadı · artanı elle gir";
+}
+
+return '<div class="pbo-row '+sinif+'"><b>'+ad+'</b><span>'+durum+'</span></div>';
+}).join("");
+
+return '<div class="pbo-box">'+
+'<div class="pbo-title">'+
+'<span>◇ Parça boyu ve artan</span>'+
+'<button type="button" class="mus-link" onclick="document.getElementById(\'pboKlasorInput\').click()">Program klasörü seç</button>'+
+'<button type="button" class="mus-link" onclick="document.getElementById(\'pboDosyaInput\').click()">Dosya seç</button>'+
+'</div>'+
+satirlar+
+(klasorler.length?'<div class="pbo-note">Program dosyaları: <code>'+musEsc(klasorler.join(" · "))+'</code></div>':'')+
+(pboSonBilgi?'<div class="pbo-note">'+musEsc(pboSonBilgi)+'</div>':'')+
+'<div class="pbo-note">Parça boyu <code>.teo</code> / <code>.LST</code> dosyalarından okunur ve program adıyla saklanır; aynı program tekrar geldiğinde dosya seçmeye gerek kalmaz.</div>'+
+'</div>';
+}
 
 
 /* =====================================================

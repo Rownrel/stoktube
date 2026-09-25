@@ -16680,18 +16680,34 @@ return null;
 /* Trumpf profil kodu: 1_400X400X60_1_40 -> 40x40 / 4 mm (1/10 mm) */
 function jobPlanParseTubeProfile(code){
 let raw=String(code||"").toUpperCase().replace(/\s+/g,"");
-let rect=raw.match(/^(\d+)_(\d+)X(\d+)X(\d+)_(\d+)_(\d+)$/);
+/* Kodun başındaki grup profilin cinsini veriyor:
+     1_200X200X30_1_15   → kutu profil (kare/dikdörtgen)
+     L_500X500X41_1_40   → köşebent, 50x50, et 4 mm
+   Ölçüler onda bir mm; ilk iki grup kenarlar, son grup et kalınlığı. */
+let rect=raw.match(/^([A-Z]*\d*)_(\d+)X(\d+)X(\d+)_(\d+)_(\d+)$/);
 if(rect){
+let on=rect[1];
 let a=Number(rect[2])/10;
 let b=Number(rect[3])/10;
 let t=Number(rect[6])/10;
 if(a>0 && b>0 && t>0){
+if(on==="L"){
+if(a<b){let gecici=a;a=b;b=gecici;}
+return {
+type:"Köşebent",
+shape:"Köşebent",
+sizeText:Number(a.toFixed(2))+"x"+Number(b.toFixed(2)),
+thickness:Number(t.toFixed(2))
+};
+}
+if(/^\d+$/.test(on)){
 return {
 type:"Profil",
 shape:a===b?"Kare":"Dikdörtgen",
 sizeText:Number(a.toFixed(2))+"x"+Number(b.toFixed(2)),
 thickness:Number(t.toFixed(2))
 };
+}
 }
 }
 let round=raw.match(/^(\d+)_(\d+)_(\d+)_(\d+)$/);
@@ -16830,7 +16846,10 @@ let wantSize=normalizeText(size.sizeText);
 let wantThickness=Number(size.thickness);
 let wantLength=jobPlanRawLengthM(rawLengthMm);
 
+let wantType=String(size.type||"");
+
 return products.filter(p=>{
+if(wantType && String(p.type||"")!==wantType)return false;
 if(normalizeText(p.size)!==wantSize)return false;
 let t=parseFloat(String(p.thickness||"").replace(",","."));
 if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
@@ -21454,6 +21473,7 @@ let claimedSet=claimed&&claimed[String(p.id)] instanceof Set?claimed[String(p.id
 if(jobPlanRemnantAvailableUnits(p,file.partialReservationId,claimedSet)<1)return false;
 
 if(base){
+if(String(p.type||"")!==String(base.type||""))return false;
 if(normalizeQuality(p.quality)!==normalizeQuality(base.quality))return false;
 if(getProductFinish(p)!==getProductFinish(base))return false;
 if(p.type==="Boru" && getProductPipeSeam(p)!==getProductPipeSeam(base))return false;
@@ -25312,7 +25332,7 @@ return {konu:konu,metin:duz,html:musMailHtml(sablon,konu,metin,imza,vars)};
 function musHataAciklama(status,text){
 let ozet=String(text||"").replace(/\s+/g," ").trim().slice(0,220);
 if(status===401 || status===403){
-return "Yetki hatası ("+status+"). Supabase'de fonksiyonun ayarlarında \"Verify JWT\" kapalı olmalı. "+ozet;
+return "Yetki hatası ("+status+"). Mail göndermek için sisteme giriş yapmış olmak gerekiyor — çıkıp yeniden girin. "+ozet;
 }
 if(status===404)return "Fonksiyon bulunamadı (404). Ayarlar'daki fonksiyon adını kontrol edin. "+ozet;
 return "Fonksiyon hata verdi ("+status+"). "+ozet;

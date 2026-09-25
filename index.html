@@ -8432,12 +8432,16 @@ headers:{
 }
 );
 let text=await response.text();
-if(!response.ok)throw new Error("Bulut veri okuma hatası: "+response.status+" "+text);
+if(!response.ok){
+if(typeof sbaErisimHatasi==="function")sbaErisimHatasi(response.status);
+throw new Error("Bulut veri okuma hatası: "+response.status+" "+text);
+}
 let rows=text?JSON.parse(text):[];
 return Array.isArray(rows)&&rows.length?rows[0].value:null;
 }
 
 async function cloudStateSet(key,value){
+if(typeof sbaYazmaKontrol==="function")sbaYazmaKontrol();
 let response=await fetch(
 SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?on_conflict=key",
 {
@@ -8452,7 +8456,10 @@ body:JSON.stringify({key:key,value:value,updated_at:new Date().toISOString()})
 }
 );
 let text=await response.text();
-if(!response.ok)throw new Error("Bulut veri kaydetme hatası: "+response.status+" "+text);
+if(!response.ok){
+if(typeof sbaErisimHatasi==="function")sbaErisimHatasi(response.status);
+throw new Error("Bulut veri kaydetme hatası: "+response.status+" "+text);
+}
 }
 
 function getLocalJson(storageKey,fallback){
@@ -10678,6 +10685,8 @@ data=null,
 query=""
 ){
 
+if(method!=="GET" && typeof sbaYazmaKontrol==="function")sbaYazmaKontrol();
+
 let options={
 method:method,
 headers:{
@@ -10703,6 +10712,8 @@ options
 let text=await response.text();
 
 if(!response.ok){
+
+if(typeof sbaErisimHatasi==="function")sbaErisimHatasi(response.status);
 
 console.error(
 "Supabase hatası:",
@@ -16127,6 +16138,7 @@ String(local.version)===String(config.rememberVersion||"")
 }
 
 function unlockPageAfterLogin(){
+if(typeof sbaKapiAc==="function")sbaKapiAc();
 document.body.classList.remove("page-locked");
 let gate=document.getElementById("pageLoginGate");
 if(gate)gate.style.display="none";
@@ -20442,6 +20454,10 @@ if(!active.length)return false;
 let remembered=systemRememberRecord();
 if(remembered){
 let user=active.find(u=>u.id===remembered.userId);
+if(user && typeof sbaHatirlamaGecerli==="function" && !sbaHatirlamaGecerli(user)){
+/* Supabase hesabı var ama jeton yok: ekran açılsa da veri gelmez. */
+user=null;
+}
 if(user && String(user.updatedAt||"")===String(remembered.stamp||"")){
 systemSetCurrentUser(user);
 unlockPageAfterLogin();
@@ -21296,7 +21312,10 @@ jobPlanSaveSettings();
 }
 
 function jobPlanClampM(){
-let n=Number(jobPlanSettings && jobPlanSettings.clampM);
+/* Ayarlar henüz yüklenmediyse varsayılan pay kullanılır; 0 yalnızca
+   kullanıcı bilerek 0 yazdıysa geçerlidir. */
+if(!jobPlanSettings)return JOB_PLAN_CLAMP_DEFAULT;
+let n=Number(jobPlanSettings.clampM);
 return Number.isFinite(n) && n>=0?n:JOB_PLAN_CLAMP_DEFAULT;
 }
 
@@ -27424,6 +27443,71 @@ catch(e){console.warn("Kullanıcı kaydı tazelenemedi:",e&&e.message||e);}
 return user;
 }
 
+/* ---------- BULUT HAZIR KAPISI ----------
+   Aşama B'den sonra jetonsuz istek reddedilir. Uygulama açılışta —daha kimse
+   giriş yapmadan— bulutu okuyup yazıyordu (bakım/sarf ilk kurulumu, stok, plan).
+   Bu kapı o işleri giriş tamamlanana kadar bekletir. Kullanıcı girişi kapalıysa
+   kapı giriş kapısı kalkar kalkmaz açılır, yani eski davranış korunur. */
+
+let sbaKapiCoz=null;
+let sbaKapiAcik=false;
+const sbaKapi=new Promise(function(coz){sbaKapiCoz=coz;});
+
+function sbaKapiAc(){
+if(sbaKapiAcik)return;
+sbaKapiAcik=true;
+/* Hatırlanan oturumun jetonu yenileniyor olabilir; önce onu bekle. */
+let devam=sbaYenilemeSozu
+?Promise.resolve(sbaYenilemeSozu).catch(function(){return null;})
+:Promise.resolve();
+devam.then(function(){
+if(sbaKapiCoz){sbaKapiCoz();sbaKapiCoz=null;}
+});
+}
+
+function sbaBekle(){return sbaKapi;}
+
+/* Hatırlanan oturum Supabase jetonu olmadan işe yaramaz: hesabı olan kullanıcı
+   jetonsuz devam ederse ekran açılır ama veri gelmez. Öyleyse şifre sorulur. */
+function sbaHatirlamaGecerli(user){
+if(!user || !user.authEmail)return true;
+return sbaOturumAcikMi();
+}
+
+/* ---------- YETKİ KESİLİNCE YAZMAYI DURDUR ----------
+   25 Eylül'de yaşanan kayıp buradan çıktı: yetki kesilince okumalar boş döndü,
+   uygulamanın hafızası boşaldı; yetki geri gelince o boş hâli gerçek verinin
+   üstüne kaydetti. Bir kez 401/403 görüldüğünde yazma kalıcı olarak kapatılır
+   ve sayfa yenilenene kadar açılmaz. */
+
+let sbaErisimKapali=false;
+
+function sbaErisimHatasi(durum){
+if(durum!==401 && durum!==403)return;
+if(sbaErisimKapali)return;
+sbaErisimKapali=true;
+try{sbaUyariGoster();}catch(e){}
+}
+
+function sbaYazmaKapaliMi(){return sbaErisimKapali;}
+
+function sbaYazmaKontrol(){
+if(!sbaErisimKapali)return;
+throw new Error("Bulut yetkisi kesildi. Veri kaybını önlemek için kaydetme durduruldu — sayfayı yenileyip (Ctrl+F5) yeniden giriş yapın.");
+}
+
+function sbaUyariGoster(){
+if(typeof document==="undefined" || !document.body)return;
+if(document.getElementById("sbaUyariSerit"))return;
+let serit=document.createElement("div");
+serit.id="sbaUyariSerit";
+serit.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#b91c1c;"+
+"color:#fff;font:bold 14px Arial,sans-serif;padding:11px 16px;text-align:center;"+
+"box-shadow:0 2px 10px rgba(0,0,0,.4)";
+serit.textContent="⚠ Bulut yetkisi kesildi. Veri kaybını önlemek için kaydetme durduruldu. Sayfayı yenileyip (Ctrl+F5) yeniden giriş yapın.";
+document.body.appendChild(serit);
+}
+
 
 /* =====================================================
    BAŞLANGIÇ
@@ -27437,12 +27521,16 @@ initReliableAddonButtons();
 initMaintenancePasswordDownloadUi();
 initSettingsUi();
 
+/* Bulut işleri giriş tamamlanmadan başlamaz: yetkisiz istek hem hata verir
+   hem de boş okunan veriyi geri yazma riski doğurur. */
+sbaBekle().then(function(){
 (async()=>{
 await resetAddonCloudDataOnce();
 await Promise.all([loadConsumables(),loadMaintenanceRecords()]);
 })().catch(console.error);
-setInterval(updateMaintenanceBadge,60*60*1000);
 loadPriceState();
+});
+setInterval(updateMaintenanceBadge,60*60*1000);
 
 fillSizeOptions();
 updateProductReservationVisibility();
@@ -27451,11 +27539,12 @@ changePage("Genel");
 
 /* Stoklar ve ayırma kayıtları buluttan gelmeden iş planı senkronu çalışmamalı;
    yoksa her sayfa yenilemesinde ayırma kayıtları kopyalanır. */
-Promise.all([
+sbaBekle()
+.then(()=>Promise.all([
 loadData(),
 loadUsageSelections(),
 loadStandardReservations()
-])
+]))
 .then(()=>{
 jobPlanStockReady=true;
 showProducts();

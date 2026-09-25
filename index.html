@@ -7555,6 +7555,13 @@ placeholder="Örn: Ahmet Yılmaz">
 </div>
 
 <div class="form-group">
+<label>Supabase maili</label>
+<input id="systemUserAuthEmail" type="text" inputmode="none"
+data-keypad="text" data-native-inputmode="text" data-keypad-label="Supabase maili"
+autocomplete="off" placeholder="orn: harun@dograr.local">
+</div>
+
+<div class="form-group">
 <label id="systemUserPasswordLabel">Şifre</label>
 <input id="systemUserPassword" type="password" inputmode="none"
 data-keypad="text" data-native-inputmode="text" data-keypad-label="Kullanıcı şifresi"
@@ -8419,7 +8426,7 @@ SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?select=value&key=eq."+encodeURICompone
 {
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY),
 "Accept":"application/json"
 }
 }
@@ -8437,7 +8444,7 @@ SUPABASE_URL+"/rest/v1/"+APP_DATA_TABLE+"?on_conflict=key",
 method:"POST",
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY),
 "Content-Type":"application/json",
 "Prefer":"resolution=merge-duplicates,return=minimal"
 },
@@ -8542,7 +8549,7 @@ SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET+"/"+encodeStoragePath(path
 method:"POST",
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY),
 "Content-Type":"application/pdf",
 "x-upsert":"true"
 },
@@ -8560,7 +8567,7 @@ SUPABASE_URL+"/storage/v1/object/authenticated/"+MAINTENANCE_BUCKET+"/"+encodeSt
 {
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY)
 }
 }
 );
@@ -8580,7 +8587,7 @@ SUPABASE_URL+"/storage/v1/object/"+MAINTENANCE_BUCKET,
 method:"DELETE",
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY),
 "Content-Type":"application/json"
 },
 body:JSON.stringify({prefixes:[path]})
@@ -10675,7 +10682,7 @@ let options={
 method:method,
 headers:{
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY,
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY),
 "Content-Type":"application/json",
 "Prefer":"return=representation"
 }
@@ -19640,8 +19647,19 @@ if(value && typeof value==="object" && Array.isArray(value.users)){
 systemData=value;
 if(!systemData.roles)systemData.roles=systemDefaultRoles();
 systemRolAdiGuncelle(systemData);
+systemData.kisaListe=false;
 }else{
 systemData=systemEmptyData();
+/* Tam liste okunamadı. Giriş yapılmamışsa bu normaldir (Aşama B):
+   giriş ekranı için şifresiz kısa listeye düşülür. */
+if(typeof sbaGirisListesiOku==="function"){
+let kisa=await sbaGirisListesiOku();
+if(kisa && kisa.length){
+systemData.users=kisa;
+systemData.loginEnabled=true;
+systemData.kisaListe=true;
+}
+}
 }
 systemDataLoaded=true;
 return systemData;
@@ -19651,6 +19669,12 @@ async function saveSystemData(){
 if(!systemData)systemData=systemEmptyData();
 systemData.updatedAt=new Date().toISOString();
 await cloudStateSet(CLOUD_KEY_SYSTEM_USERS,systemData);
+
+/* Giriş ekranının okuyabileceği şifresiz liste. */
+if(typeof sbaGirisListesiYaz==="function"){
+try{await sbaGirisListesiYaz(systemData);}
+catch(e){console.warn("Giriş listesi yazılamadı:",e);}
+}
 }
 
 /* ---------- KİM YAPTI ----------
@@ -19938,6 +19962,9 @@ if(label)label.textContent="Şifre";
 let name=document.getElementById("systemUserName");
 if(name)name.value="";
 
+let eposta=document.getElementById("systemUserAuthEmail");
+if(eposta)eposta.value="";
+
 ["systemUserPassword","systemUserPasswordRepeat"].forEach(id=>{
 let el=document.getElementById(id);
 if(el){el.value="";el.placeholder="En az 4 karakter";}
@@ -19965,6 +19992,9 @@ if(label)label.textContent="Yeni Şifre (boş bırakırsan değişmez)";
 let name=document.getElementById("systemUserName");
 if(name)name.value=user.name||"";
 
+let eposta=document.getElementById("systemUserAuthEmail");
+if(eposta)eposta.value=user.authEmail||"";
+
 ["systemUserPassword","systemUserPasswordRepeat"].forEach(id=>{
 let el=document.getElementById(id);
 if(el){el.value="";el.placeholder="Değiştirmek istemiyorsan boş bırak";}
@@ -19980,6 +20010,12 @@ let name=String(document.getElementById("systemUserName")?.value||"").trim();
 let role=String(document.getElementById("systemUserRole")?.value||"operator");
 let password=String(document.getElementById("systemUserPassword")?.value||"");
 let repeat=String(document.getElementById("systemUserPasswordRepeat")?.value||"");
+let authEmail=String(document.getElementById("systemUserAuthEmail")?.value||"").trim().toLowerCase();
+
+if(authEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(authEmail)){
+systemSetMessage("systemUserMessage","Supabase maili geçerli bir adres olmalı (orn: harun@dograr.local).","error");
+return;
+}
 
 if(name.length<2){
 systemSetMessage("systemUserMessage","Ad Soyad en az 2 karakter olmalı.","error");
@@ -20027,6 +20063,7 @@ return;
 }
 target.name=name;
 target.role=role;
+target.authEmail=authEmail;
 if(password)Object.assign(target,await systemMakeCredential(password));
 target.updatedAt=new Date().toISOString();
 }else{
@@ -20035,6 +20072,7 @@ list.push({
 id:"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
 name:name,
 role:role,
+authEmail:authEmail,
 active:true,
 perms:{},
 salt:credential.salt,
@@ -20227,6 +20265,7 @@ if(roleEl)roleEl.textContent=user.master?"Sistem":systemRoleName(user.role);
 
 function systemLogout(){
 if(!confirm("Oturumu kapatıp giriş ekranına dönülsün mü?"))return;
+if(typeof sbaCikis==="function"){try{sbaCikis();}catch(e){}}
 systemClearRemember();
 clearPageLoginRemember();
 location.reload();
@@ -20316,6 +20355,16 @@ if(!user){if(error)error.textContent="Kullanıcı bulunamadı.";return;}
 
 try{
 if(button){button.disabled=true;button.textContent="Kontrol ediliyor...";}
+
+/* Önce Supabase hesabı denenir. Tutarsa jeton alınır ve tam kayıt okunur. */
+if(typeof sbaKullaniciGirisi==="function"){
+let sbaUser=await sbaKullaniciGirisi(user,password);
+if(sbaUser){
+let hatirla=document.getElementById("pageLoginUserRemember")?.checked;
+systemFinishLogin(sbaUser,hatirla);
+return;
+}
+}
 
 let valid=await systemCheckCredential(password,user);
 
@@ -25257,7 +25306,7 @@ method:"POST",
 headers:{
 "Content-Type":"application/json",
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer "+SUPABASE_KEY
+"Authorization":"Bearer "+(typeof sbaYetki==="function"?sbaYetki():SUPABASE_KEY)
 },
 body:JSON.stringify(govde),
 signal:kontrol?kontrol.signal:undefined
@@ -27173,8 +27222,214 @@ satirlar+
 
 
 /* =====================================================
+   SUPABASE AUTH — AŞAMA A
+   Giriş doğrulaması uygulamadan Supabase'e taşınır.
+
+   Aşama A (bu dosya): kullanıcının Supabase hesabı varsa giriş onunla yapılır,
+   alınan jeton bütün isteklerde publishable anahtarın yerine kullanılır.
+   Hesabı olmayan ya da eski şifresini yazan kullanıcı eski yöntemle girer —
+   yani bu aşamada hiçbir şey kırılmaz.
+
+   Aşama B (Supabase tarafında): politikalar `anon` yerine `authenticated`
+   rolüne verilir. O anda jetonsuz istek çalışmaz; giriş ekranının kullanıcı
+   listesini okuyabilmesi için kısaltılmış liste ayrı bir anahtarda tutulur
+   (login_list_v1) ve yalnızca o anahtar anonime açık bırakılır.
+===================================================== */
+
+const SBA_OTURUM_ANAHTARI="dgr_sb_oturum_v1";
+const SBA_LISTE_ANAHTARI="login_list_v1";
+
+let sbaOturum=null;
+let sbaYenilemeSozu=null;
+let sbaZamanlayici=null;
+
+/* ---------- OTURUM SAKLAMA ---------- */
+
+function sbaOturumOku(){
+try{
+let ham=localStorage.getItem(SBA_OTURUM_ANAHTARI);
+if(!ham)return null;
+let o=JSON.parse(ham);
+if(o && o.access_token && o.refresh_token)return o;
+}catch(e){}
+return null;
+}
+
+function sbaOturumYaz(o){
+sbaOturum=o||null;
+try{
+if(o)localStorage.setItem(SBA_OTURUM_ANAHTARI,JSON.stringify(o));
+else localStorage.removeItem(SBA_OTURUM_ANAHTARI);
+}catch(e){}
+sbaZamanlayiciKur();
+}
+
+function sbaGecerliMi(pay){
+if(!sbaOturum || !sbaOturum.access_token)return false;
+return (Number(sbaOturum.expires_at)||0)-(Number(pay)||0) > Date.now();
+}
+
+/* İstek başlıkları senkron kurulduğu için bu da senkron olmak zorunda.
+   Jeton yoksa publishable anahtara düşer; yenileme arka planda tetiklenir. */
+function sbaYetki(){
+if(sbaGecerliMi(30000))return sbaOturum.access_token;
+if(sbaOturum && sbaOturum.refresh_token)sbaYenile();
+return SUPABASE_KEY;
+}
+
+function sbaOturumAcikMi(){
+return !!(sbaOturum && sbaOturum.access_token);
+}
+
+/* ---------- SUPABASE AUTH ÇAĞRILARI ---------- */
+
+async function sbaIstek(yol,govde){
+let cevap=await fetch(SUPABASE_URL+"/auth/v1/"+yol,{
+method:"POST",
+headers:{"apikey":SUPABASE_KEY,"Content-Type":"application/json"},
+body:JSON.stringify(govde||{})
+});
+let metin=await cevap.text();
+let veri={};
+try{veri=metin?JSON.parse(metin):{};}catch(e){}
+if(!cevap.ok){
+let mesaj=veri.error_description||veri.msg||veri.message||veri.error||("HTTP "+cevap.status);
+let hata=new Error(String(mesaj));
+hata.durum=cevap.status;
+throw hata;
+}
+return veri;
+}
+
+function sbaOturumKur(veri,eposta){
+if(!veri || !veri.access_token)return null;
+let sure=Number(veri.expires_in)||3600;
+let o={
+access_token:veri.access_token,
+refresh_token:veri.refresh_token||"",
+expires_at:Date.now()+sure*1000,
+eposta:eposta||(veri.user&&veri.user.email)||""
+};
+sbaOturumYaz(o);
+return o;
+}
+
+async function sbaGiris(eposta,sifre){
+let veri=await sbaIstek("token?grant_type=password",{email:eposta,password:sifre});
+return sbaOturumKur(veri,eposta);
+}
+
+function sbaYenile(){
+if(sbaYenilemeSozu)return sbaYenilemeSozu;
+if(!sbaOturum || !sbaOturum.refresh_token)return Promise.resolve(null);
+let eposta=sbaOturum.eposta;
+sbaYenilemeSozu=sbaIstek("token?grant_type=refresh_token",{refresh_token:sbaOturum.refresh_token})
+.then(v=>sbaOturumKur(v,eposta))
+.catch(e=>{
+console.warn("Oturum yenilenemedi:",e&&e.message||e);
+/* Yenileme jetonu geçersizse oturumu bırak; kullanıcı yeniden girer. */
+if(e && (e.durum===400 || e.durum===401))sbaOturumYaz(null);
+return null;
+});
+let biten=sbaYenilemeSozu.then(v=>{sbaYenilemeSozu=null;return v;},e=>{sbaYenilemeSozu=null;throw e;});
+sbaYenilemeSozu=biten;
+return biten;
+}
+
+function sbaZamanlayiciKur(){
+if(sbaZamanlayici){clearTimeout(sbaZamanlayici);sbaZamanlayici=null;}
+if(!sbaOturum || !sbaOturum.refresh_token)return;
+let kalan=(Number(sbaOturum.expires_at)||0)-Date.now()-120000;
+if(!(kalan>5000))kalan=5000;
+if(kalan>1800000)kalan=1800000;
+try{sbaZamanlayici=setTimeout(function(){sbaYenile();},kalan);}catch(e){}
+}
+
+async function sbaCikis(){
+let o=sbaOturum;
+sbaOturumYaz(null);
+if(o && o.access_token){
+try{
+await fetch(SUPABASE_URL+"/auth/v1/logout",{
+method:"POST",
+headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+o.access_token}
+});
+}catch(e){}
+}
+}
+
+/* Açılışta kayıtlı oturumu devral. */
+function sbaBaslat(){
+sbaOturum=sbaOturumOku();
+if(!sbaOturum)return;
+if(sbaGecerliMi(120000))sbaZamanlayiciKur();
+else sbaYenile();
+}
+
+/* ---------- GİRİŞ EKRANI LİSTESİ ----------
+   Aşama B'den sonra system_users_v1 anonime kapanacağı için giriş ekranı
+   kullanıcı listesini göremez. Bu yüzden her kayıtta şifre içermeyen
+   kısaltılmış bir liste ayrı anahtara yazılır ve yalnızca o anahtar
+   anonim okumaya açık bırakılır. */
+
+function sbaListeKaydi(u){
+return {
+id:u.id,
+name:u.name,
+role:u.role,
+active:u.active!==false,
+authEmail:String(u.authEmail||""),
+updatedAt:u.updatedAt||""
+};
+}
+
+async function sbaGirisListesiYaz(data){
+let users=((data&&data.users)||[]).map(sbaListeKaydi);
+await cloudStateSet(SBA_LISTE_ANAHTARI,{users:users,at:new Date().toISOString()});
+}
+
+async function sbaGirisListesiOku(){
+try{
+let v=await cloudStateGet(SBA_LISTE_ANAHTARI);
+if(v && Array.isArray(v.users) && v.users.length)return v.users;
+}catch(e){}
+return null;
+}
+
+/* ---------- GİRİŞ ----------
+   Dönen: tam kullanıcı kaydı (Supabase girişi başarılı) ya da null (eski yola düş). */
+
+async function sbaKullaniciGirisi(user,sifre){
+let eposta=String((user&&user.authEmail)||"").trim();
+if(!eposta)return null;
+
+try{
+let o=await sbaGiris(eposta,sifre);
+if(!o)return null;
+}
+catch(e){
+/* 400 = şifre yanlış ya da hesap yok → eski doğrulamaya düşülür. */
+if(e && (e.durum===400 || e.durum===401 || e.durum===403))return null;
+throw e;
+}
+
+/* Giriş yapıldı; tam kayıt (yetkiler dahil) artık okunabilir. */
+try{
+let taze=await loadSystemData(true);
+let tam=((taze&&taze.users)||[]).find(u=>String(u.id)===String(user.id));
+if(tam)return tam;
+}
+catch(e){console.warn("Kullanıcı kaydı tazelenemedi:",e&&e.message||e);}
+
+return user;
+}
+
+
+/* =====================================================
    BAŞLANGIÇ
 ===================================================== */
+
+if(typeof sbaBaslat==="function"){try{sbaBaslat();}catch(e){console.warn("Oturum:",e);}}
 
 initPageLoginGate();
 initNumericKeypad();

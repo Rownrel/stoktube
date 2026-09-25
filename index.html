@@ -2663,7 +2663,7 @@ font-weight:bold
 width:58px
 }
 
-#jobPlanScrapLimit{
+#jobPlanScrapLimit,#jobPlanClampM{
 width:62px
 }
 
@@ -7241,7 +7241,7 @@ placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <button type="button" class="btn-orange" data-perm="isplani.dosya" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
 <button type="button" class="btn-blue" onclick="jobPlanRefreshAll()">🔄 Planı Yenile</button>
 <button type="button" class="btn-green" data-perm="isplani.dosya" onclick="exportJobPlan()">📊 Excel'e Aktar</button>
-<input type="file" id="jobPlanFiles" accept=".html,.htm" multiple style="display:none" onchange="jobPlanReadFiles(event)">
+<input type="file" id="jobPlanFiles" accept=".html,.htm,.svg" multiple style="display:none" onchange="jobPlanReadFiles(event)">
 </div>
 </div>
 
@@ -7288,6 +7288,13 @@ data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Hurda s
 onchange="jobPlanSetScrapLimit(this.value)">
 <span>m</span>
 </label>
+<label class="jobplan-switch" title="Tezgâh boyun ucundan bu kadarını aynada tutar, o kısım kesilemez. Stoktan parça ayrılırken kesilecek metrenin üstüne bu pay eklenir.">
+<span>Tutma payı</span>
+<input id="jobPlanClampM" class="jobplan-num" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Tutma payı (m)"
+onchange="jobPlanSetClampM(this.value)">
+<span>m</span>
+</label>
 <label class="jobplan-switch" title="İş bitince artan boy için stok kartı açılmadan önce onay penceresi gösterilir.">
 <input type="checkbox" id="jobPlanAskRemnant" onchange="jobPlanSetAskRemnant(this.checked)">
 <span>✋ Artan için onay iste</span>
@@ -7296,7 +7303,7 @@ onchange="jobPlanSetScrapLimit(this.value)">
 <input type="checkbox" id="jobPlanStartBrief" onchange="jobPlanSetStartBrief(this.checked)">
 <span>▶ Başlarken malzeme bilgisi</span>
 </label>
-<span class="jobplan-sub">Artan bu değerin üstündeyse yeni parça stok kartı açılır.</span>
+<span class="jobplan-sub">Artan bu değerin üstündeyse yeni parça stok kartı açılır. Tutma payı tezgâhın kesemediği uç kısmıdır: 2 m kesilecekse stoktan en az 2,13 m'lik parça ayrılır.</span>
 </div>
 
 <div class="jobplan-hours" id="jobPlanHoursInfo"></div>
@@ -8244,7 +8251,7 @@ data-keypad="integer" data-native-inputmode="numeric" data-keypad-label="Başlan
 
 <!-- PROGRAM DOSYALARI (parça boyu) -->
 <input type="file" id="pboKlasorInput" multiple webkitdirectory directory style="display:none" onchange="pboSecildi(event)">
-<input type="file" id="pboDosyaInput" multiple accept=".teo,.TEO,.lst,.LST" style="display:none" onchange="pboSecildi(event)">
+<input type="file" id="pboDosyaInput" multiple accept=".svg,.SVG,.teo,.TEO,.lst,.LST" style="display:none" onchange="pboSecildi(event)">
 
 <div class="mus-toasts" id="musToasts" aria-live="polite"></div>
 
@@ -16277,6 +16284,10 @@ nightEnabled:false,
 /* Kesimden artan bu uzunluğun altındaysa hurdadır, parça kartı açılmaz. */
 scrapLimitM:1.5,
 
+/* Tezgâh boyun ucundan bu kadarını tutar, o kısım kesilemez.
+   Stoktan parça ayrılırken kesilecek metrenin üstüne bu pay eklenir. */
+clampM:0.125,
+
 /* İş bitince artan boy için stok kartı açılmadan önce onay penceresi çıksın. */
 askRemnant:true,
 
@@ -16336,6 +16347,11 @@ let legacyShort=(value.shortDays && typeof value.shortDays==="object")?value.sho
 if(value.scrapLimitM!==undefined && value.scrapLimitM!==null && value.scrapLimitM!==""){
 let scrap=Number(String(value.scrapLimitM).replace(",","."));
 if(Number.isFinite(scrap) && scrap>=0 && scrap<=6)base.scrapLimitM=Number(scrap.toFixed(2));
+}
+
+if(value.clampM!==undefined && value.clampM!==null && value.clampM!==""){
+let pay=Number(String(value.clampM).replace(",","."));
+if(Number.isFinite(pay) && pay>=0 && pay<=1)base.clampM=Number(pay.toFixed(3));
 }
 
 base.askRemnant=value.askRemnant===undefined?true:value.askRemnant!==false;
@@ -17583,6 +17599,11 @@ if(scrapBox && document.activeElement!==scrapBox){
 scrapBox.value=String(jobPlanScrapLimit()).replace(".",",");
 }
 
+let clampBox=document.getElementById("jobPlanClampM");
+if(clampBox && document.activeElement!==clampBox){
+clampBox.value=String(jobPlanClampM()).replace(".",",");
+}
+
 let askBox=document.getElementById("jobPlanAskRemnant");
 if(askBox)askBox.checked=jobPlanAskRemnantEnabled();
 
@@ -17632,7 +17653,7 @@ info.innerHTML=lines.join("<br>");
 
 async function jobPlanReadFiles(event){
 if(!jobPlanGuard("isplani.dosya"))return;
-let files=Array.from(event.target.files||[]);
+let files=Array.from(event.target.files||[]).filter(f=>!/\.svg$/i.test(String(f.name||"")));
 event.target.value="";
 if(!files.length)return;
 
@@ -21194,6 +21215,10 @@ const JOB_PLAN_REMNANT_STEP=0.05;
 /* Bu uzunluğun altındaki artık hurdadır, kart açılmaz. */
 const JOB_PLAN_SCRAP_DEFAULT=1.5;
 
+/* Tezgâhın tutma payı: boyun ucundan bu kadarı aynaya girer, kesilemez.
+   TruTops yerleşim çiziminde de her boyun ucunda 120 mm'lik kara alan olarak görünür. */
+const JOB_PLAN_CLAMP_DEFAULT=0.125;
+
 function jobPlanScrapLimit(){
 let n=Number(jobPlanSettings && jobPlanSettings.scrapLimitM);
 return Number.isFinite(n) && n>0?n:JOB_PLAN_SCRAP_DEFAULT;
@@ -21207,6 +21232,29 @@ if(n>6)n=6;
 jobPlanSettings.scrapLimitM=Number(n.toFixed(2));
 jobPlanRenderSettings();
 jobPlanSaveSettings();
+}
+
+function jobPlanClampM(){
+let n=Number(jobPlanSettings && jobPlanSettings.clampM);
+return Number.isFinite(n) && n>=0?n:JOB_PLAN_CLAMP_DEFAULT;
+}
+
+function jobPlanSetClampM(value){
+if(!jobPlanGuard("isplani.vardiya"))return;
+let n=Number(String(value||"").replace(",","."));
+if(!Number.isFinite(n) || n<0)n=JOB_PLAN_CLAMP_DEFAULT;
+if(n>1)n=1;
+jobPlanSettings.clampM=Number(n.toFixed(3));
+jobPlanRenderSettings();
+jobPlanSaveSettings();
+}
+
+/* Stoktan parça ayırırken aranan asgari boy: kesilecek metre + tutma payı.
+   2 m kesilecekse 2,10 m'lik parça yetmez; en az 2,125 m gerekir. */
+function jobPlanRemnantNeedM(need){
+let n=Number(need)||0;
+if(!(n>0))return 0;
+return Number((n+jobPlanClampM()).toFixed(3));
 }
 
 /* Aşağı yuvarlama: olmayan malzeme var gösterilmez. */
@@ -21288,6 +21336,9 @@ if(!file || !file.size)return [];
 let need=Number(neededM)||0;
 if(need<=0)return [];
 
+/* Tezgâh boyun ucundan bir miktarını tutar; parça o kadar uzun olmalı. */
+let gerekli=jobPlanRemnantNeedM(need);
+
 let rawM=jobPlanRawLengthM(file.rawLengthMm);
 let wantSize=normalizeText(file.size.sizeText);
 let wantThickness=Number(file.size.thickness);
@@ -21305,7 +21356,7 @@ if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
 let len=parseLength(p.length);
 if(!Number.isFinite(len))return false;
 if(Math.abs(len-rawM)<0.005)return false;   /* tam boy kartı parça değildir */
-if(len+0.0001<need)return false;            /* yetmiyor */
+if(len+0.0001<gerekli)return false;         /* yetmiyor (tutma payı dahil) */
 if(Number(p.stock||0)<1)return false;
 
 /* Başka bir setup / manuel ayırma bu parçanın tüm adetlerini kullanmışsa
@@ -21342,7 +21393,7 @@ let claimedSet=claimed&&claimed[String(file.partialProductId)] instanceof Set
 :null;
 if(
 secili &&
-parseLength(secili.length)+0.0001>=need &&
+parseLength(secili.length)+0.0001>=jobPlanRemnantNeedM(need) &&
 Number(secili.stock||0)>=1 &&
 jobPlanRemnantAvailableUnits(secili,file.partialReservationId,claimedSet)>=1
 ){
@@ -21370,7 +21421,7 @@ let remnant=file.partialProductId
 
 if(
 remnant &&
-parseLength(remnant.length)+0.0001>=need &&
+parseLength(remnant.length)+0.0001>=jobPlanRemnantNeedM(need) &&
 Number(remnant.stock||0)>=1 &&
 jobPlanRemnantAvailableUnits(remnant,file.partialReservationId,null)>=1
 ){
@@ -21844,10 +21895,10 @@ file.partialDeducted=true;
 return false;
 }
 
-if(kaynakBoy+0.0001<need){
+if(kaynakBoy+0.0001<jobPlanRemnantNeedM(need)){
 if(!confirm(
 "⚠️ Seçilen malzeme kısmi boya yetmiyor.\n\n"+
-formatLength(kaynak.length)+" < "+need+" m\n\n"+
+formatLength(kaynak.length)+" < "+need+" m + "+jobPlanMetre(jobPlanClampM())+" tutma payı\n\n"+
 "Yine de 1 boy düşülsün mü?"
 ))throw new Error("iptal");
 }
@@ -22015,7 +22066,7 @@ if(file.partialProductId){
 let secili=products.find(p=>String(p.id)===String(file.partialProductId));
 if(
 secili &&
-parseLength(secili.length)+0.0001>=need &&
+parseLength(secili.length)+0.0001>=jobPlanRemnantNeedM(need) &&
 Number(secili.stock||0)>=1 &&
 jobPlanRemnantAvailableUnits(secili,file.partialReservationId,null)>=1
 )return false;
@@ -26660,6 +26711,7 @@ let pboBoylar={};         /* {PROGRAM: {mm, kaynak, tarih, dosya}} */
 let pboYuklendi=false;
 let pboDeneme=false;
 let pboKlasor={};         /* dosyaAdı -> program dosyalarının klasörü */
+let pboSvgHam={};         /* üretim paketi adı -> yerleşim SVG metni */
 let pboSonBilgi="";
 
 /* Program adı anahtarı — dosya uzantısı atılır, büyük harfe çevrilir.
@@ -26746,6 +26798,7 @@ function pboDosyaTuru(ad){
 let alt=String(ad||"").toLocaleLowerCase("tr-TR");
 if(alt.endsWith(".teo"))return "teo";
 if(alt.endsWith(".lst"))return "lst";
+if(alt.endsWith(".svg"))return "svg";
 return "";
 }
 
@@ -26754,6 +26807,7 @@ if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.dosya"))return;
 let bulunan={};
 let sayac=0;
 let hatali=0;
+let svgSayac=0;
 
 for(let dosya of (dosyalar||[])){
 let tur=pboDosyaTuru(dosya && dosya.name);
@@ -26763,6 +26817,14 @@ if(Number(dosya.size)>4*1024*1024)continue;
 let metin="";
 try{metin=await dosya.text();}
 catch(e){hatali++;continue;}
+
+/* Yerleşim çizimi: hesaba gerek bırakmaz, olduğu gibi saklanır. */
+if(tur==="svg"){
+if(metin.indexOf("part filling")<0){hatali++;continue;}
+pboSvgHam[pboAnahtar(dosya.name)]=metin;
+svgSayac++;
+continue;
+}
 
 let boy=tur==="teo"?pboTeoBoyu(metin):pboLstBoyu(metin);
 if(!(boy>0)){hatali++;continue;}
@@ -26774,20 +26836,25 @@ bulunan[anahtar]={mm:Number(boy.toFixed(2)),kaynak:tur,tarih:Date.now(),dosya:St
 sayac++;
 }
 
-if(!sayac){
-pboSonBilgi="Seçilen yerde okunabilir .teo / .LST dosyası bulunamadı.";
+if(!sayac && !svgSayac){
+pboSonBilgi="Seçilen yerde okunabilir .svg / .teo / .LST dosyası bulunamadı.";
 if(typeof musImportRender==="function")musImportRender();
 return;
 }
 
+if(sayac){
 try{await pboKaydet(bulunan);}
 catch(e){
 pboSonBilgi="Parça boyları kaydedilemedi: "+String(e&&e.message||e);
 if(typeof musImportRender==="function")musImportRender();
 return;
 }
+}
 
-pboSonBilgi=sayac+" program dosyası okundu"+(hatali?" ("+hatali+" dosya çözülemedi)":"")+".";
+let parcalar=[];
+if(svgSayac)parcalar.push(svgSayac+" yerleşim çizimi");
+if(sayac)parcalar.push(sayac+" program dosyası");
+pboSonBilgi=parcalar.join(" ve ")+" okundu"+(hatali?" ("+hatali+" dosya çözülemedi)":"")+".";
 if(typeof musBildir==="function")musBildir("✓ "+pboSonBilgi,"");
 pboArtanUygula();
 if(typeof musImportRender==="function")musImportRender();
@@ -26797,6 +26864,92 @@ function pboSecildi(event){
 let dosyalar=Array.from((event && event.target && event.target.files)||[]);
 if(event && event.target)event.target.value="";
 pboDosyalariOku(dosyalar);
+}
+
+
+/* ---------- YERLEŞİM ÇİZİMİ (SVG) ----------
+   Üretim paketinin yanındaki <ad>_files\\<ad>.svg çizimi TruTops'un boy yerleşim
+   tablosunu birebir içerir; hesaba, adım payına, parça boyuna gerek bırakmaz.
+
+     <rect x='0' y='0' width='1000' ... fill='none'>  boyun kendisi → ölçek = ham boy / 1000
+     <g id='oddment'>   içindeki metin boy numaraları: "1 - 2 (2)" → 2 boy, "5" → tek boy
+     <g id='part filling'>  her parça bir <rect>; parçalar sağdan sola dizilir
+                            kullanılan boy = (çubuk genişliği − en soldaki x) × ölçek
+
+   Kısmi boy: kullanımı en az olan, tek adetlik gruptur. Bütün boylar aynı
+   dolulukta ise kısmi boy yoktur, her boydan sabit bir fire kalır. */
+
+function pboSvgCoz(metin,ham){
+let s=String(metin||"");
+if(s.indexOf("part filling")<0)return null;
+ham=Number(ham);
+if(!Number.isFinite(ham) || ham<=0)return null;
+
+let gruplar=[];
+let bloklar=s.match(/<g id='tube\d+'[\s\S]*?(?=<g id='tube\d+'|<\/defs>)/g)||[];
+
+for(let t of bloklar){
+let cer=/<rect x='0' y='0' width='([\d.]+)'[^>]*fill='none'/.exec(t);
+if(!cer)continue;
+let genis=Number(cer[1]);
+if(!(genis>0))continue;
+let birim=ham/genis;
+
+let adet=1,etiket="";
+let od=/<g id='oddment'>([\s\S]*?)<\/g>/.exec(t);
+if(od){
+let yazilar=(od[1].match(/<text[^>]*>[^<]*<\/text>/g)||[])
+.map(x=>x.replace(/<[^>]*>/g,"").trim())
+.filter(x=>x && !/^[.\s]+$/.test(x));
+etiket=yazilar.length?yazilar[yazilar.length-1]:"";
+let p=/\((\d+)\)/.exec(etiket);
+if(p && Number(p[1])>0)adet=Number(p[1]);
+}
+
+let pf=/<g id='part filling'>([\s\S]*?)<\/g>/.exec(t);
+if(!pf)continue;
+let kutular=pf[1].match(/<rect x='(-?[\d.]+)'/g)||[];
+if(!kutular.length)continue;
+
+let enSol=Infinity,sayi=0;
+kutular.forEach(k=>{
+let m=/x='(-?[\d.]+)'/.exec(k);
+if(!m)return;
+let x=Number(m[1]);
+if(!Number.isFinite(x))return;
+if(x<enSol)enSol=x;
+sayi++;
+});
+if(!Number.isFinite(enSol))continue;
+
+gruplar.push({etiket:etiket,adet:adet,parca:sayi,kullanilanMm:(genis-enSol)*birim});
+}
+
+if(!gruplar.length)return null;
+
+let boySayisi=gruplar.reduce((a,g)=>a+g.adet,0);
+let enCok=gruplar.reduce((a,g)=>Math.max(a,g.kullanilanMm),0);
+if(!(boySayisi>0) || !(enCok>0) || enCok>ham+1)return null;
+
+let kismi=null;
+gruplar.forEach(g=>{if(!kismi || g.kullanilanMm<kismi.kullanilanMm)kismi=g;});
+if(!(kismi && kismi.adet===1 && kismi.kullanilanMm<enCok-0.5))kismi=null;
+
+return {
+gruplar:gruplar,
+boySayisi:boySayisi,
+parcaSayisi:gruplar.reduce((a,g)=>a+g.adet*g.parca,0),
+toplamKullanimMm:gruplar.reduce((a,g)=>a+g.adet*g.kullanilanMm,0),
+tamBoy:boySayisi-(kismi?1:0),
+sonBoyMm:kismi?kismi.kullanilanMm:0,
+artanMm:kismi?(ham-kismi.kullanilanMm):0,
+fireMm:kismi?0:(ham-enCok)
+};
+}
+
+function pboSvgBul(data){
+let k=pboAnahtar(data && data.fileName);
+return k?(pboSvgHam[k]||null):null;
 }
 
 
@@ -26819,6 +26972,26 @@ function pboArtanHesapla(data){
 if(!data)return {durum:"yok"};
 let ham=Number(data.rawLengthMm);
 if(!Number.isFinite(ham) || ham<=0)return {durum:"yok"};
+
+/* Yerleşim çizimi varsa hesap yapılmaz, çizimden okunur. */
+let svgMetin=pboSvgBul(data);
+if(svgMetin){
+let c=pboSvgCoz(svgMetin,ham);
+if(c){
+let htmlBoy=Math.round(Number(data.tubes)||0);
+if(htmlBoy && c.boySayisi!==htmlBoy)
+return {durum:"svguymadi",svgBoy:c.boySayisi,html:htmlBoy};
+return {
+durum:"ok",
+kaynak:"svg",
+tamBoy:c.tamBoy,
+sonBoyM:Number((c.sonBoyMm/1000).toFixed(2)),
+artanM:Number((c.artanMm/1000).toFixed(2)),
+fireM:Number((c.fireMm/1000).toFixed(2)),
+boySayisi:c.boySayisi
+};
+}
+}
 
 let programlar=pboProgramlar(data);
 if(!programlar.length || programlar.some(p=>!p.rpt))return {durum:"yok"};
@@ -26856,12 +27029,15 @@ dosyalar.forEach(f=>{
 if(f.pboDolduruldu)return;
 let sonuc=pboArtanHesapla(f);
 if(!sonuc || sonuc.durum!=="ok")return;
-if(!(sonuc.sonBoyM>0))return;
+/* Çizimden gelen sonuçta kısmi boy olmayabilir (bütün boylar aynı dolulukta). */
+if(sonuc.kaynak!=="svg" && !(sonuc.sonBoyM>0))return;
+if(!(sonuc.tamBoy>0) && !(sonuc.sonBoyM>0))return;
 
 f.fullTubes=sonuc.tamBoy;
 f.partialM=sonuc.sonBoyM;
 f.pboDolduruldu=true;
 f.pboArtanM=sonuc.artanM;
+f.pboKaynak=sonuc.kaynak||"hesap";
 if(typeof jobPlanSyncTubeCount==="function")jobPlanSyncTubeCount(f);
 if(typeof jobPlanPickRemnant==="function")jobPlanPickRemnant(f);
 degisti=true;
@@ -26901,7 +27077,12 @@ if(typeof musImportRender==="function")musImportRender();
 /* HTML seçildiği anda (uygulamanın kendi okuyucusundan önce) yolu yakala. */
 document.addEventListener("change",function(e){
 try{
-if(e && e.target && e.target.id==="jobPlanFiles")pboKlasorOku(Array.from(e.target.files||[]));
+if(e && e.target && e.target.id==="jobPlanFiles"){
+let hepsi=Array.from(e.target.files||[]);
+pboKlasorOku(hepsi);
+let prog=hepsi.filter(d=>pboDosyaTuru(d && d.name));
+if(prog.length)pboDosyalariOku(prog);
+}
 }catch(err){}
 },true);
 
@@ -26932,10 +27113,22 @@ let sonuc=pboArtanHesapla(f);
 let ad=musEsc(f.fileName||"");
 let durum,sinif;
 
-if(sonuc.durum==="ok"){
+if(sonuc.durum==="ok" && sonuc.kaynak==="svg"){
+sinif="ok";
+durum="çizimden: "+sonuc.boySayisi+" boy · "+
+(sonuc.sonBoyM>0
+ ?sonuc.tamBoy+" tam + "+pboMetre(sonuc.sonBoyM)+" son boydan · artan <b>"+pboMetre(sonuc.artanM)+"</b>"
+ :"hepsi aynı dolulukta, artan yok"+(sonuc.fireM>0?" (her boyda "+pboMetre(sonuc.fireM)+" fire)":""))+
+" · "+(f.pboDolduruldu?"kutulara yazıldı":"hazır");
+}
+else if(sonuc.durum==="ok"){
 sinif="ok";
 durum=sonuc.tamBoy+" tam boy + "+pboMetre(sonuc.sonBoyM)+" son boydan · artan "+
 '<b>'+pboMetre(sonuc.artanM)+'</b> · '+(f.pboDolduruldu?"kutulara yazıldı":"hazır");
+}
+else if(sonuc.durum==="svguymadi"){
+sinif="uymadi";
+durum="çizim HTML ile tutmadı ("+sonuc.svgBoy+" boy ≠ "+sonuc.html+" boy) · yanlış dosya seçilmiş olabilir";
 }
 else if(sonuc.durum==="eksik"){
 sinif="eksik";
@@ -26962,7 +27155,7 @@ return '<div class="pbo-box">'+
 satirlar+
 (klasorler.length?'<div class="pbo-note">Program dosyaları: <code>'+musEsc(klasorler.join(" · "))+'</code></div>':'')+
 (pboSonBilgi?'<div class="pbo-note">'+musEsc(pboSonBilgi)+'</div>':'')+
-'<div class="pbo-note">Parça boyu <code>.teo</code> / <code>.LST</code> dosyalarından okunur ve program adıyla saklanır; aynı program tekrar geldiğinde dosya seçmeye gerek kalmaz.</div>'+
+'<div class="pbo-note">En kesin sonuç yerleşim çizimindedir: üretim paketinin yanındaki <code>&lt;ad&gt;_files\\&lt;ad&gt;.svg</code> dosyası seçilirse artan doğrudan okunur. Çizim yoksa parça boyu <code>.teo</code> / <code>.LST</code> dosyalarından okunup hesaplanır; boylar program adıyla saklandığı için aynı program tekrar geldiğinde dosya seçmeye gerek kalmaz.</div>'+
 '</div>';
 }
 

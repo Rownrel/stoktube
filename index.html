@@ -19571,7 +19571,7 @@ return {
 yonetici:{name:"Yönetici",note:"Her şeyi görür ve değiştirir."},
 planlamaci:{name:"Planlamacı",note:"İş planı ve stok yönetimi."},
 operator:{name:"Operatör",note:"İşleri başlatır, bitirir, stok hareketi girer."},
-izleyici:{name:"İzleyici",note:"Sadece görür, işlem yapamaz."}
+izleyici:{name:"Takip",note:"Stok ve iş durumunu görür, işlem yapamaz."}
 };
 }
 
@@ -19622,12 +19622,24 @@ systemMasterLoaded=true;
 return credential;
 }
 
+/* Rol anahtarı "izleyici" olarak kalır — kayıtlı kullanıcılar, yetkiler ve sade ekran
+   ayarı bozulmasın diye. Değişen yalnızca ekranda görünen ad. Rolü kendisi
+   adlandırmış olanın yazdığı ad korunur. */
+function systemRolAdiGuncelle(data){
+let rol=data && data.roles && data.roles.izleyici;
+if(!rol)return;
+if(!rol.name || rol.name==="İzleyici")rol.name="Takip";
+if(!rol.note || rol.note==="Sadece görür, işlem yapamaz.")
+rol.note="Stok ve iş durumunu görür, işlem yapamaz.";
+}
+
 async function loadSystemData(force=false){
 if(systemDataLoaded && !force)return systemData;
 let value=await cloudStateGet(CLOUD_KEY_SYSTEM_USERS);
 if(value && typeof value==="object" && Array.isArray(value.users)){
 systemData=value;
 if(!systemData.roles)systemData.roles=systemDefaultRoles();
+systemRolAdiGuncelle(systemData);
 }else{
 systemData=systemEmptyData();
 }
@@ -20667,7 +20679,7 @@ let sadeKutu=
 '<label>'+
 '<input type="checkbox" '+(sade?"checked":"")+' '+
 'onchange="systemSetRoleSimple(\''+systemSelectedRole+'\',this.checked)">'+
-'<span>Sade izleyici ekranı'+
+'<span>Sade takip ekranı'+
 '<span class="hint"> · Giriş yapınca Stok / İş Planı seçimi çıkar, tablolar salt okunur olur</span>'+
 '</span>'+
 '</label>'+

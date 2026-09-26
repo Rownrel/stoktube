@@ -5940,6 +5940,82 @@ border-left:4px solid #14b8a6;animation:musIn .18s ease-out
 .mus-ochks{grid-template-columns:1fr}
 }
 
+/* ---------- MALZEME KALİTESİ VE KALINLIK RENKLERİ ----------
+   ST37 renksiz bırakıldı: en yaygın kalite, her satırda renk olması göz yorar.
+   Diğer kaliteler ve bütün kalınlıklar ayrı renkte. */
+
+.kal-etiket,.et-etiket{
+display:inline-block;
+padding:1px 7px;
+border-radius:999px;
+font-weight:800;
+font-size:11.5px;
+line-height:1.5;
+letter-spacing:.01em;
+background:#f1f5f9;
+color:#475569;
+border:1px solid #e2e8f0;
+white-space:nowrap
+}
+
+.kal-etiket.kal-304{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.kal-etiket.kal-316{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.kal-etiket.kal-st52{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.kal-etiket.kal-galvaniz{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
+.kal-etiket.kal-aluminyum{background:#f8fafc;color:#334155;border-color:#cbd5e1}
+.kal-etiket.kal-diger{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+
+.et-etiket.et-8 {background:#f0fdfa;color:#0f766e;border-color:#99f6e4}
+.et-etiket.et-10{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.et-etiket.et-12{background:#eef2ff;color:#4338ca;border-color:#c7d2fe}
+.et-etiket.et-15{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.et-etiket.et-20{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.et-etiket.et-25{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
+.et-etiket.et-30{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.et-etiket.et-35{background:#fefce8;color:#a16207;border-color:#fde68a}
+.et-etiket.et-40{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+.et-etiket.et-50{background:#fdf2f8;color:#a21caf;border-color:#fbcfe8}
+.et-etiket.et-60{background:#eef2ff;color:#1e3a8a;border-color:#c7d2fe}
+.et-etiket.et-80{background:#f5f5f4;color:#57534e;border-color:#d6d3d1}
+
+/* Dosyadan okunan firma: müşteri bağlı değil, mail gitmez. */
+.mus-chip.dosya{
+background:#f8fafc;
+color:#475569;
+border:1px dashed #cbd5e1
+}
+
+.jobplan-kalite-uyari{
+margin-top:3px;
+font-size:11.5px;
+font-weight:700;
+color:#b45309
+}
+
+/* Stok tablosundaki kalite rozeti: ST37 varsayılan renkte kalır,
+   diğer kaliteler kendi rengini alır. */
+.quality.kal-304{background:#eff6ff;color:#1d4ed8}
+.quality.kal-316{background:#f5f3ff;color:#6d28d9}
+.quality.kal-st52{background:#fff7ed;color:#c2410c}
+.quality.kal-galvaniz{background:#ecfeff;color:#0e7490}
+.quality.kal-aluminyum{background:#f1f5f9;color:#334155}
+.quality.kal-diger{background:#fef2f2;color:#b91c1c}
+.quality.kal-st37{background:#f1f5f9;color:#475569}
+.kal-etiket.kal-st37{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+
+/* Yükleme satırındaki kalite seçici — seçili kalitenin rengini alır. */
+.kal-secici{min-width:104px;font-weight:800}
+.kal-secici.kal-304{color:#1d4ed8;border-color:#bfdbfe}
+.kal-secici.kal-316{color:#6d28d9;border-color:#ddd6fe}
+.kal-secici.kal-st52{color:#c2410c;border-color:#fed7aa}
+.kal-secici.kal-galvaniz{color:#0e7490;border-color:#a5f3fc}
+.kal-secici.kal-diger{color:#b91c1c;border-color:#fecaca}
+
+/* DT penceresinde dosyadan okunan firma adı */
+.mus-dtfirma{margin-top:12px;display:flex;flex-direction:column;gap:5px}
+.mus-dtfirma label{font-size:12px;font-weight:800;color:#475569}
+.mus-dtfirma .ipucu{font-size:11.5px;color:#64748b}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -11092,8 +11168,12 @@ function stockLengthMetaHTML(product){
 }
 
 function stockMaterialMetaHTML(product){
-  let facts=[formatThickness(product?.thickness),product?.quality].filter(Boolean).join(" · ");
-  return (facts?'<span class="stock-meta-facts">'+escapeHTML(facts)+'</span>':"")+
+  let parcalar=[];
+  let et=(typeof kalEtHtml==="function")?kalEtHtml(product?.thickness):"";
+  if(et)parcalar.push(et);
+  let kal=(typeof kalKaliteHtml==="function")?kalKaliteHtml(product?.quality):"";
+  if(kal)parcalar.push(kal);
+  return (parcalar.length?'<span class="stock-meta-facts">'+parcalar.join(" ")+'</span>':"")+
     stockLengthMetaHTML(product);
 }
 
@@ -12680,7 +12760,7 @@ ${p.type==="Boru"?"—":p.shape}
 </td>
 
 <td>
-<span class="quality">
+<span class="quality ${typeof kalRenkSinifi==="function"?kalRenkSinifi(p.quality):""}">
 ${p.quality}
 </span>
 </td>
@@ -12706,7 +12786,7 @@ ${p.size}
 </td>
 
 <td>
-${p.thickness}
+<span class="et-etiket ${typeof kalEtSinifi==="function"?kalEtSinifi(p.thickness):""}">${p.thickness}</span>
 </td>
 
 <td>
@@ -16799,6 +16879,14 @@ tubeProfile=tubeProfiles[0]||"";
 let size=jobPlanParseTubeProfile(tubeProfile);
 let sizeSource=size?"Tube profile":"";
 
+/* Kalite: teknoloji tablosu ailesi + dosya adındaki kalite.
+   Paslanmaz işin ST37 stoğundan düşmemesi için ebatla birlikte taşınır. */
+let kaliteBilgi=(typeof kalBelirle==="function")?kalBelirle(doc,fileName||jobName,tubeProfile):{quality:""};
+if(size && kaliteBilgi.quality)size.quality=kaliteBilgi.quality;
+
+/* Firma: TruTops'taki User alanı, yoksa dosya adının son parçası. */
+let firmaAdi=(typeof kalFirmaAdi==="function")?kalFirmaAdi(doc,fileName||jobName):"";
+
 /* Süre okunamadıysa NC satırlarının toplamını kullan */
 if(!Number.isFinite(totalSeconds)){
 let sum=ncPrograms.reduce((acc,p)=>acc+(Number.isFinite(p.seconds)?p.seconds:0),0);
@@ -16816,6 +16904,10 @@ sizeCode:"",
 tubeProfile:tubeProfile,
 tubeProfiles:tubeProfiles,
 sizeSource:sizeSource,
+quality:kaliteBilgi.quality||"",
+qualitySource:kaliteBilgi.kaynak||"",
+qualityWarn:kaliteBilgi.uyari||"",
+firmaAdi:firmaAdi,
 totalSeconds:Number.isFinite(totalSeconds)?totalSeconds:0,
 parts:Number.isFinite(parts)?parts:0,
 tubes:Math.round(tubes),
@@ -16847,9 +16939,11 @@ let wantThickness=Number(size.thickness);
 let wantLength=jobPlanRawLengthM(rawLengthMm);
 
 let wantType=String(size.type||"");
+let wantQuality=normalizeQuality(String(size.quality||""));
 
 return products.filter(p=>{
 if(wantType && String(p.type||"")!==wantType)return false;
+if(wantQuality && normalizeQuality(p.quality)!==wantQuality)return false;
 if(normalizeText(p.size)!==wantSize)return false;
 let t=parseFloat(String(p.thickness||"").replace(",","."));
 if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
@@ -17268,6 +17362,27 @@ jobPlanJobs.forEach((job,idx)=>{
 if(!Number.isFinite(Number(job.order)))job.order=idx;
 if(!Array.isArray(job.files))job.files=[];
 if(!job.status)job.status="planned";
+
+/* Kalite ve firma adı sonradan eklendi. Eski kayıtlarda ikisi de,
+   zaten saklanan profil kodundan ve dosya adından yeniden üretilebiliyor —
+   kullanıcının elle girmesine gerek kalmıyor. */
+job.files.forEach(f=>{
+if(typeof kalBelirle==="function" && !f.quality && !f.qualityManual){
+let bilgi=kalBelirle(null,f.fileName||"",f.tubeProfile||"");
+if(bilgi.quality){
+f.quality=bilgi.quality;
+if(f.size && !f.size.quality)f.size.quality=bilgi.quality;
+}
+}
+if(f.size && !f.size.quality && f.quality)f.size.quality=f.quality;
+});
+
+if(!job.firmaAdi && typeof kalFirmaAdi==="function"){
+for(let f of job.files){
+let ad=kalFirmaAdi(null,f.fileName||"");
+if(ad){job.firmaAdi=ad;break;}
+}
+}
 
 /* Eski sürümde % bir çarpandı (100 = değişiklik yok).
    Yeni sürümde EK süredir (0 = değişiklik yok). Bir kez dönüştürülür. */
@@ -17715,7 +17830,7 @@ data.productId=data.candidates.length?String(data.candidates[0].id):"";
 data.fullTubes=Math.floor(Number(data.tubes)||0);
 data.partialM=0;
 data.partialProductId="";
-data.newQuality="ST37";
+data.newQuality=data.quality||"ST37";
 data.newFinish="Standart";
 data.newPipeSeam="Dikişli";
 data.customerMaterial=false;
@@ -17760,9 +17875,11 @@ jobPlanFormatDuration(totalSeconds)+" ("+jobPlanFormatClock(totalSeconds)+")";
 
 body.innerHTML=jobPlanImportFiles.map(f=>{
 let sizeText=f.size
-?(escapeHTML(f.size.sizeText+" · "+formatThickness(f.size.thickness))+
+?(escapeHTML(f.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(f.size.thickness):escapeHTML(formatThickness(f.size.thickness)))+
+(typeof jobPlanImportKaliteSecici==="function"?jobPlanImportKaliteSecici(f):"")+
 '<div class="jobplan-sub">'+escapeHTML(f.tubeProfile||f.sizeCode||"")+
 (f.sizeSource?" ("+escapeHTML(f.sizeSource)+")":"")+'</div>'+
+(f.qualityWarn?'<div class="jobplan-kalite-uyari">&#9888; '+escapeHTML(f.qualityWarn)+'</div>':'')+
 (f.sizeConflict?'<div class="jobplan-warn">Dosya adı farklı ebat söylüyor</div>':'')+
 ((f.tubeProfiles||[]).length>1?'<div class="jobplan-warn">Dosyada '+f.tubeProfiles.length+' farklı profil var</div>':''))
 :'<span class="jobplan-warn">Ebat çözülemedi</span>';
@@ -17869,7 +17986,13 @@ function jobPlanImportSetCustomer(rowId,checked){
 let f=jobPlanImportFind(rowId);
 if(!f)return;
 f.customerMaterial=!!checked;
-if(f.customerMaterial)f.productId="";
+if(f.customerMaterial){
+/* Müşteri malzemesinde artan takip edilmiyor; kısmi boy tam boya katılır. */
+f.productId="";
+f.fullTubes=Math.max(1,Math.round(Number(f.tubes)||1));
+f.partialM=0;
+f.partialProductId="";
+}
 else if(f.candidates && f.candidates.length)f.productId=String(f.candidates[0].id);
 jobPlanRenderImport();
 }
@@ -17993,6 +18116,7 @@ order:maxOrder,
 percent:0,
 percentMode:"ek",
 status:"planned",
+firmaAdi:String(data.firmaAdi||""),
 files:[]
 };
 jobPlanJobs.push(job);
@@ -18005,6 +18129,8 @@ jobName:data.jobName,
 size:data.size,
 tubeProfile:data.tubeProfile,
 sizeSource:data.sizeSource||"",
+quality:data.quality||"",
+firmaAdi:String(data.firmaAdi||""),
 percent:jobPlanCleanPercent(data.percent),
 totalSeconds:Number(data.totalSeconds)||0,
 parts:Number(data.parts)||0,
@@ -18408,6 +18534,10 @@ file.customerMaterial=!!checked;
 
 if(file.customerMaterial){
 jobPlanRemoveReservation(file);
+/* Artan takibi yok: kısmi boy tam boya katılır. */
+file.fullTubes=Math.max(1,Math.round(Number(file.tubes)||1));
+file.partialM=0;
+file.partialProductId="";
 }
 else if(!file.productId){
 let candidates=jobPlanProductCandidates(file.size,file.rawLengthMm);
@@ -19024,7 +19154,7 @@ actions='<span class="jobplan-sub">'+jobPlanFormatDateTime(file.finishedAt)+'</s
 }
 
 let sizeText=file.size
-?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+?escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):"")
 :'<span class="jobplan-warn">?</span>';
 
 let doneTubes=jobPlanDoneTubes(file);
@@ -21660,7 +21790,7 @@ head.innerHTML=
 '<strong>'+escapeHTML(String(job.dtNo||""))+'</strong> · '+
 escapeHTML(String(file.fileName||""))+
 '<div>'+(file.size
-?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+?escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):"")
 :"ebat okunamadı")+'</div>';
 }
 
@@ -22702,7 +22832,7 @@ return '<span class="vw-pill wait">Bekliyor</span>';
 
 function viewerMalzemeMetni(file){
 let ebat=file.size
-?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+?escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):"")
 :"—";
 
 let alt="";
@@ -22793,7 +22923,7 @@ box.innerHTML=
 '<div class="vw-live"><i></i>Şu an tezgâhta</div>'+
 '<div class="vw-now-dt">'+escapeHTML(String(calisan.job.dtNo||""))+'</div>'+
 '<div class="vw-now-file">'+escapeHTML(String(file.fileName||""))+
-(file.size?' · '+escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness)):'')+
+(file.size?' · '+escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):""):'')+
 '</div>'+
 '</div>'+
 '<div class="vw-now-stat"><div class="k">İlerleme</div><div class="v">'+yapilan+" / "+tam+'</div></div>'+
@@ -23225,7 +23355,7 @@ return {tam:tam,parcaVar:false,parcaM:0,toplam:tam,yapilanTam:yapilan,yapilan:ya
 function opMalzemeMetni(file){
 if(!file)return "—";
 return file.size
-?escapeHTML(file.size.sizeText+" · "+formatThickness(file.size.thickness))
+?escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):"")
 :"ebat okunamadı";
 }
 
@@ -26349,6 +26479,14 @@ musSiraliMusteriler().map(m=>'<option value="'+musEsc(m.id)+'"'+(String(m.id)===
 '</select>'+
 (duzen?'<button type="button" class="mus-btn ghost" onclick="musDtHizliAc()">+ Yeni</button>':'')+
 '</div>'+
+'<div class="mus-dtfirma">'+
+'<label for="musDtFirma">Dosyadaki firma</label>'+
+'<input id="musDtFirma" class="mus-fld" type="text" inputmode="none" '+
+'data-keypad="text" data-native-inputmode="text" data-keypad-label="Firma adı" '+
+'value="'+musEsc(job.firmaAdi||"")+'" placeholder="Örn: IMMAK"'+(duzen?"":" disabled")+
+' onchange="musDtFirmaKaydet(this.value)">'+
+'<span class="ipucu">Müşteri seçilmediğinde DT satırında bu ad görünür. Otomatik mail gitmez.</span>'+
+'</div>'+
 '<div class="mus-to" id="musDtTo"></div>'+
 '<div id="musDtHizli"></div>'+
 '<div class="mus-factions" id="musDtKaydetBar" style="display:none;margin-top:12px">'+
@@ -26358,6 +26496,23 @@ musSiraliMusteriler().map(m=>'<option value="'+musEsc(m.id)+'"'+(String(m.id)===
 '</div>';
 musDtSecimDegisti();
 musDtHizliRender();
+}
+
+/* Dosyadan okunan firma adı elle düzeltilebilir: TruTops'taki User alanı
+   boşsa ve dosya adından da çıkmıyorsa kullanıcı kendi yazar. */
+async function musDtFirmaKaydet(deger){
+if(!musYetki("musteri.duzenle"))return;
+let job=musDtJob();
+if(!job)return;
+let ad=String(deger||"").trim().slice(0,60);
+if(String(job.firmaAdi||"")===ad)return;
+job.firmaAdi=ad;
+try{
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
+musBildir("\u2713 Firma adı kaydedildi","");
+}
+catch(e){musBildir("Firma adı kaydedilemedi: "+musKisaHata(e),"hata");}
 }
 
 function musDtSecimDegisti(){
@@ -26560,7 +26715,17 @@ else if(musLogYuklendi && Date.now()-musLogZamani>5*60*1000 && !musYukleniyor)mu
 let m=job.customerId?musBul(job.customerId):null;
 let ad=m?m.name:(job.customerId?job.customerName||"":"");
 let tik=' onclick="event.stopPropagation();musDtAc(\''+musJs(job.id)+'\')"';
-if(!ad)return duzen?'<span class="mus-chip bos"'+tik+' title="Müşteri bağla">+ Müşteri</span>':'';
+if(!ad){
+/* Müşteri bağlı değilse dosyadan okunan firma gösterilir — mail gitmez,
+   ama hangi işin kime ait olduğu görünür. */
+let dosyaFirma=String(job.firmaAdi||"").trim();
+if(dosyaFirma){
+return '<span class="mus-chip dosya"'+(duzen?tik:'')+
+' title="Dosyadan okundu · müşteri bağlı değil, otomatik mail gitmez">'+
+MUS_IKON.bina+musEsc(dosyaFirma)+(duzen?' +':'')+'</span>';
+}
+return duzen?'<span class="mus-chip bos"'+tik+' title="Müşteri bağla">+ Müşteri</span>':'';
+}
 
 let kayitlar=musLog.filter(k=>k.jobId===job.id);
 let gonderilen=kayitlar.filter(k=>k.durum==="gonderildi").length;
@@ -27535,6 +27700,242 @@ serit.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;backgroun
 "box-shadow:0 2px 10px rgba(0,0,0,.4)";
 serit.textContent="⚠ Bulut yetkisi kesildi. Veri kaybını önlemek için kaydetme durduruldu. Sayfayı yenileyip (Ctrl+F5) yeniden giriş yapın.";
 document.body.appendChild(serit);
+}
+
+
+/* =====================================================
+   MALZEME KALİTESİ, FİRMA ADI VE RENKLER
+
+   Üretim paketindeki lazer teknoloji tablosunun kodu malzeme ailesini veriyor:
+     ST015MD0-N2S0-30-T → ST = karbon çelik
+     SS040MD0-N2S0-30-T → SS = paslanmaz
+   Tam kalite (304 mü 316 mı) tabloda yok; dosya adından okunur.
+   İkisi çelişiyorsa kalite boş bırakılır, kullanıcı uyarılır —
+   paslanmaz işin ST37 stoğundan düşmesi bu yüzden oluyordu.
+===================================================== */
+
+const KAL_AD_DESENLERI=[
+["316L",/(^|[_\-\s])316\s?L([_\-\s]|$)/],
+["316",/(^|[_\-\s])316([_\-\s]|$)/],
+["304",/(^|[_\-\s])304([_\-\s]|$)/],
+["ST52",/(^|[_\-\s])ST\s?52([_\-\s]|$)/],
+["ST37",/(^|[_\-\s])ST\s?37([_\-\s]|$)/],
+["Galvaniz",/(^|[_\-\s])(GALVANIZ|GALV)([_\-\s]|$)/],
+["Alüminyum",/(^|[_\-\s])(ALUMINYUM|ALU)([_\-\s]|$)/]
+];
+
+const KAL_AILE={
+"304":"paslanmaz","316":"paslanmaz","316L":"paslanmaz",
+"ST37":"celik","ST52":"celik","Galvaniz":"celik",
+"Alüminyum":"aluminyum"
+};
+
+function kalSadelestir(metin){
+return String(metin||"").toUpperCase()
+.replace(/İ/g,"I").replace(/I/g,"I").replace(/Ü/g,"U")
+.replace(/Ö/g,"O").replace(/Ş/g,"S").replace(/Ç/g,"C").replace(/Ğ/g,"G");
+}
+
+/* Teknoloji tablosu kodunun ilk iki harfi malzeme ailesini verir. */
+function kalTeknolojiAilesi(doc){
+let kod="";
+try{
+let hucreler=doc?doc.querySelectorAll("td"):[];
+for(let td of hucreler){
+let m=String(td.textContent||"").trim();
+if(/^[A-Z]{2}\d{3}[A-Z0-9\-]*$/.test(m)){kod=m;break;}
+}
+}catch(e){}
+if(!kod)return "";
+let on=kod.slice(0,2).toUpperCase();
+if(on==="ST")return "celik";
+if(on==="SS")return "paslanmaz";
+if(on==="AL")return "aluminyum";
+return "";
+}
+
+function kalAdKalitesi(ad){
+let s=kalSadelestir(ad);
+for(let i=0;i<KAL_AD_DESENLERI.length;i++){
+if(KAL_AD_DESENLERI[i][1].test(s))return KAL_AD_DESENLERI[i][0];
+}
+return "";
+}
+
+/* Profil kodunun SONDAN İKİNCİ grubu malzemeyi veriyor:
+     1_200X200X30_1_15  → 1 = ST37
+     1_400X400X60_2_40  → 2 = 304
+     1_1000X500X50_3_30 → 3 = Alüminyum
+   Yuvarlak boruda da aynı yerde: 2_603_1_30 → 1.
+   En güvenilir kaynak bu; dosya adı yalnızca dereceyi inceltmek için
+   kullanılır (304 mü 316 mı, ST37 mi ST52 mi). */
+
+const KAL_KOD_AILE={"1":"celik","2":"paslanmaz","3":"aluminyum"};
+const KAL_KOD_VARSAYILAN={"1":"ST37","2":"304","3":"Alüminyum"};
+
+function kalKodMalzemesi(kod){
+let parcalar=String(kod||"").toUpperCase().split("_").filter(Boolean);
+if(parcalar.length<4)return "";
+let m=parcalar[parcalar.length-2];
+return /^\d+$/.test(m)?m:"";
+}
+
+function kalAileAdi(a){
+if(a==="paslanmaz")return "paslanmaz";
+if(a==="aluminyum")return "alüminyum";
+if(a==="celik")return "karbon çelik";
+return "?";
+}
+
+/* {quality, aile, kaynak, uyari} */
+function kalBelirle(doc,ad,profilKodu){
+let kod=kalKodMalzemesi(profilKodu);
+let kodAile=KAL_KOD_AILE[kod]||"";
+let tabloAile=kalTeknolojiAilesi(doc);
+let adKalite=kalAdKalitesi(ad);
+let adAile=adKalite?(KAL_AILE[adKalite]||""):"";
+
+/* Profil kodu ile tezgâh tablosu çelişiyorsa karar verilmez. */
+if(kodAile && tabloAile && kodAile!==tabloAile){
+return {quality:"",aile:kodAile,kaynak:"celiski",
+uyari:"Profil kodu "+kalAileAdi(kodAile)+" diyor, tezgâh tablosu "+kalAileAdi(tabloAile)+
+" diyor — kaliteyi elle seç"};
+}
+
+let aile=kodAile||tabloAile;
+
+if(adKalite){
+if(aile && adAile && aile!==adAile){
+return {quality:"",aile:aile,kaynak:"celiski",
+uyari:"Dosya adı "+adKalite+" diyor, profil kodu "+kalAileAdi(aile)+" diyor — kaliteyi elle seç"};
+}
+return {quality:adKalite,aile:adAile||aile,kaynak:aile?"kod+ad":"ad"};
+}
+
+if(kod && KAL_KOD_VARSAYILAN[kod])
+return {quality:KAL_KOD_VARSAYILAN[kod],aile:kodAile,kaynak:"kod"};
+
+if(kod)
+return {quality:"",aile:"",kaynak:"bilinmeyen-kod",
+uyari:"Profil kodundaki malzeme numarası ("+kod+") tanınmıyor — kaliteyi elle seç"};
+
+if(tabloAile==="celik")return {quality:"ST37",aile:tabloAile,kaynak:"tablo"};
+if(tabloAile==="aluminyum")return {quality:"Alüminyum",aile:tabloAile,kaynak:"tablo"};
+if(tabloAile==="paslanmaz")return {quality:"",aile:tabloAile,kaynak:"belirsiz",
+uyari:"Paslanmaz ama 304 mü 316 mı belli değil — kaliteyi elle seç"};
+
+return {quality:"",aile:"",kaynak:"yok"};
+}
+
+/* ---------- FİRMA ADI ----------
+   Öncelik TruTops'taki "User" alanı; doldurulmamışsa (varsayılanı "User")
+   dosya adının son anlamlı parçası firma kabul edilir:
+   DT03505_20X20X1_5MM_IMMAK → IMMAK */
+
+const KAL_ATLANACAK=/^(DT|DP)\d+$|^\d+$|MM$|^[0-9XØ.,]+$|^(KOSEBENT|PROFIL|BORU|LAMA|NPU|KARE|YUVARLAK|DIKDORTGEN|L)$/;
+
+function kalFirmaAdi(doc,ad){
+let user="";
+try{
+let alan=doc?doc.querySelector('input[name="bearbeiter"]'):null;
+user=String((alan && (alan.getAttribute("value")||alan.value))||"").trim();
+}catch(e){}
+if(user && user.toLowerCase()!=="user")return user;
+
+let parcalar=String(ad||"").replace(/\.(html?|svg|pdf)$/i,"").split("_").filter(Boolean);
+
+/* En az üç parça olmalı: DT numarası + ebat + firma.
+   İki parçalıysa (DT034585_TRAVERS) ikincisi parça adı olabilir, firma sayılmaz. */
+if(parcalar.length<3)return "";
+
+for(let i=parcalar.length-1;i>0;i--){
+let p=parcalar[i].trim();
+if(!p)continue;
+if(KAL_ATLANACAK.test(kalSadelestir(p)))continue;
+if(kalAdKalitesi(p))continue;
+return p;
+}
+return "";
+}
+
+/* ---------- RENKLER ----------
+   ST37 renksiz (en yaygın olan göz yormasın), diğer kaliteler renkli.
+   Kalınlıklar birbirinden ayrılsın diye her değere ayrı renk. */
+
+function kalRenkSinifi(kalite){
+let v=kalSadelestir(kalite).replace(/\s+/g,"");
+if(!v)return "";
+if(v==="ST37")return "kal-st37";   /* en yaygın kalite: nötr gri, diğerleri öne çıksın */
+if(v==="ST52")return "kal-st52";
+if(v==="304")return "kal-304";
+if(v==="316"||v==="316L")return "kal-316";
+if(v==="GALVANIZ")return "kal-galvaniz";
+if(v==="ALUMINYUM")return "kal-aluminyum";
+return "kal-diger";
+}
+
+function kalKaliteHtml(kalite){
+let metin=String(kalite||"").trim();
+if(!metin)return "";
+let sinif=kalRenkSinifi(metin);
+return '<span class="kal-etiket'+(sinif?" "+sinif:"")+'">'+escapeHTML(metin)+"</span>";
+}
+
+function kalEtSinifi(kalinlik){
+let n=parseFloat(String(kalinlik||"").replace(",","."));
+if(!Number.isFinite(n) || n<=0)return "";
+return "et-"+Math.round(n*10);
+}
+
+function kalEtHtml(kalinlik){
+let metin=(typeof formatThickness==="function")?formatThickness(kalinlik):String(kalinlik||"");
+if(!metin)return "";
+let sinif=kalEtSinifi(kalinlik);
+return '<span class="et-etiket'+(sinif?" "+sinif:"")+'">'+escapeHTML(metin)+"</span>";
+}
+
+/* ---------- YÜKLEME SATIRINDA KALİTE SEÇİCİ ----------
+   Profil kodu 316'yı 304'ten, ST52'yi ST37'den ayırmıyor: ikisi de aynı
+   numarayla geliyor. Bu yüzden kalite her satırda elle değiştirilebilir.
+   Elle seçilen kalite `qualityManual` ile işaretlenir ve dosya yeniden
+   okunsa bile ezilmez. */
+
+const KAL_SECENEKLER=["ST37","ST52","304","316","316L","Galvaniz","Alüminyum"];
+
+function jobPlanImportKaliteSecici(f){
+if(!f || !f.size)return "";
+let secili=String(f.quality||"");
+let sinif=kalRenkSinifi(secili);
+let secenekler='<option value="">— kalite seç —</option>'+
+KAL_SECENEKLER.map(function(v){
+return '<option value="'+v+'"'+(v===secili?" selected":"")+">"+v+"</option>";
+}).join("");
+if(secili && KAL_SECENEKLER.indexOf(secili)<0){
+secenekler+='<option value="'+escapeHTML(secili)+'" selected>'+escapeHTML(secili)+"</option>";
+}
+return ' <select class="jobplan-select jobplan-select-sm kal-secici'+(sinif?" "+sinif:"")+'"'+
+' title="Malzeme kalitesi — profil kodundan okunur, gerekirse elle değiştir"'+
+' onchange="jobPlanImportSetKalite(\'' + f.rowId + '\',this.value)">'+
+secenekler+"</select>";
+}
+
+function jobPlanImportSetKalite(rowId,deger){
+let f=(typeof jobPlanImportFind==="function")?jobPlanImportFind(rowId):null;
+if(!f)return;
+let kalite=String(deger||"").trim();
+
+f.quality=kalite;
+f.qualityManual=!!kalite;
+f.qualityWarn="";
+if(f.size)f.size.quality=kalite;
+if(kalite)f.newQuality=kalite;
+
+/* Kalite değişince eşleşen stok kartları da değişir. */
+if(typeof jobPlanProductCandidates==="function"){
+f.candidates=jobPlanProductCandidates(f.size,f.rawLengthMm);
+f.productId=(!f.customerMaterial && f.candidates.length)?String(f.candidates[0].id):"";
+}
+if(typeof jobPlanRenderImport==="function")jobPlanRenderImport();
 }
 
 

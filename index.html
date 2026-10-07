@@ -6068,12 +6068,27 @@ font-size:10.5px;font-weight:700;letter-spacing:.05em;color:rgba(226,232,240,.6)
 background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space:nowrap;flex:0 0 auto
 }
 
+/* ---------- TEZGÂH: ÇİFT DOKUNUŞ KİLİDİ ----------
+   İş bitince kart başka bir işe geçiyor; parmağın altındaki düğme bir anda
+   başka bir işin düğmesi oluyordu. Kısa süre pasif ve soluk kalır. */
+.ope-jact{flex-wrap:wrap}
+.ope-jact.kilitli .ope-big{opacity:.4;pointer-events:none;box-shadow:none}
+.ope-kilit-not{
+flex:0 0 100%;order:-1;margin-bottom:9px;
+background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;
+border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;text-align:center
+}
+.ope-big.kilit{opacity:.4;pointer-events:none;box-shadow:none}
+@media (max-width:900px){
+  body.op-on .ope-kilit-not{font-size:10.5px;padding:6px 9px;margin-bottom:7px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@zip.js/zip.js@2.7.62/dist/zip-full.min.js"></script>
+<!-- @zip.js/zip.js kaldırıldı: kullanılmıyordu, zip işleri JSZip ile yapılıyor. -->
 
 </head>
 
@@ -6144,7 +6159,7 @@ background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.60</div>
+      <div class="page-login-surum">Tube.1.0.62</div>
     </section>
   </div>
 </div>
@@ -6155,7 +6170,7 @@ background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.60</small>
+<small class="app-surum">Tube.1.0.62</small>
 </h1>
 
 <div class="backup-area">
@@ -7253,7 +7268,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.60</div>
+  <div class="planner-corp-surum">Tube.1.0.62</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7984,7 +7999,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.60</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.62</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8038,7 +8053,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.60</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.62</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8052,7 +8067,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.60</div>
+<div class="ope-surum">Tube.1.0.62</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8488,7 +8503,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.60";
+const APP_SURUM = "Tube.1.0.62";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -23452,7 +23467,7 @@ box.innerHTML=
 '<span>'+escapeHTML(String(sira.file.fileName||""))+' · '+opMalzemeMetni(sira.file)+'</span>'+
 '</div></div>'+
 (opCan("isplani.calistir")
-?'<button type="button" class="ope-big start" style="width:100%" '+
+?'<button type="button" class="ope-big start'+(opKilitli()?" kilit":"")+'" style="width:100%" '+
 'onclick="opStart(\''+sira.job.id+'\',\''+sira.file.id+'\')">'+OP_PLAY+' BAŞLAT</button>'
 :'')
 :'')+
@@ -23528,7 +23543,8 @@ String(new Date(file.startedAt).getMinutes()).padStart(2,"0"):"—")+'</div></di
 '</div>'+
 
 (opCan("isplani.calistir")
-?'<div class="ope-jact">'+
+?'<div class="ope-jact'+(opKilitli()?" kilitli":"")+'">'+
+(opKilitli()?'<div class="ope-kilit-not">Yeni iş geldi — yanlışlıkla basmamak için düğmeler bir an kapalı.</div>':'')+
 (calisiyor
 ?'<button type="button" class="ope-big pause" onclick="opPause(\''+aktif.job.id+'\',\''+file.id+'\')">'+
 OP_PAUSE+' DURAKLA</button>'
@@ -23542,21 +23558,72 @@ OP_CHECK+' BİTİR</button>'+
 '</div>';
 }
 
-async function opStart(jobId,fileId){
-if(typeof jobPlanStartFile==="function")await jobPlanStartFile(jobId,fileId);
+/* ---------- ÇİFT DOKUNUŞ KORUMASI ----------
+   Bir iş bitirilince kart hemen başka bir işe geçiyor: sırada bekleyen ya da
+   daha önce duraklatılmış olan iş aynı yere, aynı düğmelerle geliyor. Parmak
+   orada olduğu için arka arkaya basılan ikinci dokunuş o işi de bitiriyordu.
+
+   İki kat koruma:
+   1) Bir eylem sürerken ikincisi hiç başlamaz (opIslemde).
+   2) Eylemden sonra karttaki iş DEĞİŞTİYSE düğmeler kısa süre kapanır
+      (opKilitli) — hem tıklama reddedilir hem de düğmeler soluk görünür.
+   Kart aynı işte kaldıysa kilit kurulmaz; duraklat/devam akışı yavaşlamaz. */
+
+const OP_KILIT_MS=1200;
+let opIslemde=false;
+let opKilitBitis=0;
+let opKilitZaman=null;
+
+function opKilitli(){return Date.now()<opKilitBitis;}
+
+function opKilitKur(){
+opKilitBitis=Date.now()+OP_KILIT_MS;
+if(opKilitZaman)clearTimeout(opKilitZaman);
+opKilitZaman=setTimeout(function(){
+opKilitZaman=null;
+if(typeof opActive==="function" && opActive())opRender();
+},OP_KILIT_MS+40);
+}
+
+/* Kartta hangi iş duruyor? Eylemden önce ve sonra bunu karşılaştırıyoruz. */
+function opKartAnahtari(){
+let a=opCalisanIs();
+return a?String(a.job.id)+"/"+String(a.file.id):"";
+}
+
+async function opEylem(fn,jobId,fileId){
+if(opIslemde || opKilitli())return;
+opIslemde=true;
+let onceki=opKartAnahtari();
+let hedef=String(jobId)+"/"+String(fileId);
+try{
+if(typeof fn==="function")await fn(jobId,fileId);
+}
+finally{
+opIslemde=false;
+}
+
+/* Kilit YALNIZCA kartın, basılan düğmenin işinden BAŞKA bir işe geçtiği
+   durumda kurulur. Başlat/duraklat/devam'da kart zaten o işte kalır, o yüzden
+   bu akışlar hiç yavaşlamaz. Hiçbir şey değişmediyse (örn. başlatma iptal
+   edildi) de kilit yok. */
+let simdi=opKartAnahtari();
+if(simdi!==onceki && simdi!==hedef)opKilitKur();
+
 opRender();
+}
+
+async function opStart(jobId,fileId){
+await opEylem(typeof jobPlanStartFile==="function"?jobPlanStartFile:null,jobId,fileId);
 }
 async function opPause(jobId,fileId){
-if(typeof jobPlanPauseFile==="function")await jobPlanPauseFile(jobId,fileId);
-opRender();
+await opEylem(typeof jobPlanPauseFile==="function"?jobPlanPauseFile:null,jobId,fileId);
 }
 async function opResume(jobId,fileId){
-if(typeof jobPlanResumeFile==="function")await jobPlanResumeFile(jobId,fileId);
-opRender();
+await opEylem(typeof jobPlanResumeFile==="function"?jobPlanResumeFile:null,jobId,fileId);
 }
 async function opFinish(jobId,fileId){
-if(typeof jobPlanFinishFile==="function")await jobPlanFinishFile(jobId,fileId);
-opRender();
+await opEylem(typeof jobPlanFinishFile==="function"?jobPlanFinishFile:null,jobId,fileId);
 }
 
 /* ---------- TEZGÂH: KUYRUK ---------- */
@@ -23654,7 +23721,7 @@ opQueueTab==="biten"?"Tamamlanmış iş yok.":"Planda iş yok.")+'</div>';
 return;
 }
 
-let calisanVar=!!opAktifCalisan();
+let calisanVar=!!opAktifCalisan() || (typeof opKilitli==="function" && opKilitli());
 let html=[];
 
 gruplar.forEach((grup,index)=>{

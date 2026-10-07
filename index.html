@@ -6016,6 +6016,27 @@ color:#b45309
 .mus-dtfirma label{font-size:12px;font-weight:800;color:#475569}
 .mus-dtfirma .ipucu{font-size:11.5px;color:#64748b}
 
+/* ---------- İŞ FİRMASI ROZETİ (Takip / Tezgâh) ---------- */
+.is-firma{
+display:inline-flex;align-items:center;gap:5px;max-width:200px;vertical-align:middle;
+background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:2px 9px 2px 8px;
+font-size:11.5px;font-weight:700;color:#475569;letter-spacing:.01em;line-height:1.5
+}
+.is-firma svg{flex:0 0 auto;opacity:.6}
+.is-firma b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;min-width:0}
+.is-firma.bagli{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+.is-firma.bagli svg{opacity:.8}
+.is-firma.koyu{background:rgba(148,163,184,.16);border-color:rgba(148,163,184,.3);color:#cbd5e1}
+.is-firma.koyu.bagli{background:rgba(59,130,246,.2);border-color:rgba(96,165,250,.45);color:#93c5fd}
+.ope-jfirma{margin-top:8px}
+.ope-jfirma .is-firma{font-size:12.5px;max-width:240px;padding:3px 11px 3px 9px}
+.ope-qdt .dt .is-firma{font-size:11px;max-width:150px;font-weight:700}
+@media (max-width:900px){
+  body.op-on .ope-jfirma{margin-top:5px}
+  body.op-on .ope-jfirma .is-firma{font-size:11px;padding:2px 9px 2px 7px}
+  body.op-on .ope-qdt .dt .is-firma{max-width:110px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -7961,7 +7982,7 @@ Görüntüleme modu
 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
 <input id="viewerPlanSearch" type="text" inputmode="none"
 data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya ara"
-placeholder="DT veya dosya adı ara…" oninput="viewerSetPlanSearch(this.value)">
+placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.value)">
 </div>
 <div class="vw-chips" id="viewerPlanChips"></div>
 </div>
@@ -8047,7 +8068,7 @@ Bakım
 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
 <input id="opQueueSearch" type="text" inputmode="none"
 data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya ara"
-placeholder="DT veya dosya adı ara…" oninput="opSetQueueSearch(this.value)">
+placeholder="DT, dosya ya da firma ara…" oninput="opSetQueueSearch(this.value)">
 </div>
 <div class="ope-qlist" id="opQueueList"></div>
 </div>
@@ -22774,6 +22795,8 @@ let files=(job.files||[]).slice();
 
 if(kelimeler.length){
 let dtKeys=[viewerNorm(job.dtNo).replace(/\s+/g,"")];
+if(typeof kalFirmaAramaAnahtari==="function")
+dtKeys=dtKeys.concat(kalFirmaAramaAnahtari(job,viewerNorm));
 if(!viewerUyuyor(dtKeys,kelimeler)){
 files=files.filter(file=>viewerUyuyor(
 dtKeys.concat([viewerNorm(file.fileName).replace(/\s+/g,"")]),kelimeler));
@@ -22921,7 +22944,8 @@ box.innerHTML=
 '<div class="vw-now">'+
 '<div class="vw-now-main">'+
 '<div class="vw-live"><i></i>Şu an tezgâhta</div>'+
-'<div class="vw-now-dt">'+escapeHTML(String(calisan.job.dtNo||""))+'</div>'+
+'<div class="vw-now-dt">'+escapeHTML(String(calisan.job.dtNo||""))+
+(typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(calisan.job,true):"")+'</div>'+
 '<div class="vw-now-file">'+escapeHTML(String(file.fileName||""))+
 (file.size?' · '+escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):""):'')+
 '</div>'+
@@ -23012,7 +23036,8 @@ html.push(
 (calisiyor?' style="background:#f0fdfa"':(sorun?' style="background:#fef2f2"':''))+'>'+
 '<td style="font-weight:800;color:#94a3b8">'+(index+1)+'</td>'+
 '<td colspan="4"><div class="vw-name"><span class="vw-caret">'+(acik?"▼":"►")+'</span>'+
-escapeHTML(String(job.dtNo||""))+'</div></td>'+
+escapeHTML(String(job.dtNo||""))+
+(typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(job):"")+'</div></td>'+
 '<td>'+viewerDtDurumu(grup)+'</td>'+
 '</tr>'
 );
@@ -23378,7 +23403,8 @@ box.innerHTML=
 '<p>'+(sira?"Sıradaki işi başlatmak için düğmeye basın":"Planda bekleyen iş yok")+'</p>'+
 (sira
 ?'<div class="ope-bnext"><div class="n">1</div><div class="t">'+
-'<b>'+escapeHTML(String(sira.job.dtNo||""))+'</b>'+
+'<b>'+escapeHTML(String(sira.job.dtNo||""))+
+(typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(sira.job):"")+'</b>'+
 '<span>'+escapeHTML(String(sira.file.fileName||""))+' · '+opMalzemeMetni(sira.file)+'</span>'+
 '</div></div>'+
 (opCan("isplani.calistir")
@@ -23426,6 +23452,8 @@ box.innerHTML=
 '<div style="min-width:0">'+
 '<div class="ope-live'+(calisiyor?"":" durdu")+'"><i></i>'+(calisiyor?"Tezgâhta":"Duraklatıldı")+'</div>'+
 '<div class="ope-jdt">'+escapeHTML(String(aktif.job.dtNo||""))+'</div>'+
+(typeof kalFirmaRozeti==="function"&&kalIsFirmasi(aktif.job)
+?'<div class="ope-jfirma">'+kalFirmaRozeti(aktif.job)+'</div>':"")+
 '<div class="ope-jfile">'+escapeHTML(String(file.fileName||""))+'</div>'+
 '</div>'+
 '<div class="ope-jright">'+
@@ -23523,6 +23551,8 @@ return jobs.map(job=>{
 let files=(job.files||[]).slice();
 if(kelimeler.length){
 let dtKeys=[opNorm(job.dtNo).replace(/\s+/g,"")];
+if(typeof kalFirmaAramaAnahtari==="function")
+dtKeys=dtKeys.concat(kalFirmaAramaAnahtari(job,opNorm));
 if(!opUyuyor(dtKeys,kelimeler)){
 files=files.filter(f=>opUyuyor(dtKeys.concat([opNorm(f.fileName).replace(/\s+/g,"")]),kelimeler));
 }
@@ -23595,7 +23625,8 @@ html.push(
 '<div class="no">'+(opQueueTab==="biten"?"✓":(index+1))+'</div>'+
 '<div class="info">'+
 '<div class="dt"><span class="caret">'+(acik?"▼":"►")+'</span>'+
-escapeHTML(String(job.dtNo||""))+'</div>'+
+escapeHTML(String(job.dtNo||""))+
+(typeof kalFirmaRozeti==="function"?kalFirmaRozeti(job):"")+'</div>'+
 '<div class="cnt">'+grup.files.length+' dosya</div>'+
 '</div>'+
 opDtRozet(job)+
@@ -27936,6 +27967,52 @@ f.candidates=jobPlanProductCandidates(f.size,f.rawLengthMm);
 f.productId=(!f.customerMaterial && f.candidates.length)?String(f.candidates[0].id):"";
 }
 if(typeof jobPlanRenderImport==="function")jobPlanRenderImport();
+}
+
+
+/* =====================================================
+   İŞ FİRMASI — TAKİP VE TEZGÂH EKRANLARI
+   Plan ekranında müşteri etiketi zaten vardı; aynı ad Takip ve Tezgâh
+   ekranlarında da görünsün diye burada tek yerden üretiliyor.
+   Öncelik: bağlı müşteri > işe yazılmış müşteri adı > dosyadan okunan firma.
+===================================================== */
+
+function kalIsFirmasi(job){
+if(!job)return "";
+if(job.customerId){
+let m=(typeof musBul==="function")?musBul(job.customerId):null;
+let ad=m?String(m.name||""):String(job.customerName||"");
+ad=ad.trim();
+if(ad)return ad;
+}
+return String(job.firmaAdi||"").trim();
+}
+
+/* Ad bağlı müşteriden mi geliyor (mail gider) yoksa dosya adından mı okundu? */
+function kalIsFirmasiBagli(job){
+return !!(job && job.customerId && kalIsFirmasi(job));
+}
+
+const KAL_BINA_IKON='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" '+
+'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+
+'<path d="M4 21V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v15"/><path d="M15 10h3a2 2 0 0 1 2 2v9"/>'+
+'<path d="M2 21h20"/><path d="M8 8h3M8 12h3M8 16h3"/></svg>';
+
+/* koyu=true → Takip ekranının koyu "Şu an tezgâhta" kartı için açık renkli. */
+function kalFirmaRozeti(job,koyu){
+let ad=kalIsFirmasi(job);
+if(!ad)return "";
+let bagli=kalIsFirmasiBagli(job);
+return '<span class="is-firma'+(koyu?" koyu":"")+(bagli?" bagli":"")+'" title="'+
+(bagli?"Müşteri":"Dosyadan okundu")+'">'+KAL_BINA_IKON+
+'<b>'+escapeHTML(ad)+'</b></span>';
+}
+
+/* Takip ve Tezgâh aramalarında firma adı da bulunsun. */
+function kalFirmaAramaAnahtari(job,norm){
+let ad=kalIsFirmasi(job);
+if(!ad)return [];
+try{return [String(norm(ad)).replace(/\s+/g,"")];}catch(e){return [];}
 }
 
 

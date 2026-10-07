@@ -6140,7 +6140,7 @@ background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.58</div>
+      <div class="page-login-surum">Tube.1.0.59</div>
     </section>
   </div>
 </div>
@@ -6151,7 +6151,7 @@ background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.58</small>
+<small class="app-surum">Tube.1.0.59</small>
 </h1>
 
 <div class="backup-area">
@@ -7979,7 +7979,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.58</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.59</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8033,7 +8033,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.58</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.59</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8047,7 +8047,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.58</div>
+<div class="ope-surum">Tube.1.0.59</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8483,7 +8483,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.58";
+const APP_SURUM = "Tube.1.0.59";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -24595,6 +24595,24 @@ let opOldRenderConsumables=renderConsumables;
 renderConsumables=function(){
 let r=opOldRenderConsumables.apply(this,arguments);
 try{if(opActive()&&opPage==="sarf")opRenderSarf();}catch(e){}
+return r;
+};
+}
+
+if(typeof renderErrorCodes==="function"){
+let opOldRenderErrorCodes=renderErrorCodes;
+renderErrorCodes=function(){
+let r=opOldRenderErrorCodes.apply(this,arguments);
+try{if(opActive()&&opPage==="hata")opRenderHata();}catch(e){}
+return r;
+};
+}
+
+if(typeof renderMaintenanceRecords==="function"){
+let opOldRenderMaintenance=renderMaintenanceRecords;
+renderMaintenanceRecords=function(){
+let r=opOldRenderMaintenance.apply(this,arguments);
+try{if(opActive()&&opPage==="bakim")opRenderBakim();}catch(e){}
 return r;
 };
 }

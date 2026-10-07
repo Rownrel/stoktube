@@ -6041,6 +6041,29 @@ font-size:11.5px;font-weight:700;color:#475569;letter-spacing:.01em;line-height:
 .vw-sub2.vw-kal{margin-top:5px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .vw-sub2.vw-kal .kal-etiket,.vw-sub2.vw-kal .et-etiket{font-size:11px;padding:1px 8px}
 
+/* ---------- SÜRÜM ETİKETİ ----------
+   Yayındaki dosyanın hangi derleme olduğu ekrandan görünsün: giriş ekranı,
+   ana başlık, Takip alt şeridi ve Tezgâh üst şeridi. Değer parts/surum.txt. */
+.page-login-surum{
+margin-top:18px;text-align:center;font-size:11px;font-weight:700;
+letter-spacing:.06em;color:#94a3b8
+}
+h1 .app-surum{
+display:inline-block;margin-left:10px;vertical-align:middle;
+font-size:11px;font-weight:700;letter-spacing:.05em;
+color:rgba(255,255,255,.62);background:rgba(255,255,255,.12);
+border-radius:999px;padding:2px 9px;white-space:nowrap
+}
+.vw-foot .vw-surum{margin-left:9px;color:#cbd5e1;font-weight:700;letter-spacing:.04em}
+.ope-surum{
+font-size:10.5px;font-weight:700;letter-spacing:.05em;color:rgba(226,232,240,.6);
+background:rgba(255,255,255,.08);border-radius:999px;padding:3px 9px;white-space:nowrap
+}
+@media (max-width:900px){
+  body.op-on .ope-surum{font-size:9.5px;padding:2px 7px}
+  h1 .app-surum{font-size:10px;margin-left:7px;padding:1px 7px}
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6117,6 +6140,7 @@ font-size:11.5px;font-weight:700;color:#475569;letter-spacing:.01em;line-height:
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
+      <div class="page-login-surum">Tube.1.0.58</div>
     </section>
   </div>
 </div>
@@ -6127,6 +6151,7 @@ font-size:11.5px;font-weight:700;color:#475569;letter-spacing:.01em;line-height:
 
 <h1>
 🏭 Stok & Üretim Takip
+<small class="app-surum">Tube.1.0.58</small>
 </h1>
 
 <div class="backup-area">
@@ -7954,7 +7979,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span id="viewerStockCount">—</span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.58</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8008,7 +8033,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span id="viewerPlanCount">—</span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.58</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8022,6 +8047,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
+<div class="ope-surum">Tube.1.0.58</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8454,6 +8480,10 @@ const MOVEMENTS_TABLE = "StokTubeMovements";
 
 /* Bakım ve sarf malzemelerinin ortak bulut verisi */
 const APP_DATA_TABLE = "StokAppData";
+
+/* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
+   Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
+const APP_SURUM = "Tube.1.0.58";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -14427,6 +14457,9 @@ if(typeof systemGuard==="function" && !systemGuard("bolum.yedek"))return;
 let backup={
 
 version:7,
+
+appVersion:
+typeof APP_SURUM!=="undefined"?APP_SURUM:"",
 
 createdAt:
 new Date().toISOString(),

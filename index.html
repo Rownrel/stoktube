@@ -6037,6 +6037,10 @@ font-size:11.5px;font-weight:700;color:#475569;letter-spacing:.01em;line-height:
   body.op-on .ope-qdt .dt .is-firma{max-width:110px}
 }
 
+/* Takip ekranı stok listesi: kalite/kalınlık etiketleri satıra sığsın */
+.vw-sub2.vw-kal{margin-top:5px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.vw-sub2.vw-kal .kal-etiket,.vw-sub2.vw-kal .et-etiket{font-size:11px;padding:1px 8px}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -22729,9 +22733,11 @@ return '<tr'+(stok<=0?' class="vw-yokrow"':'')+'>'+
 '<td><div class="vw-stat '+ikon+'">'+(stok>0?VIEWER_TIK:VIEWER_CARPI)+'</div></td>'+
 '<td><div class="vw-name"><i class="vw-dot '+viewerTipSinifi(p.type)+'"></i>'+
 escapeHTML(String(p.type||"")+" "+String(p.size||""))+'</div>'+
-'<div class="vw-sub2">'+escapeHTML(
-[formatThickness(p.thickness),p.quality]
-.filter(Boolean).join(" · "))+'</div></td>'+
+'<div class="vw-sub2 vw-kal">'+
+(typeof kalEtHtml==="function"
+?[kalEtHtml(p.thickness),kalKaliteHtml(p.quality)].filter(Boolean).join(" ")
+:escapeHTML([formatThickness(p.thickness),p.quality].filter(Boolean).join(" · ")))+
+'</div></td>'+
 viewerBoyHucresi(p)+
 '<td class="num"><span class="vw-big"'+(stok<=0?' style="color:#b91c1c"':'')+'>'+stok+'</span></td>'+
 '<td class="num vw-muted">'+(ayrilan>0?ayrilan:"—")+'</td>'+

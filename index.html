@@ -5189,17 +5189,7 @@ body.planner-on.planner-stock-open #jobPlanModal>.jobplan-modal-box>.modal-butto
 }
 
 /* Planlamacı tam ekran kabuğunun üstünde mevcut modül pencereleri görünür kalsın. */
-body.planner-on #priceModal,
-body.planner-on #maintenanceModal,
-body.planner-on #maintenancePasswordModal,
-body.planner-on #errorCodeModal,
-body.planner-on #consumablesModal,
-body.planner-on #consumableMovementModal,
-body.planner-on #purchaseImportModal,
-body.planner-on #productModal,
-body.planner-on #movementModal,
-body.planner-on #reservationModal,
-body.planner-on #settingsModal{z-index:15900}
+body.planner-on .modal:not(#jobPlanModal){z-index:15900}
 
 @media(max-width:1180px){
   .planner-corp-nav{display:flex !important;overflow-x:auto;scrollbar-width:none}
@@ -6182,7 +6172,7 @@ background:#0f766e;color:#fff;border-color:#0f766e
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.65</div>
+      <div class="page-login-surum">Tube.1.0.66</div>
     </section>
   </div>
 </div>
@@ -6193,7 +6183,7 @@ background:#0f766e;color:#fff;border-color:#0f766e
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.65</small>
+<small class="app-surum">Tube.1.0.66</small>
 </h1>
 
 <div class="backup-area">
@@ -7310,7 +7300,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.65</div>
+  <div class="planner-corp-surum">Tube.1.0.66</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8068,7 +8058,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.65</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.66</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8122,7 +8112,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.65</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.66</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8136,7 +8126,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.65</div>
+<div class="ope-surum">Tube.1.0.66</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8572,7 +8562,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.65";
+const APP_SURUM = "Tube.1.0.66";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 

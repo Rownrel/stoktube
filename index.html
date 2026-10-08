@@ -6096,6 +6096,16 @@ color:#334155;cursor:pointer
 .jobplan-stokkart.elle{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
 .jobplan-stokkart optgroup{font-size:11px;color:#64748b}
 
+/* ---------- SEVKİYAT ----------
+   Biten iş sevk edilene kadar takipte kalır. "Sevk Bekleyenler" listesinden
+   işaretlenip "Sevk Edilenler" listesine düşer. */
+.jobplan-mini.sevk{
+background:#0f766e;color:#fff;border-color:#0f766e
+}
+.jobplan-mini.sevk:hover{background:#115e59;border-color:#115e59}
+.jobplan-sevk-toggle{margin-top:10px}
+.vw-pill.sevk{background:#ccfbf1;color:#0f766e}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6172,7 +6182,7 @@ color:#334155;cursor:pointer
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.63</div>
+      <div class="page-login-surum">Tube.1.0.65</div>
     </section>
   </div>
 </div>
@@ -6183,7 +6193,7 @@ color:#334155;cursor:pointer
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.63</small>
+<small class="app-surum">Tube.1.0.65</small>
 </h1>
 
 <div class="backup-area">
@@ -6903,6 +6913,25 @@ disabled
 </div>
 </div>
 
+
+<!-- SEVK ONAY MODALI -->
+<div class="modal" id="jobPlanSevkModal">
+<div class="modal-box" style="max-width:520px">
+<h2>🚚 Sevk Edildi İşaretle</h2>
+<div class="notice" id="jobPlanSevkInfo"></div>
+<div class="form-grid">
+<div class="form-group">
+<label>İrsaliye / Not (isteğe bağlı)</label>
+<input id="jobPlanSevkNot" type="text" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="İrsaliye no veya not" placeholder="Örn: İrsaliye 2026/4812 · Kendi aracımız">
+</div>
+</div>
+<div class="modal-buttons">
+<button type="button" class="btn-gray" onclick="jobPlanSevkKapat()">Vazgeç</button>
+<button type="button" class="btn-green" onclick="jobPlanSevkKaydet()">Sevk Edildi</button>
+</div>
+</div>
+</div>
+
 <!-- 6 M PROFİL REZERVASYON MODALI -->
 <div class="modal" id="reservationModal">
 <div class="modal-box" style="max-width:560px">
@@ -7281,7 +7310,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.63</div>
+  <div class="planner-corp-surum">Tube.1.0.65</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7527,7 +7556,7 @@ onchange="jobPlanSetClampM(this.value)">
 
 <button type="button" class="jobplan-done-toggle" onclick="jobPlanToggleDone()">
 <span class="jobplan-caret" id="jobPlanDoneCaret">►</span>
-<span>✅ Tamamlananlar</span>
+<span>📦 Sevk Bekleyenler</span>
 <span class="movement-count" id="jobPlanDoneCount">0 kayıt</span>
 </button>
 
@@ -7545,11 +7574,38 @@ onchange="jobPlanSetClampM(this.value)">
 </tr>
 </thead>
 <tbody id="jobPlanDoneBody">
-<tr><td colspan="7" class="jobplan-empty">Tamamlanmış iş yok.</td></tr>
+<tr><td colspan="7" class="jobplan-empty">Sevk bekleyen iş yok.</td></tr>
 </tbody>
 </table>
 </div>
 </div>
+
+<button type="button" class="jobplan-done-toggle jobplan-sevk-toggle" onclick="jobPlanToggleSevk()">
+<span class="jobplan-caret" id="jobPlanSevkCaret">►</span>
+<span>🚚 Sevk Edilenler</span>
+<span class="movement-count" id="jobPlanSevkCount">0 kayıt</span>
+</button>
+
+<div id="jobPlanSevkWrap" style="display:none">
+<div class="jobplan-table-wrap">
+<table class="jobplan-table">
+<thead>
+<tr>
+<th>DT</th>
+<th>Dosya</th>
+<th>Bitiş</th>
+<th>Sevk</th>
+<th>İrsaliye / Not</th>
+<th style="width:110px">İşlem</th>
+</tr>
+</thead>
+<tbody id="jobPlanSevkBody">
+<tr><td colspan="6" class="jobplan-empty">Sevk edilen iş yok.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
 
 </div>
 
@@ -8012,7 +8068,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.63</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.65</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8066,7 +8122,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.63</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.65</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8080,7 +8136,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.63</div>
+<div class="ope-surum">Tube.1.0.65</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8516,7 +8572,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.63";
+const APP_SURUM = "Tube.1.0.65";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -19322,12 +19378,13 @@ return rows.join("");
 
 let doneBody=document.getElementById("jobPlanDoneBody");
 if(doneBody){
-let done=jobPlanDoneJobs().filter(jobPlanMatchesSearch);
+let done=(typeof jobPlanSevkBekleyen==="function"
+?jobPlanSevkBekleyen():jobPlanDoneJobs()).filter(jobPlanMatchesSearch);
 jobPlanRenderDoneHead(done.length);
 
 if(!done.length){
 doneBody.innerHTML='<tr><td colspan="6" class="jobplan-empty">'+
-(jobPlanSearch?"Aramaya uyan tamamlanmış iş yok.":"Tamamlanmış iş yok.")+'</td></tr>';
+(jobPlanSearch?"Aramaya uyan sevk bekleyen iş yok.":"Sevk bekleyen iş yok.")+'</td></tr>';
 }
 else{
 doneBody.innerHTML=done.map(job=>{
@@ -19348,13 +19405,16 @@ return '<tr>'+
 :'')+'</td>'+
 '<td class="jobplan-termin">'+jobPlanFormatDateTime(job.completedAt)+
 (jobPlanJobWorkers(job)?'<div class="jobplan-sub">'+escapeHTML(jobPlanJobWorkers(job))+'</div>':'')+'</td>'+
-'<td>'+(jobPlanAllows("isplani.duzenle")
-?'<button type="button" class="jobplan-mini undo" onclick="jobPlanReopenJob(\''+job.id+'\')">Geri Al</button>'
+'<td>'+(typeof jobPlanSevkDugmesi==="function"?jobPlanSevkDugmesi(job):"")+
+(jobPlanAllows("isplani.duzenle")
+?' <button type="button" class="jobplan-mini undo" onclick="jobPlanReopenJob(\''+job.id+'\')">Geri Al</button>'
 :'')+'</td>'+
 '</tr>';
 }).join("");
 }
 }
+
+if(typeof jobPlanRenderSevk==="function")jobPlanRenderSevk();
 
 /* Yeni oluşan kutular ekran klavyesi tercihine uysun. */
 if(typeof updateInputModes==="function")updateInputModes();
@@ -20806,7 +20866,8 @@ items:[
 {key:"isplani.sure",label:"Süre, ek %, başlangıç ve termin",hint:"Bu sütunlar gizlenir"},
 {key:"isplani.duzenle",label:"Sıra değiştir, kaldır, geri al"},
 {key:"isplani.calistir",label:"Başlat / Durakla / Bitir"},
-{key:"isplani.stok",label:"Stok sütunu ve müşteri malzemesi kutusu"}
+{key:"isplani.stok",label:"Stok sütunu ve müşteri malzemesi kutusu"},
+{key:"isplani.sevk",label:"Sevk edildi işareti",hint:"Biten işi sevk edildi olarak işaretler ve geri alır"}
 ]
 },
 {
@@ -20888,7 +20949,7 @@ if(currentUser.role==="planlamaci"){
 const plannerRequired=new Set([
 "bolum.fiyat","bolum.bakim","bakim.duzenle","bolum.sarf","bolum.hatakodu","bolum.isplani",
 "stok.ozet","stok.kart","stok.hareketgor","stok.hareket","stok.ayir","stok.ayirkaldir","stok.excel","stok.alis",
-"isplani.ozet","isplani.ebat","isplani.vardiya","isplani.dosya","isplani.sure","isplani.duzenle","isplani.calistir","isplani.stok",
+"isplani.ozet","isplani.ebat","isplani.vardiya","isplani.dosya","isplani.sure","isplani.duzenle","isplani.calistir","isplani.stok","isplani.sevk",
 "hatakodu.duzenle",
 "bolum.musteri","musteri.duzenle","mail.ayar"
 ]);
@@ -22548,7 +22609,8 @@ const VIEWER_PLAN_FILTRE=[
 {key:"hepsi",ad:"Tümü"},
 {key:"bekliyor",ad:"Bekliyor"},
 {key:"devam",ad:"Devam Ediyor"},
-{key:"bitti",ad:"Tamamlandı"}
+{key:"bitti",ad:"Tamamlandı"},
+{key:"sevk",ad:"Sevk Edildi"}
 ];
 
 function viewerSetPlanTab(tab){
@@ -22560,6 +22622,8 @@ viewerRenderPlan();
    bir dosyaya bile başlanmışsa devam ediyor, yoksa bekliyor. */
 function viewerDtDurumKodu(job){
 if(!job)return "bekliyor";
+/* Sevk edilen iş "tamamlandı"nın ötesinde ayrı bir aşama. */
+if(typeof jobPlanSevkEdildiMi==="function" && jobPlanSevkEdildiMi(job))return "sevk";
 if(job.status==="completed")return "bitti";
 
 let files=job.files||[];
@@ -22575,10 +22639,12 @@ return basladi?"devam":"bekliyor";
 }
 
 function viewerDtDurumAdi(kod){
+if(kod==="sevk")return "Sevk Edildi";
 return kod==="bitti"?"Tamamlandı":(kod==="devam"?"Devam Ediyor":"Bekliyor");
 }
 
 function viewerDtDurumSinifi(kod){
+if(kod==="sevk")return "sevk";
 return kod==="bitti"?"ok":(kod==="devam"?"run":"wait");
 }
 
@@ -22850,7 +22916,7 @@ return aktif.concat(biten);
 
 /* Süzgeç düğmelerindeki sayılar */
 function viewerPlanSayilar(){
-let sayi={hepsi:0,bekliyor:0,devam:0,bitti:0};
+let sayi={hepsi:0,bekliyor:0,devam:0,bitti:0,sevk:0};
 viewerTumIsler().forEach(job=>{
 sayi.hepsi++;
 sayi[viewerDtDurumKodu(job)]++;
@@ -23115,7 +23181,11 @@ html.push(
 '<td style="font-weight:800;color:#94a3b8">'+(index+1)+'</td>'+
 '<td colspan="4"><div class="vw-name"><span class="vw-caret">'+(acik?"▼":"►")+'</span>'+
 escapeHTML(String(job.dtNo||""))+
-(typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(job):"")+'</div></td>'+
+(typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(job):"")+'</div>'+
+(typeof jobPlanSevkEdildiMi==="function" && jobPlanSevkEdildiMi(job)
+?'<div class="vw-sub2">Sevk: '+escapeHTML(viewerTerminMetni(job.sevkAt).ana)+
+(job.sevkNot?' \u00b7 '+escapeHTML(String(job.sevkNot)):'')+'</div>'
+:'')+'</td>'+
 '<td>'+viewerDtDurumu(grup)+'</td>'+
 '</tr>'
 );
@@ -23698,8 +23768,10 @@ try{return jobPlanFileStockState(file).code==="yetersiz";}catch(e){return false;
 }
 
 function opDtDurum(job){
-if(typeof viewerDtDurumKodu==="function")return viewerDtDurumKodu(job);
-return "bekliyor";
+if(typeof viewerDtDurumKodu!=="function")return "bekliyor";
+let kod=viewerDtDurumKodu(job);
+/* Sevkiyat tezgâhı ilgilendirmez; orada iş bitmiştir. */
+return kod==="sevk"?"bitti":kod;
 }
 
 function opDtRozet(job){
@@ -28261,6 +28333,190 @@ file.productManual=!!yeni;
 
 if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
 if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
+}
+
+
+/* =====================================================
+   SEVKİYAT
+   İş bitince süreç kapanmıyor: sevk edilene kadar takip edilmesi gereken
+   bir aşama daha var. "Tamamlananlar" listesi artık SEVK BEKLEYENLER'i
+   gösterir; sevk işareti konan iş alttaki "Sevk Edilenler" listesine düşer.
+   Böylece asıl bakılacak liste kısa kalır, bekleyen iş gözden kaçmaz.
+
+   İşaretlemeyi yalnızca planlamacı ve yönetici yapar (isplani.sevk).
+   Takip ekranı durumu görür ama değiştiremez. Tezgâh ekranını ilgilendirmez.
+   Kayıtta: sevk tarihi, işaretleyen kişi, irsaliye/not.
+   Sevk DT bazındadır — dosya dosya değil.
+===================================================== */
+
+let jobPlanSevkOpen=false;
+let jobPlanSevkJobId=null;
+
+function jobPlanSevkEdildiMi(job){
+return !!(job && job.sevkAt);
+}
+
+/* Tamamlanmış ama henüz sevk edilmemiş işler. */
+function jobPlanSevkBekleyen(){
+return (typeof jobPlanDoneJobs==="function"?jobPlanDoneJobs():[])
+.filter(j=>!jobPlanSevkEdildiMi(j));
+}
+
+/* Sevk edilmiş işler — en son sevk edilen başta. */
+function jobPlanSevkEdilen(){
+return (typeof jobPlanDoneJobs==="function"?jobPlanDoneJobs():[])
+.filter(jobPlanSevkEdildiMi)
+.sort((a,b)=>(Number(b.sevkAt)||0)-(Number(a.sevkAt)||0));
+}
+
+function jobPlanSevkIzinli(){
+return typeof jobPlanAllows!=="function" || jobPlanAllows("isplani.sevk");
+}
+
+/* ---------- AÇ / KAPAT ---------- */
+
+function jobPlanToggleSevk(){
+jobPlanSevkOpen=!jobPlanSevkOpen;
+if(typeof jobPlanRender==="function")jobPlanRender();
+}
+
+function jobPlanRenderSevkHead(count){
+let caret=document.getElementById("jobPlanSevkCaret");
+if(caret)caret.textContent=jobPlanSevkOpen?"▼":"►";
+
+let badge=document.getElementById("jobPlanSevkCount");
+if(badge)badge.textContent=count+" kayıt";
+
+let wrap=document.getElementById("jobPlanSevkWrap");
+if(wrap)wrap.style.display=jobPlanSevkOpen?"block":"none";
+}
+
+/* ---------- SEVK PENCERESİ ---------- */
+
+function jobPlanSevkAc(jobId){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.sevk"))return;
+let job=jobPlanJobs.find(j=>j.id===jobId);
+if(!job)return;
+
+jobPlanSevkJobId=jobId;
+
+let bilgi=document.getElementById("jobPlanSevkInfo");
+if(bilgi){
+let firma=(typeof kalIsFirmasi==="function")?kalIsFirmasi(job):"";
+bilgi.innerHTML="<strong>"+escapeHTML(String(job.dtNo||""))+"</strong>"+
+(firma?" · "+escapeHTML(firma):"")+
+"<br><br>"+(job.files||[]).length+" dosya"+
+(job.completedAt && typeof jobPlanFormatDateTime==="function"
+?" · "+escapeHTML(jobPlanFormatDateTime(job.completedAt))+" tarihinde tamamlandı"
+:"");
+}
+
+let not=document.getElementById("jobPlanSevkNot");
+if(not)not.value="";
+
+let modal=document.getElementById("jobPlanSevkModal");
+if(modal)modal.style.display="flex";
+}
+
+function jobPlanSevkKapat(){
+if(typeof closeNumericKeypad==="function")closeNumericKeypad();
+let modal=document.getElementById("jobPlanSevkModal");
+if(modal)modal.style.display="none";
+jobPlanSevkJobId=null;
+}
+
+async function jobPlanSevkKaydet(){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.sevk"))return;
+
+let job=jobPlanJobs.find(j=>j.id===jobPlanSevkJobId);
+if(!job){jobPlanSevkKapat();return;}
+
+let not=document.getElementById("jobPlanSevkNot");
+
+job.sevkAt=Date.now();
+job.sevkBy=(typeof jobPlanWho==="function")?jobPlanWho():"";
+job.sevkNot=String(not?not.value:"").trim();
+
+jobPlanSevkKapat();
+/* Sevk edilen iş listeye düşsün, kapalıysa bile sayaç görünsün. */
+jobPlanSevkOpen=true;
+
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
+}
+
+async function jobPlanSevkKaldir(jobId){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.sevk"))return;
+
+let job=jobPlanJobs.find(j=>j.id===jobId);
+if(!job)return;
+
+if(!confirm("🚚 "+String(job.dtNo||"")+"\n\nSevk işareti kaldırılsın mı?\n"+
+"İş yeniden sevk bekleyenler listesine döner."))return;
+
+job.sevkAt=null;
+job.sevkBy="";
+job.sevkNot="";
+
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
+}
+
+/* ---------- SEVK EDİLENLER TABLOSU ---------- */
+
+function jobPlanSevkTarihMetni(job){
+if(!jobPlanSevkEdildiMi(job))return "—";
+let t=(typeof jobPlanFormatDateTime==="function")
+?jobPlanFormatDateTime(job.sevkAt):String(job.sevkAt);
+return escapeHTML(t)+
+(job.sevkBy?'<div class="jobplan-sub">'+escapeHTML(String(job.sevkBy))+'</div>':"");
+}
+
+function jobPlanRenderSevk(){
+let body=document.getElementById("jobPlanSevkBody");
+if(!body)return;
+
+let liste=jobPlanSevkEdilen();
+if(typeof jobPlanMatchesSearch==="function")liste=liste.filter(jobPlanMatchesSearch);
+
+jobPlanRenderSevkHead(liste.length);
+
+if(!liste.length){
+body.innerHTML='<tr><td colspan="6" class="jobplan-empty">'+
+((typeof jobPlanSearch!=="undefined" && jobPlanSearch)
+?"Aramaya uyan sevk edilmiş iş yok."
+:"Sevk edilen iş yok.")+'</td></tr>';
+return;
+}
+
+body.innerHTML=liste.map(job=>
+'<tr>'+
+'<td><strong>'+escapeHTML(String(job.dtNo||""))+'</strong>'+
+(typeof musDtEtiket==="function"
+?'<div style="margin:4px 0 0 -8px">'+musDtEtiket(job)+'</div>':'')+'</td>'+
+'<td>'+(job.files||[]).length+
+'<div class="jobplan-sub">'+(job.files||[])
+.map(f=>escapeHTML(String(f.fileName||""))).join("<br>")+'</div></td>'+
+'<td class="jobplan-termin">'+
+(typeof jobPlanFormatDateTime==="function"
+?escapeHTML(jobPlanFormatDateTime(job.completedAt)):"")+'</td>'+
+'<td class="jobplan-termin">'+jobPlanSevkTarihMetni(job)+'</td>'+
+'<td>'+(job.sevkNot
+?escapeHTML(String(job.sevkNot))
+:'<span class="jobplan-sub">—</span>')+'</td>'+
+'<td>'+(jobPlanSevkIzinli()
+?'<button type="button" class="jobplan-mini undo" '+
+'onclick="jobPlanSevkKaldir(\''+job.id+'\')">Sevki Geri Al</button>'
+:'')+'</td>'+
+'</tr>'
+).join("");
+}
+
+/* Tamamlananlar tablosundaki sevk düğmesi. */
+function jobPlanSevkDugmesi(job){
+if(!jobPlanSevkIzinli())return "";
+return '<button type="button" class="jobplan-mini sevk" '+
+'onclick="jobPlanSevkAc(\''+job.id+'\')">🚚 Sevk Edildi</button>';
 }
 
 

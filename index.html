@@ -6186,7 +6186,7 @@ box-shadow:0 1px 0 #e2e8f0
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.68</div>
+      <div class="page-login-surum">Tube.1.0.70</div>
     </section>
   </div>
 </div>
@@ -6197,7 +6197,7 @@ box-shadow:0 1px 0 #e2e8f0
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.68</small>
+<small class="app-surum">Tube.1.0.70</small>
 </h1>
 
 <div class="backup-area">
@@ -7314,7 +7314,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.68</div>
+  <div class="planner-corp-surum">Tube.1.0.70</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8072,7 +8072,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.68</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.70</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8126,7 +8126,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.68</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.70</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8140,7 +8140,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.68</div>
+<div class="ope-surum">Tube.1.0.70</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8576,7 +8576,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.68";
+const APP_SURUM = "Tube.1.0.70";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -17442,9 +17442,12 @@ if(file.status==="basladi")calisan={job:job,file:file};
 
 if(calisan){
 let started=Number(calisan.file.startedAt);
-let from=Number.isFinite(started)?started:cursor;
+let simdi=Date.now();
+/* Kalan iş geriye dönük yapılamaz: bitiş tahmini şimdiden ileriye kurulur.
+   Başlangıç saati olduğu gibi kalır — iş gerçekten o saatte başladı. */
+let from=Math.max(Number.isFinite(started)?started:cursor,simdi);
 let result=jobPlanAddWorkSeconds(from,jobPlanFileRemainingSeconds(calisan.job,calisan.file));
-calisan.file.planStart=result.start;
+calisan.file.planStart=Number.isFinite(started)?started:result.start;
 calisan.file.planEnd=result.end;
 if(result.end && result.end>cursor)cursor=result.end;
 }
@@ -23079,15 +23082,17 @@ let kalanSn=0;
 if(typeof jobPlanFileRemainingSeconds==="function"){
 try{kalanSn=jobPlanFileRemainingSeconds(calisan.job,file)||0;}catch(e){}
 }
-let kalan=typeof jobPlanFormatDuration==="function"&&kalanSn>0
-?jobPlanFormatDuration(kalanSn):"—";
+let kalanGoster=(typeof kalanSureGosterim==="function")
+?kalanSureGosterim(kalanSn):kalanSn;
+let kalan=typeof jobPlanFormatDuration==="function"&&kalanGoster>0
+?jobPlanFormatDuration(kalanGoster):"—";
 
-let bitis=typeof jobPlanFormatDateTime==="function"&&file.planEnd
-?viewerTerminMetni(file.planEnd):null;
-let bitisMetni=file.planEnd
+let bitisMetni=(typeof bitisSaatiMetni==="function")
+?bitisSaatiMetni(kalanSn)
+:(file.planEnd
 ?String(new Date(file.planEnd).getHours()).padStart(2,"0")+":"+
 String(new Date(file.planEnd).getMinutes()).padStart(2,"0")
-:"—";
+:"—");
 
 box.innerHTML=
 '<div class="vw-now">'+
@@ -23590,10 +23595,15 @@ if(typeof jobPlanFileRemainingSeconds==="function"){
 try{kalanSn=jobPlanFileRemainingSeconds(aktif.job,file)||0;}catch(e){}
 }
 
-let bitis=Number(file.planEnd)
+let kalanGoster=(typeof kalanSureGosterim==="function")
+?kalanSureGosterim(kalanSn):kalanSn;
+
+let bitis=(typeof bitisSaatiMetni==="function")
+?bitisSaatiMetni(kalanSn)
+:(Number(file.planEnd)
 ?String(new Date(file.planEnd).getHours()).padStart(2,"0")+":"+
 String(new Date(file.planEnd).getMinutes()).padStart(2,"0")
-:"—";
+:"—");
 
 let ilerlemeMetni=a.yapilanTam+" / "+a.tam+" boy"+
 (a.parcaVar?" + "+opSayi(a.parcaM)+" m parça":"");
@@ -23627,7 +23637,7 @@ box.innerHTML=
 (Number(file.startedAt)?String(new Date(file.startedAt).getHours()).padStart(2,"0")+":"+
 String(new Date(file.startedAt).getMinutes()).padStart(2,"0"):"—")+'</div></div>'+
 '<div class="ope-jstat"><div class="k">Kalan</div>'+
-'<div class="v">'+(kalanSn>0?opSure(kalanSn):"—")+'</div>'+
+'<div class="v">'+(kalanGoster>0?opSure(kalanGoster):"—")+'</div>'+
 '<div class="s">bitiş '+bitis+'</div></div>'+
 '</div>'+
 
@@ -28604,6 +28614,46 @@ return '<button type="button" class="jobplan-mini sevk" '+
 
 function dosyaAdiSade(ad){
 return String(ad||"").replace(/\.(html?|HTML?)$/,"");
+}
+
+/* ---------- KALAN SÜRE ALT SINIRI ----------
+   Kalan süre 10 dakikanın altına inince küçük bir sayı göstermek yanıltıyor:
+   "2 dk kaldı" diyen iş; mola, ayar, boy değişimi ya da sıradaki kuruluma
+   takılıp çok daha uzun sürebiliyor. Kullanıcının kararı: altına düşünce
+   tahmini en az 10 dakika yaz.
+
+   Yalnızca GÖSTERİM içindir. Plan motoru (terminler, kuyruk sırası) gerçek
+   süreyle hesaplamaya devam eder — yoksa her iş en az 10 dakika sayılır ve
+   kuyruk şişerdi. */
+
+const KALAN_ALT_SINIR_SN=600;
+
+function kalanSureGosterim(saniye){
+let n=Number(saniye)||0;
+if(!(n>0))return 0;
+return n<KALAN_ALT_SINIR_SN?KALAN_ALT_SINIR_SN:n;
+}
+
+/* Karttaki bitiş saati, kartta yazan kalan süreyle aynı olmalı.
+   Mola ve vardiya sonu hesaba katılsın diye plan motorunun kendi
+   fonksiyonu kullanılır. */
+function bitisTahminiMs(saniye){
+let n=kalanSureGosterim(saniye);
+if(!(n>0))return null;
+if(typeof jobPlanAddWorkSeconds==="function"){
+try{
+let r=jobPlanAddWorkSeconds(Date.now(),n);
+if(r && r.end)return r.end;
+}catch(e){}
+}
+return Date.now()+n*1000;
+}
+
+function bitisSaatiMetni(saniye){
+let ms=bitisTahminiMs(saniye);
+if(!ms)return "—";
+let d=new Date(ms);
+return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
 }
 
 

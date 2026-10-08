@@ -6083,6 +6083,19 @@ border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;text-align:ce
   body.op-on .ope-kilit-not{font-size:10.5px;padding:6px 9px;margin-bottom:7px}
 }
 
+/* ---------- PLAN SATIRINDA STOK KARTI SEÇİCİ ----------
+   Çizim Ø48.3 derken kart Ø48 olabiliyor; doğru kart elle seçilsin. */
+.jobplan-stokkart{
+display:block;width:100%;max-width:290px;margin:6px 0 2px;
+border:1px solid #cbd5e1;border-radius:7px;background:#fff;
+padding:4px 7px;font-family:inherit;font-size:11px;font-weight:700;
+color:#334155;cursor:pointer
+}
+.jobplan-stokkart:hover{border-color:#94a3b8}
+.jobplan-stokkart.bos{border-color:#fca5a5;background:#fef2f2;color:#b91c1c}
+.jobplan-stokkart.elle{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
+.jobplan-stokkart optgroup{font-size:11px;color:#64748b}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6159,7 +6172,7 @@ border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;text-align:ce
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.62</div>
+      <div class="page-login-surum">Tube.1.0.63</div>
     </section>
   </div>
 </div>
@@ -6170,7 +6183,7 @@ border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;text-align:ce
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.62</small>
+<small class="app-surum">Tube.1.0.63</small>
 </h1>
 
 <div class="backup-area">
@@ -7268,7 +7281,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.62</div>
+  <div class="planner-corp-surum">Tube.1.0.63</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7999,7 +8012,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.62</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.63</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8053,7 +8066,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.62</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.63</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8067,7 +8080,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.62</div>
+<div class="ope-surum">Tube.1.0.63</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8503,7 +8516,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.62";
+const APP_SURUM = "Tube.1.0.63";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -9753,7 +9766,9 @@ return;
 }
 let key=String(product.id);
 if(!Array.isArray(standardReservations[key]))standardReservations[key]=[];
-standardReservations[key].push(createReservation(quantity,note));
+let elleAyirma=createReservation(quantity,note);
+elleAyirma.source="elle";
+standardReservations[key].push(elleAyirma);
 persistStandardReservations();
 closeReservationModal();
 showProducts();
@@ -17151,6 +17166,9 @@ planNotes.add(jobPlanReservationNote(job));
 Object.keys(standardReservations).forEach(pid=>{
 let list=standardReservations[pid]||[];
 let keep=list.filter(r=>{
+/* Elle açılan ayırmaya dokunma. Notu bir DT numarasıyla aynı olsa bile
+   (kullanıcı zaten o iş için ayırıyor) planın onu silme hakkı yok. */
+if(String(r.source||"")!=="jobplan")return true;
 if(!planNotes.has(String(r.note)))return true;
 return !!(claimed[pid] && claimed[pid].has(String(r.id)));
 });
@@ -19274,7 +19292,8 @@ file.status==="durakladi"?"paused":"")+'">'+
 '<td class="jp-c-stok '+stockClass+'">'+escapeHTML(stock.text)+
 (jobPlanPartialText(file)?'<div class="jobplan-sub">'+escapeHTML(jobPlanPartialText(file))+'</div>':'')+
 (file.status!=="bitti"
-?'<label class="jobplan-customer">'+
+?(typeof jobPlanStokSeciciHtml==="function"?jobPlanStokSeciciHtml(job,file):"")+
+'<label class="jobplan-customer">'+
 '<input type="checkbox" '+(file.customerMaterial?"checked":"")+
 ' onchange="jobPlanSetCustomerMaterial('+ref+',this.checked)">'+
 '<span>Müşteri Malzemesi</span>'+
@@ -28142,6 +28161,106 @@ function kalFirmaAramaAnahtari(job,norm){
 let ad=kalIsFirmasi(job);
 if(!ad)return [];
 try{return [String(norm(ad)).replace(/\s+/g,"")];}catch(e){return [];}
+}
+
+
+/* =====================================================
+   PLAN SATIRINDAN STOK KARTI SEÇİMİ
+   Çizimdeki ölçü ile stok kartındaki ölçü her zaman birebir yazılmıyor:
+   çizim Ø48.3 derken depodaki kart Ø48 olabiliyor (aynı boru). Otomatik
+   eşleştirme ölçüyü birebir aradığı için böyle durumlarda kart bulunamıyor,
+   iş "stok yetersiz" kalıyor ve stoktan düşülemiyordu.
+
+   Çözüm: planlamacı iş planı satırında doğru kartı kendisi seçebilsin.
+   Seçenekler iki grupta sunulur — ölçüsü birebir uyanlar ve aynı et
+   kalınlığı/boydaki diğer kartlar (ölçüce en yakın olan başta).
+===================================================== */
+
+/* Ø48 ile Ø48.3 yan yana gelsin diye sayısal ölçü farkı. */
+function jobPlanOlcuFarki(file,p){
+let a=parseFloat(String((file && file.size && file.size.sizeText)||"")
+.replace(",",".").replace(/[^0-9.]/g,""));
+let b=parseFloat(String((p && p.size)||"").replace(",",".").replace(/[^0-9.]/g,""));
+if(!Number.isFinite(a) || !Number.isFinite(b))return 9999;
+return Math.abs(a-b);
+}
+
+function jobPlanStokSecenekleri(file){
+if(!file || !file.size)return {uygun:[],yakin:[]};
+
+let uygun=(typeof jobPlanProductCandidates==="function")
+?jobPlanProductCandidates(file.size,file.rawLengthMm):[];
+let uygunIds=new Set(uygun.map(p=>String(p.id)));
+
+let istenenEt=Number(file.size.thickness);
+let istenenBoy=jobPlanRawLengthM(file.rawLengthMm);
+let istenenTip=String(file.size.type||"");
+
+/* Aynı tip, aynı et kalınlığı, aynı boy — ölçü yazımı farklı olabilir. */
+let yakin=(Array.isArray(products)?products:[]).filter(p=>{
+if(uygunIds.has(String(p.id)))return false;
+if(istenenTip && String(p.type||"")!==istenenTip)return false;
+let t=parseFloat(String(p.thickness||"").replace(",","."));
+if(!Number.isFinite(t) || Math.abs(t-istenenEt)>=0.01)return false;
+return Math.abs(parseLength(p.length)-istenenBoy)<0.005;
+})
+.sort((a,b)=>{
+let fa=jobPlanOlcuFarki(file,a),fb=jobPlanOlcuFarki(file,b);
+if(fa!==fb)return fa-fb;
+return Number(b.stock||0)-Number(a.stock||0);
+});
+
+return {uygun:uygun,yakin:yakin};
+}
+
+function jobPlanStokSeciciHtml(job,file){
+if(!file || file.status==="bitti" || file.customerMaterial)return "";
+if(typeof jobPlanAllows==="function" && !jobPlanAllows("isplani.stok"))return "";
+
+let s=jobPlanStokSecenekleri(file);
+if(!s.uygun.length && !s.yakin.length)return "";
+
+let secili=String(file.productId||"");
+let secenek=function(p){
+return '<option value="'+escapeHTML(String(p.id))+'"'+
+(secili===String(p.id)?" selected":"")+'>'+
+escapeHTML(jobPlanProductLabel(p))+'</option>';
+};
+
+return '<select class="jobplan-stokkart'+(file.productManual?" elle":"")+
+(secili?"":" bos")+'" '+
+'onclick="event.stopPropagation()" '+
+'onchange="jobPlanSetFileProduct(\''+job.id+'\',\''+file.id+'\',this.value)" '+
+'title="Bu dosyanın düşeceği stok kartı">'+
+'<option value="">— stok kartı seçilmedi —</option>'+
+(s.uygun.length
+?'<optgroup label="Ölçüsü birebir uyan">'+s.uygun.map(secenek).join("")+'</optgroup>'
+:'')+
+(s.yakin.length
+?'<optgroup label="Aynı et kalınlığı ve boy · ölçü yazımı farklı">'+
+s.yakin.map(secenek).join("")+'</optgroup>'
+:'')+
+'</select>';
+}
+
+async function jobPlanSetFileProduct(jobId,fileId,productId){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.stok"))return;
+
+let job=jobPlanJobs.find(j=>j.id===jobId);
+let file=job && job.files ? job.files.find(f=>f.id===fileId) : null;
+if(!file)return;
+
+let yeni=String(productId||"");
+if(String(file.productId||"")===yeni)return;
+
+/* Eski karttaki ayırma bırakılır; yenisini jobPlanSyncReservations kurar. */
+if(typeof jobPlanRemoveReservation==="function")jobPlanRemoveReservation(file);
+
+file.productId=yeni;
+file.productManual=!!yeni;
+
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveJobs==="function")await jobPlanSaveJobs();
 }
 
 

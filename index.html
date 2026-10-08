@@ -6096,6 +6096,20 @@ background:#0f766e;color:#fff;border-color:#0f766e
 .jobplan-sevk-toggle{margin-top:10px}
 .vw-pill.sevk{background:#ccfbf1;color:#0f766e}
 
+/* ---------- TAKİP: ÜST ŞERİT SABİT ----------
+   Aşağı kaydırınca "Ana Sayfa" düğmesi ekrandan çıkıyordu; geri dönmek için
+   en yukarı çıkmak gerekiyordu. Sayfa şeridi artık tepeye yapışık kalır. */
+.vw-sub{
+position:sticky;top:0;z-index:5;
+box-shadow:0 1px 0 #e2e8f0
+}
+
+/* ---------- TAKİP: DT GRUPLARI AYRIŞSIN ----------
+   Açık bir DT'nin dosyaları bitip yeni DT başlarken sınır belli olmuyordu. */
+.vw-tbl tbody tr.vw-dosya + tr.vw-dt td{border-top:3px solid #cbd5e1}
+.vw-tbl tbody tr.vw-dosya td:first-child{box-shadow:inset 4px 0 0 #94a3b8}
+.vw-tbl tbody tr.vw-dt.acik td{border-bottom-color:#cbd5e1}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6172,7 +6186,7 @@ background:#0f766e;color:#fff;border-color:#0f766e
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.66</div>
+      <div class="page-login-surum">Tube.1.0.68</div>
     </section>
   </div>
 </div>
@@ -6183,7 +6197,7 @@ background:#0f766e;color:#fff;border-color:#0f766e
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.66</small>
+<small class="app-surum">Tube.1.0.68</small>
 </h1>
 
 <div class="backup-area">
@@ -7300,7 +7314,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.66</div>
+  <div class="planner-corp-surum">Tube.1.0.68</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8058,7 +8072,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.66</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.68</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8112,7 +8126,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.66</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.68</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8126,7 +8140,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.66</div>
+<div class="ope-surum">Tube.1.0.68</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8562,7 +8576,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.66";
+const APP_SURUM = "Tube.1.0.68";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -18049,11 +18063,12 @@ stockCell=customerToggle+
 }
 else{
 let options='<select class="jobplan-select" onchange="jobPlanImportSetProduct(\''+f.rowId+'\',this.value)">'+
-f.candidates.map(p=>
+(typeof jobPlanImportKartSecenekleri==="function"
+?jobPlanImportKartSecenekleri(f)
+:f.candidates.map(p=>
 '<option value="'+p.id+'" '+(String(p.id)===String(f.productId)?"selected":"")+'>'+
 escapeHTML(jobPlanProductLabel(p))+
-'</option>'
-).join("")+
+'</option>').join(""))+
 '<option value="" '+(f.productId?"":"selected")+'>+ Yeni stok kartı aç</option>'+
 '</select>';
 
@@ -23080,7 +23095,7 @@ box.innerHTML=
 '<div class="vw-live"><i></i>Şu an tezgâhta</div>'+
 '<div class="vw-now-dt">'+escapeHTML(String(calisan.job.dtNo||""))+
 (typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(calisan.job,true):"")+'</div>'+
-'<div class="vw-now-file">'+escapeHTML(String(file.fileName||""))+
+'<div class="vw-now-file">'+escapeHTML(dosyaAdiSade(file.fileName))+
 (file.size?' · '+escapeHTML(file.size.sizeText)+" "+(typeof kalEtHtml==="function"?kalEtHtml(file.size.thickness):escapeHTML(formatThickness(file.size.thickness)))+(file.quality&&typeof kalKaliteHtml==="function"?" "+kalKaliteHtml(file.quality):""):'')+
 '</div>'+
 '</div>'+
@@ -23188,7 +23203,7 @@ html.push(
 '<tr class="vw-dosya"'+(file.status==="basladi"?' style="background:#f0fdfa"':
 (viewerStokSorunu(file)?' style="background:#fef2f2"':''))+'>'+
 '<td></td>'+
-'<td><div class="vw-dosya-ad">'+escapeHTML(String(file.fileName||""))+'</div></td>'+
+'<td><div class="vw-dosya-ad">'+escapeHTML(dosyaAdiSade(file.fileName))+'</div></td>'+
 '<td>'+viewerMalzemeMetni(file)+'</td>'+
 '<td>'+viewerIlerleme(file)+'</td>'+
 '<td>'+escapeHTML(fTermin.ana)+
@@ -23543,7 +23558,7 @@ box.innerHTML=
 ?'<div class="ope-bnext"><div class="n">1</div><div class="t">'+
 '<b>'+escapeHTML(String(sira.job.dtNo||""))+
 (typeof kalFirmaRozeti==="function"?" "+kalFirmaRozeti(sira.job):"")+'</b>'+
-'<span>'+escapeHTML(String(sira.file.fileName||""))+' · '+opMalzemeMetni(sira.file)+'</span>'+
+'<span>'+escapeHTML(dosyaAdiSade(sira.file.fileName))+' · '+opMalzemeMetni(sira.file)+'</span>'+
 '</div></div>'+
 (opCan("isplani.calistir")
 ?'<button type="button" class="ope-big start'+(opKilitli()?" kilit":"")+'" style="width:100%" '+
@@ -23592,7 +23607,7 @@ box.innerHTML=
 '<div class="ope-jdt">'+escapeHTML(String(aktif.job.dtNo||""))+'</div>'+
 (typeof kalFirmaRozeti==="function"&&kalIsFirmasi(aktif.job)
 ?'<div class="ope-jfirma">'+kalFirmaRozeti(aktif.job)+'</div>':"")+
-'<div class="ope-jfile">'+escapeHTML(String(file.fileName||""))+'</div>'+
+'<div class="ope-jfile">'+escapeHTML(dosyaAdiSade(file.fileName))+'</div>'+
 '</div>'+
 '<div class="ope-jright">'+
 '<div class="ope-jmat">'+opMalzemeMetni(file)+'</div>'+
@@ -23859,7 +23874,7 @@ html.push(
 '<div class="ope-qfile'+(basladi?" calisiyor":"")+'"'+
 (opStokSorunu(file)?' style="background:#fef2f2"':'')+'>'+
 '<div class="fi">'+
-'<div class="fn">'+escapeHTML(String(file.fileName||""))+'</div>'+
+'<div class="fn">'+escapeHTML(dosyaAdiSade(file.fileName))+'</div>'+
 '<div class="fm">'+opMalzemeMetni(file)+' · '+a.yapilanTam+' / '+a.tam+' boy'+
 (file.customerMaterial?' <span class="ope-customer-material">Müşteri Malzemesi</span>':'')+
 (a.parcaVar?" + "+opSayi(a.parcaM)+" m parça":"")+
@@ -28227,18 +28242,23 @@ try{return [String(norm(ad)).replace(/\s+/g,"")];}catch(e){return [];}
 
 
 /* =====================================================
-   PLAN SATIRINDAN STOK KARTI SEÇİMİ
-   Çizimdeki ölçü ile stok kartındaki ölçü her zaman birebir yazılmıyor:
-   çizim Ø48.3 derken depodaki kart Ø48 olabiliyor (aynı boru). Otomatik
-   eşleştirme ölçüyü birebir aradığı için böyle durumlarda kart bulunamıyor,
-   iş "stok yetersiz" kalıyor ve stoktan düşülemiyordu.
+   STOK KARTI SEÇİMİ — ÇİZİM İLE DEPO BİREBİR TUTMUYOR
+   TruTops çizimindeki ölçü ile depodaki stok kartı her zaman aynı yazılmıyor:
 
-   Çözüm: planlamacı iş planı satırında doğru kartı kendisi seçebilsin.
-   Seçenekler iki grupta sunulur — ölçüsü birebir uyanlar ve aynı et
-   kalınlığı/boydaki diğer kartlar (ölçüce en yakın olan başta).
+     · çizim Ø48.3  →  kart Ø48          (aynı boru, atölyede 48 denir)
+     · çizim 3.2 mm →  kart 3 mm         (aynı sac, çizim nominal veriyor)
+
+   Otomatik eşleştirme ölçüyü de et kalınlığını da birebir aradığı için böyle
+   durumlarda kart bulunamıyor; iş "stok yetersiz" kalıyor, stoktan düşmüyor ve
+   boşuna yeni kart açılıyordu. Çizimi baştan değiştirmek daha zor olduğu için
+   doğru kartı kullanıcı seçiyor.
+
+   Otomatik tolerans BİLEREK konmadı: 3 ile 3.2'yi kendiliğinden eşleştirmek
+   başka yerlerde sessizce yanlış karta düşmek demek. Onun yerine seçenekler
+   iki grupta sunulur ve hangi ölçünün farklı olduğu etiketin sonunda yazar.
 ===================================================== */
 
-/* Ø48 ile Ø48.3 yan yana gelsin diye sayısal ölçü farkı. */
+/* Sayısal ölçü farkı — Ø48 ile Ø48.3 yan yana gelsin diye. */
 function jobPlanOlcuFarki(file,p){
 let a=parseFloat(String((file && file.size && file.size.sizeText)||"")
 .replace(",",".").replace(/[^0-9.]/g,""));
@@ -28247,6 +28267,39 @@ if(!Number.isFinite(a) || !Number.isFinite(b))return 9999;
 return Math.abs(a-b);
 }
 
+function jobPlanEtSayisi(deger){
+let n=parseFloat(String(deger||"").replace(",","."));
+return Number.isFinite(n)?n:NaN;
+}
+
+/* Kartın hangi yönden farklı olduğu — etikette gösterilir. */
+function jobPlanKartFarki(file,p){
+let s=file && file.size ? file.size : null;
+if(!s)return {olcu:false,et:false,kalite:false,sayi:0};
+
+let olcu=normalizeText(p.size)!==normalizeText(s.sizeText);
+
+let kartEt=jobPlanEtSayisi(p.thickness);
+let istenenEt=Number(s.thickness);
+let et=!(Number.isFinite(kartEt) && Math.abs(kartEt-istenenEt)<0.01);
+
+let istenenKalite=normalizeQuality(String(s.quality||""));
+let kalite=!!istenenKalite && normalizeQuality(p.quality)!==istenenKalite;
+
+return {olcu:olcu,et:et,kalite:kalite,sayi:(olcu?1:0)+(et?1:0)};
+}
+
+function jobPlanFarkMetni(fark){
+let parcalar=[];
+if(fark.olcu)parcalar.push("ölçü");
+if(fark.et)parcalar.push("et");
+if(fark.kalite)parcalar.push("kalite");
+return parcalar.length?" ⚠ "+parcalar.join(" + ")+" farklı":"";
+}
+
+/* uygun = birebir eşleşen kartlar
+   yakin = aynı tip ve boyda, ölçü YA DA et kalınlığından en fazla biri farklı
+           (ikisi birden farklıysa listeye alınmaz — gürültü olur) */
 function jobPlanStokSecenekleri(file){
 if(!file || !file.size)return {uygun:[],yakin:[]};
 
@@ -28254,26 +28307,58 @@ let uygun=(typeof jobPlanProductCandidates==="function")
 ?jobPlanProductCandidates(file.size,file.rawLengthMm):[];
 let uygunIds=new Set(uygun.map(p=>String(p.id)));
 
-let istenenEt=Number(file.size.thickness);
 let istenenBoy=jobPlanRawLengthM(file.rawLengthMm);
 let istenenTip=String(file.size.type||"");
 
-/* Aynı tip, aynı et kalınlığı, aynı boy — ölçü yazımı farklı olabilir. */
 let yakin=(Array.isArray(products)?products:[]).filter(p=>{
 if(uygunIds.has(String(p.id)))return false;
 if(istenenTip && String(p.type||"")!==istenenTip)return false;
-let t=parseFloat(String(p.thickness||"").replace(",","."));
-if(!Number.isFinite(t) || Math.abs(t-istenenEt)>=0.01)return false;
-return Math.abs(parseLength(p.length)-istenenBoy)<0.005;
+if(Math.abs(parseLength(p.length)-istenenBoy)>=0.005)return false;
+return jobPlanKartFarki(file,p).sayi<=1;
 })
 .sort((a,b)=>{
-let fa=jobPlanOlcuFarki(file,a),fb=jobPlanOlcuFarki(file,b);
-if(fa!==fb)return fa-fb;
+let fa=jobPlanKartFarki(file,a),fb=jobPlanKartFarki(file,b);
+if(fa.sayi!==fb.sayi)return fa.sayi-fb.sayi;
+
+let ea=Math.abs(jobPlanEtSayisi(a.thickness)-Number(file.size.thickness));
+let eb=Math.abs(jobPlanEtSayisi(b.thickness)-Number(file.size.thickness));
+ea=Number.isFinite(ea)?ea:9999; eb=Number.isFinite(eb)?eb:9999;
+if(ea!==eb)return ea-eb;
+
+let oa=jobPlanOlcuFarki(file,a),ob=jobPlanOlcuFarki(file,b);
+if(oa!==ob)return oa-ob;
+
 return Number(b.stock||0)-Number(a.stock||0);
 });
 
 return {uygun:uygun,yakin:yakin};
 }
+
+function jobPlanKartEtiketi(file,p,fark){
+return jobPlanProductLabel(p)+(fark?jobPlanFarkMetni(fark):"");
+}
+
+/* ---------- YÜKLEME PANELİNDEKİ SEÇENEKLER ---------- */
+
+function jobPlanImportKartSecenekleri(f){
+let s=jobPlanStokSecenekleri(f);
+let secili=String(f.productId||"");
+let secenek=function(p,fark){
+return '<option value="'+escapeHTML(String(p.id))+'"'+
+(secili===String(p.id)?" selected":"")+'>'+
+escapeHTML(jobPlanKartEtiketi(f,p,fark))+'</option>';
+};
+
+return (s.uygun.length
+?'<optgroup label="Birebir uyan">'+s.uygun.map(p=>secenek(p,null)).join("")+'</optgroup>'
+:'')+
+(s.yakin.length
+?'<optgroup label="Yakın kartlar">'+
+s.yakin.map(p=>secenek(p,jobPlanKartFarki(f,p))).join("")+'</optgroup>'
+:'');
+}
+
+/* ---------- PLAN SATIRINDAKİ SEÇİCİ ---------- */
 
 function jobPlanStokSeciciHtml(job,file){
 if(!file || file.status==="bitti" || file.customerMaterial)return "";
@@ -28283,10 +28368,10 @@ let s=jobPlanStokSecenekleri(file);
 if(!s.uygun.length && !s.yakin.length)return "";
 
 let secili=String(file.productId||"");
-let secenek=function(p){
+let secenek=function(p,fark){
 return '<option value="'+escapeHTML(String(p.id))+'"'+
 (secili===String(p.id)?" selected":"")+'>'+
-escapeHTML(jobPlanProductLabel(p))+'</option>';
+escapeHTML(jobPlanKartEtiketi(file,p,fark))+'</option>';
 };
 
 return '<select class="jobplan-stokkart'+(file.productManual?" elle":"")+
@@ -28296,11 +28381,11 @@ return '<select class="jobplan-stokkart'+(file.productManual?" elle":"")+
 'title="Bu dosyanın düşeceği stok kartı">'+
 '<option value="">— stok kartı seçilmedi —</option>'+
 (s.uygun.length
-?'<optgroup label="Ölçüsü birebir uyan">'+s.uygun.map(secenek).join("")+'</optgroup>'
+?'<optgroup label="Birebir uyan">'+s.uygun.map(p=>secenek(p,null)).join("")+'</optgroup>'
 :'')+
 (s.yakin.length
-?'<optgroup label="Aynı et kalınlığı ve boy · ölçü yazımı farklı">'+
-s.yakin.map(secenek).join("")+'</optgroup>'
+?'<optgroup label="Yakın kartlar">'+
+s.yakin.map(p=>secenek(p,jobPlanKartFarki(file,p))).join("")+'</optgroup>'
 :'')+
 '</select>';
 }
@@ -28507,6 +28592,18 @@ function jobPlanSevkDugmesi(job){
 if(!jobPlanSevkIzinli())return "";
 return '<button type="button" class="jobplan-mini sevk" '+
 'onclick="jobPlanSevkAc(\''+job.id+'\')">🚚 Sevk Edildi</button>';
+}
+
+
+/* =====================================================
+   GÖRÜNÜM YARDIMCILARI
+   Dosya adlarının sonundaki .html uzantısı TruTops çıktısından geliyor ve
+   okuyana hiçbir şey anlatmıyor; Takip ve Tezgâh ekranlarında gizleniyor.
+   Planlamacının iş planı tablosunda kalıyor — orada gerçekten dosya yönetiliyor.
+===================================================== */
+
+function dosyaAdiSade(ad){
+return String(ad||"").replace(/\.(html?|HTML?)$/,"");
 }
 
 

@@ -6110,6 +6110,12 @@ box-shadow:0 1px 0 #e2e8f0
 .vw-tbl tbody tr.vw-dosya td:first-child{box-shadow:inset 4px 0 0 #94a3b8}
 .vw-tbl tbody tr.vw-dt.acik td{border-bottom-color:#cbd5e1}
 
+/* ---------- SÜRE AYARI KUTULARI ----------
+   Vardiya satırı dolu olduğu için yeni kutular esnek kutuda eziliyordu. */
+#jobPlanYuklemeSn,#jobPlanEnAzDosyaDk{
+flex:0 0 auto;min-width:58px;text-align:center
+}
+
 </style>
 
 <!-- GERÇEK XLSX EXCEL ÇIKTISI İÇİN -->
@@ -6186,7 +6192,7 @@ box-shadow:0 1px 0 #e2e8f0
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.70</div>
+      <div class="page-login-surum">Tube.1.0.72</div>
     </section>
   </div>
 </div>
@@ -6197,7 +6203,7 @@ box-shadow:0 1px 0 #e2e8f0
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.70</small>
+<small class="app-surum">Tube.1.0.72</small>
 </h1>
 
 <div class="backup-area">
@@ -7314,7 +7320,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.70</div>
+  <div class="planner-corp-surum">Tube.1.0.72</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7487,6 +7493,20 @@ onchange="jobPlanSetScrapLimit(this.value)">
 data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Tutma payı (m)"
 onchange="jobPlanSetClampM(this.value)">
 <span>m</span>
+</label>
+<label class="jobplan-switch" title="Her boyu makineye koymak bu kadar sürüyor. Makine süresine boy sayısı × bu değer eklenir.">
+<span>Boy yükleme</span>
+<input id="jobPlanYuklemeSn" class="jobplan-num" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Boy başına yükleme süresi (sn)"
+onchange="jobPlanSetYuklemeSn(this.value)">
+<span>sn/boy</span>
+</label>
+<label class="jobplan-switch" title="Hazırlık, paketleme, kaldırma payı. Bir dosyanın süresi bu değerin altına düşmez.">
+<span>Dosya başına en az</span>
+<input id="jobPlanEnAzDosyaDk" class="jobplan-num" type="text" inputmode="none"
+data-keypad="decimal" data-native-inputmode="decimal" data-keypad-label="Dosya başına en az süre (dk)"
+onchange="jobPlanSetEnAzDosyaDk(this.value)">
+<span>dk</span>
 </label>
 <label class="jobplan-switch" title="İş bitince artan boy için stok kartı açılmadan önce onay penceresi gösterilir.">
 <input type="checkbox" id="jobPlanAskRemnant" onchange="jobPlanSetAskRemnant(this.checked)">
@@ -8072,7 +8092,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.70</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.72</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8126,7 +8146,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.70</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.72</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8140,7 +8160,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.70</div>
+<div class="ope-surum">Tube.1.0.72</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8576,7 +8596,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.70";
+const APP_SURUM = "Tube.1.0.72";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -16537,6 +16557,11 @@ nightEnabled:false,
 /* Kesimden artan bu uzunluğun altındaysa hurdadır, parça kartı açılmaz. */
 scrapLimitM:1.5,
 
+/* Her boyu makineye koyma süresi (sn) ve dosya başına en az süre (dk).
+   TruTops'un verdiği süre saf makine süresidir; ikisi de onun dışındadır. */
+yuklemeSn:15,
+enAzDosyaDk:5,
+
 /* Tezgâh boyun ucundan bu kadarını tutar, o kısım kesilemez.
    Stoktan parça ayrılırken kesilecek metrenin üstüne bu pay eklenir. */
 clampM:0.125,
@@ -16605,6 +16630,16 @@ if(Number.isFinite(scrap) && scrap>=0 && scrap<=6)base.scrapLimitM=Number(scrap.
 if(value.clampM!==undefined && value.clampM!==null && value.clampM!==""){
 let pay=Number(String(value.clampM).replace(",","."));
 if(Number.isFinite(pay) && pay>=0 && pay<=1)base.clampM=Number(pay.toFixed(3));
+}
+
+if(value.yuklemeSn!==undefined && value.yuklemeSn!==null && value.yuklemeSn!==""){
+let y=Number(String(value.yuklemeSn).replace(",","."));
+if(Number.isFinite(y) && y>=0 && y<=600)base.yuklemeSn=Number(y.toFixed(1));
+}
+
+if(value.enAzDosyaDk!==undefined && value.enAzDosyaDk!==null && value.enAzDosyaDk!==""){
+let e=Number(String(value.enAzDosyaDk).replace(",","."));
+if(Number.isFinite(e) && e>=0 && e<=240)base.enAzDosyaDk=Number(e.toFixed(1));
 }
 
 base.askRemnant=value.askRemnant===undefined?true:value.askRemnant!==false;
@@ -17350,8 +17385,11 @@ return Number.isFinite(percent)?percent:0;
 }
 
 function jobPlanFileSeconds(job,file){
-let base=Number(file.totalSeconds)||0;
-let seconds=base*(100+jobPlanFilePercent(job,file))/100;
+/* ham = makine + (boy × yükleme) · taban = en az dosya süresi · sonra ek % */
+let taban=(typeof jobPlanDosyaTabanSn==="function")
+?jobPlanDosyaTabanSn(file)
+:(Number(file.totalSeconds)||0);
+let seconds=taban*(100+jobPlanFilePercent(job,file))/100;
 return seconds>0?seconds:0;
 }
 
@@ -17915,6 +17953,16 @@ scrapBox.value=String(jobPlanScrapLimit()).replace(".",",");
 let clampBox=document.getElementById("jobPlanClampM");
 if(clampBox && document.activeElement!==clampBox){
 clampBox.value=String(jobPlanClampM()).replace(".",",");
+}
+
+let yuklemeBox=document.getElementById("jobPlanYuklemeSn");
+if(yuklemeBox && document.activeElement!==yuklemeBox && typeof jobPlanYuklemeSn==="function"){
+yuklemeBox.value=String(jobPlanYuklemeSn()).replace(".",",");
+}
+
+let enAzBox=document.getElementById("jobPlanEnAzDosyaDk");
+if(enAzBox && document.activeElement!==enAzBox && typeof jobPlanEnAzDosyaSn==="function"){
+enAzBox.value=String(jobPlanEnAzDosyaSn()/60).replace(".",",");
 }
 
 let askBox=document.getElementById("jobPlanAskRemnant");
@@ -28606,6 +28654,90 @@ return '<button type="button" class="jobplan-mini sevk" '+
 
 
 /* =====================================================
+   GERÇEK İŞ SÜRESİ — YÜKLEME PAYI VE DOSYA BAŞINA ALT SINIR
+
+   TruTops'un verdiği "Total time" SAF MAKİNE SÜRESİDİR. İki şey eksik:
+
+     1. Her boyu makineye koymak zaman alıyor (Doğrar'da ölçülen: 15 sn/boy).
+        Bu süre boy sayısıyla orantılıdır, uzun işi doğru büyütür.
+     2. Hazırlık, paketleme, kaldırma — iş başına sabit bir pay. 2 dakikalık
+        bir iş pratikte hiç 2 dakika sürmüyor; dosya başına en az 5 dakika.
+
+   Kullanıcının ek % kutusu EN SONA uygulanır: makineyi yavaşlattığında
+   yükleme ve alt sınır payını da birlikte büyütmesi isteniyor.
+
+       ham   = makine süresi + (boy sayısı × 15 sn)
+       taban = ham < 5 dk ? 5 dk : ham
+       süre  = taban × (100 + ek%) / 100
+
+   İki değer de Ayarlar'dan düzenlenebilir.
+===================================================== */
+
+const JOB_PLAN_YUKLEME_SN_VARSAYILAN=15;
+const JOB_PLAN_EN_AZ_DOSYA_DK_VARSAYILAN=5;
+
+function jobPlanYuklemeSn(){
+let n=Number(jobPlanSettings && jobPlanSettings.yuklemeSn);
+if(!Number.isFinite(n) || n<0)return JOB_PLAN_YUKLEME_SN_VARSAYILAN;
+return n;
+}
+
+function jobPlanEnAzDosyaSn(){
+let n=Number(jobPlanSettings && jobPlanSettings.enAzDosyaDk);
+if(!Number.isFinite(n) || n<0)return JOB_PLAN_EN_AZ_DOSYA_DK_VARSAYILAN*60;
+return n*60;
+}
+
+/* Makineye konan çubuk sayısı: tam boylar + varsa kısmi boy (o da konuyor). */
+function jobPlanBoySayisi(file){
+if(!file)return 0;
+let n=Number(file.tubes);
+if(Number.isFinite(n) && n>0)return Math.floor(n);
+let tam=(typeof jobPlanFullTubes==="function")?jobPlanFullTubes(file):0;
+let parca=(typeof jobPlanHasPartial==="function" && jobPlanHasPartial(file))?1:0;
+return tam+parca;
+}
+
+function jobPlanYuklemeSuresi(file){
+return jobPlanBoySayisi(file)*jobPlanYuklemeSn();
+}
+
+/* Ek % uygulanmadan önceki süre — ekranlarda "ham" karşılaştırması için. */
+function jobPlanDosyaTabanSn(file){
+let makine=Number(file && file.totalSeconds)||0;
+let ham=makine+jobPlanYuklemeSuresi(file);
+let enAz=jobPlanEnAzDosyaSn();
+return ham<enAz?enAz:ham;
+}
+
+/* ---------- AYAR KUTULARI ---------- */
+
+function jobPlanSetYuklemeSn(value){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.vardiya"))return;
+let n=Number(String(value||"").replace(",","."));
+if(!Number.isFinite(n) || n<0)n=JOB_PLAN_YUKLEME_SN_VARSAYILAN;
+if(n>600)n=600;
+jobPlanSettings.yuklemeSn=Number(n.toFixed(1));
+if(typeof jobPlanRenderSettings==="function")jobPlanRenderSettings();
+if(typeof jobPlanRecalculate==="function")jobPlanRecalculate();
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveSettings==="function")jobPlanSaveSettings();
+}
+
+function jobPlanSetEnAzDosyaDk(value){
+if(typeof jobPlanGuard==="function" && !jobPlanGuard("isplani.vardiya"))return;
+let n=Number(String(value||"").replace(",","."));
+if(!Number.isFinite(n) || n<0)n=JOB_PLAN_EN_AZ_DOSYA_DK_VARSAYILAN;
+if(n>240)n=240;
+jobPlanSettings.enAzDosyaDk=Number(n.toFixed(1));
+if(typeof jobPlanRenderSettings==="function")jobPlanRenderSettings();
+if(typeof jobPlanRecalculate==="function")jobPlanRecalculate();
+if(typeof jobPlanRefreshAll==="function")jobPlanRefreshAll();
+if(typeof jobPlanSaveSettings==="function")jobPlanSaveSettings();
+}
+
+
+/* =====================================================
    GÖRÜNÜM YARDIMCILARI
    Dosya adlarının sonundaki .html uzantısı TruTops çıktısından geliyor ve
    okuyana hiçbir şey anlatmıyor; Takip ve Tezgâh ekranlarında gizleniyor.
@@ -28631,7 +28763,11 @@ const KALAN_ALT_SINIR_SN=600;
 function kalanSureGosterim(saniye){
 let n=Number(saniye)||0;
 if(!(n>0))return 0;
-return n<KALAN_ALT_SINIR_SN?KALAN_ALT_SINIR_SN:n;
+/* Sınır, Ayarlar'daki "dosya başına en az süre" ile aynı tutulur;
+   böylece ekrandaki rakam dosyanın kendi süresinden büyük görünmez. */
+let sinir=(typeof jobPlanEnAzDosyaSn==="function")
+?jobPlanEnAzDosyaSn():KALAN_ALT_SINIR_SN;
+return n<sinir?sinir:n;
 }
 
 /* Karttaki bitiş saati, kartta yazan kalan süreyle aynı olmalı.

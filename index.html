@@ -6192,7 +6192,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.73</div>
+      <div class="page-login-surum">Tube.1.0.75</div>
     </section>
   </div>
 </div>
@@ -6203,7 +6203,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.73</small>
+<small class="app-surum">Tube.1.0.75</small>
 </h1>
 
 <div class="backup-area">
@@ -7320,7 +7320,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.73</div>
+  <div class="planner-corp-surum">Tube.1.0.75</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7777,6 +7777,7 @@ tüm kullanıcılar silinse bile onunla girebilirsin.
 <div style="flex:1"></div>
 <button type="button" class="btn-blue" onclick="systemNewUser()">+ Yeni Kullanıcı</button>
 </div>
+<div style="font-size:13px;color:#64748b;margin-bottom:12px">Giriş ekranındaki sıra bu listeyle aynıdır. Kullanıcıları ↑ / ↓ düğmeleriyle taşıyabilirsin.</div>
 
 <div class="system-form" id="systemUserForm">
 <div style="font-weight:bold;margin-bottom:12px" id="systemUserFormTitle">Yeni Kullanıcı</div>
@@ -7836,11 +7837,12 @@ autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
 <th style="width:150px">Rol</th>
 <th style="width:110px">Durum</th>
 <th style="width:150px">Son Güncelleme</th>
+<th style="width:110px">Giriş Sırası</th>
 <th style="width:220px">İşlem</th>
 </tr>
 </thead>
 <tbody id="systemUserBody">
-<tr><td colspan="5" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>
+<tr><td colspan="6" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>
 </tbody>
 </table>
 </div>
@@ -7853,6 +7855,20 @@ autocomplete="new-password" placeholder="Şifreyi tekrar yazın">
 Rolü seç, açık kalmasını istediğin yerleri işaretle. İşareti kaldırılan yerler
 o roldeki kişilerde <strong>hiç görünmez</strong>. Yönetici her zaman tam yetkilidir.
 Tek bir kişiye farklı yetki vermek istersen Kullanıcılar sekmesinden o kişiyi düzenle.
+</div>
+
+<div class="system-form open" id="systemRoleForm">
+<div class="form-group">
+<label for="systemNewRoleName">Yeni Rol Adı</label>
+<input id="systemNewRoleName" type="text" inputmode="none" maxlength="60"
+data-enter-action="systemAddRole" data-keypad="text" data-native-inputmode="text"
+data-keypad-label="Yeni rol adı" placeholder="Örn: Depo Sorumlusu">
+</div>
+<div style="font-size:13px;color:#64748b">Yeni rol görüntüleme izinleriyle oluşturulur. Kaydettikten sonra aşağıdan izinlerini ayarlayabilirsin.</div>
+<div class="system-form-actions">
+<div class="system-message" id="systemRoleMessage" role="status" aria-live="polite"></div>
+<button type="button" class="btn-blue" id="systemRoleSaveButton" onclick="systemAddRole()">+ Rol Ekle</button>
+</div>
 </div>
 
 <div class="system-role-picker" id="systemRolePicker"></div>
@@ -8092,7 +8108,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.73</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.75</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8146,7 +8162,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.73</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.75</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8160,7 +8176,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.73</div>
+<div class="ope-surum">Tube.1.0.75</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8596,7 +8612,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.73";
+const APP_SURUM = "Tube.1.0.75";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -20040,6 +20056,11 @@ systemData.kisaListe=true;
 }
 }
 systemDataLoaded=true;
+/* Eski giriş listelerinde özel rolün adı yoktu. Tam kayıtla yetkili girişte onar. */
+if(!systemData.kisaListe && typeof sbaListeRolAdlariniEsitle==="function"){
+try{await sbaListeRolAdlariniEsitle(systemData);}
+catch(e){console.warn("Giriş listesindeki rol adları yenilenemedi:",e);}
+}
 return systemData;
 }
 
@@ -20248,8 +20269,13 @@ if(toggle)toggle.checked=!!(systemData && systemData.loginEnabled);
 
 function systemRoleName(key){
 let roles=(systemData && systemData.roles)||systemDefaultRoles();
-return (roles[key] && roles[key].name)||key||"—";
+let listed=((systemData&&systemData.users)||[]).find(u=>u.role===key && u.roleName);
+if(systemData && systemData.kisaListe && listed)return listed.roleName;
+return (roles[key] && roles[key].name)||(listed&&listed.roleName)||
+(/^rol_/.test(String(key||""))?"Özel Rol":key)||"—";
 }
+
+let systemUserOrderSaving=false;
 
 function systemRenderUsers(){
 let body=document.getElementById("systemUserBody");
@@ -20258,11 +20284,11 @@ if(!body)return;
 let users=(systemData && systemData.users)||[];
 
 if(!users.length){
-body.innerHTML='<tr><td colspan="5" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>';
+body.innerHTML='<tr><td colspan="6" class="system-empty">Henüz kullanıcı eklenmemiş.</td></tr>';
 return;
 }
 
-body.innerHTML=users.map(user=>{
+body.innerHTML=users.map((user,index)=>{
 let active=user.active!==false;
 return '<tr class="'+(active?"":"passive")+'">'+
 '<td><strong>'+escapeHTML(user.name||"")+'</strong></td>'+
@@ -20271,6 +20297,13 @@ escapeHTML(systemRoleName(user.role))+'</span></td>'+
 '<td>'+(active?"Aktif":"Pasif")+'</td>'+
 '<td class="jobplan-sub">'+
 (user.updatedAt?new Date(user.updatedAt).toLocaleDateString("tr-TR"):"—")+'</td>'+
+'<td style="white-space:nowrap">'+
+'<button type="button" class="system-mini edit" title="Giriş sırasında yukarı taşı" aria-label="Giriş sırasında yukarı taşı" '+
+((systemUserOrderSaving||index===0)?'disabled ':'')+
+'onclick="systemMoveUser(\''+user.id+'\',-1)">↑</button> '+
+'<button type="button" class="system-mini edit" title="Giriş sırasında aşağı taşı" aria-label="Giriş sırasında aşağı taşı" '+
+((systemUserOrderSaving||index===users.length-1)?'disabled ':'')+
+'onclick="systemMoveUser(\''+user.id+'\',1)">↓</button></td>'+
 '<td>'+
 '<button type="button" class="system-mini edit" onclick="systemEditUser(\''+user.id+'\')">Düzenle</button> '+
 '<button type="button" class="system-mini '+(active?"off":"on")+'" '+
@@ -20306,6 +20339,38 @@ select.innerHTML=Object.keys(roles).map(key=>
 '<option value="'+key+'" '+(key===selected?"selected":"")+'>'+
 escapeHTML(roles[key].name||key)+'</option>'
 ).join("");
+}
+
+async function systemMoveUser(id,direction){
+if(systemUserOrderSaving || (direction!==-1 && direction!==1))return;
+if(!systemUnlocked || !systemCanOpenPanel())return;
+let fresh=null;
+let previousUsers=null;
+let saved=false;
+try{
+systemUserOrderSaving=true;
+systemRenderUsers();
+fresh=await loadSystemData(true);
+if(fresh.kisaListe)throw new Error("Tam kullanıcı listesi okunamadı. Yeniden giriş yapıp tekrar dene.");
+let index=fresh.users.findIndex(u=>u.id===id);
+let next=index+direction;
+if(index<0 || next<0 || next>=fresh.users.length)return;
+previousUsers=fresh.users;
+let users=previousUsers.slice();
+[users[index],users[next]]=[users[next],users[index]];
+fresh.users=users;
+await saveSystemData();
+saved=true;
+}
+catch(error){
+if(!saved && fresh && previousUsers)fresh.users=previousUsers;
+console.error(error);
+alert("Giriş sırası kaydedilemedi.\n\n"+(error&&error.message||"Tekrar dene."));
+}
+finally{
+systemUserOrderSaving=false;
+systemRenderAll();
+}
 }
 
 /* ---------- KULLANICI FORMU ---------- */
@@ -21081,6 +21146,70 @@ try{jobPlanRender();}catch(e){}
 /* ---------- ROLLER VE İZİNLER SEKMESİ ---------- */
 
 let systemSelectedRole="operator";
+
+function systemRoleNameKey(name){
+return String(name||"").normalize("NFC").toLocaleLowerCase("tr-TR").replace(/\s+/g,"");
+}
+
+async function systemAddRole(){
+let button=document.getElementById("systemRoleSaveButton");
+let input=document.getElementById("systemNewRoleName");
+if(button && button.disabled)return;
+if(!systemUnlocked || !systemCanOpenPanel()){
+systemSetMessage("systemRoleMessage","Rol eklemek için Sistem panelini sistem şifresiyle açmalısın.","error");
+return;
+}
+let name=String(input?input.value:"").trim().replace(/\s+/g," ");
+if(name.length<2 || name.length>60){
+systemSetMessage("systemRoleMessage","Rol adı 2–60 karakter olmalı.","error");
+return;
+}
+
+let fresh=null;
+let previousRoles=null;
+let saved=false;
+try{
+if(button){button.disabled=true;button.textContent="Kaydediliyor...";}
+if(input)input.disabled=true;
+systemSetMessage("systemRoleMessage","");
+/* Güncel listeye ekle; başka bilgisayardaki kullanıcı ve rol değişikliklerini koru. */
+fresh=await loadSystemData(true);
+if(fresh.kisaListe)throw new Error("Tam kullanıcı ve rol listesi okunamadı. Yeniden giriş yapıp tekrar dene.");
+let roles=fresh.roles;
+if(Object.keys(roles).some(key=>systemRoleNameKey(roles[key].name||key)===systemRoleNameKey(name))){
+systemSetMessage("systemRoleMessage","Bu isimde bir rol zaten var.","error");
+return;
+}
+/* Görünen ad, izinlerde kullanılan sabit anahtardan bağımsızdır. */
+let key;
+do{
+key="rol_"+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+}while(Object.prototype.hasOwnProperty.call(roles,key));
+previousRoles=roles;
+fresh.roles=Object.assign({},roles,{
+[key]:{name:name,perms:systemDefaultPerms(key),sadeEkran:false,tezgahEkrani:false}
+});
+await saveSystemData();
+saved=true;
+systemSelectedRole=key;
+if(input)input.value="";
+systemRenderRoles();
+let select=document.getElementById("systemUserRole");
+if(select)systemFillRoleSelect(select.value);
+systemSetMessage("systemRoleMessage","Rol eklendi. İzinlerini aşağıdan ayarlayabilirsin.","ok");
+}
+catch(error){
+/* Başarısız kayıt, yalnızca bu bilgisayarda varmış gibi görünmesin. */
+if(!saved && fresh && previousRoles)fresh.roles=previousRoles;
+console.error(error);
+systemSetMessage("systemRoleMessage",error&&error.message||"Rol kaydedilemedi.","error");
+}
+finally{
+if(input)input.disabled=false;
+if(button){button.disabled=false;button.textContent="+ Rol Ekle";}
+}
+}
+
 
 function systemRenderRoles(){
 let roles=(systemData && systemData.roles)||systemDefaultRoles();
@@ -27902,20 +28031,35 @@ else sbaYenile();
    kısaltılmış bir liste ayrı anahtara yazılır ve yalnızca o anahtar
    anonim okumaya açık bırakılır. */
 
-function sbaListeKaydi(u){
+function sbaListeKaydi(u,roles){
 return {
 id:u.id,
 name:u.name,
 role:u.role,
+roleName:String((roles&&roles[u.role]&&roles[u.role].name)||
+(systemDefaultRoles()[u.role]&&systemDefaultRoles()[u.role].name)||u.roleName||"Özel Rol"),
 active:u.active!==false,
 authEmail:String(u.authEmail||""),
 updatedAt:u.updatedAt||""
 };
 }
 
+let sbaListeSonImza=null;
+
 async function sbaGirisListesiYaz(data){
-let users=((data&&data.users)||[]).map(sbaListeKaydi);
+let users=((data&&data.users)||[]).map(u=>sbaListeKaydi(u,data.roles));
 await cloudStateSet(SBA_LISTE_ANAHTARI,{users:users,at:new Date().toISOString()});
+sbaListeSonImza=JSON.stringify(users);
+}
+
+async function sbaListeRolAdlariniEsitle(data){
+if(!data || data.kisaListe || !sbaOturumAcikMi())return;
+let users=(data.users||[]).map(u=>sbaListeKaydi(u,data.roles));
+let imza=JSON.stringify(users);
+if(imza===sbaListeSonImza)return;
+let eski=await sbaGirisListesiOku();
+if(JSON.stringify(eski)!==imza)await sbaGirisListesiYaz(data);
+else sbaListeSonImza=imza;
 }
 
 async function sbaGirisListesiOku(){

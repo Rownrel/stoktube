@@ -6199,7 +6199,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.77</div>
+      <div class="page-login-surum">Tube.1.0.78</div>
     </section>
   </div>
 </div>
@@ -6210,7 +6210,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.77</small>
+<small class="app-surum">Tube.1.0.78</small>
 </h1>
 
 <div class="backup-area">
@@ -7335,7 +7335,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.77</div>
+  <div class="planner-corp-surum">Tube.1.0.78</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8132,7 +8132,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.77</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.78</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8186,7 +8186,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.77</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.78</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8200,7 +8200,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.77</div>
+<div class="ope-surum">Tube.1.0.78</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8636,7 +8636,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.77";
+const APP_SURUM = "Tube.1.0.78";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29110,7 +29110,7 @@ async function eflowSetBuCihaz(value){
 let acik=!!value;
 if(acik){
 let u=await eflowUygulayiciOku();
-if(u && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS){
+if(u && !u.operator && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS){
 alert(
 "⚠️ E-Flow kayıtlarını şu anda başka bir bilgisayar uyguluyor:\n\n"+
 (u.ad||"bilinmeyen")+" · "+eflowSaat(u.zaman)+"\n\n"+
@@ -29147,26 +29147,51 @@ eflowUygulayici=(v && typeof v==="object")?v:null;
 return eflowUygulayici;
 }
 
+function eflowOperatorEkrani(){
+try{return typeof opActive==="function" && opActive()===true;}catch(e){return false;}
+}
+
 async function eflowUygulayiciYaz(){
+let operator=eflowOperatorEkrani();
 let kayit={
 id:eflowCihazKimligi(),
-ad:(jobPlanWho()||"kullanıcı")+" · "+(navigator.platform||"bilgisayar"),
+ad:(operator?"Operatör ekranı · ":"")+(jobPlanWho()||"kullanıcı"),
+operator:operator,
 zaman:Date.now()
 };
 await cloudStateSet(CLOUD_KEY_EFLOW_UYGULAYICI,kayit);
 eflowUygulayici=kayit;
 }
 
-/* Başka bir bilgisayar taze kalp atışı bırakmışsa bu bilgisayar uygulamaz. */
+/* Kim uygular?
+   1) Açık bir OPERATÖR ekranı her zaman önceliklidir: artan / hurda / stok
+      soruları makinenin başındaki operatöre çıkar.
+   2) Operatör ekranı yoksa "Bu bilgisayar E-Flow'u uygular" işaretli bilgisayar.
+   Taze kalp atışı bırakmış başka bir uygulayıcı varsa (ve öncelik bizde değilse)
+   bu bilgisayar uygulamaz; böylece stok iki kez düşmez. */
 async function eflowUygulayabilirMi(){
-if(!eflowBuCihazUygular())return false;
+let operator=eflowOperatorEkrani();
+if(!operator && !eflowBuCihazUygular())return false;
 let u=await eflowUygulayiciOku();
-if(u && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS){
-eflowSonHata="Başka bir bilgisayar uyguluyor: "+(u.ad||"");
-return false;
+let baskasiTaze=u && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS;
+if(baskasiTaze){
+/* Operatör, operatör olmayanın yerini alır; diğer her durumda bekleriz. */
+if(!(operator && !u.operator))return false;
 }
 await eflowUygulayiciYaz();
 return true;
+}
+
+/* Uygulamayan ekranlar da (operatör tableti, ofis) başka yerde değişen
+   planı her turda alır; yoksa sayfa yenilenene kadar eski durumu gösterir. */
+async function eflowPlanTazele(){
+if(typeof jobPlanBusy!=="undefined" && jobPlanBusy)return;
+if(typeof jobPlanDirty!=="undefined" && jobPlanDirty)return;
+let rev=await jobPlanReadRev();
+if(rev && Number(rev.rev)>jobPlanRev){
+await jobPlanPullFromCloud(rev);
+if(typeof opRender==="function")opRender();
+}
 }
 
 /* ---------- EŞLEŞTİRME ---------- */
@@ -29417,6 +29442,7 @@ if(!eflowModu()){eflowRenderDurum();return;}
 try{
 await eflowVeriOku();
 eflowSonHata="";
+await eflowPlanTazele();
 await eflowUygula();
 }catch(e){
 console.error("E-Flow senkron hatası:",e);
@@ -29464,11 +29490,13 @@ satirlar.push(kt
 :'<span class="eflow-rozet yok">⚠️ Köprüden hiç veri gelmedi</span>');
 let u=eflowUygulayici;
 let uCanli=u && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS;
-satirlar.push(eflowBuCihazUygular()
-?'<span class="eflow-rozet devam">Bu bilgisayar uyguluyor</span>'
-:(uCanli
-?'<span class="eflow-rozet plan">Uygulayan: '+escapeHTML(u.ad||"")+'</span>'
-:'<span class="eflow-rozet yok">⚠️ Uygulayan bilgisayar yok — işler başlamaz/bitmez</span>'));
+let buCihaz=uCanli && u.id===eflowCihazKimligi();
+satirlar.push(uCanli
+?'<span class="eflow-rozet '+(buCihaz?"devam":"plan")+'">Uygulayan: '+(buCihaz?"bu bilgisayar · ":"")+escapeHTML(u.ad||"")+'</span>'
+:(eflowBuCihazUygular()
+?'<span class="eflow-rozet devam">Bu bilgisayar uygulayacak</span>'
+:'<span class="eflow-rozet yok">⚠️ Uygulayan ekran yok — operatör ekranını açın ya da bir bilgisayarı seçin</span>'));
+if(eflowBuCihazUygular() && uCanli && !buCihaz && u.operator)satirlar.push('<span class="jobplan-sub">Operatör ekranı açıkken o uygular; bu bilgisayar yedekte.</span>');
 if(eflowSonVeri && Array.isArray(jobPlanJobs)){
 let eslesmeyen=0;
 jobPlanJobs.forEach(job=>{

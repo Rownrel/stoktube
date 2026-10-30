@@ -2437,6 +2437,13 @@ font-weight:bold
 }
 
 .jobplan-mini.pause{background:#d97706}
+.eflow-rozet{display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;background:#e2e8f0;color:#334155;margin:1px 2px}
+.eflow-rozet.devam{background:#dbeafe;color:#1d4ed8}
+.eflow-rozet.bitti{background:#dcfce7;color:#15803d}
+.eflow-rozet.plan{background:#fef9c3;color:#854d0e}
+.eflow-rozet.yok{background:#fee2e2;color:#b91c1c}
+.eflow-durum{display:flex;flex-wrap:wrap;gap:4px;align-items:center;width:100%;margin-top:4px}
+
 
 .jobplan-table tr.jobplan-file-row.paused td{
 background:#fffbeb
@@ -6192,7 +6199,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.76</div>
+      <div class="page-login-surum">Tube.1.0.77</div>
     </section>
   </div>
 </div>
@@ -6203,7 +6210,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.76</small>
+<small class="app-surum">Tube.1.0.77</small>
 </h1>
 
 <div class="backup-area">
@@ -7328,7 +7335,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.76</div>
+  <div class="planner-corp-surum">Tube.1.0.77</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7524,6 +7531,15 @@ onchange="jobPlanSetEnAzDosyaDk(this.value)">
 <input type="checkbox" id="jobPlanStartBrief" onchange="jobPlanSetStartBrief(this.checked)">
 <span>▶ Başlarken malzeme bilgisi</span>
 </label>
+<label class="jobplan-switch" title="Başlat/Bitir E-Flow'daki İş Emri Başla Bitir ekranından gelir; bu uygulamadaki düğmeler gizlenir.">
+<input type="checkbox" id="eflowModeBox" onchange="eflowSetMode(this.checked)">
+<span>🔗 Başla/Bitir E-Flow'dan</span>
+</label>
+<label class="jobplan-switch" title="E-Flow kayıtlarını uygulayıp stoktan düşen bilgisayar. Aynı anda yalnızca bir bilgisayar seçilebilir; tezgâh bilgisayarı önerilir.">
+<input type="checkbox" id="eflowBuCihazBox" onchange="eflowSetBuCihaz(this.checked)">
+<span>🖥 Bu bilgisayar E-Flow'u uygular</span>
+</label>
+<div class="eflow-durum" id="eflowDurum"></div>
 <span class="jobplan-sub">Artan bu değerin üstündeyse yeni parça stok kartı açılır. Tutma payı tezgâhın kesemediği uç kısmıdır: 2 m kesilecekse stoktan en az 2,13 m'lik parça ayrılır.</span>
 </div>
 
@@ -8116,7 +8132,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.76</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.77</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8170,7 +8186,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.76</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.77</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8184,7 +8200,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.76</div>
+<div class="ope-surum">Tube.1.0.77</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8620,7 +8636,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.76";
+const APP_SURUM = "Tube.1.0.77";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -16658,6 +16674,10 @@ if(Number.isFinite(e) && e>=0 && e<=240)base.enAzDosyaDk=Number(e.toFixed(1));
 base.askRemnant=value.askRemnant===undefined?true:value.askRemnant!==false;
 base.startBrief=value.startBrief===undefined?true:value.startBrief!==false;
 
+/* E-Flow senkronu (1.0.77) */
+base.eflowMode=value.eflowMode===true;
+base.eflowSince=Number.isFinite(Number(value.eflowSince))?Number(value.eflowSince):0;
+
 base.dayEnabled=value.dayEnabled===undefined?true:value.dayEnabled!==false;
 base.nightEnabled=value.nightEnabled===undefined
 ?(legacySingleShift && value.shift==="gece")
@@ -17984,6 +18004,15 @@ if(askBox)askBox.checked=jobPlanAskRemnantEnabled();
 let briefBox=document.getElementById("jobPlanStartBrief");
 if(briefBox)briefBox.checked=jobPlanStartBriefEnabled();
 
+let eflowBox=document.getElementById("eflowModeBox");
+if(eflowBox && typeof eflowModu==="function")eflowBox.checked=eflowModu();
+let eflowCihazBox=document.getElementById("eflowBuCihazBox");
+if(eflowCihazBox && typeof eflowBuCihazUygular==="function"){
+eflowCihazBox.checked=eflowBuCihazUygular();
+eflowCihazBox.disabled=!eflowModu();
+}
+if(typeof eflowRenderDurum==="function")eflowRenderDurum();
+
 let info=document.getElementById("jobPlanHoursInfo");
 if(info){
 let lines=[];
@@ -19022,8 +19051,8 @@ if(file.status==="basladi")jobPlanAddWorked(file);
 jobPlanRemoveReservation(file);
 
 file.status="bitti";
-file.finishedAt=Date.now();
-file.finishedBy=jobPlanWho();
+file.finishedAt=(typeof eflowBitisZamani!=="undefined" && eflowBitisZamani)?eflowBitisZamani:Date.now();
+file.finishedBy=(typeof eflowBitiren!=="undefined" && eflowBitiren)?eflowBitiren:jobPlanWho();
 file.doneTubes=total;
 file.stockDeducted=jobPlanDeductedTubes(file)>0;
 if(!file.startedAt)file.startedAt=file.finishedAt;
@@ -19044,7 +19073,7 @@ await jobPlanSaveJobs();
 /* Mail, bilgi penceresi kapanmasını beklemeden yola çıkar. */
 if(allDone && typeof musOlay==="function")musOlay("bitti",job);
 
-if(allDone)alert("✅ "+job.dtNo+" tamamlandı ve tamamlananlara taşındı.");
+if(allDone && !(typeof eflowOtomatik!=="undefined" && eflowOtomatik))alert("✅ "+job.dtNo+" tamamlandı ve tamamlananlara taşındı.");
 }
 catch(error){
 if(String(error&&error.message)!=="iptal"){
@@ -19208,12 +19237,20 @@ box.innerHTML=chips.join("");
 
 /* Sistem paneli yoksa (eski sürüm) her şey açıktır. */
 function jobPlanAllows(key){
+/* E-Flow senkronu açıkken başlat/bitir yalnızca E-Flow'dan gelir. */
+if(key==="isplani.calistir" && typeof eflowModu==="function" && eflowModu()){
+return typeof eflowOtomatik!=="undefined" && eflowOtomatik===true;
+}
 return typeof systemCan==="function"?systemCan(key):true;
 }
 
 /* Gizlenmiş bir işlem fonksiyon çağrısıyla da yapılamaz. */
 function jobPlanGuard(key){
 if(jobPlanAllows(key))return true;
+if(key==="isplani.calistir" && typeof eflowModu==="function" && eflowModu()){
+alert("Başlat / Bitir artık E-Flow'daki \"İş Emri Başla Bitir Boru Profil\" ekranından yapılıyor.");
+return false;
+}
 if(typeof systemGuard==="function")return systemGuard(key);
 return false;
 }
@@ -19351,9 +19388,10 @@ let actions="";
 let calistirilabilir=jobPlanAllows("isplani.calistir");
 
 if(!calistirilabilir){
-actions=file.status==="bitti"
+actions=(file.status==="bitti"
 ?'<span class="jobplan-sub">'+jobPlanFormatDateTime(file.finishedAt)+'</span>'
-:'';
+:(file.status==="basladi"?'<span class="jobplan-sub">▶ çalışıyor</span>':file.status==="durakladi"?'<span class="jobplan-sub">⏸ duraklatıldı</span>':''))+
+(typeof eflowDosyaRozet==="function" && file.status!=="bitti"?' '+eflowDosyaRozet(job,file):'');
 }
 else if(file.status==="bekliyor"){
 actions='<button type="button" class="jobplan-mini start" onclick="jobPlanStartFile('+ref+')"><span class="jp-ikon">\u25b6</span>Başlat</button>';
@@ -23564,6 +23602,7 @@ if(typeof systemLogout==="function")systemLogout();
 }
 
 function opCan(key){
+if(key==="isplani.calistir" && typeof eflowModu==="function" && eflowModu())return false;
 return typeof systemCan==="function"?systemCan(key):true;
 }
 
@@ -23732,7 +23771,7 @@ box.innerHTML=
 '<div class="ope-bos">'+
 '<div class="ope-bico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></div>'+
 '<h3>Tezgâh boşta</h3>'+
-'<p>'+(sira?"Sıradaki işi başlatmak için düğmeye basın":"Planda bekleyen iş yok")+'</p>'+
+'<p>'+(sira?((typeof eflowModu==="function" && eflowModu())?"Sıradaki işi E-Flow'dan başlatın":"Sıradaki işi başlatmak için düğmeye basın"):"Planda bekleyen iş yok")+'</p>'+
 (sira
 ?'<div class="ope-bnext"><div class="n">1</div><div class="t">'+
 '<b>'+escapeHTML(String(sira.job.dtNo||""))+
@@ -28973,9 +29012,477 @@ loadStandardReservations()
 .then(()=>{
 jobPlanStockReady=true;
 showProducts();
-return jobPlanLoad();
+return jobPlanLoad().then(()=>{
+if(typeof eflowBaslatZamanlayici==="function")eflowBaslatZamanlayici();
+});
 })
 .catch(console.error);
+
+</script>
+
+<script>
+
+/* =====================================================
+   E-FLOW SENKRONU (1.0.77)
+
+   Operatör artık işi E-Flow'daki "İş Emri Başla Bitir Boru Profil"
+   ekranından başlatıp bitiriyor. E-Flow bu bilgiyi Mikro'ya
+   (URETIM_OPERASYON_HAREKETLERI, operasyon 037) yazıyor.
+
+   Tezgâh bilgisayarındaki köprü programı (eflow-kopru.ps1) E-Flow'daki
+   "İş Emri Listesi" raporunu (#27) dakikada bir okur ve Supabase'e
+   eflow_durum_v1 anahtarıyla yazar. Bu modül o kaydı okur:
+
+     Devam Ediyor  ->  dosya "başladı"
+     Bitti         ->  dosya "bitti" + stoktan düşüm (normal Bitir akışı)
+
+   Eşleştirme: E-Flow SiparisNo (dt3561 / DT03561) = iş DT numarası,
+   E-Flow hammadde adı (80X80X3.00 PROFİL) = dosyanın ebatı.
+
+   Stoktan iki kez düşülmemesi için bu işlemleri YALNIZCA bir bilgisayar
+   uygular ("Bu bilgisayar E-Flow'u uygular"). Diğerleri sadece gösterir.
+   Açılış anından eski E-Flow kayıtları uygulanmaz (eflowSince).
+===================================================== */
+
+const CLOUD_KEY_EFLOW_DURUM="eflow_durum_v1";
+const CLOUD_KEY_EFLOW_UYGULAYICI="eflow_uygulayici_v1";
+const EFLOW_YEREL_UYGULAYICI="eflow_bu_cihaz_uygular_v1";
+const EFLOW_YEREL_CIHAZ="eflow_cihaz_kimligi_v1";
+const EFLOW_ARALIK_MS=60000;
+const EFLOW_KOPRU_ESKI_MS=5*60000;
+const EFLOW_UYGULAYICI_ESKI_MS=3*60000;
+
+let eflowOtomatik=false;
+let eflowBitisZamani=null;
+let eflowBitiren="";
+let eflowSonVeri=null;
+let eflowSonOkuma=0;
+let eflowUygulayici=null;
+let eflowZamanlayici=null;
+let eflowIslemde=false;
+let eflowSonHata="";
+
+/* ---------- AYARLAR ---------- */
+
+function eflowModu(){
+return !!(jobPlanSettings && jobPlanSettings.eflowMode===true);
+}
+
+function eflowBaslangic(){
+let n=Number(jobPlanSettings && jobPlanSettings.eflowSince);
+return Number.isFinite(n) && n>0 ? n : 0;
+}
+
+function eflowCihazKimligi(){
+let id="";
+try{id=localStorage.getItem(EFLOW_YEREL_CIHAZ)||"";}catch(e){}
+if(!id){
+id="c"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+try{localStorage.setItem(EFLOW_YEREL_CIHAZ,id);}catch(e){}
+}
+return id;
+}
+
+function eflowBuCihazUygular(){
+try{return localStorage.getItem(EFLOW_YEREL_UYGULAYICI)==="1";}catch(e){return false;}
+}
+
+async function eflowSetMode(value){
+if(!jobPlanGuard("isplani.vardiya")){jobPlanRenderSettings();return;}
+if(!jobPlanSettings)jobPlanSettings=jobPlanDefaultSettings();
+let acik=!!value;
+if(acik && !confirm(
+"E-Flow senkronu açılsın mı?\n\n"+
+"• Başlat / Durakla / Bitir düğmeleri bütün ekranlarda gizlenir.\n"+
+"• İşler E-Flow'daki başla-bitir kayıtlarına göre otomatik başlar ve biter, stoktan düşülür.\n"+
+"• Bu andan ÖNCEKİ E-Flow kayıtları uygulanmaz."
+)){jobPlanRenderSettings();return;}
+jobPlanSettings.eflowMode=acik;
+if(acik)jobPlanSettings.eflowSince=Date.now();
+jobPlanRenderSettings();
+jobPlanRefreshAll();
+if(typeof opRender==="function")opRender();
+await jobPlanSaveSettings();
+eflowTick().catch(console.error);
+}
+
+async function eflowSetBuCihaz(value){
+let acik=!!value;
+if(acik){
+let u=await eflowUygulayiciOku();
+if(u && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS){
+alert(
+"⚠️ E-Flow kayıtlarını şu anda başka bir bilgisayar uyguluyor:\n\n"+
+(u.ad||"bilinmeyen")+" · "+eflowSaat(u.zaman)+"\n\n"+
+"Stok iki kez düşülmesin diye aynı anda yalnızca bir bilgisayar uygulayabilir. "+
+"O bilgisayarda bu seçeneği kapatın ya da 3 dakika kapalı kalmasını bekleyin."
+);
+jobPlanRenderSettings();
+return;
+}
+}
+try{
+if(acik)localStorage.setItem(EFLOW_YEREL_UYGULAYICI,"1");
+else localStorage.removeItem(EFLOW_YEREL_UYGULAYICI);
+}catch(e){}
+if(acik)await eflowUygulayiciYaz();
+else{
+let u=await eflowUygulayiciOku();
+if(u && u.id===eflowCihazKimligi()){
+try{await cloudStateSet(CLOUD_KEY_EFLOW_UYGULAYICI,null);}catch(e){console.error(e);}
+eflowUygulayici=null;
+}
+}
+jobPlanRenderSettings();
+eflowTick().catch(console.error);
+}
+
+/* ---------- UYGULAYICI BİLGİSAYAR ---------- */
+
+async function eflowUygulayiciOku(){
+try{
+let v=await cloudStateGet(CLOUD_KEY_EFLOW_UYGULAYICI);
+eflowUygulayici=(v && typeof v==="object")?v:null;
+}catch(e){console.error("E-Flow uygulayıcı okunamadı:",e);}
+return eflowUygulayici;
+}
+
+async function eflowUygulayiciYaz(){
+let kayit={
+id:eflowCihazKimligi(),
+ad:(jobPlanWho()||"kullanıcı")+" · "+(navigator.platform||"bilgisayar"),
+zaman:Date.now()
+};
+await cloudStateSet(CLOUD_KEY_EFLOW_UYGULAYICI,kayit);
+eflowUygulayici=kayit;
+}
+
+/* Başka bir bilgisayar taze kalp atışı bırakmışsa bu bilgisayar uygulamaz. */
+async function eflowUygulayabilirMi(){
+if(!eflowBuCihazUygular())return false;
+let u=await eflowUygulayiciOku();
+if(u && u.id!==eflowCihazKimligi() && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS){
+eflowSonHata="Başka bir bilgisayar uyguluyor: "+(u.ad||"");
+return false;
+}
+await eflowUygulayiciYaz();
+return true;
+}
+
+/* ---------- EŞLEŞTİRME ---------- */
+
+/* "dt3561", "DT03561", "DT3561_FIRMA" -> "DT3561" */
+function eflowDtAnahtar(value){
+let s=String(value||"").toUpperCase().replace(/İ/g,"I").trim();
+let m=s.match(/^([A-Z]+)\s*0*(\d+)/);
+if(!m)return s.replace(/[^A-Z0-9]/g,"");
+return m[1]+String(Number(m[2]));
+}
+
+function eflowSayi(n){return Math.round(Number(n)*100)/100;}
+
+/* "80X80X3.00 PROFİL" / "25X2.00 BORU" -> {yuvarlak, kenarlar[], et} */
+function eflowHammaddeOlcu(ad){
+let s=String(ad||"").toUpperCase().replace(/,/g,".");
+if(/MÜŞTERİ|MUSTERI/.test(s))return {musteri:true};
+let nums=(s.match(/\d+(?:\.\d+)?/g)||[]).map(Number).filter(Number.isFinite);
+let boru=/BORU|Ø/.test(s);
+if(boru && nums.length>=2)return {yuvarlak:true,kenarlar:[eflowSayi(nums[0])],et:eflowSayi(nums[1])};
+if(/LAMA/.test(s))return null;
+if(nums.length>=3)return {yuvarlak:false,kenarlar:[eflowSayi(nums[0]),eflowSayi(nums[1])].sort((a,b)=>a-b),et:eflowSayi(nums[2])};
+return null;
+}
+
+function eflowDosyaOlcu(file){
+let size=file && file.size;
+if(!size)return null;
+let nums=(String(size.sizeText||"").replace(/,/g,".").match(/\d+(?:\.\d+)?/g)||[]).map(Number).filter(Number.isFinite);
+let et=eflowSayi(size.thickness);
+if(!nums.length || !Number.isFinite(et))return null;
+if(size.shape==="Yuvarlak" || /Ø/.test(String(size.sizeText||"")))return {yuvarlak:true,kenarlar:[eflowSayi(nums[0])],et:et};
+let a=nums[0], b=nums.length>1?nums[1]:nums[0];
+return {yuvarlak:false,kenarlar:[eflowSayi(a),eflowSayi(b)].sort((x,y)=>x-y),et:et};
+}
+
+function eflowOlcuAyni(x,y){
+if(!x || !y || x.musteri || y.musteri)return false;
+if(x.yuvarlak!==y.yuvarlak)return false;
+if(x.kenarlar.length!==y.kenarlar.length)return false;
+for(let i=0;i<x.kenarlar.length;i++){
+if(Math.abs(x.kenarlar[i]-y.kenarlar[i])>0.05)return false;
+}
+return Math.abs(x.et-y.et)<=0.05;
+}
+
+/* "2026-10-22T22:28:00.0000000" -> yerel saat ms */
+function eflowZaman(value){
+if(!value)return 0;
+let s=String(value).replace(/\.\d+$/,"").replace(/Z$/,"");
+let t=new Date(s).getTime();
+return Number.isFinite(t)?t:0;
+}
+
+function eflowSaat(ms){
+if(!ms)return "—";
+try{
+return new Date(ms).toLocaleString("tr-TR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+}catch(e){return "—";}
+}
+
+/* Aynı DT + hammaddenin birden çok satırı (farklı grup no) tek duruma indirilir. */
+function eflowGruplar(satirlar){
+let harita=new Map();
+(satirlar||[]).forEach(r=>{
+let dt=eflowDtAnahtar(r.sip);
+if(!dt)return;
+let anahtar=dt+"|"+String(r.ham||"").toUpperCase().trim();
+let g=harita.get(anahtar);
+if(!g){
+g={dt:dt,ham:String(r.ham||""),olcu:eflowHammaddeOlcu(r.ham),durumlar:[],bas:0,bit:0,personel:"",makine:"",cari:r.cari||""};
+harita.set(anahtar,g);
+}
+g.durumlar.push(String(r.durum||""));
+let bas=eflowZaman(r.bas), bit=eflowZaman(r.bit);
+if(bas && (!g.bas || bas<g.bas))g.bas=bas;
+if(bit && bit>g.bit)g.bit=bit;
+if(r.personel)g.personel=String(r.personel);
+if(r.makine)g.makine=String(r.makine);
+});
+harita.forEach(g=>{
+let d=g.durumlar;
+if(d.length && d.every(x=>x==="Bitti"))g.durum="Bitti";
+else if(d.some(x=>x==="Devam Ediyor"||x==="Bitti"))g.durum="Devam Ediyor";
+else if(d.some(x=>x==="Planlandı"))g.durum="Planlandı";
+else g.durum=d[0]||"";
+});
+return Array.from(harita.values());
+}
+
+/* Bir iş dosyasının E-Flow karşılığı. */
+function eflowDosyaGrubu(job,file,gruplar){
+let dt=eflowDtAnahtar(job && job.dtNo);
+let adaylar=(gruplar||[]).filter(g=>g.dt===dt);
+if(!adaylar.length)return null;
+let olcu=eflowDosyaOlcu(file);
+let bulunan=adaylar.find(g=>eflowOlcuAyni(g.olcu,olcu));
+if(bulunan)return bulunan;
+/* "MÜŞTERİ BORU PROFİLİ" gibi ölçüsüz satır: DT'de tek dosya ve tek satır varsa eşleşir. */
+if(adaylar.length===1 && (job.files||[]).length===1 && (!adaylar[0].olcu || adaylar[0].olcu.musteri))return adaylar[0];
+return null;
+}
+
+/* ---------- OKUMA ---------- */
+
+async function eflowVeriOku(){
+let v=await cloudStateGet(CLOUD_KEY_EFLOW_DURUM);
+eflowSonOkuma=Date.now();
+if(v && typeof v==="object" && Array.isArray(v.satirlar)){
+eflowSonVeri=v;
+eflowSonVeri.gruplar=eflowGruplar(v.satirlar);
+}
+return eflowSonVeri;
+}
+
+function eflowKopruZamani(){
+return eflowSonVeri ? (Date.parse(eflowSonVeri.at)||0) : 0;
+}
+
+function eflowKopruCanli(){
+let t=eflowKopruZamani();
+return t>0 && Date.now()-t<EFLOW_KOPRU_ESKI_MS;
+}
+
+/* ---------- UYGULAMA ---------- */
+
+function eflowCalisanDosya(haric){
+return typeof jobPlanRunningFile==="function"?jobPlanRunningFile(haric):null;
+}
+
+/* E-Flow'da başlayan dosya bizde de başlar. Tezgâhta başka dosya varsa
+   o duraklatılır: E-Flow'da yeni iş başlamışsa eskisi makineden inmiştir. */
+function eflowBaslat(job,file,g){
+let eski=eflowCalisanDosya(file);
+if(eski){
+if(typeof jobPlanAddWorked==="function")jobPlanAddWorked(eski.file);
+eski.file.status="durakladi";
+eski.file.pausedAt=Date.now();
+eski.file.pausedBy="E-Flow";
+}
+let ilk=!(job.files||[]).some(f=>f!==file && (f.startedAt || (f.status && f.status!=="bekliyor")));
+file.status="basladi";
+file.startedAt=g.bas||Date.now();
+file.pausedAt=null;
+file.startedBy=g.personel?("E-Flow · "+g.personel):"E-Flow";
+file.eflowBas=g.bas||Date.now();
+if(job.status==="planned")job.status="active";
+if(typeof jobPlanBringToFront==="function")jobPlanBringToFront(job,file);
+return ilk;
+}
+
+async function eflowBitir(job,file,g){
+eflowOtomatik=true;
+eflowBitisZamani=g.bit||Date.now();
+eflowBitiren=g.personel?("E-Flow · "+g.personel):"E-Flow";
+try{
+/* Bitir akışı kendi içinde kaydediyor ve stoktan düşüyor. */
+if(file.status==="bekliyor" && !file.startedAt && g.bas)file.startedAt=g.bas;
+await jobPlanFinishFile(job.id,file.id);
+file.eflowBit=eflowBitisZamani;
+}
+finally{
+eflowOtomatik=false;
+eflowBitisZamani=null;
+eflowBitiren="";
+}
+}
+
+async function eflowUygula(){
+if(!eflowModu() || !eflowSonVeri)return;
+if(typeof jobPlanBusy!=="undefined" && jobPlanBusy)return;
+if(!(await eflowUygulayabilirMi()))return;
+
+/* Başka bilgisayarda değişen plan önce alınır. */
+let rev=await jobPlanReadRev();
+if(rev && Number(rev.rev)>jobPlanRev){
+if(jobPlanDirty)return;
+await jobPlanPullFromCloud(rev);
+}
+
+let esik=eflowBaslangic()-5*60000;
+let gruplar=eflowSonVeri.gruplar||[];
+let baslatilacak=[];
+let bitirilecek=[];
+
+jobPlanJobs.forEach(job=>{
+if(job.status==="completed")return;
+let goruldu=new Set();
+(job.files||[]).forEach(file=>{
+if(file.status==="bitti")return;
+let g=eflowDosyaGrubu(job,file,gruplar);
+if(!g)return;
+if(g.durum==="Bitti"){
+let zaman=g.bit||g.bas;
+if(zaman && zaman>=esik)bitirilecek.push({job,file,g});
+}
+else if(g.durum==="Devam Ediyor"){
+if(!g.bas || g.bas<esik)return;
+if(file.status==="basladi")return;
+/* Aynı ebattan birden çok dosya varsa sıradaki ilki başlar. */
+let anahtar=g.dt+"|"+g.ham;
+if(goruldu.has(anahtar))return;
+goruldu.add(anahtar);
+let ayniEbattaCalisan=(job.files||[]).some(f=>f!==file && f.status==="basladi" && eflowDosyaGrubu(job,f,gruplar)===g);
+if(ayniEbattaCalisan)return;
+if(Number(file.eflowBas)===Number(g.bas) && file.status==="durakladi")return;
+baslatilacak.push({job,file,g});
+}
+});
+});
+
+if(!baslatilacak.length && !bitirilecek.length)return;
+
+eflowIslemde=true;
+try{
+/* Önce bitenler: biten iş tezgâhtan inmeden yenisi başlarsa duraklatılmış görünür. */
+for(let x of bitirilecek){
+if(x.file.status==="bitti")continue;
+try{
+await eflowBitir(x.job,x.file,x.g);
+}catch(e){
+console.error("E-Flow bitirme hatası:",e);
+eflowSonHata=x.job.dtNo+" bitirilemedi: "+(e&&e.message||e);
+}
+}
+
+let mailIsleri=[];
+baslatilacak.forEach(x=>{
+if(x.file.status==="bitti")return;
+if(eflowBaslat(x.job,x.file,x.g))mailIsleri.push(x.job);
+});
+if(baslatilacak.length){
+jobPlanRefreshAll();
+await jobPlanSaveJobs();
+if(typeof musOlay==="function")mailIsleri.forEach(j=>musOlay("basla",j));
+}
+
+}
+finally{
+eflowIslemde=false;
+if(typeof opRender==="function")opRender();
+}
+}
+
+async function eflowTick(){
+if(!eflowModu()){eflowRenderDurum();return;}
+try{
+await eflowVeriOku();
+eflowSonHata="";
+await eflowUygula();
+}catch(e){
+console.error("E-Flow senkron hatası:",e);
+eflowSonHata=String(e&&e.message||e);
+}
+eflowRenderDurum();
+if(typeof jobPlanRenderSafe==="function")jobPlanRenderSafe();
+}
+
+function eflowBaslatZamanlayici(){
+if(eflowZamanlayici)clearInterval(eflowZamanlayici);
+eflowZamanlayici=setInterval(()=>{
+if(eflowIslemde)return;
+eflowTick().catch(console.error);
+},EFLOW_ARALIK_MS);
+eflowTick().catch(console.error);
+}
+
+/* ---------- GÖSTERİM ---------- */
+
+/* Plan tablosundaki dosya satırına E-Flow durumu. */
+function eflowDosyaRozet(job,file){
+if(!eflowModu())return "";
+if(!eflowSonVeri)return '<span class="eflow-rozet bekle">E-Flow ?</span>';
+let g=eflowDosyaGrubu(job,file,eflowSonVeri.gruplar||[]);
+if(!g)return '<span class="eflow-rozet yok" title="E-Flow raporunda bu DT + ebat bulunamadı">E-Flow: eşleşmedi</span>';
+let sinif=g.durum==="Bitti"?"bitti":g.durum==="Devam Ediyor"?"devam":"plan";
+let ek=g.durum==="Bitti"?" "+eflowSaat(g.bit):g.durum==="Devam Ediyor"?" "+eflowSaat(g.bas):"";
+return '<span class="eflow-rozet '+sinif+'" title="'+escapeHTML(g.ham+(g.personel?" · "+g.personel:""))+'">E-Flow: '+escapeHTML(g.durum)+escapeHTML(ek)+'</span>';
+}
+
+function eflowRenderDurum(){
+let kutu=document.getElementById("eflowDurum");
+if(!kutu)return;
+if(!eflowModu()){
+kutu.innerHTML='<span class="jobplan-sub">Kapalı · Başlat/Bitir bu uygulamadan yapılır.</span>';
+return;
+}
+let satirlar=[];
+let kt=eflowKopruZamani();
+satirlar.push(kt
+?(eflowKopruCanli()
+?'<span class="eflow-rozet bitti">Köprü çalışıyor · son veri '+eflowSaat(kt)+'</span>'
+:'<span class="eflow-rozet yok">⚠️ Köprüden '+eflowSaat(kt)+'\'den beri veri gelmedi</span>')
+:'<span class="eflow-rozet yok">⚠️ Köprüden hiç veri gelmedi</span>');
+let u=eflowUygulayici;
+let uCanli=u && Date.now()-Number(u.zaman||0)<EFLOW_UYGULAYICI_ESKI_MS;
+satirlar.push(eflowBuCihazUygular()
+?'<span class="eflow-rozet devam">Bu bilgisayar uyguluyor</span>'
+:(uCanli
+?'<span class="eflow-rozet plan">Uygulayan: '+escapeHTML(u.ad||"")+'</span>'
+:'<span class="eflow-rozet yok">⚠️ Uygulayan bilgisayar yok — işler başlamaz/bitmez</span>'));
+if(eflowSonVeri && Array.isArray(jobPlanJobs)){
+let eslesmeyen=0;
+jobPlanJobs.forEach(job=>{
+if(job.status==="completed")return;
+(job.files||[]).forEach(f=>{
+if(f.status!=="bitti" && !eflowDosyaGrubu(job,f,eflowSonVeri.gruplar||[]))eslesmeyen++;
+});
+});
+if(eslesmeyen)satirlar.push('<span class="eflow-rozet plan">'+eslesmeyen+' dosya E-Flow\'da henüz yok</span>');
+}
+if(eflowBaslangic())satirlar.push('<span class="jobplan-sub">'+eflowSaat(eflowBaslangic())+' sonrası kayıtlar uygulanır</span>');
+if(eflowSonHata)satirlar.push('<span class="eflow-rozet yok">'+escapeHTML(eflowSonHata)+'</span>');
+kutu.innerHTML=satirlar.join(" ");
+}
 
 </script>
 

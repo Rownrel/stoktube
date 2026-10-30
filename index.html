@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.82</div>
+      <div class="page-login-surum">Tube.1.0.83</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.82</small>
+<small class="app-surum">Tube.1.0.83</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.82</div>
+  <div class="planner-corp-surum">Tube.1.0.83</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8136,7 +8136,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.82</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.83</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8190,7 +8190,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.82</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.83</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8204,7 +8204,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.82</div>
+<div class="ope-surum">Tube.1.0.83</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8640,7 +8640,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.82";
+const APP_SURUM = "Tube.1.0.83";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29513,7 +29513,7 @@ function eflowRenderDurum(){
 let kutu=document.getElementById("eflowDurum");
 if(!kutu)return;
 if(!eflowModu()){
-kutu.innerHTML='<span class="jobplan-sub">Kapalı · Başlat/Bitir bu uygulamadan yapılır.</span>';
+kutu.innerHTML='<span class="jobplan-sub">Kapalı · Başlat/Bitir bu uygulamadan yapılır.</span>'+((typeof mikroYoksay!=="undefined" && mikroYoksay.length)?' <button type="button" class="eflow-rozet plan" style="border:0;cursor:pointer" onclick="mikroYoksayTemizle()">↺ Yoksayılan '+mikroYoksay.length+' Mikro dosyasını geri getir</button>':'');
 return;
 }
 let satirlar=[];
@@ -29544,6 +29544,7 @@ if(eslesmeyen)satirlar.push('<span class="eflow-rozet plan">'+eslesmeyen+' dosya
 }
 if(eflowBaslangic())satirlar.push('<span class="jobplan-sub">'+eflowSaat(eflowBaslangic())+' sonrası kayıtlar uygulanır</span>');
 if(eflowSonHata)satirlar.push('<span class="eflow-rozet yok">'+escapeHTML(eflowSonHata)+'</span>');
+if(typeof mikroYoksay!=="undefined" && mikroYoksay.length)satirlar.push('<button type="button" class="eflow-rozet plan" style="border:0;cursor:pointer" onclick="mikroYoksayTemizle()">↺ Yoksayılan '+mikroYoksay.length+' Mikro dosyasını geri getir</button>');
 kutu.innerHTML=satirlar.join(" ");
 }
 
@@ -29587,6 +29588,7 @@ let y=await cloudStateGet(CLOUD_KEY_MIKRO_YOKSAY);
 mikroYoksay=Array.isArray(y)?y:[];
 }catch(e){console.error("Mikro yeni işler okunamadı:",e);}
 mikroIslerRender();
+if(typeof eflowRenderDurum==="function")eflowRenderDurum();
 }
 
 function mikroIslerRender(){
@@ -29635,6 +29637,17 @@ liste.forEach(d=>yeni.add(mikroAd(d.dosya)));
 mikroYoksay=Array.from(yeni).slice(-3000);
 try{await cloudStateSet(CLOUD_KEY_MIKRO_YOKSAY,mikroYoksay);}catch(e){alert("❌ Kaydedilemedi.\n\n"+(e&&e.message||""));}
 mikroIslerRender();
+}
+
+/* Yoksayılan Mikro dosyalarını geri getirir (Vardiya & Plan Ayarları'ndan). */
+async function mikroYoksayTemizle(){
+if(!jobPlanGuard("isplani.dosya"))return;
+if(!mikroYoksay.length){alert("Yoksayılan dosya yok.");return;}
+if(!confirm(mikroYoksay.length+" yoksayılan dosya tekrar listede gösterilsin mi?\n\n(Planda olanlar zaten gösterilmez.)"))return;
+mikroYoksay=[];
+try{await cloudStateSet(CLOUD_KEY_MIKRO_YOKSAY,[]);}catch(e){alert("❌ Kaydedilemedi.\n\n"+(e&&e.message||""));return;}
+mikroIslerRender();
+if(typeof eflowRenderDurum==="function")eflowRenderDurum();
 }
 
 </script>

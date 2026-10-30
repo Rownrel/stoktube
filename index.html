@@ -6199,7 +6199,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.78</div>
+      <div class="page-login-surum">Tube.1.0.79</div>
     </section>
   </div>
 </div>
@@ -6210,7 +6210,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.78</small>
+<small class="app-surum">Tube.1.0.79</small>
 </h1>
 
 <div class="backup-area">
@@ -7335,7 +7335,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.78</div>
+  <div class="planner-corp-surum">Tube.1.0.79</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8132,7 +8132,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.78</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.79</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8186,7 +8186,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.78</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.79</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8200,7 +8200,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.78</div>
+<div class="ope-surum">Tube.1.0.79</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8636,7 +8636,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.78";
+const APP_SURUM = "Tube.1.0.79";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29048,7 +29048,7 @@ const CLOUD_KEY_EFLOW_DURUM="eflow_durum_v1";
 const CLOUD_KEY_EFLOW_UYGULAYICI="eflow_uygulayici_v1";
 const EFLOW_YEREL_UYGULAYICI="eflow_bu_cihaz_uygular_v1";
 const EFLOW_YEREL_CIHAZ="eflow_cihaz_kimligi_v1";
-const EFLOW_ARALIK_MS=60000;
+const EFLOW_ARALIK_MS=30000;
 const EFLOW_KOPRU_ESKI_MS=5*60000;
 const EFLOW_UYGULAYICI_ESKI_MS=3*60000;
 
@@ -29254,19 +29254,33 @@ return new Date(ms).toLocaleString("tr-TR",{day:"2-digit",month:"2-digit",hour:"
 }catch(e){return "—";}
 }
 
-/* Aynı DT + hammaddenin birden çok satırı (farklı grup no) tek duruma indirilir. */
+/* "C:\\..\\DT03589_40X40X2MM_BOZDEMIR.html" -> "dt03589_40x40x2mm_bozdemir" */
+function eflowDosyaAnahtar(ad){
+let s=String(ad||"").split(/[\\/]/).pop().replace(/\.(html?|svg|pdf)$/i,"").trim();
+return s.toLocaleLowerCase("tr-TR").replace(/ı/g,"i");
+}
+
+/* Satırlar tek duruma indirilir:
+   - Mikro köprüsü (1.0.79) her HTML dosyası için bir satır yazar (dosya adı ile).
+   - E-Flow köprüsü dosya adı vermez; aynı DT + hammadde satırları birleştirilir. */
 function eflowGruplar(satirlar){
 let harita=new Map();
 (satirlar||[]).forEach(r=>{
 let dt=eflowDtAnahtar(r.sip);
 if(!dt)return;
-let anahtar=dt+"|"+String(r.ham||"").toUpperCase().trim();
+let dosya=r.dosya?eflowDosyaAnahtar(r.dosya):"";
+let anahtar=dosya
+?"F|"+dosya
+:dt+"|"+String(r.ham||"").toUpperCase().trim()+(r.grup?"|"+String(r.grup):"");
 let g=harita.get(anahtar);
 if(!g){
-g={dt:dt,ham:String(r.ham||""),olcu:eflowHammaddeOlcu(r.ham),durumlar:[],bas:0,bit:0,personel:"",makine:"",cari:r.cari||""};
+g={dt:dt,ham:String(r.ham||""),olcu:eflowHammaddeOlcu(r.ham),durumlar:[],bas:0,bit:0,personel:"",makine:"",cari:r.cari||"",
+dosya:dosya,grup:String(r.grup||""),isEmri:0,biten:0};
 harita.set(anahtar,g);
 }
 g.durumlar.push(String(r.durum||""));
+if(Number.isFinite(Number(r.isEmri)))g.isEmri+=Number(r.isEmri);
+if(Number.isFinite(Number(r.biten)))g.biten+=Number(r.biten);
 let bas=eflowZaman(r.bas), bit=eflowZaman(r.bit);
 if(bas && (!g.bas || bas<g.bas))g.bas=bas;
 if(bit && bit>g.bit)g.bit=bit;
@@ -29283,10 +29297,17 @@ else g.durum=d[0]||"";
 return Array.from(harita.values());
 }
 
-/* Bir iş dosyasının E-Flow karşılığı. */
+/* Bir iş dosyasının E-Flow/Mikro karşılığı.
+   1) HTML dosya adı birebir (Mikro köprüsü)
+   2) Yedek: aynı DT + aynı ebat (dosya adı bilinmeyen satırlar) */
 function eflowDosyaGrubu(job,file,gruplar){
+let ad=eflowDosyaAnahtar(file && file.fileName);
+if(ad){
+let tam=(gruplar||[]).find(g=>g.dosya && g.dosya===ad);
+if(tam)return tam;
+}
 let dt=eflowDtAnahtar(job && job.dtNo);
-let adaylar=(gruplar||[]).filter(g=>g.dt===dt);
+let adaylar=(gruplar||[]).filter(g=>g.dt===dt && !g.dosya);
 if(!adaylar.length)return null;
 let olcu=eflowDosyaOlcu(file);
 let bulunan=adaylar.find(g=>eflowOlcuAyni(g.olcu,olcu));
@@ -29393,9 +29414,8 @@ else if(g.durum==="Devam Ediyor"){
 if(!g.bas || g.bas<esik)return;
 if(file.status==="basladi")return;
 /* Aynı ebattan birden çok dosya varsa sıradaki ilki başlar. */
-let anahtar=g.dt+"|"+g.ham;
-if(goruldu.has(anahtar))return;
-goruldu.add(anahtar);
+if(goruldu.has(g))return;
+goruldu.add(g);
 let ayniEbattaCalisan=(job.files||[]).some(f=>f!==file && f.status==="basladi" && eflowDosyaGrubu(job,f,gruplar)===g);
 if(ayniEbattaCalisan)return;
 if(Number(file.eflowBas)===Number(g.bas) && file.status==="durakladi")return;
@@ -29471,6 +29491,7 @@ let g=eflowDosyaGrubu(job,file,eflowSonVeri.gruplar||[]);
 if(!g)return '<span class="eflow-rozet yok" title="E-Flow raporunda bu DT + ebat bulunamadı">E-Flow: eşleşmedi</span>';
 let sinif=g.durum==="Bitti"?"bitti":g.durum==="Devam Ediyor"?"devam":"plan";
 let ek=g.durum==="Bitti"?" "+eflowSaat(g.bit):g.durum==="Devam Ediyor"?" "+eflowSaat(g.bas):"";
+if(g.isEmri>1 && g.durum==="Devam Ediyor")ek+=" · "+g.biten+"/"+g.isEmri+" iş emri";
 return '<span class="eflow-rozet '+sinif+'" title="'+escapeHTML(g.ham+(g.personel?" · "+g.personel:""))+'">E-Flow: '+escapeHTML(g.durum)+escapeHTML(ek)+'</span>';
 }
 
@@ -29485,7 +29506,7 @@ let satirlar=[];
 let kt=eflowKopruZamani();
 satirlar.push(kt
 ?(eflowKopruCanli()
-?'<span class="eflow-rozet bitti">Köprü çalışıyor · son veri '+eflowSaat(kt)+'</span>'
+?'<span class="eflow-rozet bitti">Köprü çalışıyor'+(eflowSonVeri&&eflowSonVeri.kaynak?' ('+escapeHTML(eflowSonVeri.kaynak)+')':'')+' · son veri '+eflowSaat(kt)+'</span>'
 :'<span class="eflow-rozet yok">⚠️ Köprüden '+eflowSaat(kt)+'\'den beri veri gelmedi</span>')
 :'<span class="eflow-rozet yok">⚠️ Köprüden hiç veri gelmedi</span>');
 let u=eflowUygulayici;

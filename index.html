@@ -2442,6 +2442,9 @@ font-weight:bold
 .eflow-rozet.bitti{background:#dcfce7;color:#15803d}
 .eflow-rozet.plan{background:#fef9c3;color:#854d0e}
 .eflow-rozet.yok{background:#fee2e2;color:#b91c1c}
+.mikro-isler{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;margin:8px 0;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:14px}
+.mikro-isler-metin{flex:1 1 300px}
+.mikro-isler button{padding:6px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
 .eflow-durum{display:flex;flex-wrap:wrap;gap:4px;align-items:center;width:100%;margin-top:4px}
 
 
@@ -6199,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.81</div>
+      <div class="page-login-surum">Tube.1.0.82</div>
     </section>
   </div>
 </div>
@@ -6210,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.81</small>
+<small class="app-surum">Tube.1.0.82</small>
 </h1>
 
 <div class="backup-area">
@@ -7335,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.81</div>
+  <div class="planner-corp-surum">Tube.1.0.82</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7549,6 +7552,7 @@ onchange="jobPlanSetEnAzDosyaDk(this.value)">
 
 <div class="jobplan-notice" id="jobPlanNotice" style="display:none"></div>
 
+<div class="mikro-isler" id="mikroIsler" style="display:none"></div>
 <div class="jobplan-summary" id="jobPlanSummary" data-perm="isplani.ozet"></div>
 
 <div class="jobplan-import-panel" id="jobPlanImportPanel" data-perm="isplani.dosya">
@@ -8132,7 +8136,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.81</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.82</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8186,7 +8190,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.81</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.82</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8200,7 +8204,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.81</div>
+<div class="ope-surum">Tube.1.0.82</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8636,7 +8640,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.81";
+const APP_SURUM = "Tube.1.0.82";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -19187,6 +19191,7 @@ jobPlanRefreshShortages();
 jobPlanRenderSafe();
 jobPlanUpdateBadge();
 if(typeof showProducts==="function")showProducts();
+if(typeof mikroIslerRender==="function")mikroIslerRender();
 }
 
 function jobPlanUpdateBadge(){
@@ -29458,6 +29463,7 @@ if(typeof opRender==="function")opRender();
 }
 
 async function eflowTick(){
+if(typeof mikroIslerKontrol==="function")mikroIslerKontrol().catch(console.error);
 if(!eflowModu()){eflowRenderDurum();return;}
 try{
 await eflowVeriOku();
@@ -29539,6 +29545,96 @@ if(eslesmeyen)satirlar.push('<span class="eflow-rozet plan">'+eslesmeyen+' dosya
 if(eflowBaslangic())satirlar.push('<span class="jobplan-sub">'+eflowSaat(eflowBaslangic())+' sonrası kayıtlar uygulanır</span>');
 if(eflowSonHata)satirlar.push('<span class="eflow-rozet yok">'+escapeHTML(eflowSonHata)+'</span>');
 kutu.innerHTML=satirlar.join(" ");
+}
+
+/* =====================================================
+   MİKRO'DAN YENİ İŞLER (1.0.82)
+   Köprü, lazer (037) iş emri açılmış ve bitmemiş DT'lerin TruTops HTML'lerini
+   (TKF_TEKLIF.DosyaIcerik) Supabase'e yazar. Planda olmayan dosyalar için
+   plan ekranında bant çıkar; "Plana al" mevcut HTML Yükle önizlemesini açar,
+   planlamacı stok kartlarını kontrol edip her zamanki gibi ekler.
+===================================================== */
+
+const CLOUD_KEY_MIKRO_OZET="mikro_isler_ozet_v1";
+const CLOUD_KEY_MIKRO_HTML="mikro_isler_html_v1";
+const CLOUD_KEY_MIKRO_YOKSAY="mikro_isler_yoksay_v1";
+
+let mikroOzet=null;
+let mikroYoksay=[];
+
+function mikroAd(ad){
+return String(ad||"").trim().toLocaleLowerCase("tr-TR");
+}
+
+function mikroPlandakiDosyalar(){
+let set=new Set();
+(Array.isArray(jobPlanJobs)?jobPlanJobs:[]).forEach(job=>(job.files||[]).forEach(f=>set.add(mikroAd(f.fileName))));
+return set;
+}
+
+function mikroYeniDosyalar(){
+if(!mikroOzet || !Array.isArray(mikroOzet.dosyalar))return [];
+let plan=mikroPlandakiDosyalar();
+let yok=new Set(mikroYoksay.map(mikroAd));
+return mikroOzet.dosyalar.filter(d=>d && d.dosya && !plan.has(mikroAd(d.dosya)) && !yok.has(mikroAd(d.dosya)));
+}
+
+async function mikroIslerKontrol(){
+try{
+let v=await cloudStateGet(CLOUD_KEY_MIKRO_OZET);
+mikroOzet=(v && Array.isArray(v.dosyalar))?v:null;
+let y=await cloudStateGet(CLOUD_KEY_MIKRO_YOKSAY);
+mikroYoksay=Array.isArray(y)?y:[];
+}catch(e){console.error("Mikro yeni işler okunamadı:",e);}
+mikroIslerRender();
+}
+
+function mikroIslerRender(){
+let box=document.getElementById("mikroIsler");
+if(!box)return;
+let liste=(typeof jobPlanAllows==="function" && !jobPlanAllows("isplani.dosya"))?[]:mikroYeniDosyalar();
+if(!liste.length){box.style.display="none";box.innerHTML="";return;}
+let dtler=new Map();
+liste.forEach(d=>dtler.set(d.dt,(dtler.get(d.dt)||0)+1));
+let ozet=Array.from(dtler.entries()).slice(0,8).map(([dt,n])=>escapeHTML(dt)+(n>1?" ("+n+")":"")).join(", ")+(dtler.size>8?" …":"");
+box.style.display="flex";
+box.innerHTML=
+'<span class="mikro-isler-metin">📥 Mikro\'da üretime girmiş, planda olmayan <b>'+liste.length+' dosya</b>: '+ozet+'</span>'+
+'<button type="button" class="btn-blue" onclick="mikroIslerPlanaAl()">Plana al</button>'+
+'<button type="button" class="btn-gray" onclick="mikroIslerYoksay()">Yoksay</button>';
+}
+
+async function mikroIslerPlanaAl(){
+if(!jobPlanGuard("isplani.dosya"))return;
+let liste=mikroYeniDosyalar();
+if(!liste.length){mikroIslerRender();return;}
+let v=null;
+try{v=await cloudStateGet(CLOUD_KEY_MIKRO_HTML);}catch(e){
+alert("❌ Mikro dosyaları okunamadı.\n\n"+(e&&e.message||""));
+return;
+}
+let harita=new Map(((v&&v.dosyalar)||[]).map(d=>[mikroAd(d.dosya),d]));
+let dosyalar=liste
+.map(d=>harita.get(mikroAd(d.dosya)))
+.filter(d=>d && d.html)
+.map(d=>({name:d.dosya,text:async()=>d.html}));
+if(!dosyalar.length){
+alert("Dosyaların içeriği henüz gelmedi. Köprü bir sonraki turda gönderecek; biraz sonra tekrar deneyin.");
+return;
+}
+await jobPlanReadFiles({target:{files:dosyalar,value:""}});
+}
+
+async function mikroIslerYoksay(){
+if(!jobPlanGuard("isplani.dosya"))return;
+let liste=mikroYeniDosyalar();
+if(!liste.length)return;
+if(!confirm(liste.length+" dosya bu listede bir daha gösterilmesin mi?\n\n(Gerekirse HTML Yükle ile elle eklenebilir.)"))return;
+let yeni=new Set(mikroYoksay.map(mikroAd));
+liste.forEach(d=>yeni.add(mikroAd(d.dosya)));
+mikroYoksay=Array.from(yeni).slice(-3000);
+try{await cloudStateSet(CLOUD_KEY_MIKRO_YOKSAY,mikroYoksay);}catch(e){alert("❌ Kaydedilemedi.\n\n"+(e&&e.message||""));}
+mikroIslerRender();
 }
 
 </script>

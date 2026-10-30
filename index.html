@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.85</div>
+      <div class="page-login-surum">Tube.1.0.86</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.85</small>
+<small class="app-surum">Tube.1.0.86</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.85</div>
+  <div class="planner-corp-surum">Tube.1.0.86</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8140,7 +8140,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.85</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.86</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8194,7 +8194,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.85</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.86</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8208,7 +8208,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.85</div>
+<div class="ope-surum">Tube.1.0.86</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8644,7 +8644,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.85";
+const APP_SURUM = "Tube.1.0.86";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29714,12 +29714,23 @@ zaman:Date.now(),
 cihaz:eflowCihazKimligi()
 };
 try{
+/* Kuyruğu iki ekran aynı anda yazarsa biri diğerinin komutunu silebilir:
+   yazdıktan sonra geri okunur, komut yoksa tekrar eklenir (en çok 4 deneme). */
+let tamam=false;
+for(let deneme=0;deneme<4 && !tamam;deneme++){
 let v=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT);
 let liste=(v && Array.isArray(v.komutlar))?v.komutlar:[];
+if(!liste.some(k=>k && k.id===kayit.id)){
 let sinir=Date.now()-3*24*3600*1000;
 liste=liste.filter(k=>k && Number(k.zaman)>sinir).slice(-300);
 liste.push(kayit);
 await cloudStateSet(CLOUD_KEY_EFLOW_KOMUT,{komutlar:liste,at:new Date().toISOString()});
+}
+await new Promise(r=>setTimeout(r,400+Math.random()*600));
+let kontrol=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT);
+tamam=!!(kontrol && Array.isArray(kontrol.komutlar) && kontrol.komutlar.some(k=>k && k.id===kayit.id));
+}
+if(!tamam)throw new Error("Komut kuyruğa yazılamadı (başka bir ekran aynı anda yazıyor).");
 }catch(e){
 console.error("E-Flow komutu yazılamadı:",e);
 alert("⚠️ İş stoktube'da işlendi ama E-Flow'a gönderilemedi.\n\n"+(e&&e.message||"")+"\n\nE-Flow'da elle yapın.");
@@ -29775,7 +29786,7 @@ jobPlanPauseFile=async function(jobId,fileId){
 let x=eflowDosyaBul(jobId,fileId); let once=x&&x.file.status;
 await asilDurakla.apply(this,arguments);
 x=eflowDosyaBul(jobId,fileId);
-if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="durakladi" && once==="basladi"){
+if(eflowYazAcik() && !eflowOtomatik && x && x.file.eflowYerel && x.file.status==="durakladi" && once==="basladi"){
 let neden=await eflowDurusNedeniSor();
 if(neden)await eflowKomut("durus",x.job,x.file,neden);
 }
@@ -29785,14 +29796,19 @@ jobPlanResumeFile=async function(jobId,fileId){
 let x=eflowDosyaBul(jobId,fileId); let once=x&&x.file.status;
 await asilDevam.apply(this,arguments);
 x=eflowDosyaBul(jobId,fileId);
-if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="basladi" && once==="durakladi")await eflowKomut("devam",x.job,x.file);
+if(eflowYazAcik() && !eflowOtomatik && x && x.file.eflowYerel && x.file.status==="basladi" && once==="durakladi")await eflowKomut("devam",x.job,x.file);
 };
 
 jobPlanFinishFile=async function(jobId,fileId){
 let x=eflowDosyaBul(jobId,fileId); let once=x&&x.file.status;
 await asilBitir.apply(this,arguments);
 x=eflowDosyaBul(jobId,fileId);
-if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="bitti" && once!=="bitti")await eflowKomut("bitir",x.job,x.file);
+/* E-Flow'dan başlatılmış (köprünün bilmediği) bir süreç için bitir gönderilmez:
+   köprü yeni süreç açıp bitirir, E-Flow'da çift kayıt olur. O iş E-Flow'dan bitirilmeli. */
+if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="bitti" && once!=="bitti"){
+if(x.file.eflowYerel || once==="bekliyor")await eflowKomut("bitir",x.job,x.file);
+else alert("ℹ️ Bu dosya E-Flow'dan başlatılmıştı.\n\nstoktube'da bitti; E-Flow'daki süreci de E-Flow'dan Bitir ile kapatın.");
+}
 };
 })();
 

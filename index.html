@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.84</div>
+      <div class="page-login-surum">Tube.1.0.85</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.84</small>
+<small class="app-surum">Tube.1.0.85</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.84</div>
+  <div class="planner-corp-surum">Tube.1.0.85</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8140,7 +8140,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.84</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.85</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8194,7 +8194,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.84</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.85</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8208,7 +8208,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.84</div>
+<div class="ope-surum">Tube.1.0.85</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8644,7 +8644,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.84";
+const APP_SURUM = "Tube.1.0.85";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29510,7 +29510,7 @@ eflowTick().catch(console.error);
 /* Plan tablosundaki dosya satırına E-Flow durumu. */
 function eflowDosyaRozet(job,file){
 if(!eflowModu())return "";
-if(file.eflowKomut && typeof eflowKomutRozet==="function")return eflowKomutRozet(job,file);
+if(typeof eflowSonKomut==="function" && eflowSonKomut(file) && typeof eflowKomutRozet==="function")return eflowKomutRozet(job,file);
 if(!eflowSonVeri)return '<span class="eflow-rozet bekle">E-Flow ?</span>';
 let g=eflowDosyaGrubu(job,file,eflowSonVeri.gruplar||[]);
 if(!g)return '<span class="eflow-rozet yok" title="E-Flow raporunda bu DT + ebat bulunamadı">E-Flow: eşleşmedi</span>';
@@ -29796,31 +29796,60 @@ if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="bitti" && once!=="b
 };
 })();
 
+let eflowKomutKuyruk=[];
+
+/* Dosyanın son komutu kuyruktan okunur (plan kaydı başka ekrandan ezilse de doğru görünsün). */
+function eflowSonKomut(file){
+let ad=mikroAd(file && file.fileName);
+for(let i=eflowKomutKuyruk.length-1;i>=0;i--){
+let k=eflowKomutKuyruk[i];
+if(k && mikroAd(k.dosya)===ad)return k;
+}
+return file && file.eflowKomut || null;
+}
+
+function eflowBildirilenOku(){
+try{return new Set(JSON.parse(localStorage.getItem("eflow_bildirilen_v1")||"[]"));}catch(e){return new Set();}
+}
+function eflowBildirilenYaz(set){
+try{localStorage.setItem("eflow_bildirilen_v1",JSON.stringify(Array.from(set).slice(-300)));}catch(e){}
+}
+
 async function eflowKomutSonucOku(){
 try{
 let v=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT_SONUC);
 eflowKomutSonuc=(v && v.sonuc && typeof v.sonuc==="object")?v.sonuc:{};
+let q=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT);
+eflowKomutKuyruk=(q && Array.isArray(q.komutlar))?q.komutlar:[];
 }catch(e){console.error("E-Flow komut sonucu okunamadı:",e);return;}
-/* Bu bilgisayarda basılan bir komut hata verdiyse bir kez uyar. */
-(Array.isArray(jobPlanJobs)?jobPlanJobs:[]).forEach(job=>(job.files||[]).forEach(f=>{
-let k=f.eflowKomut; if(!k)return;
+/* Yalnızca BU bilgisayarda son 10 dakikada basılan ve hata veren komut için bir kez uyar. */
+let bildirilen=eflowBildirilenOku();
+let benim=eflowCihazKimligi();
+eflowKomutKuyruk.forEach(k=>{
+if(!k || k.cihaz!==benim || bildirilen.has(k.id))return;
 let s=eflowKomutSonuc[k.id];
-if(s && s.durum==="hata" && !eflowBildirilen.has(k.id) && Date.now()-Number(k.zaman)<30*60000){
-eflowBildirilen.add(k.id);
-setTimeout(()=>alert("⚠️ E-Flow'a gönderilemedi\n\n"+(job.dtNo||"")+" · "+(f.fileName||"")+"\n\n"+(s.mesaj||"")+"\n\nE-Flow'da elle yapın ya da plan ekranındaki \"Tekrar\" ile yeniden gönderin."),50);
+if(!s)return;
+bildirilen.add(k.id);
+if(s.durum==="hata" && Date.now()-Number(k.zaman)<10*60000){
+setTimeout(()=>alert("⚠️ E-Flow'a gönderilemedi\n\n"+(k.dt||"")+" · "+(k.dosya||"")+"\n\n"+(s.mesaj||"")+"\n\nE-Flow'da elle yapın ya da plan ekranındaki \"Tekrar\" ile yeniden gönderin."),50);
 }
-if(s)eflowBildirilen.add(k.id);
-}));
+});
+eflowBildirilenYaz(bildirilen);
 }
 
 async function eflowKomutTekrar(jobId,fileId){
 let x=eflowDosyaBul(jobId,fileId);
-if(!x || !x.file.eflowKomut)return;
-await eflowKomut(x.file.eflowKomut.tur,x.job,x.file,"");
+let k=x && eflowSonKomut(x.file);
+if(!k)return;
+let s=eflowKomutSonuc[k.id];
+if(!s){alert("Bu komut henüz köprüde işlenmedi; birkaç saniye bekleyin.");return;}
+if(s.durum!=="hata")return;
+if(!confirm("Son komut ("+k.tur+") E-Flow'a yeniden gönderilsin mi?"))return;
+await eflowKomut(k.tur,x.job,x.file,k.neden||"");
 }
 
 function eflowKomutRozet(job,file){
-let k=file.eflowKomut;
+let k=eflowSonKomut(file);
 if(!k)return "";
 let ad={basla:"başlat",durus:"duruş",devam:"devam",bitir:"bitir"}[k.tur]||k.tur;
 let s=eflowKomutSonuc[k.id];

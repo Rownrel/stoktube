@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.87</div>
+      <div class="page-login-surum">Tube.1.0.89</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.87</small>
+<small class="app-surum">Tube.1.0.89</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.87</div>
+  <div class="planner-corp-surum">Tube.1.0.89</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8140,7 +8140,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.87</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.89</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8194,7 +8194,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.87</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.89</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8208,7 +8208,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.87</div>
+<div class="ope-surum">Tube.1.0.89</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8644,7 +8644,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.87";
+const APP_SURUM = "Tube.1.0.89";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29288,7 +29288,7 @@ let anahtar=dosya
 let g=harita.get(anahtar);
 if(!g){
 g={dt:dt,ham:String(r.ham||""),olcu:eflowHammaddeOlcu(r.ham),durumlar:[],bas:0,bit:0,personel:"",makine:"",cari:r.cari||"",
-dosya:dosya,grup:String(r.grup||""),isEmri:0,biten:0};
+dosya:dosya,grup:String(r.grup||""),isEmri:0,biten:0,uyari:""};
 harita.set(anahtar,g);
 }
 g.durumlar.push(String(r.durum||""));
@@ -29298,6 +29298,7 @@ let bas=eflowZaman(r.bas), bit=eflowZaman(r.bit);
 if(bas && (!g.bas || bas<g.bas))g.bas=bas;
 if(bit && bit>g.bit)g.bit=bit;
 if(r.personel)g.personel=String(r.personel);
+if(r.uyari)g.uyari=String(r.uyari);
 if(r.makine)g.makine=String(r.makine);
 });
 harita.forEach(g=>{
@@ -29516,14 +29517,24 @@ eflowTick().catch(console.error);
 /* Plan tablosundaki dosya satırına E-Flow durumu. */
 function eflowDosyaRozet(job,file){
 if(!eflowModu())return "";
-if(typeof eflowSonKomut==="function" && eflowSonKomut(file) && typeof eflowKomutRozet==="function")return eflowKomutRozet(job,file);
+if(typeof eflowSonKomut==="function" && eflowSonKomut(file) && typeof eflowKomutRozet==="function"){
+let gk=eflowSonVeri?eflowDosyaGrubu(job,file,eflowSonVeri.gruplar||[]):null;
+return eflowKomutRozet(job,file)+(gk && gk.uyari?' <span class="eflow-rozet yok">⚠ '+escapeHTML(gk.uyari)+'</span>':'');
+}
 if(!eflowSonVeri)return '<span class="eflow-rozet bekle">E-Flow ?</span>';
 let g=eflowDosyaGrubu(job,file,eflowSonVeri.gruplar||[]);
-if(!g)return '<span class="eflow-rozet yok" title="E-Flow raporunda bu DT + ebat bulunamadı">E-Flow: eşleşmedi</span>';
+if(!g){
+let dt=eflowDtAnahtar(job && job.dtNo);
+let dtVar=(eflowSonVeri.gruplar||[]).some(x=>x.dt===dt);
+return dtVar
+?'<span class="eflow-rozet yok" title="Mikro\'da bu DT var ama bu dosyanın ebadına/adına uyan iş emri yok">E-Flow: ebat eşleşmedi</span>'
+:'<span class="eflow-rozet plan" title="Mikro\'da bu DT için lazer (037) iş emri yok ya da 60 günden eski">E-Flow\'da iş emri yok</span>';
+}
 let sinif=g.durum==="Bitti"?"bitti":g.durum==="Devam Ediyor"?"devam":"plan";
 let ek=g.durum==="Bitti"?" "+eflowSaat(g.bit):g.durum==="Devam Ediyor"?" "+eflowSaat(g.bas):"";
 if(g.isEmri>1 && g.durum==="Devam Ediyor")ek+=" · "+g.biten+"/"+g.isEmri+" iş emri";
-return '<span class="eflow-rozet '+sinif+'" title="'+escapeHTML(g.ham+(g.personel?" · "+g.personel:""))+'">E-Flow: '+escapeHTML(g.durum)+escapeHTML(ek)+'</span>';
+return '<span class="eflow-rozet '+sinif+'" title="'+escapeHTML(g.ham+(g.personel?" · "+g.personel:""))+'">E-Flow: '+escapeHTML(g.durum)+escapeHTML(ek)+'</span>'+
+(g.uyari?' <span class="eflow-rozet yok" title="HTML\'deki ölçü ile Mikro iş emrindeki hammadde farklı. Fiyatlamada malzeme değişmiş olabilir; kesim programını kontrol edin.">⚠ '+escapeHTML(g.uyari)+'</span>':'');
 }
 
 function eflowRenderDurum(){

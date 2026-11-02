@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.89</div>
+      <div class="page-login-surum">Tube.1.0.90</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.89</small>
+<small class="app-surum">Tube.1.0.90</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.89</div>
+  <div class="planner-corp-surum">Tube.1.0.90</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8140,7 +8140,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.89</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.90</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8194,7 +8194,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.89</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.90</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8208,7 +8208,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.89</div>
+<div class="ope-surum">Tube.1.0.90</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8644,7 +8644,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.89";
+const APP_SURUM = "Tube.1.0.90";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29573,6 +29573,7 @@ if(eslesmeyen)satirlar.push('<span class="eflow-rozet plan">'+eslesmeyen+' dosya
 if(eflowBaslangic())satirlar.push('<span class="jobplan-sub">'+eflowSaat(eflowBaslangic())+' sonrası kayıtlar uygulanır</span>');
 if(eflowSonHata)satirlar.push('<span class="eflow-rozet yok">'+escapeHTML(eflowSonHata)+'</span>');
 if(typeof mikroYoksay!=="undefined" && mikroYoksay.length)satirlar.push('<button type="button" class="eflow-rozet plan" style="border:0;cursor:pointer" onclick="mikroYoksayTemizle()">↺ Yoksayılan '+mikroYoksay.length+' Mikro dosyasını geri getir</button>');
+satirlar.push('<button type="button" class="eflow-rozet plan" style="border:0;cursor:pointer" onclick="eflowDtKapat()">⏹ E-Flow\'da açık kalan DT\'yi kapat</button>');
 kutu.innerHTML=satirlar.join(" ");
 }
 
@@ -29719,7 +29720,7 @@ let file=job&&(job.files||[]).find(f=>f.id===fileId);
 return file?{job,file}:null;
 }
 
-async function eflowKomut(tur,job,file,neden){
+async function eflowKomut(tur,job,file,neden,ek){
 let kayit={
 id:"k"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
 tur:tur,
@@ -29728,6 +29729,7 @@ dosya:String(file.fileName||""),
 personel:jobPlanWho()||"",
 neden:neden||"",
 musteri:!!file.customerMaterial,
+sonMusteri:!!(ek && ek.sonMusteri),
 zaman:Date.now(),
 cihaz:eflowCihazKimligi()
 };
@@ -29825,10 +29827,10 @@ x=eflowDosyaBul(jobId,fileId);
    köprü yeni süreç açıp bitirir, E-Flow'da çift kayıt olur. O iş E-Flow'dan bitirilmeli. */
 if(eflowYazAcik() && !eflowOtomatik && x && x.file.status==="bitti" && once!=="bitti"){
 let baskaMusteri=x.file.customerMaterial && (x.job.files||[]).some(f=>f!==x.file && f.customerMaterial && f.status!=="bitti");
-if(baskaMusteri){
-/* E-Flow'daki ortak müşteri malzemesi süreci, DT'nin son müşteri dosyası bitince kapanır. */
-}
-else if(x.file.eflowYerel || once==="bekliyor")await eflowKomut("bitir",x.job,x.file);
+/* Her dosya için bitir gönderilir. E-Flow'da DT'nin ortak "MÜŞTERİ …" satırı varsa köprü
+   o ortak süreci yalnızca sonMusteri=true gelince kapatır; ebat ebat satır varsa her dosyanın
+   kendi sürecini kapatır. */
+if(x.file.eflowYerel || once==="bekliyor")await eflowKomut("bitir",x.job,x.file,"",{sonMusteri:!baskaMusteri});
 else alert("ℹ️ Bu dosya E-Flow'dan başlatılmıştı.\n\nstoktube'da bitti; E-Flow'daki süreci de E-Flow'dan Bitir ile kapatın.");
 }
 };
@@ -29895,6 +29897,27 @@ if(!s)return '<span class="eflow-rozet plan">⏳ E-Flow\'a gönderiliyor ('+ad+'
 if(s.durum==="tamam")return '<span class="eflow-rozet bitti" title="'+escapeHTML(s.mesaj||"")+'">✓ E-Flow '+ad+'</span>';
 return '<span class="eflow-rozet yok" title="'+escapeHTML(s.mesaj||"")+'">⚠ E-Flow '+ad+' olmadı</span>'+
 ' <button type="button" class="jobplan-mini" style="background:#dc2626" onclick="eflowKomutTekrar(\''+job.id+'\',\''+file.id+'\')">Tekrar</button>';
+}
+
+/* Plandaki (bitmiş olsa da) bir DT'nin bütün dosyaları için E-Flow'a "bitir" gönderir.
+   E-Flow'da yarım/açık kalmış iş emri satırlarını kapatmak için (Vardiya & Plan Ayarları). */
+async function eflowDtKapat(){
+if(!jobPlanGuard("isplani.vardiya"))return;
+let dtGir=prompt("E-Flow'da kapatılacak DT numarası (ör. DT03611):","");
+if(!dtGir)return;
+let anahtar=eflowDtAnahtar(dtGir);
+let job=(jobPlanJobs||[]).find(j=>eflowDtAnahtar(j.dtNo)===anahtar);
+if(!job){alert(dtGir+" planda (tamamlananlar dahil) bulunamadı.");return;}
+let dosyalar=(job.files||[]);
+if(!dosyalar.length)return;
+if(!confirm(job.dtNo+" için "+dosyalar.length+" dosyanın her biri E-Flow'da başlatılıp bitirilecek.\n\n"+
+"E-Flow'da zaten tamamlanmış satırlar için köprü \"listede yok\" uyarısı verir; bu normaldir.\n\nDevam edilsin mi?"))return;
+let musteriler=dosyalar.filter(f=>f.customerMaterial);
+for(let f of dosyalar){
+let son=!f.customerMaterial || f===musteriler[musteriler.length-1];
+await eflowKomut("bitir",job,f,"",{sonMusteri:son});
+}
+alert("✅ "+dosyalar.length+" komut gönderildi. Sonuçlar birkaç saniye içinde köprü günlüğüne düşer.");
 }
 
 </script>

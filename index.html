@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.90</div>
+      <div class="page-login-surum">Tube.1.0.91</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.90</small>
+<small class="app-surum">Tube.1.0.91</small>
 </h1>
 
 <div class="backup-area">
@@ -7338,7 +7338,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.90</div>
+  <div class="planner-corp-surum">Tube.1.0.91</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8140,7 +8140,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.90</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.91</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8194,7 +8194,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.90</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.91</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8208,7 +8208,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.90</div>
+<div class="ope-surum">Tube.1.0.91</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8644,7 +8644,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.90";
+const APP_SURUM = "Tube.1.0.91";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -29922,5 +29922,233 @@ alert("✅ "+dosyalar.length+" komut gönderildi. Sonuçlar birkaç saniye için
 
 </script>
 
+<script>
+/* ===== Tube.1.0.91 — E-Flow hata tekrarı (operatör ekranı) + otomatik güncelleme ===== */
+
+/* ---------- E-Flow: hatalı komutu tekrar gönder ---------- */
+function eflowKomutDosyaBulK(k){
+if(!k)return null;
+let ad=mikroAd(k.dosya);
+let dt=eflowDtAnahtar(k.dt);
+let aday=null;
+for(let j of (jobPlanJobs||[])){
+for(let f of (j.files||[])){
+if(mikroAd(f.fileName)!==ad)continue;
+if(eflowDtAnahtar(j.dtNo)===dt)return {job:j,file:f};
+if(!aday)aday={job:j,file:f};
+}
+}
+return aday;
+}
+
+let eflowTekrarGonderiliyor=false;
+async function eflowKomutTekrarK(k){
+if(!k || eflowTekrarGonderiliyor)return;
+let x=eflowKomutDosyaBulK(k);
+if(!x){alert("Dosya planda bulunamadı: "+(k.dosya||"")+"\n\nE-Flow'da elle yapın.");return;}
+let son=eflowSonKomut(x.file);
+if(son && son.id!==k.id){alert("Bu dosya için daha yeni bir E-Flow komutu var; eski komut tekrar gönderilmedi.");return;}
+eflowTekrarGonderiliyor=true;
+try{await eflowKomut(k.tur,x.job,x.file,k.neden||"",{sonMusteri:!!k.sonMusteri});}
+finally{eflowTekrarGonderiliyor=false;}
+eflowOpYenile();
+}
+
+/* Plan ekranındaki "Tekrar" de müşteri malzemesi bilgisini korusun */
+eflowKomutTekrar=async function(jobId,fileId){
+let x=eflowDosyaBul(jobId,fileId);
+let k=x && eflowSonKomut(x.file);
+if(!k)return;
+let s=eflowKomutSonuc[k.id];
+if(!s){alert("Bu komut henüz köprüde işlenmedi; birkaç saniye bekleyin.");return;}
+if(s.durum!=="hata")return;
+if(!confirm("Son komut ("+k.tur+") E-Flow'a yeniden gönderilsin mi?"))return;
+await eflowKomut(k.tur,x.job,x.file,k.neden||"",{sonMusteri:!!k.sonMusteri});
+};
+
+function eflowSeritGizliOku(){
+try{return new Set(JSON.parse(localStorage.getItem("eflow_serit_gizli_v1")||"[]"));}catch(e){return new Set();}
+}
+function eflowSeritGizliYaz(set){
+try{localStorage.setItem("eflow_serit_gizli_v1",JSON.stringify(Array.from(set).slice(-200)));}catch(e){}
+}
+
+/* Bu bilgisayardan gönderilip hata veren, dosyanın SON komutu olan komutlar (son 24 saat) */
+function eflowHataliKomutlar(){
+if(typeof eflowModu==="function" && !eflowModu())return [];
+let benim=eflowCihazKimligi();
+let gizli=eflowSeritGizliOku();
+let sinir=Date.now()-24*3600*1000;
+let son={};
+(eflowKomutKuyruk||[]).forEach(k=>{if(k && k.dosya)son[mikroAd(k.dosya)]=k;});
+return Object.values(son).filter(k=>{
+let s=eflowKomutSonuc[k.id];
+return k.cihaz===benim && Number(k.zaman)>sinir && !gizli.has(k.id) && s && s.durum==="hata";
+}).sort((a,b)=>Number(b.zaman)-Number(a.zaman)).slice(0,3);
+}
+
+function eflowOpSeritHtml(){
+let liste;
+try{liste=eflowHataliKomutlar();}catch(e){return "";}
+if(!liste.length)return "";
+const ad={basla:"başlat",durus:"duruş",devam:"devam",bitir:"bitir"};
+return '<div class="eflow-op-seritler">'+liste.map(k=>{
+let s=eflowKomutSonuc[k.id]||{};
+return '<div class="eflow-op-serit">'+
+'<div class="m"><b>⚠ E-Flow\'a gitmedi: '+(ad[k.tur]||escapeHTML(String(k.tur)))+'</b>'+
+'<span>'+escapeHTML(String(k.dt||""))+' · '+escapeHTML(dosyaAdiSade(String(k.dosya||"")))+'</span>'+
+(s.mesaj?'<small>'+escapeHTML(String(s.mesaj))+'</small>':'')+'</div>'+
+'<button type="button" class="tek" onclick="eflowOpTekrar(\''+k.id+'\')">Tekrar gönder</button>'+
+'<button type="button" class="gec" onclick="eflowOpGizle(\''+k.id+'\')">Elle yaptım</button>'+
+'</div>';
+}).join("")+'</div>';
+}
+
+function eflowOpKomut(id){return (eflowKomutKuyruk||[]).find(k=>k && k.id===id)||null;}
+async function eflowOpTekrar(id){await eflowKomutTekrarK(eflowOpKomut(id));}
+function eflowOpGizle(id){
+if(!confirm("Bu işi E-Flow'da elle yaptınız mı?\n\nUyarı şeridi kaldırılacak."))return;
+let g=eflowSeritGizliOku();g.add(id);eflowSeritGizliYaz(g);
+eflowOpYenile();
+}
+function eflowOpYenile(){
+try{if(typeof opActive==="function" && opActive() && opPage==="tezgah")opRenderJob();}catch(e){}
+}
+
+/* Operatör iş kartının üstüne şerit eklenir */
+if(typeof opRenderJob==="function"){
+let eflowEskiOpRenderJob=opRenderJob;
+opRenderJob=function(){
+let r=eflowEskiOpRenderJob.apply(this,arguments);
+try{
+let box=document.getElementById("opJobBox");
+if(box){let h=eflowOpSeritHtml();if(h)box.insertAdjacentHTML("afterbegin",h);}
+}catch(e){console.error(e);}
+return r;
+};
+}
+
+/* Uyarı: "Tamam" = şimdi tekrar gönder */
+if(typeof eflowKomutSonucOku==="function"){
+eflowKomutSonucOku=async function(){
+try{
+let v=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT_SONUC);
+eflowKomutSonuc=(v && v.sonuc && typeof v.sonuc==="object")?v.sonuc:{};
+let q=await cloudStateGet(CLOUD_KEY_EFLOW_KOMUT);
+eflowKomutKuyruk=(q && Array.isArray(q.komutlar))?q.komutlar:[];
+}catch(e){console.error("E-Flow komut sonucu okunamadı:",e);return;}
+let bildirilen=eflowBildirilenOku();
+let benim=eflowCihazKimligi();
+let sor=[];
+eflowKomutKuyruk.forEach(k=>{
+if(!k || k.cihaz!==benim || bildirilen.has(k.id))return;
+let s=eflowKomutSonuc[k.id];
+if(!s)return;
+bildirilen.add(k.id);
+if(s.durum==="hata" && Date.now()-Number(k.zaman)<10*60000)sor.push({k:k,s:s});
+});
+eflowBildirilenYaz(bildirilen);
+eflowOpYenile();
+sor.forEach(({k,s})=>{
+setTimeout(()=>{
+let ad={basla:"BAŞLAT",durus:"DURUŞ",devam:"DEVAM",bitir:"BİTİR"}[k.tur]||k.tur;
+if(confirm("⚠️ E-Flow'a gönderilemedi ("+ad+")\n\n"+(k.dt||"")+" · "+(k.dosya||"")+"\n\n"+(s.mesaj||"")+
+"\n\nŞimdi tekrar gönderilsin mi?\n\nTamam = tekrar gönder · İptal = sonra (tezgâh ekranındaki \"Tekrar gönder\" ile)")){
+eflowKomutTekrarK(k);
+}
+},50);
+});
+};
+}
+
+/* ---------- Otomatik güncelleme ---------- */
+const GUNCELLEME_ARALIK_MS=2*60*1000;
+const GUNCELLEME_BEKLE_MS=60*1000;
+let guncelYeniSurum="";
+let guncelYenileZaman=0;
+
+function surumSayi(s){return String(s||"").replace(/[^0-9.]/g,"").split(".").map(x=>Number(x)||0);}
+function surumYeniMi(yeni,eski){
+let a=surumSayi(yeni),b=surumSayi(eski);
+for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]||0)!==(b[i]||0))return (a[i]||0)>(b[i]||0);}
+return false;
+}
+
+/* Operatör bir şeyle meşgulse (açık pencere, yazı yazıyor) sayfa yenilenmez */
+function guncelMesgul(){
+let el=document.activeElement;
+if(el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) && el.type!=="button")return true;
+let acik=Array.from(document.querySelectorAll('.modal,[id$="Modal"]')).some(m=>{
+if(m.id==="guncelSerit")return false;
+let st=getComputedStyle(m);
+return st.display!=="none" && st.visibility!=="hidden" && m.getClientRects().length>0;
+});
+if(acik)return true;
+if(typeof eflowTekrarGonderiliyor!=="undefined" && eflowTekrarGonderiliyor)return true;
+return false;
+}
+
+/* Girişi hatırlanmayan kullanıcı yenilemede çıkış yapmış olur: o zaman yalnızca şerit gösterilir */
+function guncelOtomatikUygun(){
+try{
+if(typeof currentUser!=="undefined" && currentUser && typeof systemRememberRecord==="function" && !systemRememberRecord())return false;
+}catch(e){}
+let anahtar="guncel_deneme_"+guncelYeniSurum;
+let n=0;try{n=Number(sessionStorage.getItem(anahtar))||0;}catch(e){}
+return n<2;
+}
+
+function guncelYenile(){
+try{let a="guncel_deneme_"+guncelYeniSurum;sessionStorage.setItem(a,String((Number(sessionStorage.getItem(a))||0)+1));}catch(e){}
+location.reload();
+}
+
+function guncelSeritGoster(){
+let d=document.getElementById("guncelSerit");
+if(!d){
+d=document.createElement("div");
+d.id="guncelSerit";
+document.body.appendChild(d);
+}
+let oto=guncelOtomatikUygun();
+let kalan=Math.max(0,Math.ceil((guncelYenileZaman-Date.now())/1000));
+d.innerHTML='<span>🔄 Yeni sürüm var (<b>'+escapeHTML(guncelYeniSurum)+'</b>)'+
+(oto?(guncelMesgul()?' · açık pencere kapanınca yenilenecek':' · '+kalan+' sn sonra kendiliğinden yenilenecek'):'')+
+'</span><button type="button" onclick="guncelYenile()">Şimdi yenile</button>';
+}
+
+async function guncelKontrol(){
+try{
+let r=await fetch("/version.json?t="+Date.now(),{cache:"no-store"});
+if(!r.ok)return;
+let j=await r.json();
+let s=j && j.surum;
+if(!s || !surumYeniMi(s,APP_SURUM))return;
+if(s!==guncelYeniSurum){guncelYeniSurum=s;guncelYenileZaman=Date.now()+GUNCELLEME_BEKLE_MS;}
+guncelSeritGoster();
+}catch(e){}
+}
+
+setInterval(()=>{
+if(!guncelYeniSurum)return;
+guncelSeritGoster();
+if(Date.now()>=guncelYenileZaman && guncelOtomatikUygun() && !guncelMesgul())guncelYenile();
+},1000);
+setInterval(guncelKontrol,GUNCELLEME_ARALIK_MS);
+setTimeout(guncelKontrol,15000);
+</script>
+<style>
+.eflow-op-seritler{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.eflow-op-serit{display:flex;align-items:center;gap:10px;background:#fef2f2;border:2px solid #dc2626;border-radius:12px;padding:10px 12px}
+.eflow-op-serit .m{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.eflow-op-serit .m b{color:#b91c1c;font-size:15px}
+.eflow-op-serit .m span{font-size:13px;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eflow-op-serit .m small{font-size:11px;color:#64748b}
+.eflow-op-serit button{border:0;border-radius:10px;padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.eflow-op-serit .tek{background:#dc2626;color:#fff}
+.eflow-op-serit .gec{background:#e2e8f0;color:#334155}
+#guncelSerit{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#1d4ed8;color:#fff;padding:8px 16px;font-size:14px;box-shadow:0 2px 8px #0004}
+#guncelSerit button{background:#fff;color:#1d4ed8;border:0;border-radius:8px;padding:6px 14px;font-weight:700;cursor:pointer}
+</style>
 </body>
 </html>

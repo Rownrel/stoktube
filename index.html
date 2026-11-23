@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.92</div>
+      <div class="page-login-surum">Tube.1.0.93</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.92</small>
+<small class="app-surum">Tube.1.0.93</small>
 </h1>
 
 <div class="backup-area">
@@ -6505,7 +6505,7 @@ oninput="showProducts()"
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()">▤ Sarf</button>
   </div>
   <div class="planner-corp-clock" id="lazerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.92</div>
+  <div class="planner-corp-surum">Tube.1.0.93</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="lazerCorpAvatar">—</div>
     <div class="planner-corp-user-text">
@@ -7147,6 +7147,7 @@ oninput="renderPriceResults()"
 <div class="maintenance-alert-box" id="maintenanceAlertBox"></div>
 
 <div class="maintenance-add-panel" id="maintenanceAddPanel">
+<div class="bakim-form-baslik" id="maintenanceFormTitle">Yeni Bakım</div>
 <div class="maintenance-add-grid">
 <div class="form-group">
 <label>Makine / Ekipman</label>
@@ -7163,7 +7164,7 @@ oninput="renderPriceResults()"
 </div>
 </div>
 <div class="form-group">
-<label>Bakım Tarihi</label>
+<label>Tarih</label>
 <input id="maintenanceDate" type="date">
 </div>
 <div class="form-group">
@@ -7183,12 +7184,19 @@ oninput="renderPriceResults()"
 <div class="form-group">
 <label>Teklif Alınan PDF</label>
 <input id="maintenanceTeklifPdf" class="maintenance-pdf-input" type="file" accept="application/pdf,.pdf">
+<div class="bakim-pdf-mevcut" id="maintenanceTeklifPdfMevcut"></div>
 </div>
 <div class="form-group">
 <label>Bakım Yapılan PDF</label>
 <input id="maintenancePdf" class="maintenance-pdf-input" type="file" accept="application/pdf,.pdf">
+<div class="bakim-pdf-mevcut" id="maintenancePdfMevcut"></div>
+</div>
+<div class="form-group bakim-not-alani">
+<label>Not</label>
+<textarea id="maintenanceNote" rows="3" inputmode="none" data-keypad="text" data-native-inputmode="text" data-keypad-label="Bakım notu" placeholder="Değişen parçalar, yapılan işlem, dikkat edilecekler..."></textarea>
 </div>
 </div>
+<div class="bakim-form-ipucu">Yalnız <b>Teklif Alınan PDF</b> yüklenirse kayıt <b>Teklif alındı</b> olur, bakım sayılmaz ve sonraki bakım tarihi değişmez. <b>Bakım Yapılan PDF</b> yüklenince bakım yapılmış sayılır.</div>
 <div class="maintenance-add-actions">
 <button type="button" id="maintenanceRecordCancelButton" class="btn-gray">Vazgeç</button>
 <button type="button" id="maintenanceRecordSaveButton" class="btn-green">Bakımı Kaydet</button>
@@ -7200,7 +7208,7 @@ oninput="renderPriceResults()"
 <thead>
 <tr>
 <th>Makine / Ekipman</th>
-<th>Bakım Tarihi</th>
+<th>Tarih</th>
 <th>Bakımı Yapan</th>
 <th>Sonraki Bakım</th>
 <th>Durum</th>
@@ -7397,7 +7405,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.92</div>
+  <div class="planner-corp-surum">Tube.1.0.93</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8201,7 +8209,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.92</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.93</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8255,7 +8263,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.92</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.93</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8269,7 +8277,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.92</div>
+<div class="ope-surum">Tube.1.0.93</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8705,7 +8713,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.92";
+const APP_SURUM = "Tube.1.0.93";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -13927,7 +13935,11 @@ pdfName:String(r.pdfName||"").trim(),
 pdfPath:String(r.pdfPath||"").trim(),
 teklifPdfName:String(r.teklifPdfName||"").trim(),
 teklifPdfPath:String(r.teklifPdfPath||"").trim(),
-createdAt:r.createdAt || new Date().toISOString()
+note:String(r.note||""),
+createdAt:r.createdAt || new Date().toISOString(),
+createdBy:r.createdBy||"",
+updatedAt:r.updatedAt||"",
+updatedBy:r.updatedBy||""
 })).filter(r=>r.equipment && r.date);
 
 await loadMaintenanceMasterLists();
@@ -14103,6 +14115,8 @@ return normalizeText(name).replace(/[^a-z0-9çğıöşü]/g,"");
 function getLatestMaintenanceMap(){
 let map={};
 maintenanceRecords.forEach(record=>{
+/* Yalnız teklif alınmış (Bakım Yapılan PDF yok) kayıt bakım sayılmaz. */
+if(typeof bakimSadeceTeklif==="function" && bakimSadeceTeklif(record))return;
 let key=getMaintenanceEquipmentKey(record.equipment);
 let current=map[key];
 if(!current){map[key]=record;return;}
@@ -14179,6 +14193,7 @@ if(keypadTarget && modal && modal.contains(keypadTarget))closeNumericKeypad();
 }
 
 async function saveMaintenanceRecord(){
+if(typeof bakimDuzenlenenId!=="undefined" && bakimDuzenlenenId)return bakimDuzenleKaydet();
 let equipment=String(document.getElementById("maintenanceEquipment")?.value||"").trim();
 let date=document.getElementById("maintenanceDate")?.value||"";
 let performedBy=String(document.getElementById("maintenancePerformedBy")?.value||"").trim();
@@ -14216,7 +14231,9 @@ pdfName:file?file.name:"",
 pdfPath:pdfPath,
 teklifPdfName:teklifFile?teklifFile.name:"",
 teklifPdfPath:teklifPdfPath,
-createdAt:new Date().toISOString()
+note:String(document.getElementById("maintenanceNote")?.value||"").trim(),
+createdAt:new Date().toISOString(),
+createdBy:typeof systemCurrentUserName==="function"?systemCurrentUserName():""
 };
 maintenanceRecords.push(newRecord);
 maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,equipment]);
@@ -14238,11 +14255,18 @@ document.getElementById("maintenancePerformedBy").value="";
 document.getElementById("maintenancePdf").value="";
 let _teklifInput=document.getElementById("maintenanceTeklifPdf");
 if(_teklifInput)_teklifInput.value="";
+let _notInput=document.getElementById("maintenanceNote");
+if(_notInput)_notInput.value="";
 document.getElementById("maintenanceDate").value=maintenanceDateToISO(new Date());
 toggleMaintenanceAddPanel(false);
 renderMaintenanceRecords();
 alert("✅ Bakım kaydı buluta kaydedildi.");
 return true;
+}
+
+/* Teklif PDF'i var ama Bakım Yapılan PDF'i yok → bakım henüz yapılmadı. */
+function bakimSadeceTeklif(record){
+return !!(record && record.teklifPdfName && !record.pdfName);
 }
 
 function bakimPdfMi(file){
@@ -14274,6 +14298,7 @@ function bakimPdfSonradanYukle(id,tur){
 if(typeof systemGuard==="function" && !systemGuard("bakim.duzenle"))return;
 let record=maintenanceRecords.find(r=>String(r.id)===String(id));
 if(!record){alert("Bakım kaydı bulunamadı.");return;}
+if(tur==="bakim" && bakimSadeceTeklif(record) && typeof bakimDuzenleAc==="function"){bakimDuzenleAc(id,{bakimYapildi:true});return;}
 let input=document.createElement("input");
 input.type="file";
 input.accept="application/pdf,.pdf";
@@ -14362,19 +14387,19 @@ return String(a.equipment).localeCompare(String(b.equipment),"tr");
 body.innerHTML=sorted.map(record=>{
 let key=getMaintenanceEquipmentKey(record.equipment);
 let isLatest=latest[key] && String(latest[key].id)===String(record.id);
-let status=isLatest?getMaintenanceStatus(record):{kind:"history",text:"Geçmiş kayıt",due:null};
+let status=bakimSadeceTeklif(record)?{kind:"teklif",text:"Teklif alındı",due:null}:(isLatest?getMaintenanceStatus(record):{kind:"history",text:"Geçmiş kayıt",due:null});
 let rowClass=status.kind==="warning"?"maintenance-warning-row":(status.kind==="overdue"?"maintenance-overdue-row":"");
 let safeId=escapeHTML(String(record.id));
 let pdfCell=bakimPdfHucre(record,"teklif",safeId)+bakimPdfHucre(record,"bakim",safeId);
 return `
 <tr class="${rowClass}">
-<td class="maintenance-equipment">${escapeHTML(record.equipment)}</td>
+<td class="maintenance-equipment">${escapeHTML(record.equipment)}${record.note?'<div class="bakim-not" title="'+escapeHTML(record.note)+'">📝 '+escapeHTML(record.note)+'</div>':''}</td>
 <td>${formatMaintenanceDate(record.date)}</td>
 <td>${escapeHTML(record.performedBy)}</td>
 <td>${isLatest?formatMaintenanceDate(status.due):"—"}</td>
 <td><span class="maintenance-status ${status.kind}">${status.text}</span></td>
 <td class="bakim-c-pdf">${pdfCell}</td>
-<td class="bakim-c-islem"><button type="button" class="btn-gray" data-maint-action="delete" data-maint-id="${safeId}">Sil</button></td>
+<td class="bakim-c-islem"><div class="bakim-islem"><button type="button" class="btn-blue" data-maint-action="edit" data-maint-id="${safeId}">Düzenle</button><button type="button" class="btn-gray" data-maint-action="delete" data-maint-id="${safeId}">Sil</button></div></td>
 </tr>`;
 }).join("");
 
@@ -14388,6 +14413,7 @@ let id=btn.dataset.maintId||"";
 let tur=btn.dataset.maintTur==="teklif"?"teklif":"bakim";
 if(btn.dataset.maintAction==="download")requestMaintenanceDownload("single",id,tur);
 if(btn.dataset.maintAction==="upload")bakimPdfSonradanYukle(id,tur);
+if(btn.dataset.maintAction==="edit")bakimDuzenleAc(id);
 if(btn.dataset.maintAction==="delete")requestMaintenanceDelete(id);
 };
 }
@@ -30400,7 +30426,7 @@ setTimeout(guncelKontrol,15000);
 #guncelSerit button{background:#fff;color:#1d4ed8;border:0;border-radius:8px;padding:6px 14px;font-weight:700;cursor:pointer}
 </style>
 <script>
-/* ===== Tube.1.0.92 — Profil / Lazer kapsamı =====
+/* ===== Tube.1.0.93 — Profil / Lazer kapsamı =====
    Bakım, Sarf ve Hata Kodları pencerelerinde "Profil | Lazer" sekmesi.
    Profil = eski kayıtlar (anahtarlar aynı). Lazer = "lazer_" önekli ayrı anahtarlar.
    Kullanıcı yalnızca izinli olduğu kapsamı görür (Sistem > Roller: Lazer grubu).
@@ -30473,6 +30499,7 @@ maintenanceEquipments=[];
 maintenanceVendors=[];
 let panel=document.getElementById("maintenanceAddPanel");
 if(panel)panel.style.display="none";
+if(typeof bakimFormSifirla==="function")bakimFormSifirla();
 if(typeof renderMaintenanceMasterSelects==="function")renderMaintenanceMasterSelects("","");
 if(typeof renderMaintenanceRecords==="function")renderMaintenanceRecords();
 let tbody=document.getElementById("maintenanceTableBody");
@@ -30532,6 +30559,7 @@ return true;
 
 /* Pencere kapanınca: Profil görülebiliyorsa Profil'e dön. */
 function kapsamDinlen(bolum){
+if(bolum==="bakim" && typeof bakimFormSifirla==="function")bakimFormSifirla();
 let izin=kapsamIzinli(bolum);
 if(KAPSAM[bolum]!=="profil" && izin.indexOf("profil")>-1)kapsamDegistir(bolum,"profil");
 }
@@ -30642,6 +30670,115 @@ if(panel && panel.style.display==="block")makineSarfSeciciDoldur();
 }
 }
 
+
+/* ===== Bakım kaydını düzenle + not (1.0.92) ===== */
+var bakimDuzenlenenId=null;
+let bakimDuzenlemeAciliyor=false;
+
+function bakimFormSifirla(){
+bakimDuzenlenenId=null;
+bakimDuzenlePdfZorunlu=false;
+let t=document.getElementById("maintenanceFormTitle");
+if(t)t.textContent="Yeni Bakım";
+let b=document.getElementById("maintenanceRecordSaveButton");
+if(b && b.dataset.busy!=="1")b.textContent="Bakımı Kaydet";
+["maintenanceTeklifPdfMevcut","maintenancePdfMevcut"].forEach(id=>{let el=document.getElementById(id);if(el)el.innerHTML="";});
+let n=document.getElementById("maintenanceNote");
+if(n)n.value="";
+let f1=document.getElementById("maintenancePdf");if(f1)f1.value="";
+let f2=document.getElementById("maintenanceTeklifPdf");if(f2)f2.value="";
+}
+
+var bakimDuzenlePdfZorunlu=false;
+function bakimDuzenleAc(id,secenek){
+if(typeof systemGuard==="function" && !systemGuard("bakim.duzenle"))return;
+let r=maintenanceRecords.find(x=>String(x.id)===String(id));
+if(!r){alert("Bakım kaydı bulunamadı.");return;}
+bakimDuzenlemeAciliyor=true;
+try{toggleMaintenanceAddPanel(true);}finally{bakimDuzenlemeAciliyor=false;}
+bakimFormSifirla();
+bakimDuzenlenenId=String(r.id);
+/* Listede olmayan makine / firma da seçilebilsin. */
+if(r.equipment && !maintenanceEquipments.some(x=>x===r.equipment))maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,r.equipment]);
+if(r.performedBy && !maintenanceVendors.some(x=>x===r.performedBy))maintenanceVendors=maintenanceUniqueNames([...maintenanceVendors,r.performedBy]);
+renderMaintenanceMasterSelects(r.equipment,r.performedBy);
+let d=document.getElementById("maintenanceDate");if(d)d.value=r.date||"";
+let n=document.getElementById("maintenanceNote");if(n)n.value=r.note||"";
+let mev=(id,ad)=>{let el=document.getElementById(id);if(el)el.innerHTML=ad?'Mevcut: <b>'+escapeHTML(ad)+'</b><br><span>Değiştirmek için yeni PDF seçin</span>':'<span>PDF yok — eklemek için seçin</span>';};
+mev("maintenanceTeklifPdfMevcut",r.teklifPdfName);
+mev("maintenancePdfMevcut",r.pdfName);
+let t=document.getElementById("maintenanceFormTitle");
+if(t)t.textContent="Bakımı Düzenle — "+r.equipment+" · "+formatMaintenanceDate(r.date);
+let b=document.getElementById("maintenanceRecordSaveButton");
+if(b)b.textContent="Değişikliği Kaydet";
+bakimDuzenlePdfZorunlu=!!(secenek&&secenek.bakimYapildi);
+if(bakimDuzenlePdfZorunlu){
+if(d)d.value=maintenanceDateToISO(new Date());
+if(t)t.textContent="Bakım Yapıldı — "+r.equipment+" (teklif: "+formatMaintenanceDate(r.date)+")";
+let el=document.getElementById("maintenancePdfMevcut");
+if(el)el.innerHTML='<b class="bakim-zorunlu">Bakım Yapılan PDF\'ini seçin ve bakım tarihini kontrol edin.</b>';
+if(b)b.textContent="Bakımı Tamamla";
+}
+let panel=document.getElementById("maintenanceAddPanel");
+if(panel)setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"nearest"}),30);
+}
+
+async function bakimDuzenleKaydet(){
+let id=bakimDuzenlenenId;
+let r=maintenanceRecords.find(x=>String(x.id)===String(id));
+if(!r){alert("Bakım kaydı bulunamadı (başka bir yerden silinmiş olabilir).");bakimFormSifirla();toggleMaintenanceAddPanel(false);return false;}
+let equipment=String(document.getElementById("maintenanceEquipment")?.value||"").trim();
+let date=document.getElementById("maintenanceDate")?.value||"";
+let performedBy=String(document.getElementById("maintenancePerformedBy")?.value||"").trim();
+let note=String(document.getElementById("maintenanceNote")?.value||"").trim();
+let file=document.getElementById("maintenancePdf")?.files?.[0]||null;
+let teklifFile=document.getElementById("maintenanceTeklifPdf")?.files?.[0]||null;
+if(!equipment){alert("Makine / ekipman seçin.");return false;}
+if(!maintenanceDateFromISO(date)){alert("Geçerli bir bakım tarihi seçin.");return false;}
+if(!performedBy){alert("Bakımı yapan firma / kişiyi seçin.");return false;}
+if(teklifFile && !bakimPdfMi(teklifFile)){alert("Teklif Alınan belge PDF olmalıdır.");return false;}
+if(file && !bakimPdfMi(file)){alert("Bakım Yapılan belge PDF olmalıdır.");return false;}
+if(bakimDuzenlePdfZorunlu && !file){alert("Bakımın yapıldığını kaydetmek için Bakım Yapılan PDF'ini seçin.");return false;}
+
+let kapsamBas=KAPSAM.bakim;
+let yeniTeklifYol="",yeniBakimYol="";
+try{
+if(teklifFile)yeniTeklifYol=await uploadMaintenancePdfToCloud(r.id+"_teklif",teklifFile);
+if(file)yeniBakimYol=await putMaintenancePdf(r.id,file);
+}catch(error){
+console.error(error);showCloudAddonError(error);
+alert("PDF buluta yüklenemedi. Değişiklik kaydedilmedi.\n\n"+(error&&error.message||""));
+return false;
+}
+if(kapsamBas!==KAPSAM.bakim){alert("Bu arada sekme değişti. Tekrar deneyin.");return false;}
+
+let onceki=Object.assign({},r);
+r.equipment=equipment;
+r.date=date;
+r.performedBy=performedBy;
+r.note=note;
+if(teklifFile){r.teklifPdfName=teklifFile.name;r.teklifPdfPath=yeniTeklifYol;}
+if(file){r.pdfName=file.name;r.pdfPath=yeniBakimYol;}
+r.updatedAt=new Date().toISOString();
+r.updatedBy=typeof systemCurrentUserName==="function"?systemCurrentUserName():"";
+
+let ok=await saveMaintenanceRecords();
+if(!ok){
+Object.assign(r,onceki);
+renderMaintenanceRecords();
+alert("Değişiklik buluta kaydedilemedi. Tekrar deneyin.");
+return false;
+}
+maintenanceEquipments=maintenanceUniqueNames([...maintenanceEquipments,equipment]);
+maintenanceVendors=maintenanceUniqueNames([...maintenanceVendors,performedBy]);
+await saveMaintenanceMasterLists(false);
+bakimFormSifirla();
+toggleMaintenanceAddPanel(false);
+renderMaintenanceRecords();
+alert("✅ Bakım kaydı güncellendi.");
+return true;
+}
+
 /* Yeni hata kodu / yeni bakım: filtre seçiliyse makine alanı dolu gelsin. */
 (function makineKancalari(){
 if(typeof errorCodeNew==="function"){
@@ -30656,8 +30793,10 @@ return r;
 if(typeof toggleMaintenanceAddPanel==="function"){
 let eski=toggleMaintenanceAddPanel;
 toggleMaintenanceAddPanel=function(show){
+/* "+ Yeni Bakım" ya da Vazgeç: düzenleme modundan çık. */
+if(!bakimDuzenlemeAciliyor && typeof bakimFormSifirla==="function")bakimFormSifirla();
 let r=eski.apply(this,arguments);
-if(show && FILTRE.bakim){
+if(show && FILTRE.bakim && !bakimDuzenlemeAciliyor){
 let sel=document.getElementById("maintenanceEquipment");
 if(sel && !sel.value){
 let o=[...sel.options].find(x=>x.value && makineAnahtar(x.value)===makineAnahtar(FILTRE.bakim));
@@ -30764,6 +30903,17 @@ body.lazer-on .lazer-ekran .lazer-corp-top{display:flex;position:sticky;top:0;z-
 .lazer-kart .lk-alt{font-size:12px;color:#64748b;font-weight:600}
 .lazer-kart .lk-alt.uyari{color:#c2410c}
 @media(max-width:900px){body.lazer-on .lazer-ekran .lazer-corp-top{flex-wrap:wrap;gap:10px}.lazer-corp-top .planner-corp-brand{min-width:0}}
+.maintenance-status.teklif{background:#dbeafe;color:#1e40af}
+.bakim-form-ipucu{margin-top:10px;font-size:12px;color:#475569;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px;line-height:1.45}
+.bakim-zorunlu{color:#c2410c}
+.bakim-form-baslik{font-weight:800;color:#0f172a;margin-bottom:10px;font-size:14px}
+.bakim-not-alani{grid-column:1/-1}
+@media(min-width:781px){.maintenance-add-grid .form-group:has(.maintenance-pdf-input){grid-column:span 2}}
+.bakim-not-alani textarea{width:100%;min-height:64px;resize:vertical;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;font-size:14px;box-sizing:border-box}
+.bakim-pdf-mevcut{font-size:11.5px;color:#334155;margin-top:4px;line-height:1.35}
+.bakim-pdf-mevcut span{color:#94a3b8}
+.bakim-not{margin-top:4px;font-size:12px;font-weight:500;color:#64748b;max-width:260px;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.bakim-islem{display:flex;gap:6px;flex-wrap:wrap}
 .makine-filtre{display:none;align-items:center;gap:6px;margin:4px 0 2px;flex-wrap:wrap}
 .makine-filtre label{font-size:13px;font-weight:700;color:#475569}
 .makine-filtre select{padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;font-size:14px;min-width:180px;background:#fff}

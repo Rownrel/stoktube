@@ -6492,13 +6492,50 @@ oninput="showProducts()"
 
 </div>
 
-<div class="lazer-karsilama" id="lazerKarsilama">
-<h2>🔥 Lazer</h2>
-<p>Bakım, hata kodu ve sarf malzemesi kayıtlarına aşağıdan ulaşabilirsiniz.</p>
-<div class="lazer-karsilama-grid">
-<button type="button" data-perm="bolum.bakim|lazer.bakim" onclick="openMaintenanceModal()"><span>🛠</span>Bakım Takibi</button>
-<button type="button" data-perm="bolum.hatakodu|lazer.hatakodu" onclick="openErrorCodeModal()"><span>⚠️</span>Hata Kodları</button>
-<button type="button" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()"><span>🧰</span>Sarf Malzemeleri</button>
+<div class="lazer-ekran" id="lazerEkran">
+<div class="planner-corp-top lazer-corp-top">
+  <div class="planner-corp-brand">
+    <div class="planner-corp-logo">D</div>
+    <div><b>DOĞRAR METAL</b><span>LAZER BAKIM VE TAKİP</span></div>
+  </div>
+  <div class="planner-corp-nav">
+    <button type="button" class="planner-corp-nav-item active" onclick="lazerEkranAnasayfa()">▣ Genel Bakış</button>
+    <button type="button" class="planner-corp-nav-item" data-perm="bolum.bakim|lazer.bakim" onclick="openMaintenanceModal()">⚒ Bakım</button>
+    <button type="button" class="planner-corp-nav-item" data-perm="bolum.hatakodu|lazer.hatakodu" onclick="openErrorCodeModal()">⚠ Hata Kodları</button>
+    <button type="button" class="planner-corp-nav-item" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()">▤ Sarf</button>
+  </div>
+  <div class="planner-corp-clock" id="lazerCorpClock">—</div>
+  <div class="planner-corp-surum">Tube.1.0.92</div>
+  <div class="planner-corp-user">
+    <div class="planner-corp-avatar" id="lazerCorpAvatar">—</div>
+    <div class="planner-corp-user-text">
+      <div class="planner-corp-user-name" id="lazerCorpName">—</div>
+      <div class="planner-corp-user-role" id="lazerCorpRole">Lazer</div>
+    </div>
+    <button type="button" class="planner-corp-logout" onclick="systemLogout()">Çıkış</button>
+  </div>
+</div>
+<div class="lazer-hero">
+  <div class="planner-corp-kicker">Lazer Bölümü</div>
+  <h1>Genel Bakış</h1>
+  <p>Makine bakımları, hata kodları ve sarf malzemeleri.</p>
+</div>
+<div class="lazer-kartlar">
+  <button type="button" class="lazer-kart" data-perm="bolum.bakim|lazer.bakim" onclick="openMaintenanceModal()">
+    <div class="lk-ust"><span class="lk-ikon">⚒</span><span class="lk-baslik">Bakım Takibi</span></div>
+    <div class="lk-sayi" id="lazerKartBakim">—</div>
+    <div class="lk-alt" id="lazerKartBakimAlt">bakım kaydı</div>
+  </button>
+  <button type="button" class="lazer-kart" data-perm="bolum.hatakodu|lazer.hatakodu" onclick="openErrorCodeModal()">
+    <div class="lk-ust"><span class="lk-ikon">⚠</span><span class="lk-baslik">Hata Kodları</span></div>
+    <div class="lk-sayi" id="lazerKartHata">—</div>
+    <div class="lk-alt">kayıtlı hata kodu</div>
+  </button>
+  <button type="button" class="lazer-kart" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()">
+    <div class="lk-ust"><span class="lk-ikon">▤</span><span class="lk-baslik">Sarf Malzemeleri</span></div>
+    <div class="lk-sayi" id="lazerKartSarf">—</div>
+    <div class="lk-alt" id="lazerKartSarfAlt">malzeme</div>
+  </button>
 </div>
 </div>
 
@@ -30411,7 +30448,7 @@ kutu.style.display="flex";
 kutu.innerHTML=izin.map(k=>
 '<button type="button" class="'+(KAPSAM[bolum]===k?"on":"")+'" '+
 'onclick="kapsamSec(\''+bolum+'\',\''+k+'\')">'+
-(k==="lazer"?"🔥 Lazer":"📐 Profil")+'</button>'
+(k==="lazer"?"Lazer":"Profil")+'</button>'
 ).join("");
 }
 }
@@ -30509,6 +30546,7 @@ else if(hedef==="lazer" && !kapsamModalAcik(bolum) && izin.indexOf("profil")>-1)
 if(hedef!==KAPSAM[bolum])kapsamDegistir(bolum,hedef);
 else kapsamSekmeCiz(bolum);
 });
+if(typeof lazerEkranUygula==="function")lazerEkranUygula();
 }
 
 /* ===== Makine filtresi =====
@@ -30631,6 +30669,61 @@ return r;
 }
 })();
 
+
+/* ===== Lazer ekranı (stok kapalı kullanıcı, ör. Emre Aygördü) =====
+   Planlamacı ekranı gibi koyu üst şerit + özet kartları. */
+let lazerEkranSaat=null;
+
+function lazerEkranAktif(){
+if(!systemData || !systemData.loginEnabled)return false;
+if(!currentUser || currentUser.master)return false;
+if(typeof opActive==="function" && opActive())return false;
+if(typeof viewerActive==="function" && viewerActive())return false;
+if(typeof plannerActive==="function" && plannerActive())return false;
+return !kapsamCan("bolum.stok");
+}
+
+function lazerEkranCiz(){
+if(!document.body.classList.contains("lazer-on"))return;
+let ad=currentUser&&currentUser.name?String(currentUser.name):"";
+let set=(id,t)=>{let el=document.getElementById(id);if(el)el.textContent=t;};
+set("lazerCorpName",ad||"—");
+set("lazerCorpAvatar",typeof plannerInitials==="function"?plannerInitials(ad):(typeof opBasHarf==="function"?opBasHarf(ad):"—"));
+set("lazerCorpRole",typeof systemRoleName==="function"&&currentUser?systemRoleName(currentUser.role):"Lazer");
+let saat=document.getElementById("lazerCorpClock");
+if(saat){
+if(typeof plannerDateTime==="function")saat.innerHTML=plannerDateTime();
+else saat.textContent=new Date().toLocaleString("tr-TR");
+}
+let bekleyen=typeof getMaintenanceAlerts==="function"?getMaintenanceAlerts().length:0;
+set("lazerKartBakim",String((maintenanceRecords||[]).length));
+let bAlt=document.getElementById("lazerKartBakimAlt");
+if(bAlt){bAlt.textContent=bekleyen?bekleyen+" makine bakım bekliyor":"bakım kaydı";bAlt.classList.toggle("uyari",!!bekleyen);}
+set("lazerKartHata",String((errorCodes||[]).length));
+let azalan=typeof getLowConsumables==="function"?getLowConsumables().length:0;
+set("lazerKartSarf",String((consumables||[]).length));
+let sAlt=document.getElementById("lazerKartSarfAlt");
+if(sAlt){sAlt.textContent=azalan?azalan+" malzeme azaldı":"malzeme";sAlt.classList.toggle("uyari",!!azalan);}
+}
+
+function lazerEkranUygula(){
+let acik=lazerEkranAktif();
+document.body.classList.toggle("lazer-on",acik);
+if(lazerEkranSaat){clearInterval(lazerEkranSaat);lazerEkranSaat=null;}
+if(!acik)return;
+lazerEkranCiz();
+lazerEkranSaat=setInterval(lazerEkranCiz,5000);
+/* Hata kodları sayısı için bir kez yükle. */
+if(typeof loadErrorCodes==="function")Promise.resolve(loadErrorCodes()).then(lazerEkranCiz).catch(()=>{});
+}
+
+function lazerEkranAnasayfa(){
+if(kapsamModalAcik("bakim"))closeMaintenanceModal();
+if(kapsamModalAcik("hata"))closeErrorCodeModal();
+if(kapsamModalAcik("sarf"))closeConsumablesModal();
+lazerEkranCiz();
+}
+
 /* Yedek al / yükle yalnızca Profil verisiyle yapılır. */
 function kapsamYedekEngel(){
 let acik=Object.keys(KAPSAM).filter(b=>KAPSAM[b]!=="profil");
@@ -30650,21 +30743,33 @@ let css=`
 .bakim-pdf-yok{color:#94a3b8;font-size:12px}
 .bakim-pdf-satir .btn-dark,.bakim-pdf-satir .bakim-pdf-yukle{padding:4px 10px;font-size:12px}
 .bakim-pdf-satir .maintenance-file-name{flex-basis:100%}
-.lazer-karsilama{display:none;max-width:860px;margin:32px auto;padding:26px;background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(15,23,42,.08)}
-.lazer-karsilama h2{margin:0 0 6px}
-.lazer-karsilama p{margin:0 0 18px;color:#64748b}
-.lazer-karsilama-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.lazer-karsilama-grid button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 12px;font-size:17px;font-weight:700;border-radius:14px;border:1px solid #e2e8f0;background:#f8fafc;color:#1e293b;cursor:pointer}
-.lazer-karsilama-grid button span{font-size:34px}
-.lazer-karsilama-grid button:hover{background:#eef2ff}
-body.perm-yok-bolum-stok .lazer-karsilama{display:block}
+.lazer-ekran{display:none}
+body.lazer-on{background:#f1f5f9}
+body.lazer-on > header,body.lazer-on .container{display:none !important}
+body.lazer-on .lazer-ekran{display:block;min-height:100vh;background:#f1f5f9}
+body.lazer-on .lazer-ekran .lazer-corp-top{display:flex;position:sticky;top:0;z-index:50;min-height:60px;align-items:center;gap:18px;padding:9px 22px;background:#0f172a;color:#fff;border-bottom:1px solid #1e293b}
+.lazer-corp-top .planner-corp-nav-item{cursor:pointer}
+.lazer-corp-top .planner-corp-nav-item:hover{border-color:#475569;color:#fff}
+.lazer-corp-top .planner-corp-logout{cursor:pointer}
+.lazer-hero{padding:18px 24px 14px;background:#fff;border-bottom:1px solid #e2e8f0}
+.lazer-hero h1{margin:3px 0 3px;color:#0f172a;font-size:23px;line-height:1.15;letter-spacing:-.025em}
+.lazer-hero p{margin:0;color:#64748b;font-size:12px}
+.lazer-kartlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;padding:22px 24px;max-width:1200px}
+.lazer-kart{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:18px 20px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04);cursor:pointer;color:#0f172a;font:inherit}
+.lazer-kart:hover{border-color:#93c5fd;box-shadow:0 4px 14px rgba(37,99,235,.10)}
+.lazer-kart .lk-ust{display:flex;align-items:center;gap:10px}
+.lazer-kart .lk-ikon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:#1d4ed8;font-size:16px;font-weight:900}
+.lazer-kart .lk-baslik{font-size:14px;font-weight:800}
+.lazer-kart .lk-sayi{font-size:30px;font-weight:900;letter-spacing:-.03em;margin-top:6px}
+.lazer-kart .lk-alt{font-size:12px;color:#64748b;font-weight:600}
+.lazer-kart .lk-alt.uyari{color:#c2410c}
+@media(max-width:900px){body.lazer-on .lazer-ekran .lazer-corp-top{flex-wrap:wrap;gap:10px}.lazer-corp-top .planner-corp-brand{min-width:0}}
 .makine-filtre{display:none;align-items:center;gap:6px;margin:4px 0 2px;flex-wrap:wrap}
 .makine-filtre label{font-size:13px;font-weight:700;color:#475569}
 .makine-filtre select{padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;font-size:14px;min-width:180px;background:#fff}
 .makine-filtre button{border:0;background:#e2e8f0;color:#334155;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:700}
 .makine-rozet{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:11px;font-weight:700;vertical-align:middle}
 @media(min-width:781px){.consumable-add-grid{grid-template-columns:minmax(200px,2fr) minmax(110px,1fr) minmax(140px,1fr) minmax(120px,1fr) auto}}
-body.op-on .lazer-karsilama,body.viewer-on .lazer-karsilama,body.planner-on .lazer-karsilama,body.page-locked .lazer-karsilama{display:none !important}
 `;
 let st=document.createElement("style");
 st.id="kapsamStil";

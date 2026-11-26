@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.94</div>
+      <div class="page-login-surum">Tube.1.0.95</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.94</small>
+<small class="app-surum">Tube.1.0.95</small>
 </h1>
 
 <div class="backup-area">
@@ -6505,7 +6505,7 @@ oninput="showProducts()"
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()">▤ Sarf</button>
   </div>
   <div class="planner-corp-clock" id="lazerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.94</div>
+  <div class="planner-corp-surum">Tube.1.0.95</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="lazerCorpAvatar">—</div>
     <div class="planner-corp-user-text">
@@ -7405,7 +7405,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.94</div>
+  <div class="planner-corp-surum">Tube.1.0.95</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -8209,7 +8209,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.94</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.95</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8263,7 +8263,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.94</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.95</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8277,7 +8277,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.94</div>
+<div class="ope-surum">Tube.1.0.95</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8713,7 +8713,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.94";
+const APP_SURUM = "Tube.1.0.95";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -17875,6 +17875,15 @@ if(!job.status)job.status="planned";
    zaten saklanan profil kodundan ve dosya adından yeniden üretilebiliyor —
    kullanıcının elle girmesine gerek kalmıyor. */
 job.files.forEach(f=>{
+/* 1.0.94: eski sürümde ebadı okunamayan (NPU "U_...") dosyalar kayıtlı profil kodundan onarılır.
+   Stok kartı kendiliğinden seçilmez; plan satırındaki kart seçiciden seçilir. */
+if(!f.size && f.tubeProfile && typeof jobPlanParseTubeProfile==="function"){
+let onarilan=jobPlanParseTubeProfile(f.tubeProfile);
+if(onarilan){
+f.size=onarilan;
+if(!f.sizeSource)f.sizeSource="Tube profile";
+}
+}
 if(typeof kalBelirle==="function" && !f.quality && !f.qualityManual){
 let bilgi=kalBelirle(null,f.fileName||"",f.tubeProfile||"");
 if(bilgi.quality){
@@ -29532,6 +29541,8 @@ function eflowHammaddeOlcu(ad){
 let s=String(ad||"").toUpperCase().replace(/,/g,".");
 if(/MÜŞTERİ|MUSTERI/.test(s))return {musteri:true};
 let nums=(s.match(/\d+(?:\.\d+)?/g)||[]).map(Number).filter(Number.isFinite);
+/* 1.0.94: "NPU 65", "65 UPN", "U PROFİL 80" -> {npu:65} (BORU PROFİL'e takılmaz) */
+if(/NPU|UPN|(^|[^A-ZÇĞİÖŞÜ])U[\s_-]*PROF/.test(s) && nums.length)return {npu:eflowSayi(nums[0])};
 let boru=/BORU|Ø/.test(s);
 if(boru && nums.length>=2)return {yuvarlak:true,kenarlar:[eflowSayi(nums[0])],et:eflowSayi(nums[1])};
 if(/LAMA/.test(s))return null;
@@ -29544,6 +29555,7 @@ let size=file && file.size;
 if(!size)return null;
 let nums=(String(size.sizeText||"").replace(/,/g,".").match(/\d+(?:\.\d+)?/g)||[]).map(Number).filter(Number.isFinite);
 let et=eflowSayi(size.thickness);
+if(size.type==="NPU" && nums.length)return {npu:eflowSayi(nums[0])};
 if(!nums.length || !Number.isFinite(et))return null;
 if(size.shape==="Yuvarlak" || /Ø/.test(String(size.sizeText||"")))return {yuvarlak:true,kenarlar:[eflowSayi(nums[0])],et:et};
 let a=nums[0], b=nums.length>1?nums[1]:nums[0];
@@ -29552,6 +29564,12 @@ return {yuvarlak:false,kenarlar:[eflowSayi(a),eflowSayi(b)].sort((x,y)=>x-y),et:
 
 function eflowOlcuAyni(x,y){
 if(!x || !y || x.musteri || y.musteri)return false;
+/* 1.0.94 NPU: numara aynıysa; Mikro adı NPU demeden "65X42X5.5" yazıyorsa uzun kenar numaraya eşitse */
+if(x.npu || y.npu){
+let n=x.npu?x:y, o=x.npu?y:x;
+if(o.npu)return Math.abs(n.npu-o.npu)<=0.05;
+return !o.yuvarlak && Array.isArray(o.kenarlar) && o.kenarlar.length===2 && Math.abs(Math.max.apply(null,o.kenarlar)-n.npu)<=0.05;
+}
 if(x.yuvarlak!==y.yuvarlak)return false;
 if(x.kenarlar.length!==y.kenarlar.length)return false;
 for(let i=0;i<x.kenarlar.length;i++){

@@ -8713,7 +8713,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.93";
+const APP_SURUM = "Tube.1.0.94";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -17241,6 +17241,16 @@ let a=Number(rect[2])/10;
 let b=Number(rect[3])/10;
 let t=Number(rect[6])/10;
 if(a>0 && b>0 && t>0){
+/* 1.0.94: U_650X420X61_1_60 -> NPU 65 (65x42, et 6). TruTops U profili "U_" ile yazar. */
+if(on==="U"){
+return {
+type:"NPU",
+shape:"NPU",
+sizeText:"NPU "+Number(a.toFixed(2)),
+thickness:Number(t.toFixed(2)),
+flange:Number(b.toFixed(2))
+};
+}
 if(on==="L"){
 if(a<b){let gecici=a;a=b;b=gecici;}
 return {
@@ -17391,6 +17401,26 @@ size:size
 
 /* ---------- STOK EŞLEŞTİRME ---------- */
 
+/* 1.0.94 NPU: stok kartında ölçü serbest yazılıyor ("65", "NPU 65", "npu65").
+   NPU'da yalnız numara karşılaştırılır; et kalınlığı NPU numarasıyla belli (standart),
+   kartlarda çoğu zaman boş — NPU'da et kontrolü yapılmaz. Diğer cinslerde eski kural aynen. */
+function jobPlanNpuNo(v){
+let m=String(v||"").replace(",",".").match(/\d+(?:\.\d+)?/);
+return m?Number(m[0]):NaN;
+}
+function jobPlanAyniOlcu(tip,kartOlcu,istenenOlcu){
+if(tip==="NPU"){
+let a=jobPlanNpuNo(kartOlcu),b=jobPlanNpuNo(istenenOlcu);
+return Number.isFinite(a) && a===b;
+}
+return normalizeText(kartOlcu)===normalizeText(istenenOlcu);
+}
+function jobPlanAyniEt(tip,kartEt,istenenEt){
+if(tip==="NPU")return true;
+let t=parseFloat(String(kartEt||"").replace(",","."));
+return Number.isFinite(t) && Math.abs(t-Number(istenenEt))<0.01;
+}
+
 function jobPlanIsStandardRaw(rawLengthMm){
 return Number.isFinite(rawLengthMm) && Math.abs(rawLengthMm-6000)<=5;
 }
@@ -17414,9 +17444,8 @@ let wantQuality=normalizeQuality(String(size.quality||""));
 return products.filter(p=>{
 if(wantType && String(p.type||"")!==wantType)return false;
 if(wantQuality && normalizeQuality(p.quality)!==wantQuality)return false;
-if(normalizeText(p.size)!==wantSize)return false;
-let t=parseFloat(String(p.thickness||"").replace(",","."));
-if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
+if(!jobPlanAyniOlcu(wantType,p.size,size.sizeText))return false;
+if(!jobPlanAyniEt(wantType,p.thickness,wantThickness))return false;
 return Math.abs(parseLength(p.length)-wantLength)<0.005;
 })
 .sort((a,b)=>Number(b.stock||0)-Number(a.stock||0));
@@ -17427,7 +17456,7 @@ if(!p)return "";
 let parts=[p.type+" "+p.size,formatThickness(p.thickness),formatLength(p.length),p.quality];
 if(getProductFinish(p)==="Boyalı")parts.push("Boyalı");
 if(p.type==="Boru" && getProductPipeSeam(p)==="Dikişsiz")parts.push("Dikişsiz");
-return parts.join(" · ")+" · stok "+Number(p.stock||0)+" boy";
+return parts.filter(x=>String(x||"").trim()).join(" · ")+" · stok "+Number(p.stock||0)+" boy";
 }
 
 /* Plandaki dosyaların stok kartı bazında ihtiyacı */
@@ -22250,12 +22279,13 @@ let wantThickness=Number(file.size.thickness);
 /* Tam boy kartı varsa kalite/yüzey/dikiş onunla eşleşsin. */
 let base=products.find(p=>String(p.id)===String(file.productId))||null;
 
+let wantTip=String(file.size.type||"");
 return products.filter(p=>{
 if(base && String(p.id)===String(base.id))return false;
-if(normalizeText(p.size)!==wantSize)return false;
-
-let t=parseFloat(String(p.thickness||"").replace(",","."));
-if(!Number.isFinite(t) || Math.abs(t-wantThickness)>=0.01)return false;
+/* 1.0.94: NPU numarayla eşleştiği için başka cinsin aynı sayılı kartına düşmesin */
+if(wantTip==="NPU" && String(p.type||"")!=="NPU")return false;
+if(!jobPlanAyniOlcu(wantTip,p.size,file.size.sizeText))return false;
+if(!jobPlanAyniEt(wantTip,p.thickness,wantThickness))return false;
 
 let len=parseLength(p.length);
 if(!Number.isFinite(len))return false;
@@ -28803,11 +28833,14 @@ function jobPlanKartFarki(file,p){
 let s=file && file.size ? file.size : null;
 if(!s)return {olcu:false,et:false,kalite:false,sayi:0};
 
-let olcu=normalizeText(p.size)!==normalizeText(s.sizeText);
+let tip=String(s.type||"");
+let olcu=(typeof jobPlanAyniOlcu==="function")
+?!jobPlanAyniOlcu(tip,p.size,s.sizeText)
+:normalizeText(p.size)!==normalizeText(s.sizeText);
 
 let kartEt=jobPlanEtSayisi(p.thickness);
 let istenenEt=Number(s.thickness);
-let et=!(Number.isFinite(kartEt) && Math.abs(kartEt-istenenEt)<0.01);
+let et=tip==="NPU"?false:!(Number.isFinite(kartEt) && Math.abs(kartEt-istenenEt)<0.01);
 
 let istenenKalite=normalizeQuality(String(s.quality||""));
 let kalite=!!istenenKalite && normalizeQuality(p.quality)!==istenenKalite;

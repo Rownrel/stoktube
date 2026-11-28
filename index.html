@@ -6202,7 +6202,7 @@ flex:0 0 auto;min-width:58px;text-align:center
         <!-- Sistem yöneticisi girişi kaldırıldı: Supabase jetonu almadığı için veri getirmiyordu.
      Yönetim işleri yönetici rolündeki kullanıcı hesabıyla yapılır. -->
       </div>
-      <div class="page-login-surum">Tube.1.0.95</div>
+      <div class="page-login-surum">Tube.1.0.96</div>
     </section>
   </div>
 </div>
@@ -6213,7 +6213,7 @@ flex:0 0 auto;min-width:58px;text-align:center
 
 <h1>
 🏭 Stok & Üretim Takip
-<small class="app-surum">Tube.1.0.95</small>
+<small class="app-surum">Tube.1.0.96</small>
 </h1>
 
 <div class="backup-area">
@@ -6505,7 +6505,7 @@ oninput="showProducts()"
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.sarf|lazer.sarf" onclick="openConsumablesModal()">▤ Sarf</button>
   </div>
   <div class="planner-corp-clock" id="lazerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.95</div>
+  <div class="planner-corp-surum">Tube.1.0.96</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="lazerCorpAvatar">—</div>
     <div class="planner-corp-user-text">
@@ -7405,7 +7405,7 @@ Bakım işlemi için belirlenmiş şifreyi gir. Doğru şifre olmadan indirme ve
     <button type="button" class="planner-corp-nav-item" data-perm="bolum.musteri" onclick="plannerOpenModule('musteri')">✉ Müşteriler</button>
   </div>
   <div class="planner-corp-clock" id="plannerCorpClock">—</div>
-  <div class="planner-corp-surum">Tube.1.0.95</div>
+  <div class="planner-corp-surum">Tube.1.0.96</div>
   <div class="planner-corp-user">
     <div class="planner-corp-avatar" id="plannerCorpAvatar">HA</div>
     <div class="planner-corp-user-text">
@@ -7522,10 +7522,10 @@ data-keypad="search" data-native-inputmode="text" data-keypad-label="DT / dosya 
 placeholder="DT veya dosya ara" oninput="jobPlanSetSearch(this.value)">
 <button type="button" id="jobPlanSearchClear" title="Aramayı temizle" onclick="jobPlanClearSearch()">✕</button>
 </div>
-<button type="button" class="btn-orange" data-perm="isplani.dosya" onclick="document.getElementById('jobPlanFiles').click()">📄 HTML Yükle</button>
+<button type="button" class="btn-orange" data-perm="isplani.dosya" onclick="document.getElementById('jobPlanFiles').click()" title="TruTops HTML ya da PDF (Production Package)">📄 HTML / PDF Yükle</button>
 <button type="button" class="btn-blue" onclick="jobPlanRefreshAll()">🔄 Planı Yenile</button>
 <button type="button" class="btn-green" data-perm="isplani.dosya" onclick="exportJobPlan()">📊 Excel'e Aktar</button>
-<input type="file" id="jobPlanFiles" accept=".html,.htm,.svg" multiple style="display:none" onchange="jobPlanReadFiles(event)">
+<input type="file" id="jobPlanFiles" accept=".html,.htm,.svg,.pdf" multiple style="display:none" onchange="jobPlanReadFiles(event)">
 </div>
 </div>
 
@@ -8209,7 +8209,7 @@ placeholder="Ebat, kalite veya kalınlık ara…" oninput="viewerSetStockSearch(
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.95</span></span><span id="viewerStockClock"></span></div>
+<div class="vw-foot"><span><span id="viewerStockCount">—</span><span class="vw-surum">Tube.1.0.96</span></span><span id="viewerStockClock"></span></div>
 </div>
 
 <!-- ---------- İŞ PLANI ---------- -->
@@ -8263,7 +8263,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 </div>
 
 </div>
-<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.95</span></span><span id="viewerPlanClock"></span></div>
+<div class="vw-foot"><span><span id="viewerPlanCount">—</span><span class="vw-surum">Tube.1.0.96</span></span><span id="viewerPlanClock"></span></div>
 </div>
 
 </div>
@@ -8277,7 +8277,7 @@ placeholder="DT, dosya ya da firma ara…" oninput="viewerSetPlanSearch(this.val
 <div class="ope-brand"><b>Doğrar Metal</b><span>Tube3000 · Tezgâh Terminali</span></div>
 <div class="ope-state" id="opState"><i></i>Boşta</div>
 <div class="ope-clock" id="opClock">—</div>
-<div class="ope-surum">Tube.1.0.95</div>
+<div class="ope-surum">Tube.1.0.96</div>
 <div class="ope-user">
 <div class="ope-av" id="opAvatar">—</div>
 <div><div class="ope-uname" id="opName">—</div><div class="ope-urole" id="opRole">Operatör</div></div>
@@ -8713,7 +8713,7 @@ const APP_DATA_TABLE = "StokAppData";
 
 /* Yayındaki dosyanın hangi derleme olduğunu ekrandan görebilmek için.
    Tek kaynak parts/surum.txt; artırmak icin: python3 surum_artir.py */
-const APP_SURUM = "Tube.1.0.95";
+const APP_SURUM = "Tube.1.0.96";
 const MAINTENANCE_BUCKET = "maintenance-pdfs";
 
 
@@ -18353,15 +18353,24 @@ let existing=new Set();
 jobPlanJobs.forEach(job=>(job.files||[]).forEach(f=>existing.add(String(f.fileName||"").toLowerCase())));
 
 let parsed=[];
+let pdfIssiz=[];
 
 for(let file of files){
 try{
+/* 1.0.96: yeni TruTops PDF veriyor (Production Package). PDF tarayıcıda okunur. */
+let veriler;
+if(/\.pdf$/i.test(String(file.name||""))){
+veriler=await jobPlanParsePdf(await jobPlanDosyaBaytlari(file),file.name);
+if(!veriler.length){pdfIssiz.push(file.name);continue;}
+}else{
 let text=await file.text();
-let data=jobPlanParseHtml(text,file.name);
+veriler=[jobPlanParseHtml(text,file.name)];
+}
+for(let data of veriler){
 data.include=true;
 data.percent=0;
 data.rowId="imp"+Math.random().toString(36).slice(2,9);
-data.duplicate=existing.has(String(file.name).toLowerCase());
+data.duplicate=existing.has(String(data.fileName||file.name).toLowerCase());
 data.candidates=jobPlanProductCandidates(data.size,data.rawLengthMm);
 data.productId=data.candidates.length?String(data.candidates[0].id):"";
 /* Yeni kart açılırken kullanılacak varsayılanlar */
@@ -18374,12 +18383,17 @@ data.newPipeSeam="Dikişli";
 data.customerMaterial=false;
 if(data.duplicate)data.include=false;
 parsed.push(data);
+}
 }catch(error){
 console.error("HTML okunamadı:",file.name,error);
 alert("❌ "+file.name+" okunamadı.\n\n"+(error?.message||""));
 }
 }
 
+if(pdfIssiz.length){
+alert("ℹ️ Şu PDF'lerde TruTops üretim paketi (Job Total Time / NC-Programs) bulunamadı, atlandı:\n\n"+pdfIssiz.map(n=>"• "+n).join("\n")+
+"\n\n(Parça çizimi PDF'i olabilir.)");
+}
 if(!parsed.length)return;
 
 parsed.sort((a,b)=>String(a.dtNo).localeCompare(String(b.dtNo),"tr")||String(a.fileName).localeCompare(String(b.fileName),"tr"));
@@ -29255,7 +29269,7 @@ if(typeof jobPlanSaveSettings==="function")jobPlanSaveSettings();
 ===================================================== */
 
 function dosyaAdiSade(ad){
-return String(ad||"").replace(/\.(html?|HTML?)$/,"");
+return String(ad||"").replace(/\.(html?|HTML?|pdf|PDF)$/,"");
 }
 
 /* ---------- KALAN SÜRE ALT SINIRI ----------
@@ -29973,8 +29987,10 @@ return;
 let harita=new Map(((v&&v.dosyalar)||[]).map(d=>[mikroAd(d.dosya),d]));
 let dosyalar=liste
 .map(d=>harita.get(mikroAd(d.dosya)))
-.filter(d=>d && d.html)
-.map(d=>({name:d.dosya,text:async()=>d.html}));
+.filter(d=>d && (d.html||d.pdf))
+.map(d=>d.pdf
+?{name:d.dosya,arrayBuffer:async()=>tpBase64Bayt(d.pdf).buffer}
+:{name:d.dosya,text:async()=>d.html});
 if(!dosyalar.length){
 alert("Dosyaların içeriği henüz gelmedi. Köprü bir sonraki turda gönderecek; biraz sonra tekrar deneyin.");
 return;
@@ -30980,6 +30996,667 @@ document.head.appendChild(st);
 
 /* Sayfa yüklenince sekmeler bir kez çizilsin. */
 try{Object.keys(KAPSAM_IZIN).forEach(kapsamSekmeCiz);}catch(e){}
+
+</script>
+<script>
+/* ===== Tube.1.0.96 — TruTops Tube PDF ("Production Package") okuyucu =====
+   Yeni profil programı (Programming Tube 7.5) üretim paketini HTML yerine PDF veriyor.
+   Lazer Panel 4.28'deki Python okuyucunun (lazer_panel.py tube_pdf_isler) birebir karşılığı:
+   nesneler + FlateDecode (tarayıcının DecompressionStream'i) + /ObjStm, Type0/Identity-H
+   fontlar ToUnicode ile, içerik akışı (metin konumları, dikdörtgenler) -> satır/hücre ->
+   "Job Total Time" ile başlayan işler. Çıktı Python'unkiyle aynı alanlar:
+   {ad, toplam_sure_sn, parca_sayisi, profil, parcalar[{ad,siparis,adet,kg,sure_sn}], tup_sayisi,
+    ham_boy_mm, kullanilan_mm, artan_mm, boylar[{adet,mm,etiket}], boy_uyari}
+   Baytlar latin1 metin olarak tutulur (her karakter = bir bayt). */
+
+function tpBaytMetin(u8){
+let s="";
+for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));
+return s;
+}
+function tpMetinBayt(s){
+let u=new Uint8Array(s.length);
+for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i)&255;
+return u;
+}
+
+/* zlib açıcı: akış sonundaki fazlalıkta (\r\n vb.) hata verirse o ana kadar açılanı döndürür
+   (Python'un zlib.decompressobj() davranışı). */
+async function tpInflate(u8){
+if(typeof DecompressionStream!=="function")throw new Error("Bu tarayıcı PDF açamıyor (DecompressionStream yok)");
+let ds=new DecompressionStream("deflate");
+let yazici=ds.writable.getWriter();
+yazici.write(u8).catch(()=>{});
+yazici.close().catch(()=>{});
+let okuyucu=ds.readable.getReader();
+let parcalar=[],toplam=0;
+try{
+for(;;){
+let r=await okuyucu.read();
+if(r.done)break;
+parcalar.push(r.value);toplam+=r.value.length;
+}
+}catch(e){/* sondaki fazlalık */}
+let out=new Uint8Array(toplam),k=0;
+for(let p of parcalar){out.set(p,k);k+=p.length;}
+return out;
+}
+
+/* {no: [sözlük, akış|null]} (ikisi de latin1 metin) */
+async function tpNesneler(b){
+let nes=new Map();
+let re=/(\d+)\s+0\s+obj\b([\s\S]*?)\bendobj/g,m;
+let bekleyen=[];
+while((m=re.exec(b))){
+let govde=m[2],akis=null,sozluk=govde;
+let s=/\bstream\r?\n/.exec(govde);
+if(s){
+sozluk=govde.slice(0,s.index);
+let ham=govde.slice(s.index+s[0].length);
+let e=ham.lastIndexOf("endstream");
+ham=e>=0?ham.slice(0,e):ham;
+if(/\/FlateDecode/.test(sozluk)){
+let uz=/\/Length\s+(\d+)\b(?!\s+\d+\s+R)/.exec(sozluk);
+if(uz && Number(uz[1])>0 && Number(uz[1])<=ham.length)ham=ham.slice(0,Number(uz[1]));
+bekleyen.push([Number(m[1]),sozluk,ham]);
+continue;
+}
+akis=ham;
+}
+nes.set(Number(m[1]),[sozluk,akis]);
+}
+for(let [no,sozluk,ham] of bekleyen){
+let akis="";
+try{akis=tpBaytMetin(await tpInflate(tpMetinBayt(ham)));}catch(e){akis="";}
+nes.set(no,[sozluk,akis]);
+}
+/* Acrobat'ta kaydedilmiş PDF (1.5+): nesnelerin çoğu /ObjStm içinde */
+for(let [no,[sozluk,akis]] of Array.from(nes.entries())){
+if(!akis || !/\/Type\s*\/ObjStm/.test(sozluk))continue;
+let n=/\/N\s+(\d+)/.exec(sozluk),ilk=/\/First\s+(\d+)/.exec(sozluk);
+if(!n||!ilk)continue;
+n=Number(n[1]);ilk=Number(ilk[1]);
+let sayilar=(akis.slice(0,ilk).match(/\d+/g)||[]).slice(0,2*n).map(Number);
+let ciftler=[];
+for(let k=0;k+1<sayilar.length;k+=2)ciftler.push([sayilar[k],sayilar[k+1]]);
+ciftler.forEach(([ono,ofs],k)=>{
+let son=k+1<ciftler.length?ciftler[k+1][1]:akis.length-ilk;
+if(!nes.has(ono))nes.set(ono,[akis.slice(ilk+ofs,ilk+son),null]);
+});
+}
+return nes;
+}
+
+function tpCoz(nes,b){
+let m=/^\s*(\d+)\s+0\s+R\b/.exec(b||"");
+return m?((nes.get(Number(m[1]))||["",null])[0]):(b||"");
+}
+
+/* İçerik akışı belirteçleri (Python _tp_TOKEN ile aynı gruplar) */
+const TP_TOKEN=/\s*(?:(%[^\r\n]*)|(\()|(<<)|(>>)|(<[0-9A-Fa-f\s]*>)|(\[)|(\])|(\/[^\s\/\[\]()<>{}%]*)|([+-]?(?:\d+\.?\d*|\.\d+))|([A-Za-z'"*][A-Za-z0-9'"*]*))/y;
+
+function tpLiteral(b,i){
+let out="",derin=1;
+while(i<b.length){
+let c=b.charCodeAt(i);
+if(c===0x5C){
+i++;
+if(i>=b.length)break;
+let d=b[i];
+if("nrtbf".includes(d)){out+={n:"\n",r:"\r",t:"\t",b:"\b",f:"\f"}[d];}
+else if(d>="0"&&d<="7"){
+let o=d;
+while(o.length<3 && i+1<b.length && b[i+1]>="0" && b[i+1]<="7"){i++;o+=b[i];}
+out+=String.fromCharCode(parseInt(o,8)&255);
+}
+else if(d==="\r"||d==="\n"){if(d==="\r"&&b[i+1]==="\n")i++;}
+else out+=d;
+}
+else if(c===0x28){derin++;out+="(";}
+else if(c===0x29){derin--;if(derin===0)return [out,i+1];out+=")";}
+else out+=b[i];
+i++;
+}
+return [out,i];
+}
+
+/* [değerler, operatör] çiftleri. Değer türleri: {s:baytMetni} (dizgi), sayı, {ad}, dizi, {dict} */
+function tpTokenler(b){
+let sonuc=[];
+let i=0,n=b.length;
+let yigin=[[]];
+while(i<n){
+TP_TOKEN.lastIndex=i;
+let m=TP_TOKEN.exec(b);
+if(!m || TP_TOKEN.lastIndex===i){i++;continue;}
+i=TP_TOKEN.lastIndex;
+if(m[1])continue;
+if(m[2]){let r=tpLiteral(b,i);i=r[1];yigin[yigin.length-1].push({s:r[0]});}
+else if(m[3]){yigin.push([]);}
+else if(m[4]){if(yigin.length>1){let ic=yigin.pop();yigin[yigin.length-1].push({dict:ic});}}
+else if(m[5]){
+let h=m[5].slice(1,-1).replace(/\s/g,"");
+if(h.length%2)h+="0";
+let s="";for(let k=0;k<h.length;k+=2)s+=String.fromCharCode(parseInt(h.substr(k,2),16));
+yigin[yigin.length-1].push({s:s});
+}
+else if(m[6]){yigin.push([]);}
+else if(m[7]){if(yigin.length>1){let ic=yigin.pop();yigin[yigin.length-1].push(ic);}}
+else if(m[8]){yigin[yigin.length-1].push({ad:m[8].slice(1)});}
+else if(m[9]){yigin[yigin.length-1].push(parseFloat(m[9]));}
+else if(m[10]){
+let op=m[10];
+if(yigin.length===1){sonuc.push([yigin[0],op]);yigin[0]=[];}
+else yigin[yigin.length-1].push({op:op});
+}
+}
+return sonuc;
+}
+
+function tpUtf16be(h){
+let s="";
+for(let k=0;k+3<h.length+1;k+=4){
+let kod=parseInt(h.substr(k,4),16);
+if(Number.isFinite(kod))s+=String.fromCharCode(kod);
+}
+return s;
+}
+
+function tpCmap(akis){
+let harita=new Map();
+if(!akis)return harita;
+let t=akis;
+for(let blok of (t.match(/beginbfchar([\s\S]*?)endbfchar/g)||[])){
+let re=/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]*)>/g,m;
+while((m=re.exec(blok)))harita.set(parseInt(m[1],16),m[2]?tpUtf16be(m[2]):"");
+}
+for(let blok of (t.match(/beginbfrange([\s\S]*?)endbfrange/g)||[])){
+let re=/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(\[[^\]]*\]|<[0-9A-Fa-f]*>)/g,m;
+while((m=re.exec(blok))){
+let a=parseInt(m[1],16),z=parseInt(m[2],16),c=m[3];
+if(c[0]==="["){
+let hs=c.match(/<([0-9A-Fa-f]*)>/g)||[];
+hs.forEach((h,k)=>harita.set(a+k,tpUtf16be(h.slice(1,-1))));
+}else{
+let h=c.slice(1,-1);
+let v=h?parseInt(h,16):0;
+for(let k=0;k<=z-a;k++)harita.set(a+k,v+k<0x110000?String.fromCodePoint(v+k):"");
+}
+}
+}
+return harita;
+}
+
+function tpRef(sozluk,anahtar){
+let m=new RegExp("/"+anahtar+"\\s+(\\d+)\\s+0\\s+R").exec(sozluk);
+return m?Number(m[1]):null;
+}
+
+function tpFont(nes,no){
+let sozluk=(nes.get(no)||["",null])[0];
+let tu=tpRef(sozluk,"ToUnicode");
+let harita=tu?tpCmap((nes.get(tu)||["",null])[1]):new Map();
+let iki=/\/Identity-H/.test(sozluk)||/\/Type0/.test(sozluk);
+let gen=new Map();
+let dw=1000;
+let m=/\/DescendantFonts\s*\[\s*(\d+)\s+0\s+R/.exec(sozluk);
+if(!m){
+let r=/\/DescendantFonts\s+(\d+)\s+0\s+R/.exec(sozluk);
+if(r)m=/\[\s*(\d+)\s+0\s+R/.exec((nes.get(Number(r[1]))||["",null])[0]);
+}
+if(m){
+let d=(nes.get(Number(m[1]))||["",null])[0];
+let x=/\/DW\s+([\d.]+)/.exec(d);
+if(x)dw=parseFloat(x[1]);
+x=/\/W\s*\[([\s\S]*)\]/.exec(d);
+if(!x){
+let wr=tpRef(d,"W");
+if(wr)x=/\[([\s\S]*)\]/.exec((nes.get(wr)||["",null])[0]);
+}
+if(x){
+let par=x[1].match(/\[[^\]]*\]|[\d.]+/g)||[];
+let k=0;
+while(k<par.length){
+if(k+1<par.length && par[k+1][0]==="["){
+let c=Math.trunc(parseFloat(par[k]));
+(par[k+1].match(/[\d.]+/g)||[]).forEach((w,j)=>gen.set(c+j,parseFloat(w)));
+k+=2;
+}else if(k+2<par.length){
+let c1=Math.trunc(parseFloat(par[k])),c2=Math.trunc(parseFloat(par[k+1])),w=parseFloat(par[k+2]);
+for(let c=c1;c<=c2;c++)gen.set(c,w);
+k+=3;
+}else break;
+}
+}
+}else{
+let x=/\/Widths\s*\[([^\]]*)\]/.exec(sozluk);
+let fc=/\/FirstChar\s+(\d+)/.exec(sozluk);
+if(x&&fc)(x[1].match(/[\d.]+/g)||[]).forEach((w,j)=>gen.set(Number(fc[1])+j,parseFloat(w)));
+dw=500;
+}
+return {harita,iki,gen,dw};
+}
+
+function tpCarp(a,b){
+return [a[0]*b[0]+a[1]*b[2],a[0]*b[1]+a[1]*b[3],
+a[2]*b[0]+a[3]*b[2],a[2]*b[1]+a[3]*b[3],
+a[4]*b[0]+a[5]*b[2]+b[4],a[4]*b[1]+a[5]*b[3]+b[5]];
+}
+function tpNokta(m,x,y){return [m[0]*x+m[2]*y+m[4],m[1]*x+m[3]*y+m[5]];}
+
+async function tpSayfalar(u8){
+let b=tpBaytMetin(u8);
+let nes=await tpNesneler(b);
+let sayfalar=[];
+let sira=[];
+let kokler=[];
+for(let [n,[s]] of nes)if(/\/Type\s*\/Pages\b/.test(s)&&!/\/Parent\s/.test(s))kokler.push(n);
+let gorulen=new Set();
+let gez=n=>{
+if(gorulen.has(n))return;gorulen.add(n);
+let s=(nes.get(n)||["",null])[0];
+if(/\/Type\s*\/Pages\b/.test(s)){
+let k=/\/Kids\s*\[([^\]]*)\]/.exec(s);
+let re=/(\d+)\s+0\s+R/g,c;
+while((c=re.exec(k?k[1]:"")))gez(Number(c[1]));
+}else if(/\/Type\s*\/Page\b/.test(s))sira.push(n);
+};
+kokler.forEach(gez);
+if(!sira.length){
+for(let [n,[s]] of nes)if(/\/Type\s*\/Page\b/.test(s))sira.push(n);
+sira.sort((a,b2)=>a-b2);
+}
+for(let pn of sira){
+let s=nes.get(pn)[0];
+let mb=/\/MediaBox\s*\[\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)/.exec(s);
+let yuk=mb?parseFloat(mb[4]):792;
+let rs=/\/Resources\s+(\d+\s+0\s+R)/.exec(s);
+if(rs)s=s+" "+tpCoz(nes,rs[1]);
+let fr=/\/Font\s+(\d+\s+0\s+R)/.exec(s);
+if(fr)s=s+" /Font"+tpCoz(nes,fr[1]);
+let fontlar={};
+let fm=/\/Font\s*<<([\s\S]*?)>>/.exec(s);
+if(fm){let re=/\/([^\s\/]+)\s+(\d+)\s+0\s+R/g,x;while((x=re.exec(fm[1])))fontlar[x[1]]=tpFont(nes,Number(x[2]));}
+let xo={};
+let xm=/\/XObject\s*<<([\s\S]*?)>>/.exec(s);
+if(xm){let re=/\/([^\s\/]+)\s+(\d+)\s+0\s+R/g,x;while((x=re.exec(xm[1])))xo[x[1]]=Number(x[2]);}
+let icerik="";
+let cm=/\/Contents\s*(\[[^\]]*\]|\d+\s+0\s+R)/.exec(s);
+if(cm){
+let re=/(\d+)\s+0\s+R/g,c;
+while((c=re.exec(cm[1]))){
+let [d_,ak_]=nes.get(Number(c[1]))||["",null];
+if(ak_===null && d_.trim()[0]==="["){
+let re2=/(\d+)\s+0\s+R/g,c2;
+while((c2=re2.exec(d_)))icerik+=((nes.get(Number(c2[1]))||["",""])[1]||"")+"\n";
+}else icerik+=(ak_||"")+"\n";
+}
+}
+let yazi=[],kutu=[];
+tpCalistir(icerik,nes,fontlar,xo,[1,0,0,1,0,0],yazi,kutu,0);
+sayfalar.push({
+yazi:yazi.map(([x,y,t,h,x2])=>[x,yuk-y,t,h,x2]),
+kutu:kutu.map(([x0,y0,x1,y1,f])=>[x0,yuk-y1,x1,yuk-y0,f])
+});
+}
+return sayfalar;
+}
+
+function tpCalistir(icerik,nes,fontlar,xo,ctm0,yazi,kutu,derin){
+let ctm=ctm0.slice();
+let yigin=[];
+let dolgu=[0,0,0];
+let yol=[];
+let font=null,fboy=1;
+let tm=[1,0,0,1,0,0],tlm=tm;
+let tc=0,tw=0,th=1,tl=0;
+const sayi=v=>typeof v==="number"?v:parseFloat(v);
+for(let [a,op] of tpTokenler(icerik)){
+if(op==="q")yigin.push([ctm.slice(),dolgu]);
+else if(op==="Q"){if(yigin.length){let r=yigin.pop();ctm=r[0];dolgu=r[1];}}
+else if(op==="cm"&&a.length>=6)ctm=tpCarp(a.slice(0,6).map(sayi),ctm);
+else if(op==="rg"&&a.length>=3)dolgu=a.slice(0,3).map(sayi);
+else if(op==="g"&&a.length)dolgu=[sayi(a[0]),sayi(a[0]),sayi(a[0])];
+else if(op==="k"&&a.length>=4){
+let [c,m_,y_,k_]=a.slice(0,4).map(sayi);
+dolgu=[(1-c)*(1-k_),(1-m_)*(1-k_),(1-y_)*(1-k_)];
+}
+else if(op==="re"&&a.length>=4){
+let [x,y,w,h]=a.slice(0,4).map(sayi);
+yol.push(["re",[tpNokta(ctm,x,y),tpNokta(ctm,x+w,y+h)]]);
+}
+else if(["m","l","c","v","y","h"].includes(op))yol.push(["diger",null]);
+else if(["f","F","f*","B","B*","b","b*"].includes(op)){
+for(let [t,p] of yol)if(t==="re"){
+let [[x0,y0],[x1,y1]]=p;
+kutu.push([Math.min(x0,x1),Math.min(y0,y1),Math.max(x0,x1),Math.max(y0,y1),dolgu]);
+}
+yol=[];
+}
+else if(op==="S"||op==="s"){
+for(let [t,p] of yol)if(t==="re"){
+let [[x0,y0],[x1,y1]]=p;
+kutu.push([Math.min(x0,x1),Math.min(y0,y1),Math.max(x0,x1),Math.max(y0,y1),null]);
+}
+yol=[];
+}
+else if(op==="n")yol=[];
+else if(op==="BT"){tm=[1,0,0,1,0,0];tlm=tm;}
+else if(op==="Tf"&&a.length>=2){
+font=(a[0]&&a[0].ad!==undefined)?(fontlar[a[0].ad]||null):null;
+fboy=sayi(a[1]);
+}
+else if(op==="Tc"&&a.length)tc=sayi(a[0]);
+else if(op==="Tw"&&a.length)tw=sayi(a[0]);
+else if(op==="Tz"&&a.length)th=sayi(a[0])/100;
+else if(op==="TL"&&a.length)tl=sayi(a[0]);
+else if(op==="Tm"&&a.length>=6){tm=a.slice(0,6).map(sayi);tlm=tm;}
+else if((op==="Td"||op==="TD")&&a.length>=2){
+if(op==="TD")tl=-sayi(a[1]);
+tm=tpCarp([1,0,0,1,sayi(a[0]),sayi(a[1])],tlm);tlm=tm;
+}
+else if(op==="T*"){tm=tpCarp([1,0,0,1,0,-tl],tlm);tlm=tm;}
+else if(op==="Tj"||op==="TJ"||op==="'"||op==='"'){
+if(op==="'"||op==='"'){tm=tpCarp([1,0,0,1,0,-tl],tlm);tlm=tm;}
+let son_=a.length?a[a.length-1]:null;
+let parcalar=(op==="TJ"&&Array.isArray(son_))?son_:(son_!==null?[son_]:[]);
+let metin="",bas=null,boy=0;
+for(let p of parcalar){
+if(typeof p==="number"){tm=tpCarp([1,0,0,1,-p/1000*fboy*th,0],tm);continue;}
+if(!p||p.s===undefined)continue;
+let s=p.s;
+let kodlar=[];
+if(font&&font.iki){for(let k=0;k+1<s.length;k+=2)kodlar.push(s.charCodeAt(k)*256+s.charCodeAt(k+1));}
+else for(let k=0;k<s.length;k++)kodlar.push(s.charCodeAt(k));
+for(let kod of kodlar){
+let trm=tpCarp(tm,ctm);
+if(bas===null){
+bas=tpNokta(trm,0,0);
+boy=Math.abs(fboy*(Math.abs(trm[3])>1e-9?trm[3]:trm[0]));
+}
+let ch=font?(font.harita.has(kod)?font.harita.get(kod):""):String.fromCharCode(kod);
+metin+=ch;
+let w=(font?(font.gen.has(kod)?font.gen.get(kod):font.dw):500)/1000;
+let adv=(w*fboy+tc+(ch===" "?tw:0))*th;
+tm=tpCarp([1,0,0,1,adv,0],tm);
+}
+}
+if(metin&&bas!==null){
+let son=tpNokta(tpCarp(tm,ctm),0,0);
+yazi.push([bas[0],bas[1],metin,boy,son[0]]);
+}
+}
+else if(op==="Do"&&a.length&&a[0]&&a[0].ad!==undefined&&derin<3){
+let no=xo[a[0].ad];
+if(no!==undefined){
+let [s,ak]=nes.get(no)||["",null];
+if(ak&&/\/Form/.test(s)){
+let mm=/\/Matrix\s*\[([^\]]*)\]/.exec(s);
+let mat=mm?mm[1].trim().split(/\s+/).map(parseFloat):[1,0,0,1,0,0];
+tpCalistir(ak,nes,fontlar,xo,tpCarp(mat,ctm),yazi,kutu,derin+1);
+}
+}
+}
+}
+}
+
+/* Parça parça yazıları satır ve hücrelere toplar: [[y, [[x0,x1,metin,boy]]]] */
+function tpSatirlar(yazi){
+yazi=yazi.slice().sort((p,q)=>p[1]-q[1]||p[0]-q[0]);
+let satir=[];
+for(let [x,y,t,h,x2] of yazi){
+if(satir.length && Math.abs(satir[satir.length-1][0]-y)<=Math.max(1,h*0.25))satir[satir.length-1][1].push([x,x2,t,h]);
+else satir.push([y,[[x,x2,t,h]]]);
+}
+let cikti=[];
+for(let [y,ogeler] of satir){
+ogeler.sort((p,q)=>p[0]-q[0]);
+let hucre=[];
+for(let [x,x2,t,h] of ogeler){
+let son=hucre[hucre.length-1];
+if(son && x-son[1]<=h*1.0){
+let bosluk=(x-son[1]>h*0.18 && !son[2].endsWith(" ") && !t.startsWith(" "))?" ":"";
+hucre[hucre.length-1]=[son[0],Math.max(son[1],x2),son[2]+bosluk+t,h];
+}else hucre.push([x,x2,t,h]);
+}
+cikti.push([y,hucre.filter(c=>c[2].trim()).map(([a,b,t,h])=>[a,b,t.replace(/\s+/g," ").trim(),h])]);
+}
+return cikti;
+}
+
+function tpSn(t){
+let m=/^(\d+):(\d{2}):(\d{2})$/.exec(String(t||"").trim());
+return m?Number(m[1])*3600+Number(m[2])*60+Number(m[3]):null;
+}
+function tpSayi(t){
+t=String(t).trim().replace(/ /g,"");
+if(/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(t))t=t.replace(/,/g,"");
+t=t.replace(/,/g,".");
+if(!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(t))return null;
+return parseFloat(t);
+}
+/* Python round(x, 1): yarım değerde çifte yuvarlar (807.25 -> 807.2) */
+function tpYuvarla1(x){
+let y=x*10,r=Math.round(y);
+if(Math.abs(y-Math.floor(y)-0.5)<1e-9 && r%2!==0)r-=1;
+return r/10;
+}
+function tpRenkli(f){return f!==null && f!==undefined && Math.max.apply(null,f)-Math.min.apply(null,f)>0.1;}
+
+/* Python'daki (sayfa, y, tür) sıralamasının karşılığı */
+function tpAnahtarKarsilastir(p,q){
+for(let k=0;k<3;k++){if(p[k]<q[k])return -1;if(p[k]>q[k])return 1;}
+return 0;
+}
+
+async function tubePdfIsler(u8){
+let bas=String.fromCharCode.apply(null,u8.subarray(0,4));
+if(bas!=="%PDF")throw new Error("PDF değil");
+let sayfalar=await tpSayfalar(u8);
+let olay=[];
+sayfalar.forEach((s,pi)=>{
+let satir=tpSatirlar(s.yazi);
+let basSon=0;
+for(let [y,hucre] of satir){
+if(hucre.some(h=>h[2].includes("Production Package"))){basSon=y+30;break;}
+}
+for(let [y,hucre] of satir){
+if(y<=basSon)continue;
+olay.push([[pi,y,0],"satir",hucre]);
+}
+for(let [x0,y0,x1,y1,f] of s.kutu){
+if(f===null && x1-x0>300 && y1-y0>15 && y1-y0<30){
+let parca=s.kutu.filter(k=>tpRenkli(k[4]) && k[1]>=y0-1 && k[3]<=y1+1 && k[0]>=x0-1 && k[2]<=x1+1 &&
+k[3]-k[1]>10 && k[3]-k[1]<y1-y0+1 && k[2]-k[0]<x1-x0-1);
+olay.push([[pi,y0,1],"boy",{x0:x0,x1:x1,y1:y1,parca_x0:parca.map(k=>k[0])}]);
+}
+}
+});
+/* Python sort kararlıdır; aynı anahtarlı olaylar eklenme sırasını korur */
+olay=olay.map((o,i)=>[o,i]).sort((p,q)=>tpAnahtarKarsilastir(p[0][0],q[0][0])||p[1]-q[1]).map(p=>p[0]);
+
+let isler=[];
+let i=null,bolum=null,kolon={},bekleyenBoy=null,onceki=null,oncekiNc=null;
+for(let [anahtar,tur,veri] of olay){
+if(tur==="boy"){
+if(i!==null){veri.etiket=null;i._boy.push(veri);bekleyenBoy=veri;}
+continue;
+}
+let hucre=veri;
+let ilk=hucre.length?hucre[0][2]:"";
+if(bekleyenBoy!==null && bekleyenBoy.etiket===null){
+let m=/^(\d+)(?:\s*-\s*(\d+)\s*\((\d+)\))?$/.exec(ilk);
+if(m && hucre[0][0]<bekleyenBoy.x0+60 && anahtar[1]-bekleyenBoy.y1>=0 && anahtar[1]-bekleyenBoy.y1<25){
+bekleyenBoy.etiket=ilk;
+bekleyenBoy.adet=m[3]?Number(m[3]):1;
+continue;
+}
+}
+if(ilk.startsWith("Job Total Time")){
+let ad=(onceki && onceki.length===1)?onceki[0][2]:"";
+i={ad:ad,toplam_sure_sn:hucre.length>1?tpSn(hucre[hucre.length-1][2]):null,parca_sayisi:null,
+profil:"",parcalar:[],tup_sayisi:null,ham_boy_mm:null,kullanilan_mm:null,artan_mm:null,_boy:[]};
+isler.push(i);
+bolum=null;
+}
+else if(i===null){}
+else if(ilk==="Number of Parts" && hucre.length>1)i.parca_sayisi=tpSayi(hucre[hucre.length-1][2]);
+else if(ilk==="Tube Profile" && hucre.length>1)i.profil=hucre[hucre.length-1][2];
+else if(ilk==="NC-Programs"){bolum="nc";kolon={};}
+else if(ilk==="Tube layout"){bolum="boy";kolon={};}
+else if(bolum==="nc" && ilk==="Main Program"){
+for(let [x0,x1,t] of hucre){
+let tl=t.toLowerCase();
+if(tl.startsWith("quantity"))kolon.adet=x0;
+else if(tl.startsWith("weight"))kolon.kg=x0;
+else if(tl.startsWith("[hh")||tl.includes("time"))kolon.sure=x0;
+else if(tl.startsWith("order")||tl.startsWith("manufacturing"))kolon.siparis=x0;
+}
+if(kolon.ad===undefined)kolon.ad=hucre[0][0];
+}
+else if(bolum==="nc" && kolon.adet!==undefined && kolon.adet!==null){
+/* Python: min(kolon, key=...) — eşitlikte sözlükteki ilk anahtar */
+let kol=x=>{
+let enIyi=null,enIyiD=Infinity;
+for(let k of Object.keys(kolon)){
+let d=x>=kolon[k]-8?Math.abs(kolon[k]-x):1e9;
+if(d<enIyiD){enIyiD=d;enIyi=k;}
+}
+return enIyi;
+};
+let sat={};
+for(let [x0,x1,t] of hucre){let k=kol(x0);sat[k]=((sat[k]||"")+" "+t).trim();}
+let adet=tpSayi(sat.adet||""),kg=tpSayi(sat.kg||""),sure=tpSn(sat.sure||"");
+if(sat.ad && adet!==null && sure!==null){
+oncekiNc=anahtar;
+i.parcalar.push({ad:sat.ad,siparis:sat.siparis||"",adet:Math.trunc(adet),kg:kg,sure_sn:sure});
+}else if(sat.ad && Object.keys(sat).length===1 && i.parcalar.length && oncekiNc!==null &&
+anahtar[0]===oncekiNc[0] && anahtar[1]-oncekiNc[1]<12){
+i.parcalar[i.parcalar.length-1].ad+=sat.ad;
+}
+}
+else if(bolum==="boy" && hucre.length>=3 && i.tup_sayisi===null){
+let s_=hucre.map(h=>tpSayi(h[2]));
+if(s_.every(v=>v!==null)){
+i.tup_sayisi=Math.trunc(s_[0]);
+i.ham_boy_mm=s_[1];
+i.kullanilan_mm=s_.length>2?s_[2]:null;
+i.artan_mm=s_.length>3?s_[3]:null;
+}
+}
+onceki=hucre;
+}
+
+for(let is of isler){
+let boylar=[];
+let ham=is.ham_boy_mm||0;
+for(let v of is._boy){
+let gen=v.x1-v.x0;
+if(!v.parca_x0.length || gen<=0 || !ham)continue;
+let mm=(v.x1-Math.min.apply(null,v.parca_x0))/gen*ham;
+boylar.push({adet:v.adet!==undefined?v.adet:1,mm:Math.min(mm,ham),etiket:v.etiket!==undefined?v.etiket:null});
+}
+delete is._boy;
+let toplam=boylar.reduce((t,b_)=>t+b_.adet*b_.mm,0);
+let adet=boylar.reduce((t,b_)=>t+b_.adet,0);
+is.boy_uyari="";
+if(boylar.length && is.tup_sayisi && adet!==is.tup_sayisi){
+is.boy_uyari="Çizimdeki boy sayısı ("+adet+") tablodakiyle ("+is.tup_sayisi+") tutmuyor";
+boylar=[];
+}else if(boylar.length && is.kullanilan_mm && toplam>0){
+let oran=is.kullanilan_mm/toplam;
+if(Math.abs(oran-1)>0.02){
+is.boy_uyari="Çizimden okunan uzunluk tablodakiyle tutmuyor (%"+((oran-1)*100).toFixed(1)+")";
+boylar=[];
+}else boylar.forEach(b_=>{b_.mm=tpYuvarla1(Math.min(b_.mm*oran,ham));});
+}
+is.boylar=boylar;
+}
+return isler.filter(x=>x.parcalar.length);
+}
+
+/* ---------- stoktube bağlantısı (1.0.96) ---------- */
+
+/* base64 -> Uint8Array (köprünün Mikro'dan getirdiği PDF içeriği) */
+function tpBase64Bayt(b64){
+let s=atob(String(b64||""));
+let u=new Uint8Array(s.length);
+for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);
+return u;
+}
+
+/* Bir PDF işini HTML okuyucusunun (jobPlanParseHtml) verdiği biçime çevirir. */
+function jobPlanPdfIsVerisi(is,fileName){
+let jobName=String(is.ad||"").trim()||String(fileName||"").replace(/\.pdf$/i,"");
+let nameInfo=jobPlanParseName(fileName||jobName);
+let tubeProfile=String(is.profil||"").trim();
+let size=jobPlanParseTubeProfile(tubeProfile);
+let kaliteBilgi=(typeof kalBelirle==="function")?kalBelirle(null,fileName||jobName,tubeProfile):{quality:""};
+if(size && kaliteBilgi.quality)size.quality=kaliteBilgi.quality;
+let firmaAdi=(typeof kalFirmaAdi==="function")?kalFirmaAdi(null,fileName||jobName):"";
+let ncPrograms=(is.parcalar||[]).map(p=>({
+program:String(p.ad||""),
+rpt:String(p.adet||""),
+profile:tubeProfile,
+weight:Number.isFinite(p.kg)?p.kg+" kg":"",
+/* PDF'te tek parçanın süresi var; HTML'deki gibi satır toplamı */
+seconds:Number.isFinite(p.sure_sn)?p.sure_sn*(Number(p.adet)||1):NaN
+}));
+let totalSeconds=Number(is.toplam_sure_sn);
+if(!Number.isFinite(totalSeconds)){
+let sum=ncPrograms.reduce((t,p)=>t+(Number.isFinite(p.seconds)?p.seconds:0),0);
+totalSeconds=sum>0?sum:NaN;
+}
+let tubes=Number(is.tup_sayisi);
+if(!Number.isFinite(tubes)||tubes<=0)tubes=1;
+let ham=Number(is.ham_boy_mm),kul=Number(is.kullanilan_mm);
+let parts=Number(is.parca_sayisi);
+if(!Number.isFinite(parts)||parts<=0)parts=(is.parcalar||[]).reduce((t,p)=>t+(Number(p.adet)||0),0);
+return {
+fileName:String(fileName||""),
+jobName:jobName,
+dtNo:nameInfo.dtNo,
+customer:"",
+sizeCode:"",
+tubeProfile:tubeProfile,
+tubeProfiles:tubeProfile?[tubeProfile]:[],
+sizeSource:size?"Tube profile · PDF":"",
+quality:kaliteBilgi.quality||"",
+qualitySource:kaliteBilgi.kaynak||"",
+qualityWarn:kaliteBilgi.uyari||"",
+firmaAdi:firmaAdi,
+totalSeconds:Number.isFinite(totalSeconds)?totalSeconds:0,
+parts:Number.isFinite(parts)?parts:0,
+tubes:Math.round(tubes),
+rawLengthMm:Number.isFinite(ham)&&ham>0?ham:NaN,
+allocatedM:Number.isFinite(kul)&&kul>0?kul/1000:NaN,
+ncPrograms:ncPrograms,
+size:size,
+kaynakTur:"pdf",
+pdfBoylar:Array.isArray(is.boylar)?is.boylar:[],
+pdfBoyUyari:String(is.boy_uyari||"")
+};
+}
+
+/* PDF dosyası -> HTML okuyucusu biçiminde iş listesi (üretim paketi değilse boş).
+   Tek işli PDF'te dosya adı kullanılır (programdaki iş adı farklı olabilir).
+   Çok işli (Overview) PDF'te dosya adına uyan iş varsa yalnız o; yoksa her iş kendi adıyla. */
+async function jobPlanParsePdf(u8,fileName){
+let isler=await tubePdfIsler(u8);
+if(!isler.length)return [];
+let kok=String(fileName||"").replace(/\.pdf$/i,"").trim();
+let kokK=kok.toLocaleLowerCase("tr-TR");
+if(isler.length===1 && kok && !/_overview_/i.test(kok))return [jobPlanPdfIsVerisi(isler[0],fileName)];
+let uyan=isler.find(i=>String(i.ad||"").trim().toLocaleLowerCase("tr-TR")===kokK);
+if(uyan)return [jobPlanPdfIsVerisi(uyan,fileName)];
+return isler.map(i=>jobPlanPdfIsVerisi(i,(String(i.ad||"").trim()||kok)+".pdf"));
+}
+
+async function jobPlanDosyaBaytlari(file){
+if(file && typeof file.arrayBuffer==="function")return new Uint8Array(await file.arrayBuffer());
+if(file && typeof file.bytes==="function")return await file.bytes();
+throw new Error("Dosya okunamadı");
+}
 
 </script>
 </body>
